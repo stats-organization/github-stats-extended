@@ -33,7 +33,7 @@ const HomeScreen = () => {
   const login = (newUserId, userKey) => dispatch(_login(newUserId, userKey));
 
   // for all stages
-  const [stage, setStage] = useState(0);
+  const [stage, setStage] = useState(isAuthenticated ? 1 : 0);
 
   // for stage one
   const [selectedCard, setSelectedCard] = useState('stats');

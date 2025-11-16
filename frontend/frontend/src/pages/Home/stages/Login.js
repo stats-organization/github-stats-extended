@@ -1,6 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -24,6 +24,70 @@ const LoginStage = ({ setCurrItem }) => {
   const logout = () => {
     dispatch(_logout());
   };
+
+  // Card data
+  const cards = [
+    {
+      title: 'GitHub Stats Card',
+      description: 'your overall GitHub statistics',
+      imageSrc: `?&username=anuraghazra`,
+      demoCustomization: '&include_all_commits=true',
+      cardType: 'stats',
+    },
+    {
+      title: 'Top Languages Card',
+      description: 'your most frequently used languages',
+      imageSrc: `/top-langs?&username=anuraghazra`,
+      demoCustomization: '&langs_count=4',
+      cardType: 'top-langs',
+    },
+    {
+      title: 'GitHub Extra Pin',
+      description:
+        'pin more than 6 repositories in your profile using a GitHub profile readme',
+      imageSrc: '/pin?repo=anuraghazra/github-readme-stats',
+      demoCustomization: '',
+      cardType: 'pin',
+    },
+    {
+      title: 'GitHub Gist Pin',
+      description:
+        'pin gists in your GitHub profile using a GitHub profile readme',
+      imageSrc: '/gist?id=bbfce31e0217a3689c8d961a356cb10d',
+      demoCustomization: '',
+      cardType: 'gist',
+    },
+    {
+      title: 'WakaTime Stats Card',
+      description: 'your coding activity from WakaTime',
+      imageSrc: '/wakatime?username=ffflabs',
+      demoCustomization: '&langs_count=6&card_width=450',
+      cardType: 'wakatime',
+    },
+  ];
+
+  // Animation state for each card
+  const [cardOffsets, setCardOffsets] = useState(
+    cards.map(() => ({ x: 0, y: 0 })),
+  );
+
+  // Subtle floating animation
+  useEffect(() => {
+    const intervals = cards.map((_, index) => {
+      return setInterval(() => {
+        setCardOffsets((prev) => {
+          const newOffsets = [...prev];
+          newOffsets[index] = {
+            x: Math.sin(Date.now() / 1000 + index) * 3,
+            y: Math.cos(Date.now() / 1500 + index * 0.5) * 3,
+          };
+          return newOffsets;
+        });
+      }, 50);
+    });
+
+    return () => intervals.forEach(clearInterval);
+  }, []);
   return (
     <div className="h-full flex flex-wrap">
       <div className="hidden lg:block lg:w-3/5 lg:p-8 lg:my-auto">
@@ -69,6 +133,7 @@ const LoginStage = ({ setCurrItem }) => {
                       href={`https://${HOST}/api/downgrade?user_key=${userKey}`}
                     >
                       <Button className="h-12 flex justify-center items-center w-[260px] text-black border border-black bg-white hover:bg-gray-100">
+                        <GithubIcon className="w-6 h-6" />
                         <span className="xl:text-lg">
                           Downgrade to Public Access
                         </span>
@@ -83,6 +148,7 @@ const LoginStage = ({ setCurrItem }) => {
                   <div className="flex items-center gap-4">
                     <a href={GITHUB_PRIVATE_AUTH_URL}>
                       <Button className="h-12 flex justify-center items-center w-[260px] text-white bg-blue-500 hover:bg-blue-600">
+                        <GithubIcon className="w-6 h-6" />
                         <span className="xl:text-lg">
                           Upgrade to Private Access
                         </span>
@@ -166,8 +232,54 @@ const LoginStage = ({ setCurrItem }) => {
           )}
         </div>
       </div>
-      <div className="w-full h-full lg:w-2/5 flex lg:flex-col lg:p-8">
-        placeholder for cards
+      <div className="w-full h-full lg:w-2/5 flex lg:flex-col lg:p-8 relative overflow-hidden">
+        <div className="relative w-full h-full">
+          {cards.map((card, index) => {
+            // Calculate arch position
+            // Arch center is far to the right (1500px to the right)
+            // Radius of the arch
+            const radius = 800;
+            const centerX = 1500;
+            const centerY = 300;
+
+            // Angle for each card (spreading them in an arch)
+            // Cards arranged from top-left to bottom-left
+            const startAngle = Math.PI * 0.75; // ~135 degrees
+            const endAngle = Math.PI * 1.25; // ~225 degrees
+            const angle =
+              startAngle +
+              (endAngle - startAngle) * (index / (cards.length - 1));
+
+            // Calculate position on the arch
+            const x = centerX + radius * Math.cos(angle);
+            const y = centerY + radius * Math.sin(angle);
+
+            // Add animation offset
+            const animX = x + cardOffsets[index].x;
+            const animY = y + cardOffsets[index].y;
+
+            return (
+              <div
+                key={index}
+                className="absolute transition-all duration-100 ease-out"
+                style={{
+                  left: `${animX}px`,
+                  top: `${animY}px`,
+                  transform: 'translate(-50%, -50%)',
+                  width: '280px',
+                }}
+              >
+                <Card
+                  title={card.title}
+                  description={card.description}
+                  imageSrc={card.imageSrc + card.demoCustomization}
+                  selected={false}
+                  fixedSize="true"
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
