@@ -37,7 +37,7 @@ const HomeScreen = () => {
 
   // for stage one
   const [selectedCard, setSelectedCard] = useState('stats');
-  const [imageSrc, setImageSrc] = useState(`?&username=${userId}`);
+  const [imageSrc, setImageSrc] = useState(`?username=${userId}`);
 
   // for stage two
   const [selectedStatsRank, setSelectedStatsRank] =
@@ -89,7 +89,7 @@ const HomeScreen = () => {
   }, [selectedCard]);
 
   useEffect(() => {
-    setImageSrc(`?&username=${userId}`);
+    setImageSrc(`?username=${userId}`);
   }, [userId]);
 
   let fullSuffix = `${imageSrc}`;

@@ -14,14 +14,14 @@ const SelectCardStage = ({ selectedCard, setSelectedCard, setImageSrc }) => {
         {
           title: 'GitHub Stats Card',
           description: 'your overall GitHub statistics',
-          imageSrc: `?&username=${userId}`,
+          imageSrc: `?username=${userId}`,
           demoCustomization: '&include_all_commits=true',
           cardType: 'stats',
         },
         {
           title: 'Top Languages Card',
           description: 'your most frequently used languages',
-          imageSrc: `/top-langs?&username=${userId}`,
+          imageSrc: `/top-langs?username=${userId}`,
           demoCustomization: '&langs_count=4',
           cardType: 'top-langs',
         },

@@ -12,6 +12,8 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import { createMockReq, createMockRes } from '../../mock-http';
 import { default as router } from '../../backend/.vercel/output/functions/api.func/router.js';
 import axios from 'axios';
+import { HOST } from '../../constants';
+import { DEMO_STATS_CARD } from './demoData/statsCard';
 
 const SvgInline = (props) => {
   const [svg, setSvg] = useState(null);
@@ -26,33 +28,47 @@ const SvgInline = (props) => {
       process.env.PAT_1 = userToken;
 
       setLoaded(false);
-      const isAuthenticated = userId && userId.length > 0;
-      if (isAuthenticated && (!userToken || userToken === 'placeholderPAT')) {
-        // waiting for backend call to private-access
-        return;
-      }
 
       let body;
       let status;
-      if (isAuthenticated) {
-        const req = createMockReq({
-          method: 'GET',
-          url: url,
-        });
-        const res = createMockRes();
-        await router(req, res);
-        body = res._getBody();
-        status = res._getStatusCode();
-      } else {
-        let res = await axios.get(url);
-        body = res.data;
-        status = res.status;
+
+      switch (url) {
+        case `https://${HOST}/api?username=anuraghazra&include_all_commits=true&client=wizard`:
+          status = 200;
+          body = DEMO_STATS_CARD;
+          break;
+
+        default:
+          const isAuthenticated = userId && userId.length > 0;
+          if (
+            isAuthenticated &&
+            (!userToken || userToken === 'placeholderPAT')
+          ) {
+            // waiting for backend call to private-access
+            return;
+          }
+
+          if (isAuthenticated) {
+            const req = createMockReq({
+              method: 'GET',
+              url: url,
+            });
+            const res = createMockRes();
+            await router(req, res);
+            body = res._getBody();
+            status = res._getStatusCode();
+          } else {
+            let res = await axios.get(url);
+            body = res.data;
+            status = res.status;
+          }
+
+          if (status >= 300) {
+            console.error('failed to fetch/generate SVG');
+            return;
+          }
       }
 
-      if (status >= 300) {
-        console.error('failed to fetch/generate SVG');
-        return;
-      }
       setSvg(body);
       setLoaded(true);
     };
