@@ -28,41 +28,24 @@ const LoginStage = ({ setCurrItem }) => {
   // Card data
   const cards = [
     {
-      title: 'GitHub Stats Card',
-      description: 'your overall GitHub statistics',
-      imageSrc: '?username=anuraghazra',
-      demoCustomization: '&include_all_commits=true',
-      cardType: 'stats',
-    },
-    {
-      title: 'Top Languages Card',
-      description: 'your most frequently used languages',
-      imageSrc: '/top-langs?username=anuraghazra',
-      demoCustomization: '&langs_count=4',
-      cardType: 'top-langs',
-    },
-    {
-      title: 'GitHub Extra Pin',
-      description:
-        'pin more than 6 repositories in your profile using a GitHub profile readme',
       imageSrc: '/pin?repo=anuraghazra/github-readme-stats',
       demoCustomization: '',
-      cardType: 'pin',
     },
     {
-      title: 'GitHub Gist Pin',
-      description:
-        'pin gists in your GitHub profile using a GitHub profile readme',
-      imageSrc: '/gist?id=bbfce31e0217a3689c8d961a356cb10d',
-      demoCustomization: '',
-      cardType: 'gist',
+      imageSrc: '/top-langs?username=anuraghazra',
+      demoCustomization: '&langs_count=4',
     },
     {
-      title: 'WakaTime Stats Card',
-      description: 'your coding activity from WakaTime',
+      imageSrc: '?username=anuraghazra',
+      demoCustomization: '&include_all_commits=true',
+    },
+    {
       imageSrc: '/wakatime?username=ffflabs',
       demoCustomization: '&langs_count=6&card_width=450',
-      cardType: 'wakatime',
+    },
+    {
+      imageSrc: '/gist?id=bbfce31e0217a3689c8d961a356cb10d',
+      demoCustomization: '',
     },
   ];
 
@@ -248,22 +231,28 @@ const LoginStage = ({ setCurrItem }) => {
                 // className="absolute"
                 style={{
                   left: `${x}%`,
-                  top: `${y}%`,
+                  // top: `${y}%`,
                   position: 'relative',
+                  zoom: '0.5',
+                  marginBottom: '1%',
                   // transform: 'translate(-50%, -50%)',
                   // width: '280px',
                 }}
               >
+                {/*
                 <div
                   className="floating-card"
                   style={{ animationDelay: `${index * 0.8}s` }}
                 >
-                  <Image
-                    imageSrc={card.imageSrc + card.demoCustomization}
-                    compact={false}
-                    extraClasses=""
-                  />
+*/}
+                <Image
+                  imageSrc={card.imageSrc + card.demoCustomization}
+                  compact={false}
+                  extraClasses=""
+                />
+                {/*
                 </div>
+*/}
               </div>
             );
           })}
