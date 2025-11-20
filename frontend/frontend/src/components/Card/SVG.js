@@ -38,27 +38,22 @@ const SvgInline = (props) => {
 
       switch (url) {
         case `https://${HOST}/api?username=anuraghazra&include_all_commits=true&client=wizard`:
-        case `https://${HOST}/api?username=anuraghazra&include_all_commits=true&disable_animations=true&client=wizard`:
           status = 200;
           body = DEMO_STATS_CARD;
           break;
         case `https://${HOST}/api/top-langs?username=anuraghazra&langs_count=4&client=wizard`:
-        case `https://${HOST}/api/top-langs?username=anuraghazra&langs_count=4&disable_animations=true&client=wizard`:
           status = 200;
           body = DEMO_TOPLANGS_CARD;
           break;
         case `https://${HOST}/api/pin?repo=anuraghazra/github-readme-stats&client=wizard`:
-        case `https://${HOST}/api/pin?repo=anuraghazra/github-readme-stats&disable_animations=true&client=wizard`:
           status = 200;
           body = DEMO_PIN_CARD;
           break;
         case `https://${HOST}/api/gist?id=bbfce31e0217a3689c8d961a356cb10d&client=wizard`:
-        case `https://${HOST}/api/gist?id=bbfce31e0217a3689c8d961a356cb10d&disable_animations=true&client=wizard`:
           status = 200;
           body = DEMO_GIST_CARD;
           break;
         case `https://${HOST}/api/wakatime?username=ffflabs&langs_count=6&card_width=450&client=wizard`:
-        case `https://${HOST}/api/wakatime?username=ffflabs&langs_count=6&card_width=450&disable_animations=true&client=wizard`:
           status = 200;
           body = DEMO_WAKATIME_CARD;
           break;
