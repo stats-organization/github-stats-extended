@@ -36,7 +36,7 @@ const GRAPHQL_REPOS_FIELD = `
 
 const GRAPHQL_REPOS_QUERY = `
   query userInfo($login: String!, $after: String, $ownerAffiliations: [RepositoryAffiliation]) {
-    user(login: $login, ownerAffiliations: $ownerAffiliations) {
+    user(login: $login) {
       ${GRAPHQL_REPOS_FIELD}
     }
   }
