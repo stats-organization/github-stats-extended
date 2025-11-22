@@ -1,0 +1,39 @@
+{
+  "data": {
+    "user": {
+      "repository": {
+        "name": "github-readme-stats",
+        "nameWithOwner": "anuraghazra/github-readme-stats",
+        "isPrivate": false,
+        "isArchived": false,
+        "isTemplate": false,
+        "stargazers": {
+          "totalCount": 76994
+        },
+        "description": ":zap: Dynamically generated stats for your github readmes",
+        "primaryLanguage": {
+          "color": "#f1e05a",
+          "id": "MDg6TGFuZ3VhZ2UxNDA=",
+          "name": "JavaScript"
+        },
+        "forkCount": 26873
+      }
+    },
+    "organization": null
+  },
+  "errors": [
+    {
+      "type": "NOT_FOUND",
+      "path": [
+        "organization"
+      ],
+      "locations": [
+        {
+          "line": 25,
+          "column": 9
+        }
+      ],
+      "message": "Could not resolve to an Organization with the login of 'anuraghazra'."
+    }
+  ]
+}

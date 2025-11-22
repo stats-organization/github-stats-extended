@@ -11,13 +11,6 @@ import 'react-loading-skeleton/dist/skeleton.css';
 
 import { createMockReq, createMockRes } from '../../mock-http';
 import { default as router } from '../../backend/.vercel/output/functions/api.func/router.js';
-import axios from 'axios';
-import { HOST } from '../../constants';
-import { DEMO_STATS_CARD } from './demoData/statsCard';
-import { DEMO_TOPLANGS_CARD } from './demoData/topLangsCard';
-import { DEMO_PIN_CARD } from './demoData/pinCard';
-import { DEMO_GIST_CARD } from './demoData/gistCard';
-import { DEMO_WAKATIME_CARD } from './demoData/wakatimeCard';
 
 const SvgInline = (props) => {
   const [svg, setSvg] = useState(null);
@@ -36,57 +29,32 @@ const SvgInline = (props) => {
       let body;
       let status;
 
-      switch (url) {
-        case `https://${HOST}/api?username=anuraghazra&include_all_commits=true&client=wizard`:
-          status = 200;
-          body = DEMO_STATS_CARD;
-          break;
-        case `https://${HOST}/api/top-langs?username=anuraghazra&langs_count=4&client=wizard`:
-          status = 200;
-          body = DEMO_TOPLANGS_CARD;
-          break;
-        case `https://${HOST}/api/pin?repo=anuraghazra/github-readme-stats&client=wizard`:
-          status = 200;
-          body = DEMO_PIN_CARD;
-          break;
-        case `https://${HOST}/api/gist?id=bbfce31e0217a3689c8d961a356cb10d&client=wizard`:
-          status = 200;
-          body = DEMO_GIST_CARD;
-          break;
-        case `https://${HOST}/api/wakatime?username=ffflabs&langs_count=6&card_width=450&client=wizard`:
-          status = 200;
-          body = DEMO_WAKATIME_CARD;
-          break;
+      const isAuthenticated = userId && userId.length > 0;
+      if (isAuthenticated && (!userToken || userToken === 'placeholderPAT')) {
+        // waiting for backend call to private-access
+        return;
+      }
 
-        default:
-          const isAuthenticated = userId && userId.length > 0;
-          if (
-            isAuthenticated &&
-            (!userToken || userToken === 'placeholderPAT')
-          ) {
-            // waiting for backend call to private-access
-            return;
-          }
-
-          if (isAuthenticated) {
-            const req = createMockReq({
-              method: 'GET',
-              url: url,
-            });
-            const res = createMockRes();
-            await router(req, res);
-            body = res._getBody();
-            status = res._getStatusCode();
+      // if (isAuthenticated) {
+      const req = createMockReq({
+        method: 'GET',
+        url: url,
+      });
+      const res = createMockRes();
+      await router(req, res);
+      body = res._getBody();
+      status = res._getStatusCode();
+      /*
           } else {
             let res = await axios.get(url);
             body = res.data;
             status = res.status;
           }
+*/
 
-          if (status >= 300) {
-            console.error('failed to fetch/generate SVG');
-            return;
-          }
+      if (status >= 300) {
+        console.error('failed to fetch/generate SVG');
+        return;
       }
 
       setSvg(body);

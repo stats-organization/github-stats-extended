@@ -1,0 +1,361 @@
+{
+  "id": "10d3dbf0-217c-451a-b39d-7125faca6776",
+  "user_id": "2dd5e7c6-e792-422f-9f0e-e76985af66e2",
+  "range": "last_year",
+  "timeout": 15,
+  "writes_only": false,
+  "holidays": 231,
+  "status": "ok",
+  "is_stuck": false,
+  "days_minus_holidays": 134,
+  "percent_calculated": 100,
+  "is_already_updating": false,
+  "is_up_to_date": true,
+  "total_seconds": 263996.570273,
+  "days_including_holidays": 365,
+  "total_seconds_including_other_language": 770251.949874,
+  "daily_average_including_other_language": 5748,
+  "daily_average": 1970,
+  "human_readable_total_including_other_language": "213 hrs 57 mins",
+  "operating_systems": [
+    {
+      "total_seconds": 496480.13012,
+      "name": "Unknown OS",
+      "percent": 64.46,
+      "digital": "137:54",
+      "decimal": "137.90",
+      "text": "137 hrs 54 mins",
+      "hours": 137,
+      "minutes": 54
+    },
+    {
+      "total_seconds": 272853.07107,
+      "name": "Linux",
+      "percent": 35.42,
+      "digital": "75:47",
+      "decimal": "75.78",
+      "text": "75 hrs 47 mins",
+      "hours": 75,
+      "minutes": 47
+    },
+    {
+      "total_seconds": 918.748684,
+      "name": "Windows",
+      "percent": 0.12,
+      "digital": "0:15",
+      "decimal": "0.25",
+      "text": "15 mins",
+      "hours": 0,
+      "minutes": 15
+    }
+  ],
+  "categories": [
+    {
+      "name": "Meeting",
+      "total_seconds": 496480.13012,
+      "percent": 64.46,
+      "digital": "137:54",
+      "decimal": "137.90",
+      "text": "137 hrs 54 mins",
+      "hours": 137,
+      "minutes": 54
+    },
+    {
+      "name": "Coding",
+      "total_seconds": 273771.819754,
+      "percent": 35.54,
+      "digital": "76:02",
+      "decimal": "76.03",
+      "text": "76 hrs 2 mins",
+      "hours": 76,
+      "minutes": 2
+    }
+  ],
+  "editors": [
+    {
+      "total_seconds": 496480.13012,
+      "name": "Google Calendar",
+      "percent": 64.46,
+      "digital": "137:54",
+      "decimal": "137.90",
+      "text": "137 hrs 54 mins",
+      "hours": 137,
+      "minutes": 54
+    },
+    {
+      "total_seconds": 250778.595434,
+      "name": "VS Code",
+      "percent": 32.56,
+      "digital": "69:39",
+      "decimal": "69.65",
+      "text": "69 hrs 39 mins",
+      "hours": 69,
+      "minutes": 39
+    },
+    {
+      "total_seconds": 22993.22432,
+      "name": "DataGrip",
+      "percent": 2.99,
+      "digital": "6:23",
+      "decimal": "6.38",
+      "text": "6 hrs 23 mins",
+      "hours": 6,
+      "minutes": 23
+    }
+  ],
+  "human_readable_daily_average_including_other_language": "1 hr 35 mins",
+  "is_up_to_date_pending_future": false,
+  "human_readable_total": "73 hrs 19 mins",
+  "languages": [
+    {
+      "name": "Other",
+      "total_seconds": 506255.379601,
+      "percent": 65.73,
+      "digital": "140:37",
+      "decimal": "140.62",
+      "text": "140 hrs 37 mins",
+      "hours": 140,
+      "minutes": 37
+    },
+    {
+      "name": "TypeScript",
+      "total_seconds": 74336.229167,
+      "percent": 9.65,
+      "digital": "20:38",
+      "decimal": "20.63",
+      "text": "20 hrs 38 mins",
+      "hours": 20,
+      "minutes": 38
+    },
+    {
+      "name": "PHP",
+      "total_seconds": 41144.797498,
+      "percent": 5.34,
+      "digital": "11:25",
+      "decimal": "11.42",
+      "text": "11 hrs 25 mins",
+      "hours": 11,
+      "minutes": 25
+    },
+    {
+      "name": "Vue.js",
+      "total_seconds": 27060.047966,
+      "percent": 3.51,
+      "digital": "7:31",
+      "decimal": "7.52",
+      "text": "7 hrs 31 mins",
+      "hours": 7,
+      "minutes": 31
+    },
+    {
+      "name": "JavaScript",
+      "total_seconds": 26924.099536,
+      "percent": 3.5,
+      "digital": "7:28",
+      "decimal": "7.47",
+      "text": "7 hrs 28 mins",
+      "hours": 7,
+      "minutes": 28
+    },
+    {
+      "name": "JSON",
+      "total_seconds": 26366.784244,
+      "percent": 3.42,
+      "digital": "7:19",
+      "decimal": "7.32",
+      "text": "7 hrs 19 mins",
+      "hours": 7,
+      "minutes": 19
+    },
+    {
+      "name": "SQL",
+      "total_seconds": 23022.426581,
+      "percent": 2.99,
+      "digital": "6:23",
+      "decimal": "6.38",
+      "text": "6 hrs 23 mins",
+      "hours": 6,
+      "minutes": 23
+    },
+    {
+      "name": "Blade Template",
+      "total_seconds": 15362.231057,
+      "percent": 1.99,
+      "digital": "4:16",
+      "decimal": "4.27",
+      "text": "4 hrs 16 mins",
+      "hours": 4,
+      "minutes": 16
+    },
+    {
+      "name": "Bash",
+      "total_seconds": 8844.393415,
+      "percent": 1.15,
+      "digital": "2:27",
+      "decimal": "2.45",
+      "text": "2 hrs 27 mins",
+      "hours": 2,
+      "minutes": 27
+    },
+    {
+      "name": "HTML",
+      "total_seconds": 8555.093038,
+      "percent": 1.11,
+      "digital": "2:22",
+      "decimal": "2.37",
+      "text": "2 hrs 22 mins",
+      "hours": 2,
+      "minutes": 22
+    },
+    {
+      "name": "Markdown",
+      "total_seconds": 3799.950136,
+      "percent": 0.49,
+      "digital": "1:03",
+      "decimal": "1.05",
+      "text": "1 hr 3 mins",
+      "hours": 1,
+      "minutes": 3
+    },
+    {
+      "name": "Python",
+      "total_seconds": 3182.262429,
+      "percent": 0.41,
+      "digital": "0:53",
+      "decimal": "0.88",
+      "text": "53 mins",
+      "hours": 0,
+      "minutes": 53
+    },
+    {
+      "name": "SCSS",
+      "total_seconds": 1421.7404,
+      "percent": 0.18,
+      "digital": "0:23",
+      "decimal": "0.38",
+      "text": "23 mins",
+      "hours": 0,
+      "minutes": 23
+    },
+    {
+      "name": "TSConfig",
+      "total_seconds": 1184.367779,
+      "percent": 0.15,
+      "digital": "0:19",
+      "decimal": "0.32",
+      "text": "19 mins",
+      "hours": 0,
+      "minutes": 19
+    },
+    {
+      "name": "TOML",
+      "total_seconds": 1073.305056,
+      "percent": 0.14,
+      "digital": "0:17",
+      "decimal": "0.28",
+      "text": "17 mins",
+      "hours": 0,
+      "minutes": 17
+    },
+    {
+      "name": "Image (svg)",
+      "total_seconds": 1065.634724,
+      "percent": 0.14,
+      "digital": "0:17",
+      "decimal": "0.28",
+      "text": "17 mins",
+      "hours": 0,
+      "minutes": 17
+    },
+    {
+      "name": "Text",
+      "total_seconds": 220.856383,
+      "percent": 0.03,
+      "digital": "0:03",
+      "decimal": "0.05",
+      "text": "3 mins",
+      "hours": 0,
+      "minutes": 3
+    },
+    {
+      "name": "CSS",
+      "total_seconds": 205.648265,
+      "percent": 0.03,
+      "digital": "0:03",
+      "decimal": "0.05",
+      "text": "3 mins",
+      "hours": 0,
+      "minutes": 3
+    },
+    {
+      "name": "Git Config",
+      "total_seconds": 89.248561,
+      "percent": 0.01,
+      "digital": "0:01",
+      "decimal": "0.02",
+      "text": "1 min",
+      "hours": 0,
+      "minutes": 1
+    },
+    {
+      "name": "Makefile",
+      "total_seconds": 77.397983,
+      "percent": 0.01,
+      "digital": "0:01",
+      "decimal": "0.02",
+      "text": "1 min",
+      "hours": 0,
+      "minutes": 1
+    },
+    {
+      "name": "Diff",
+      "total_seconds": 36.762629,
+      "percent": 0,
+      "digital": "0:00",
+      "decimal": "0.00",
+      "text": "0 secs",
+      "hours": 0,
+      "minutes": 0
+    },
+    {
+      "name": "GitIgnore file",
+      "total_seconds": 8.992,
+      "percent": 0,
+      "digital": "0:00",
+      "decimal": "0.00",
+      "text": "0 secs",
+      "hours": 0,
+      "minutes": 0
+    },
+    {
+      "name": "YAML",
+      "total_seconds": 8.961989,
+      "percent": 0,
+      "digital": "0:00",
+      "decimal": "0.00",
+      "text": "0 secs",
+      "hours": 0,
+      "minutes": 0
+    },
+    {
+      "name": "Docker",
+      "total_seconds": 5.339437,
+      "percent": 0,
+      "digital": "0:00",
+      "decimal": "0.00",
+      "text": "0 secs",
+      "hours": 0,
+      "minutes": 0
+    }
+  ],
+  "human_readable_daily_average": "32 mins",
+  "is_cached": true,
+  "username": "ffflabs",
+  "is_including_today": false,
+  "human_readable_range": "last year",
+  "is_coding_activity_visible": true,
+  "is_language_usage_visible": true,
+  "is_editor_usage_visible": true,
+  "is_category_usage_visible": true,
+  "is_os_usage_visible": true
+}
