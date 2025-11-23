@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { getAdapter } from 'axios';
 import { setupCache } from 'axios-cache-interceptor';
 import { HOST } from './constants';
 
@@ -21,6 +21,9 @@ const cachedAxios = setupCache(axios, {
   methods: ['get', 'post'],
 });
 
+axios.get = cachedAxios.get.bind(cachedAxios);
+axios.post = cachedAxios.post.bind(cachedAxios);
+
 function createMockResponse(data, config) {
   return Promise.resolve({
     data,
@@ -39,7 +42,7 @@ export function setUserId(newUserId) {
   userId = newUserId;
 }
 
-const defaultAdapter = axios.defaults.adapter;
+const defaultAdapter = getAdapter(axios.defaults.adapter);
 
 // mock responses to unauthenticated "anuraghazra" requests
 axios.defaults.adapter = async (config) => {
@@ -113,8 +116,4 @@ axios.defaults.adapter = async (config) => {
   }
 };
 
-axios.get = cachedAxios.get.bind(cachedAxios);
-axios.post = cachedAxios.post.bind(cachedAxios);
-
-export default cachedAxios;
 export const { get, post } = cachedAxios;
