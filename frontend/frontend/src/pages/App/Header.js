@@ -70,7 +70,7 @@ const Header = ({ mode, stage, setStage }) => {
 
   return (
     <>
-      <div className="text-gray-100 bg-gray-800 shadow-md body-font z-20">
+      <div className="text-gray-100 bg-gray-800 shadow-md body-font z-50">
         <div className="px-5 py-2 flex flex-wrap">
           {/* GitHub Trends Logo */}
           <Link

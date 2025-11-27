@@ -46,12 +46,12 @@ const ProgressBar = ({ items, currItem, setCurrItem }) => {
   const rightDisabled = currItem === items.length - 1;
 
   return (
-    <div className="w-full flex items-center sticky top-0 bg-gray-300 z-10 pt-3 pb-1 px-20 shadow-md">
+    <div className="w-full flex items-center sticky top-0 bg-gray-200 z-50 pt-3 pb-1 px-20 shadow-md">
       <LeftArrowIcon
         className={classnames(
           'w-8 h-8',
           leftDisabled
-            ? 'text-gray-300 cursor-not-allowed'
+            ? 'text-gray-400 cursor-not-allowed'
             : 'text-gray-700 cursor-pointer',
         )}
         onClick={() => setCurrItem(Math.max(currItem - 1, 0))}
@@ -73,7 +73,7 @@ const ProgressBar = ({ items, currItem, setCurrItem }) => {
         className={classnames(
           'w-8 h-8',
           rightDisabled
-            ? 'text-gray-300 cursor-not-allowed'
+            ? 'text-gray-400 cursor-not-allowed'
             : 'text-gray-700 cursor-pointer',
         )}
         onClick={() => setCurrItem(Math.min(currItem + 1, items.length - 1))}
