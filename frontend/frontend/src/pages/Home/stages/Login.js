@@ -130,7 +130,7 @@ const LoginStage = ({ setCurrItem }) => {
               <div className="mt-6 flex items-center gap-4">
                 <Button
                   className="h-12 flex justify-center items-center w-[320px] text-black border border-black bg-white hover:bg-gray-100"
-                  onClick={deleteAccountHandler(userId, userKey)}
+                  onClick={() => deleteAccountHandler(userId, userKey)}
                 >
                   <span className="xl:text-lg">Delete Account</span>
                 </Button>
