@@ -44,12 +44,8 @@ export function setIsAuthenticated(newIsAuthenticated) {
 
 const defaultAdapter = getAdapter(axios.defaults.adapter);
 
-// mock responses to unauthenticated "anuraghazra" requests
+// mock responses to "anuraghazra" requests
 axios.defaults.adapter = async (config) => {
-  if (isAuthenticated) {
-    return defaultAdapter(config);
-  }
-
   const params = config.data ? JSON.parse(config.data) : {};
 
   if (

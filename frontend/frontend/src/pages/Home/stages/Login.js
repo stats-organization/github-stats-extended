@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { Button, Image } from '../../../components';
 import { classnames } from '../../../utils';
 import {
+  CLIENT_ID,
   GITHUB_PRIVATE_AUTH_URL,
   GITHUB_PUBLIC_AUTH_URL,
   HOST,
@@ -16,10 +17,13 @@ import { logout as _logout } from '../../../redux/actions/userActions';
 import {
   useIsAuthenticated,
   usePrivateAccess,
+  useUserId,
   useUserKey,
 } from '../../../redux/selectors/userSelectors';
+import { deleteAccount } from '../../../api';
 
 const LoginStage = ({ setCurrItem }) => {
+  const userId = useUserId();
   const userKey = useUserKey();
   const privateAccess = usePrivateAccess();
   const isAuthenticated = useIsAuthenticated();
@@ -27,6 +31,13 @@ const LoginStage = ({ setCurrItem }) => {
   const dispatch = useDispatch();
   const logout = () => {
     dispatch(_logout());
+  };
+  const deleteAccountHandler = async (myUserId, myUserKey) => {
+    const success = await deleteAccount(myUserId, myUserKey);
+    if (success) {
+      logout();
+      window.location = `https://github.com/settings/connections/applications/${CLIENT_ID}`;
+    }
   };
 
   // Card data
@@ -81,7 +92,7 @@ const LoginStage = ({ setCurrItem }) => {
                     </a>
                     <p className="text-sm text-gray-600 flex-1">
                       Switch to public access if you prefer not to share private
-                      repository data.
+                      contributions.
                     </p>
                   </div>
                 ) : (
@@ -95,8 +106,8 @@ const LoginStage = ({ setCurrItem }) => {
                       </Button>
                     </a>
                     <p className="text-sm text-gray-600 flex-1">
-                      Upgrade to include contributions from your private
-                      repositories for more complete stats.
+                      Upgrade to include contributions in private repositories
+                      for more complete and accurate stats.
                     </p>
                   </div>
                 )}
@@ -111,7 +122,21 @@ const LoginStage = ({ setCurrItem }) => {
                   <span className="xl:text-lg">Log Out</span>
                 </Button>
                 <p className="text-sm text-gray-600 flex-1">
-                  Log out from your GitHub account.
+                  Log out from GitHub Trends.
+                </p>
+              </div>
+
+              {/* Delete Account Button */}
+              <div className="mt-6 flex items-center gap-4">
+                <Button
+                  className="h-12 flex justify-center items-center w-[320px] text-black border border-black bg-white hover:bg-gray-100"
+                  onClick={deleteAccountHandler(userId, userKey)}
+                >
+                  <span className="xl:text-lg">Delete Account</span>
+                </Button>
+                <p className="text-sm text-gray-600 flex-1">
+                  This will delete your GitHub Trends account and then redirect
+                  you to a GitHub screen where you can revoke your access token.
                 </p>
               </div>
             </>
@@ -128,7 +153,8 @@ const LoginStage = ({ setCurrItem }) => {
                   </Button>
                 </a>
                 <p className="text-sm text-gray-600 flex-1">
-                  Generate stats based on your public repositories.
+                  Generate stats based on your contributions in public
+                  repositories.
                 </p>
               </div>
 
@@ -142,7 +168,7 @@ const LoginStage = ({ setCurrItem }) => {
                   </Button>
                 </a>
                 <p className="text-sm text-gray-600 flex-1">
-                  Includes contributions in your private repositories for more
+                  Includes contributions from private repositories for more
                   complete and accurate stats.
                 </p>
               </div>

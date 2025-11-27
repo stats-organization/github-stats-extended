@@ -60,3 +60,6 @@ See [docs/CONTRIBUTING.md](https://github.com/avgupta456/github-trends/blob/main
 ## Acknowledgements
 
 Much inspiration was taken from [GitHub Readme Stats](https://github.com/anuraghazra/github-readme-stats). If you haven't already, check it out and give it a star!
+
+## Other
+We use your GitHub API access token to make requests on your behalf. All of our code is open-source and visible on our GitHub repository.

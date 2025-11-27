@@ -9,12 +9,9 @@ import {
 
 import Header from './Header';
 import LandingScreen from '../Landing';
-import { SignUpScreen } from '../Auth';
 import HomeScreen from '../Home';
-import SettingsScreen from '../Settings';
 import { NoMatchScreen } from '../Misc';
 import { getUserMetadata } from '../../api';
-import Footer from './Footer';
 import {
   useIsAuthenticated,
   useUserKey,
@@ -48,16 +45,11 @@ function App() {
         <Header mode="trends" />
         <section className="bg-white text-gray-700 flex-grow">
           <Routes>
-            {!isAuthenticated && (
-              <Route path="/signup" element={<SignUpScreen />} />
-            )}
             <Route path="/user/*" element={<HomeScreen />} />
-            <Route path="/settings" element={<SettingsScreen />} />
             <Route exact path="/" element={<LandingScreen />} />
             <Route path="*" element={<NoMatchScreen />} />
           </Routes>
         </section>
-        <Footer />
       </Router>
     </div>
   );

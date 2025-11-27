@@ -5,13 +5,13 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import { GiHamburgerMenu as HamburgerIcon } from 'react-icons/gi';
-import { MdSettings as SettingsIcon } from 'react-icons/md';
 
 import { logout as _logout } from '../../redux/actions/userActions';
 import { useIsAuthenticated } from '../../redux/selectors/userSelectors';
 import appIcon from '../../assets/appLogo64.png';
 import { classnames } from '../../utils';
 import { GITHUB_PUBLIC_AUTH_URL } from '../../constants';
+import { FaGithub as GithubIcon } from 'react-icons/fa';
 
 const propTypes = {
   to: PropTypes.string.isRequired,
@@ -80,35 +80,21 @@ const Header = ({ mode }) => {
             <span className="ml-2 text-xl">GitHub Trends</span>
           )}
         </Link>
-        {/* Auth Pages: Sign Up, Log In, Log Out */}
+        {/* Star on GitHub */}
         <div className="hidden md:flex ml-auto items-center text-base justify-center">
-          {isAuthenticated ? (
-            <>
-              {mode === 'trends' && (
-                <Link to="/settings" className="mr-3 px-1 py-1">
-                  <SettingsIcon className="h-6 w-6 text-gray-700" />
-                </Link>
-              )}
-              <StandardLink to="/" onClick={logout}>
-                Sign Out
-              </StandardLink>
-            </>
-          ) : (
-            <>
-              <a
-                className="px-4 py-1 mr-3 rounded-sm bg-gray-200 hover:bg-gray-300 text-gray-700"
-                href={GITHUB_PUBLIC_AUTH_URL}
-              >
-                Login
-              </a>
-              <Link
-                to="/signup"
-                className="px-4 py-1 mr-3 rounded-sm bg-blue-500 hover:bg-blue-700 hover:text-gray-300"
-              >
-                Sign Up
-              </Link>
-            </>
-          )}
+          <a
+            href="https://www.github.com/avgupta456/github-trends"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <button
+              type="button"
+              className="rounded-sm shadow bg-gray-700 hover:bg-gray-800 text-gray-50 px-3 py-2 flex items-center"
+            >
+              Star on
+              <GithubIcon className="ml-1.5 w-5 h-5" />
+            </button>
+          </a>
         </div>
         {/* Hamburger Menu */}
         <div className="md:hidden flex ml-auto items-center">

@@ -280,12 +280,13 @@ const HomeScreen = () => {
                   <p>
                     {privateAccess ? (
                       <>
-                        You have granted access to both{' '}
-                        <b>public and private</b> repositories.
+                        You granted GitHub Trends access to both your{' '}
+                        <b>public and private</b> contributions.
                       </>
                     ) : (
                       <>
-                        You have granted access to <b>public</b> repositories.
+                        You granted GitHub Trends access to your <b>public</b>{' '}
+                        contributions.
                       </>
                     )}
                   </p>
