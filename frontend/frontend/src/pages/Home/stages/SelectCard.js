@@ -6,7 +6,12 @@ import PropTypes from 'prop-types';
 import { Card } from '../../../components';
 import { useUserId } from '../../../redux/selectors/userSelectors';
 
-const SelectCardStage = ({ selectedCard, setSelectedCard, setImageSrc }) => {
+const SelectCardStage = ({
+  selectedCard,
+  setSelectedCard,
+  setStage,
+  setImageSrc,
+}) => {
   const userId = useUserId();
   return (
     <div className="w-full flex flex-wrap">
@@ -55,6 +60,7 @@ const SelectCardStage = ({ selectedCard, setSelectedCard, setImageSrc }) => {
           type="button"
           onClick={() => {
             setSelectedCard(card.cardType);
+            setStage(2);
             setImageSrc(card.imageSrc);
           }}
         >
@@ -74,6 +80,7 @@ const SelectCardStage = ({ selectedCard, setSelectedCard, setImageSrc }) => {
 SelectCardStage.propTypes = {
   selectedCard: PropTypes.string,
   setSelectedCard: PropTypes.func.isRequired,
+  setStage: PropTypes.func.isRequired,
   setImageSrc: PropTypes.func.isRequired,
 };
 

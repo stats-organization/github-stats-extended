@@ -288,6 +288,7 @@ const HomeScreen = ({ stage, setStage }) => {
             <SelectCardStage
               selectedCard={selectedCard}
               setSelectedCard={setSelectedCard}
+              setStage={setStage}
               setImageSrc={setImageSrc}
             />
           )}
@@ -328,6 +329,7 @@ const HomeScreen = ({ stage, setStage }) => {
             <ThemeStage
               theme={theme}
               setTheme={setTheme}
+              setStage={setStage}
               fullSuffix={fullSuffix}
             />
           )}

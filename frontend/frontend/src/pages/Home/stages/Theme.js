@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { Card } from '../../../components';
 import { themes } from '../../../backend/themes/index';
 
-const ThemeStage = ({ theme, setTheme, fullSuffix }) => {
+const ThemeStage = ({ theme, setTheme, setStage, fullSuffix }) => {
   return (
     <div className="flex flex-wrap">
       {Object.keys(themes)
@@ -26,7 +26,10 @@ const ThemeStage = ({ theme, setTheme, fullSuffix }) => {
             className="p-2 lg:p-4"
             key={index}
             type="button"
-            onClick={() => setTheme(myTheme)}
+            onClick={() => {
+              setTheme(myTheme);
+              setStage(4);
+            }}
           >
             <Card
               title={myTheme}
@@ -43,6 +46,7 @@ const ThemeStage = ({ theme, setTheme, fullSuffix }) => {
 ThemeStage.propTypes = {
   theme: PropTypes.string.isRequired,
   setTheme: PropTypes.func.isRequired,
+  setStage: PropTypes.func.isRequired,
   fullSuffix: PropTypes.string.isRequired,
 };
 

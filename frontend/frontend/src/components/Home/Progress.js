@@ -9,12 +9,13 @@ import {
 
 import { classnames } from '../../utils';
 
-const ProgressSection = ({ num, item, passed, onClick }) => {
+const ProgressSection = ({ num, item, passed, isActive, onClick }) => {
   return (
     <button
       className={classnames(
-        'w-1/4 flex flex-col mx-2 p-2 border-t-4 cursor-pointer',
+        'w-1/4 flex flex-col mx-2 p-2 cursor-pointer',
         passed ? 'border-blue-500' : 'border-gray-500',
+        isActive ? 'border-t-[14px] -mt-[5px]' : 'border-t-4',
       )}
       type="button"
       onClick={onClick}
@@ -38,6 +39,7 @@ ProgressSection.propTypes = {
   num: PropTypes.number.isRequired,
   item: PropTypes.string.isRequired,
   passed: PropTypes.bool.isRequired,
+  isActive: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 
@@ -64,6 +66,7 @@ const ProgressBar = ({ items, currItem, setCurrItem }) => {
               key={index}
               item={item}
               passed={currItem >= index}
+              isActive={currItem === index}
               onClick={() => setCurrItem(index)}
             />
           );
