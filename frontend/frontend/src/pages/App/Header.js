@@ -159,7 +159,7 @@ const Header = ({ mode, stage, setStage }) => {
           'Login',
           'Select Card',
           'Modify Parameters',
-          'Customize Theme',
+          'Select Theme',
           'Display Card',
         ]}
         currItem={stage}

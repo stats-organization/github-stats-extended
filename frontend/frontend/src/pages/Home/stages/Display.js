@@ -27,11 +27,26 @@ const DisplayStage = ({ userId, themeSuffix }) => {
     );
   };
 
+  const copyMarkdown = () => {
+    navigator.clipboard.writeText(
+      `[![GitHub Stats](https://${HOST}/api${themeSuffix})](https://${HOST}/api${themeSuffix})`,
+    );
+    toast.info('Copied to Clipboard!', {
+      position: 'bottom-right',
+      autoClose: 1500,
+      hideProgressBar: true,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+    });
+  };
+
   const copyUrl = () => {
     navigator.clipboard.writeText(`https://${HOST}/api${themeSuffix}`);
     toast.info('Copied to Clipboard!', {
       position: 'bottom-right',
-      autoClose: 1000,
+      autoClose: 1500,
       hideProgressBar: true,
       closeOnClick: false,
       pauseOnHover: false,
@@ -45,23 +60,23 @@ const DisplayStage = ({ userId, themeSuffix }) => {
       <ToastContainer />
       <div className="h-auto lg:w-2/5 md:w-1/2">
         <div className="pr-10 p-10 rounded-sm bg-gray-200">
-          <div>
-            Copy the image URL or download the PNG. Share on GitHub, Twitter,
-            LinkedIn, or anywhere else!
-          </div>
-          <br />
           <div className="flex flex-col items-center">
             {[
-              { title: 'Copy URL', active: true, onClick: copyUrl },
-              { title: 'Download PNG', active: true, onClick: downloadPNG },
+              {
+                title: 'Copy Markdown',
+                highlight: true,
+                onClick: copyMarkdown,
+              },
+              { title: 'Copy URL', highlight: false, onClick: copyUrl },
+              { title: 'Download PNG', highlight: false, onClick: downloadPNG },
             ].map((item, index) => (
               <Button
                 key={index}
                 className={classnames(
                   'm-4 w-60 flex justify-center',
-                  item.active
+                  item.highlight
                     ? 'bg-blue-500 text-white'
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed',
+                    : 'bg-gray-300 text-gray-500',
                 )}
                 onClick={item.onClick}
               >

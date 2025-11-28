@@ -197,7 +197,13 @@ const HomeScreen = ({ stage, setStage }) => {
   const contentSectionRef = useRef(null);
 
   useEffect(() => {
-    contentSectionRef.current?.scrollIntoView();
+    // scroll to top of content section if we're scrolled down
+    if (contentSectionRef.current) {
+      const rect = contentSectionRef.current.getBoundingClientRect();
+      if (rect.top < 0) {
+        contentSectionRef.current.scrollIntoView();
+      }
+    }
   }, [stage]);
 
   useEffect(() => {
@@ -285,9 +291,9 @@ const HomeScreen = ({ stage, setStage }) => {
                 [
                   '',
                   'You will be able to customize your card in future steps.',
-                  'Change the date range, include private commits, and more!',
-                  'Choose from one of our predefined themes (more coming soon!)',
-                  'Display your card on GitHub, Twitter, or Linkedin',
+                  '',
+                  '',
+                  'Display the finished card on GitHub, Twitter/X, Linkedin, or anywhere else!',
                 ][stage]
               )}
             </div>

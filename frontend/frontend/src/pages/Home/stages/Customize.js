@@ -160,7 +160,7 @@ const CustomizeStage = ({
         )}
       </div>
       <div className="w-full lg:w-3/5 md:w-1/2 object-center pt-5 md:pt-0 pl-0 md:pl-5 lg:pl-0">
-        <div className="w-full lg:w-3/5 mx-auto flex flex-col justify-center">
+        <div className="w-full lg:w-3/5 mx-auto flex flex-col justify-center sticky top-32">
           <Image imageSrc={fullSuffix} />
         </div>
       </div>
