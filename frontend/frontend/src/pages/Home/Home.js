@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import BounceLoader from 'react-spinners/BounceLoader';
@@ -194,6 +194,12 @@ const HomeScreen = ({ stage, setStage }) => {
     themeSuffix += `&theme=${theme}`;
   }
 
+  const contentSectionRef = useRef(null);
+
+  useEffect(() => {
+    contentSectionRef.current?.scrollIntoView();
+  }, [stage]);
+
   useEffect(() => {
     async function redirectCode() {
       // After requesting Github access, Github redirects back to your app with a code parameter
@@ -229,7 +235,10 @@ const HomeScreen = ({ stage, setStage }) => {
   }
 
   return (
-    <div className="h-full px-2 lg:px-8 text-gray-600 body-font">
+    <div
+      ref={contentSectionRef}
+      className="h-full px-2 lg:px-8 text-gray-600 body-font"
+    >
       <div className="flex flex-col">
         <div className="m-4 rounded-sm">
           <div className="lg:p-4">

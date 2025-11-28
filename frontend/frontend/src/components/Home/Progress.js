@@ -24,7 +24,7 @@ const ProgressSection = ({ num, item, passed, isActive, onClick }) => {
         className={classnames(
           'text-lg font-bold',
           passed ? 'text-blue-500' : 'text-gray-500',
-          isActive ? '-mt-[5px]' : '',
+          isActive ? '-mt-[4px]' : '',
         )}
       >
         {`Step ${num + 1}`}
