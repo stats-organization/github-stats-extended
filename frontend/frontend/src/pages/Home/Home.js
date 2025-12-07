@@ -14,7 +14,7 @@ import {
 
 import { authenticate } from '../../api';
 import { login as _login } from '../../redux/actions/userActions';
-import { HOST, DEMO_USER } from '../../constants';
+import { HOST, DEMO_USER, DEMO_WAKATIME_USER } from '../../constants';
 import { CardTypes } from '../../utils';
 import { DEFAULT_OPTION as STATS_DEFAULT_RANK } from '../../components/Home/StatsRankSection';
 import { DEFAULT_OPTION as LANGUAGES_DEFAULT_LAYOUT } from '../../components/Home/LanguagesLayoutSection';
@@ -24,14 +24,6 @@ import {
   useIsAuthenticated,
   usePrivateAccess,
 } from '../../redux/selectors/userSelectors';
-
-const computeUserName = (selectedCard, myUserId, myWakatimeUser) => {
-  if (selectedCard === CardTypes.WAKATIME) {
-    return myWakatimeUser;
-  } else {
-    return myUserId;
-  }
-};
 
 const HomeScreen = ({ stage, setStage }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -48,9 +40,6 @@ const HomeScreen = ({ stage, setStage }) => {
   const [wakatimeUser, setWakatimeUser] = useState();
 
   const [selectedCard, setSelectedCard] = useState('stats');
-  const [imageSrc, setImageSrc] = useState(
-    `?username=${computeUserName(selectedCard, userId, wakatimeUser)}`,
-  );
 
   // for stage three
   const [selectedStatsRank, setSelectedStatsRank] =
@@ -101,13 +90,22 @@ const HomeScreen = ({ stage, setStage }) => {
     resetCustomization();
   }, [selectedCard]);
 
-  useEffect(() => {
-    setImageSrc(
-      `?username=${computeUserName(selectedCard, userId, wakatimeUser)}`,
-    );
-  }, [selectedCard, userId, wakatimeUser]);
+  let fullSuffix = `${selectedCard === CardTypes.STATS ? '' : '/' + selectedCard}?`;
 
-  let fullSuffix = `${imageSrc}`;
+  switch (selectedCard) {
+    case CardTypes.STATS:
+    case CardTypes.TOP_LANGS:
+      fullSuffix += `username=${useUserId(DEMO_USER)}`;
+      break;
+    case CardTypes.PIN:
+      fullSuffix += `repo=anuraghazra/github-readme-stats`;
+      break;
+    case CardTypes.GIST:
+      fullSuffix += `id=bbfce31e0217a3689c8d961a356cb10d`;
+      break;
+    case CardTypes.WAKATIME:
+      fullSuffix += `username=${useUserId(DEMO_WAKATIME_USER)}`;
+  }
 
   if (
     selectedStatsRank !== STATS_DEFAULT_RANK &&
@@ -320,13 +318,11 @@ const HomeScreen = ({ stage, setStage }) => {
               selectedCard={selectedCard}
               setSelectedCard={setSelectedCard}
               setStage={setStage}
-              setImageSrc={setImageSrc}
             />
           )}
           {stage === 2 && (
             <CustomizeStage
               selectedCard={selectedCard || CardTypes.STATS}
-              imageSrc={imageSrc}
               selectedStatsRank={selectedStatsRank}
               setSelectedStatsRank={setSelectedStatsRank}
               selectedLanguagesLayout={selectedLanguagesLayout}
@@ -368,7 +364,9 @@ const HomeScreen = ({ stage, setStage }) => {
           )}
           {stage === 4 && (
             <DisplayStage
-              userId={computeUserName(selectedCard, userId, wakatimeUser)}
+              userId={
+                selectedCard === CardTypes.WAKATIME ? wakatimeUser : userId
+              }
               themeSuffix={themeSuffix}
             />
           )}

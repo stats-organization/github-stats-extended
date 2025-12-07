@@ -6,52 +6,43 @@ import PropTypes from 'prop-types';
 import { Card } from '../../../components';
 import { useUserId } from '../../../redux/selectors/userSelectors';
 import { DEMO_USER, DEMO_WAKATIME_USER } from '../../../constants';
+import { CardTypes } from '../../../utils';
 
-const SelectCardStage = ({
-  selectedCard,
-  setSelectedCard,
-  setStage,
-  setImageSrc,
-}) => {
+const SelectCardStage = ({ selectedCard, setSelectedCard, setStage }) => {
   return (
     <div className="w-full flex flex-wrap">
       {[
         {
           title: 'GitHub Stats Card',
           description: 'your overall GitHub statistics',
-          imageSrc: `?username=${useUserId(DEMO_USER)}`,
-          demoCustomization: '&include_all_commits=true',
-          cardType: 'stats',
+          demoImageSrc: `?username=${useUserId(DEMO_USER)}&include_all_commits=true`,
+          cardType: CardTypes.STATS,
         },
         {
           title: 'Top Languages Card',
           description: 'your most frequently used languages',
-          imageSrc: `/top-langs?username=${useUserId(DEMO_USER)}`,
-          demoCustomization: '&langs_count=4',
-          cardType: 'top-langs',
+          demoImageSrc: `/top-langs?username=${useUserId(DEMO_USER)}&langs_count=4`,
+          cardType: CardTypes.TOP_LANGS,
         },
         {
           title: 'GitHub Extra Pin',
           description:
             'pin more than 6 repositories in your profile using a GitHub profile readme',
-          imageSrc: '/pin?repo=anuraghazra/github-readme-stats',
-          demoCustomization: '',
-          cardType: 'pin',
+          demoImageSrc: '/pin?repo=anuraghazra/github-readme-stats',
+          cardType: CardTypes.PIN,
         },
         {
           title: 'GitHub Gist Pin',
           description:
             'pin gists in your GitHub profile using a GitHub profile readme',
-          imageSrc: '/gist?id=bbfce31e0217a3689c8d961a356cb10d',
-          demoCustomization: '',
-          cardType: 'gist',
+          demoImageSrc: '/gist?id=bbfce31e0217a3689c8d961a356cb10d',
+          cardType: CardTypes.GIST,
         },
         {
           title: 'WakaTime Stats Card',
           description: 'your coding activity from WakaTime',
-          imageSrc: `/wakatime?username=${useUserId(DEMO_WAKATIME_USER)}`,
-          demoCustomization: '&langs_count=6&card_width=450',
-          cardType: 'wakatime',
+          demoImageSrc: `/wakatime?username=${useUserId(DEMO_WAKATIME_USER)}&langs_count=6&card_width=450`,
+          cardType: CardTypes.WAKATIME,
         },
       ].map((card, index) => (
         <button
@@ -61,13 +52,12 @@ const SelectCardStage = ({
           onClick={() => {
             setSelectedCard(card.cardType);
             setStage(2);
-            setImageSrc(card.imageSrc);
           }}
         >
           <Card
             title={card.title}
             description={card.description}
-            imageSrc={card.imageSrc + card.demoCustomization}
+            imageSrc={card.demoImageSrc}
             selected={selectedCard === card.cardType}
             fixedSize="true"
           />
@@ -81,7 +71,6 @@ SelectCardStage.propTypes = {
   selectedCard: PropTypes.string,
   setSelectedCard: PropTypes.func.isRequired,
   setStage: PropTypes.func.isRequired,
-  setImageSrc: PropTypes.func.isRequired,
 };
 
 SelectCardStage.defaultProps = {
