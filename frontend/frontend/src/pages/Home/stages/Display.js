@@ -12,14 +12,14 @@ import { Button, Image } from '../../../components';
 import { classnames } from '../../../utils';
 import { HOST } from '../../../constants';
 
-const DisplayStage = ({ userId, themeSuffix }) => {
+const DisplayStage = ({ filename, themeSuffix }) => {
   const card = themeSuffix.split('?')[0];
 
   const downloadPNG = () => {
     saveSvgAsPng(
       document.getElementById('svgWrapper').shadowRoot.firstElementChild
         .firstElementChild,
-      `${userId}_${card}.png`,
+      `${filename}.png`,
       {
         scale: 2,
         encoderOptions: 1,
@@ -96,7 +96,7 @@ const DisplayStage = ({ userId, themeSuffix }) => {
 };
 
 DisplayStage.propTypes = {
-  userId: PropTypes.string.isRequired,
+  filename: PropTypes.string.isRequired,
   themeSuffix: PropTypes.string.isRequired,
 };
 

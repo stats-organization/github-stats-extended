@@ -8,6 +8,8 @@ import NumericSection from '../../../components/Home/NumericSection';
 import StatsRankSection from '../../../components/Home/StatsRankSection';
 import LanguagesLayoutSection from '../../../components/Home/LanguagesLayoutSection';
 import WakatimeLayoutSection from '../../../components/Home/WakatimeLayoutSection';
+import { DEMO_REPO, DEMO_WAKATIME_USER } from '../../../constants';
+import { useIsAuthenticated } from '../../../redux/selectors/userSelectors';
 
 const CustomizeStage = ({
   selectedCard,
@@ -17,6 +19,10 @@ const CustomizeStage = ({
   setSelectedLanguagesLayout,
   selectedWakatimeLayout,
   setSelectedWakatimeLayout,
+  repo,
+  setRepo,
+  gist,
+  setGist,
   wakatimeUser,
   setWakatimeUser,
   showTitle,
@@ -42,6 +48,8 @@ const CustomizeStage = ({
   fullSuffix,
 }) => {
   const cardType = selectedCard || CardTypes.STATS;
+  const isAuthenticated = useIsAuthenticated();
+
   return (
     <div className="w-full flex flex-wrap">
       <div className="h-auto lg:w-2/5 md:w-1/2 pr-10 p-10 rounded-sm bg-gray-200">
@@ -84,11 +92,37 @@ const CustomizeStage = ({
             setSelectedOption={setSelectedLanguagesLayout}
           />
         )}
+        {cardType === CardTypes.PIN && (
+          <TextSection
+            title="Repository"
+            description={
+              <>
+                Set your GitHub Repo to fetch your stats.
+                <br />
+                Please <a>log in</a> to change the repo.
+              </>
+            } // TODO: link to step 1
+            placeholder={`e.g. "${DEMO_REPO}"`} // TODO: example without owner?
+            value={repo}
+            setValue={(myRepo) => {
+              if (myRepo.endsWith('/')) {
+                myRepo = myRepo.slice(0, -1);
+              }
+              setRepo(myRepo.includes('/') ? myRepo.split('/')[1] : myRepo);
+            }}
+            disabled={!isAuthenticated} // TODO: explanation
+          />
+        )}
         {cardType === CardTypes.WAKATIME && (
           <TextSection
             title="WakaTime Username"
-            text='Set your <a href="https://wakatime.com/">WakaTime</a> username to fetch your stats.'
-            placeholder='e.g. "ffflabs"'
+            description={
+              <>
+                Set your <a href="https://wakatime.com/">WakaTime</a> username
+                to fetch your stats.
+              </>
+            } // TODO: make link visible
+            placeholder={`e.g. "${DEMO_WAKATIME_USER}"`}
             value={wakatimeUser}
             setValue={setWakatimeUser}
           />
@@ -133,7 +167,13 @@ const CustomizeStage = ({
         {(cardType === CardTypes.STATS || cardType === CardTypes.WAKATIME) && (
           <TextSection
             title="Custom Title"
-            text="Set a custom title for the card.<br>Leave empty for default title."
+            description={
+              <>
+                Set a custom title for the card.
+                <br />
+                Leave empty for default title.
+              </>
+            }
             placeholder='e.g. "My GitHub Stats"'
             value={customTitle}
             setValue={setCustomTitle}
@@ -187,6 +227,10 @@ CustomizeStage.propTypes = {
   setSelectedLanguagesLayout: PropTypes.func.isRequired,
   selectedWakatimeLayout: PropTypes.object.isRequired,
   setSelectedWakatimeLayout: PropTypes.func.isRequired,
+  repo: PropTypes.string.isRequired,
+  setRepo: PropTypes.func.isRequired,
+  gist: PropTypes.string.isRequired,
+  setGist: PropTypes.func.isRequired,
   wakatimeUser: PropTypes.string.isRequired,
   setWakatimeUser: PropTypes.func.isRequired,
   showTitle: PropTypes.bool.isRequired,

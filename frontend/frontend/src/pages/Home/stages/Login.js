@@ -8,6 +8,10 @@ import { Button, Image } from '../../../components';
 import { classnames } from '../../../utils';
 import {
   CLIENT_ID,
+  DEMO_GIST,
+  DEMO_REPO,
+  DEMO_USER,
+  DEMO_WAKATIME_USER,
   GITHUB_PRIVATE_AUTH_URL,
   GITHUB_PUBLIC_AUTH_URL,
   HOST,
@@ -43,25 +47,19 @@ const LoginStage = ({ setCurrItem }) => {
   // Card data
   const cards = [
     {
-      imageSrc: '/pin?repo=anuraghazra/github-readme-stats',
-      demoCustomization: '&disable_animations=true',
+      demoImageSrc: `/pin?repo=${DEMO_REPO}&disable_animations=true`,
     },
     {
-      imageSrc: '/top-langs?username=anuraghazra',
-      demoCustomization: '&langs_count=4&disable_animations=true',
+      demoImageSrc: `/top-langs?username=${DEMO_USER}&langs_count=4&disable_animations=true`,
     },
     {
-      imageSrc: '?username=anuraghazra',
-      demoCustomization: '&include_all_commits=true&disable_animations=true',
+      demoImageSrc: `?username=${DEMO_USER}&include_all_commits=true&disable_animations=true`,
     },
     {
-      imageSrc: '/wakatime?username=ffflabs',
-      demoCustomization:
-        '&langs_count=6&card_width=450&disable_animations=true',
+      demoImageSrc: `/wakatime?username=${DEMO_WAKATIME_USER}&langs_count=6&card_width=450&disable_animations=true`,
     },
     {
-      imageSrc: '/gist?id=bbfce31e0217a3689c8d961a356cb10d',
-      demoCustomization: '&disable_animations=true',
+      demoImageSrc: `/gist?id=${DEMO_GIST}&disable_animations=true`,
     },
   ];
 
@@ -213,7 +211,7 @@ const LoginStage = ({ setCurrItem }) => {
                 }}
               >
                 <Image
-                  imageSrc={card.imageSrc + card.demoCustomization}
+                  imageSrc={card.demoImageSrc}
                   compact={false}
                   extraClasses=""
                 />

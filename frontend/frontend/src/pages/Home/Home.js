@@ -14,7 +14,13 @@ import {
 
 import { authenticate } from '../../api';
 import { login as _login } from '../../redux/actions/userActions';
-import { HOST, DEMO_USER, DEMO_WAKATIME_USER } from '../../constants';
+import {
+  HOST,
+  DEMO_USER,
+  DEMO_WAKATIME_USER,
+  DEMO_REPO,
+  DEMO_GIST,
+} from '../../constants';
 import { CardTypes } from '../../utils';
 import { DEFAULT_OPTION as STATS_DEFAULT_RANK } from '../../components/Home/StatsRankSection';
 import { DEFAULT_OPTION as LANGUAGES_DEFAULT_LAYOUT } from '../../components/Home/LanguagesLayoutSection';
@@ -37,6 +43,8 @@ const HomeScreen = ({ stage, setStage }) => {
   const login = (newUserId, userKey) => dispatch(_login(newUserId, userKey));
 
   // for stage two
+  const [repo, setRepo] = useState(DEMO_REPO);
+  const [gist, setGist] = useState(DEMO_GIST);
   const [wakatimeUser, setWakatimeUser] = useState(DEMO_WAKATIME_USER);
 
   const [selectedCard, setSelectedCard] = useState('stats');
@@ -98,10 +106,10 @@ const HomeScreen = ({ stage, setStage }) => {
       fullSuffix += `username=${userId}`;
       break;
     case CardTypes.PIN:
-      fullSuffix += `repo=anuraghazra/github-readme-stats`;
+      fullSuffix += `repo=${repo}`;
       break;
     case CardTypes.GIST:
-      fullSuffix += `id=bbfce31e0217a3689c8d961a356cb10d`;
+      fullSuffix += `id=${gist}`;
       break;
     case CardTypes.WAKATIME:
       fullSuffix += `username=${wakatimeUser}`;
@@ -347,6 +355,10 @@ const HomeScreen = ({ stage, setStage }) => {
               setIncludeAllCommits={setIncludeAllCommits}
               enableAnimations={enableAnimations}
               setEnableAnimations={setEnableAnimations}
+              repo={repo}
+              setRepo={setRepo}
+              gist={gist}
+              setGist={setGist}
               wakatimeUser={wakatimeUser}
               setWakatimeUser={setWakatimeUser}
               usePercent={usePercent}
@@ -364,9 +376,20 @@ const HomeScreen = ({ stage, setStage }) => {
           )}
           {stage === 4 && (
             <DisplayStage
-              userId={
-                selectedCard === CardTypes.WAKATIME ? wakatimeUser : userId
-              }
+              filename={(() => {
+                switch (selectedCard) {
+                  case CardTypes.STATS:
+                    return `${userId}_card`;
+                  case CardTypes.TOP_LANGS:
+                    return `${userId}_card`;
+                  case CardTypes.PIN:
+                    return `${repo}_card`;
+                  case CardTypes.GIST:
+                    return `gist_card`;
+                  case CardTypes.WAKATIME:
+                    return `${wakatimeUser}_card`;
+                }
+              })()}
               themeSuffix={themeSuffix}
             />
           )}

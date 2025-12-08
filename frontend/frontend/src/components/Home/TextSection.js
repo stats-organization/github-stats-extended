@@ -4,10 +4,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Section from './Section';
+import { classnames } from '../../utils';
 
 const TextSection = ({
   title,
-  text,
+  description,
   value,
   setValue,
   disabled,
@@ -33,10 +34,13 @@ const TextSection = ({
 
   return (
     <Section title={title}>
-      <p dangerouslySetInnerHTML={{ __html: text }} />
+      <p>{description}</p>
       <input
         type="text"
-        className="border border-gray-300 rounded px-2 py-1 mt-2 w-1/2"
+        className={classnames(
+          'border border-gray-300 rounded px-2 py-1 mt-2 w-1/2',
+          disabled ? 'cursor-not-allowed' : '',
+        )}
         value={internalValue}
         onChange={(e) => setInternalValue(e.target.value)}
         disabled={disabled}
@@ -48,7 +52,7 @@ const TextSection = ({
 
 TextSection.propTypes = {
   title: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
+  description: PropTypes.node.isRequired,
   value: PropTypes.string.isRequired,
   setValue: PropTypes.func.isRequired,
   disabled: PropTypes.bool,

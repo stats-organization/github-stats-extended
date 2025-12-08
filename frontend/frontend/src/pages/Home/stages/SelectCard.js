@@ -5,7 +5,12 @@ import PropTypes from 'prop-types';
 
 import { Card } from '../../../components';
 import { useUserId } from '../../../redux/selectors/userSelectors';
-import { DEMO_USER, DEMO_WAKATIME_USER } from '../../../constants';
+import {
+  DEMO_GIST,
+  DEMO_REPO,
+  DEMO_USER,
+  DEMO_WAKATIME_USER,
+} from '../../../constants';
 import { CardTypes } from '../../../utils';
 
 const SelectCardStage = ({ selectedCard, setSelectedCard, setStage }) => {
@@ -28,14 +33,14 @@ const SelectCardStage = ({ selectedCard, setSelectedCard, setStage }) => {
           title: 'GitHub Extra Pin',
           description:
             'pin more than 6 repositories in your profile using a GitHub profile readme',
-          demoImageSrc: '/pin?repo=anuraghazra/github-readme-stats',
+          demoImageSrc: `/pin?repo=${DEMO_REPO}`,
           cardType: CardTypes.PIN,
         },
         {
           title: 'GitHub Gist Pin',
           description:
             'pin gists in your GitHub profile using a GitHub profile readme',
-          demoImageSrc: '/gist?id=bbfce31e0217a3689c8d961a356cb10d',
+          demoImageSrc: `/gist?id=${DEMO_GIST}`,
           cardType: CardTypes.GIST,
         },
         {
