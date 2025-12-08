@@ -364,6 +364,7 @@ const HomeScreen = ({ stage, setStage }) => {
               usePercent={usePercent}
               setUsePercent={setUsePercent}
               fullSuffix={fullSuffix}
+              setStage={setStage}
             />
           )}
           {stage === 3 && (

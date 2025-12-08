@@ -46,6 +46,7 @@ const CustomizeStage = ({
   usePercent,
   setUsePercent,
   fullSuffix,
+  setStage,
 }) => {
   const cardType = selectedCard || CardTypes.STATS;
   const isAuthenticated = useIsAuthenticated();
@@ -99,9 +100,24 @@ const CustomizeStage = ({
               <>
                 Set your GitHub Repo to fetch your stats.
                 <br />
-                Please <a>log in</a> to change the repo.
+                {!isAuthenticated && (
+                  <>
+                    Please
+                    <a
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setStage(1);
+                      }}
+                      className="underline text-blue-900"
+                    >
+                      log in
+                    </a>
+                    to change the repo.
+                  </>
+                )}
               </>
-            } // TODO: link to step 1
+            }
             placeholder={`e.g. "${DEMO_REPO}"`} // TODO: example without owner?
             value={repo}
             setValue={(myRepo) => {
@@ -110,7 +126,7 @@ const CustomizeStage = ({
               }
               setRepo(myRepo.includes('/') ? myRepo.split('/')[1] : myRepo);
             }}
-            disabled={!isAuthenticated} // TODO: explanation
+            disabled={!isAuthenticated}
           />
         )}
         {cardType === CardTypes.WAKATIME && (
@@ -118,8 +134,15 @@ const CustomizeStage = ({
             title="WakaTime Username"
             description={
               <>
-                Set your <a href="https://wakatime.com/">WakaTime</a> username
-                to fetch your stats.
+                Set your
+                <a
+                  href="https://wakatime.com/"
+                  target="_blank"
+                  className="underline text-blue-900"
+                >
+                  WakaTime
+                </a>{' '}
+                username to fetch your stats.
               </>
             } // TODO: make link visible
             placeholder={`e.g. "${DEMO_WAKATIME_USER}"`}
@@ -254,6 +277,7 @@ CustomizeStage.propTypes = {
   usePercent: PropTypes.bool.isRequired,
   setUsePercent: PropTypes.func.isRequired,
   fullSuffix: PropTypes.string.isRequired,
+  setStage: PropTypes.func.isRequired,
 };
 
 export default CustomizeStage;
