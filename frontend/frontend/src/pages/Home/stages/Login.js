@@ -1,6 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 
@@ -33,11 +33,45 @@ const LoginStage = ({ setCurrItem }) => {
   const isAuthenticated = useIsAuthenticated();
 
   const dispatch = useDispatch();
+  const [deleteModal, setDeleteModal] = useState(false);
+
   const logout = () => {
     dispatch(_logout());
   };
-  const deleteAccountHandler = async (myUserId, myUserKey) => {
-    const success = await deleteAccount(myUserId, myUserKey);
+
+  const openDeleteModal = () => {
+    setDeleteModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModal(false);
+  };
+
+  function useOutsideAlerter(ref, action) {
+    useEffect(() => {
+      /**
+       * Alert if clicked on outside of element
+       */
+      function handleClickOutside(event) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          action();
+        }
+      }
+
+      // Bind the event listener
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        // Unbind the event listener on clean up
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, [ref]);
+  }
+
+  const wrapperRef = useRef(null);
+  useOutsideAlerter(wrapperRef, closeDeleteModal);
+
+  const deleteAccountHandler = async () => {
+    const success = await deleteAccount(userId, userKey);
     if (success) {
       logout();
       window.location = `https://github.com/settings/connections/applications/${CLIENT_ID}`;
@@ -65,161 +99,199 @@ const LoginStage = ({ setCurrItem }) => {
 
   return (
     <div className="h-full flex flex-wrap">
-      <div className="lg:block lg:w-3/5 lg:p-8">
-        <div
-          className={classnames(
-            'bg-gray-200 rounded-sm w-full h-full m-auto p-8 shadow',
-            'lg:h-auto',
-          )}
-        >
-          {isAuthenticated ? (
-            <>
-              {/* Access Level Management Buttons */}
-              <div className="mb-4">
-                {privateAccess ? (
-                  <div className="flex items-center gap-4">
-                    <a
-                      href={`https://${HOST}/api/downgrade?user_key=${userKey}`}
-                    >
-                      <Button className="h-12 flex justify-center items-center w-[320px] text-black border border-black bg-white hover:bg-gray-100">
-                        <GithubIcon className="w-6 h-6" />
-                        <span className="ml-2 xl:text-lg">
-                          Downgrade to Public Access
-                        </span>
-                      </Button>
-                    </a>
-                    <p className="text-sm text-gray-600 flex-1">
-                      Switch to public access if you prefer not to share private
-                      contributions.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-4">
-                    <a href={GITHUB_PRIVATE_AUTH_URL}>
-                      <Button className="h-12 flex justify-center items-center w-[320px] text-white bg-blue-500 hover:bg-blue-600">
-                        <GithubIcon className="w-6 h-6" />
-                        <span className="ml-2 xl:text-lg">
-                          Upgrade to Private Access
-                        </span>
-                      </Button>
-                    </a>
-                    <p className="text-sm text-gray-600 flex-1">
-                      Upgrade to include contributions in private repositories
-                      for more complete and accurate stats.
-                    </p>
-                  </div>
-                )}
-              </div>
+      <div className={deleteModal && 'opacity-25'}>
+        <div className="lg:block lg:w-3/5 lg:p-8">
+          <div
+            className={classnames(
+              'bg-gray-200 rounded-sm w-full h-full m-auto p-8 shadow',
+              'lg:h-auto',
+            )}
+          >
+            {isAuthenticated ? (
+              <>
+                {/* Access Level Management Buttons */}
+                <div className="mb-4">
+                  {privateAccess ? (
+                    <div className="flex items-center gap-4">
+                      <a
+                        href={`https://${HOST}/api/downgrade?user_key=${userKey}`}
+                      >
+                        <Button className="h-12 flex justify-center items-center w-[320px] text-black border border-black bg-white hover:bg-gray-100">
+                          <GithubIcon className="w-6 h-6" />
+                          <span className="ml-2 xl:text-lg">
+                            Downgrade to Public Access
+                          </span>
+                        </Button>
+                      </a>
+                      <p className="text-sm text-gray-600 flex-1">
+                        Switch to public access if you prefer not to share
+                        private contributions.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-4">
+                      <a href={GITHUB_PRIVATE_AUTH_URL}>
+                        <Button className="h-12 flex justify-center items-center w-[320px] text-white bg-blue-500 hover:bg-blue-600">
+                          <GithubIcon className="w-6 h-6" />
+                          <span className="ml-2 xl:text-lg">
+                            Upgrade to Private Access
+                          </span>
+                        </Button>
+                      </a>
+                      <p className="text-sm text-gray-600 flex-1">
+                        Upgrade to include contributions in private repositories
+                        for more complete and accurate stats.
+                      </p>
+                    </div>
+                  )}
+                </div>
 
-              {/* Logout Button */}
-              <div className="mt-6 flex items-center gap-4">
-                <Button
-                  className="h-12 flex justify-center items-center w-[320px] text-black border border-black bg-white hover:bg-gray-100"
-                  onClick={logout}
-                >
-                  <span className="xl:text-lg">Log Out</span>
-                </Button>
-                <p className="text-sm text-gray-600 flex-1">
-                  Log out from GitHub Trends.
-                </p>
-              </div>
-
-              {/* Delete Account Button */}
-              <div className="mt-6 flex items-center gap-4">
-                <Button
-                  className="h-12 flex justify-center items-center w-[320px] text-black border border-black bg-white hover:bg-gray-100"
-                  onClick={() => deleteAccountHandler(userId, userKey)}
-                >
-                  <span className="xl:text-lg">Delete Account</span>
-                </Button>
-                <p className="text-sm text-gray-600 flex-1">
-                  This will delete your GitHub Trends account and then redirect
-                  you to a GitHub screen where you can revoke your access token.
-                </p>
-              </div>
-            </>
-          ) : (
-            <>
-              {/* User is not logged in - show login options */}
-              <div className="flex items-center gap-4 mb-4">
-                <a href={GITHUB_PUBLIC_AUTH_URL}>
-                  <Button className="h-12 flex justify-center items-center w-[260px] text-white bg-blue-500 hover:bg-blue-600">
-                    <GithubIcon className="w-6 h-6" />
-                    <span className="ml-2 xl:text-lg">
-                      GitHub Public Access
-                    </span>
+                {/* Logout Button */}
+                <div className="mt-6 flex items-center gap-4">
+                  <Button
+                    className="h-12 flex justify-center items-center w-[320px] text-black border border-black bg-white hover:bg-gray-100"
+                    onClick={logout}
+                  >
+                    <span className="xl:text-lg">Log Out</span>
                   </Button>
-                </a>
-                <p className="text-sm text-gray-600 flex-1">
-                  Generate stats based on your contributions in public
-                  repositories.
-                </p>
-              </div>
+                  <p className="text-sm text-gray-600 flex-1">
+                    Log out from GitHub Trends.
+                  </p>
+                </div>
 
-              <div className="flex items-center gap-4 mb-4">
-                <a href={GITHUB_PRIVATE_AUTH_URL}>
-                  <Button className="h-12 flex justify-center items-center w-[260px] text-black border border-black bg-white hover:bg-gray-100">
-                    <GithubIcon className="w-6 h-6" />
-                    <span className="ml-2 xl:text-lg">
-                      GitHub Private Access
-                    </span>
+                {/* Delete Account Button */}
+                <div className="mt-6 flex items-center gap-4">
+                  <Button
+                    className="h-12 flex justify-center items-center w-[320px] text-black border border-black bg-white hover:bg-gray-100"
+                    onClick={openDeleteModal}
+                  >
+                    <span className="xl:text-lg">Delete Account</span>
                   </Button>
-                </a>
-                <p className="text-sm text-gray-600 flex-1">
-                  Includes contributions from private repositories for more
-                  complete and accurate stats.
-                </p>
-              </div>
+                  <p className="text-sm text-gray-600 flex-1">
+                    This will delete your GitHub Trends account and then
+                    redirect you to a GitHub screen where you can revoke your
+                    access token.
+                  </p>
+                </div>
+              </>
+            ) : (
+              <>
+                {/* User is not logged in - show login options */}
+                <div className="flex items-center gap-4 mb-4">
+                  <a href={GITHUB_PUBLIC_AUTH_URL}>
+                    <Button className="h-12 flex justify-center items-center w-[260px] text-white bg-blue-500 hover:bg-blue-600">
+                      <GithubIcon className="w-6 h-6" />
+                      <span className="ml-2 xl:text-lg">
+                        GitHub Public Access
+                      </span>
+                    </Button>
+                  </a>
+                  <p className="text-sm text-gray-600 flex-1">
+                    Generate stats based on your contributions in public
+                    repositories.
+                  </p>
+                </div>
 
-              <div className="flex items-center gap-4">
-                <Button
-                  className="h-12 flex justify-center items-center w-[260px] text-black border border-black bg-white hover:bg-gray-100"
-                  onClick={() => setCurrItem(1)}
+                <div className="flex items-center gap-4 mb-4">
+                  <a href={GITHUB_PRIVATE_AUTH_URL}>
+                    <Button className="h-12 flex justify-center items-center w-[260px] text-black border border-black bg-white hover:bg-gray-100">
+                      <GithubIcon className="w-6 h-6" />
+                      <span className="ml-2 xl:text-lg">
+                        GitHub Private Access
+                      </span>
+                    </Button>
+                  </a>
+                  <p className="text-sm text-gray-600 flex-1">
+                    Includes contributions from private repositories for more
+                    complete and accurate stats.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  <Button
+                    className="h-12 flex justify-center items-center w-[260px] text-black border border-black bg-white hover:bg-gray-100"
+                    onClick={() => setCurrItem(1)}
+                  >
+                    <span className="ml-2 xl:text-lg">Continue as Guest</span>
+                  </Button>
+                  <p className="text-sm text-gray-600 flex-1">
+                    Try out Github Trends with data from an example
+                    user/repository.
+                  </p>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+        <div className="w-full h-full lg:w-2/5 flex lg:flex-col lg:p-8 relative overflow-hidden">
+          <div className="relative w-full h-full">
+            {cards.map((card, index) => {
+              const radius = 60;
+              const centerX = 70;
+              const startAngle = Math.PI * 0.75; // 135 degrees
+              const endAngle = Math.PI * 1.25; // 225 degrees
+
+              const angle =
+                startAngle +
+                (endAngle - startAngle) * (index / (cards.length - 1));
+              const x = centerX + radius * Math.cos(angle);
+
+              return (
+                <div
+                  key={index}
+                  style={{
+                    left: `${x}%`,
+                    position: 'relative',
+                    zoom: '0.5',
+                    marginBottom: '1%',
+                  }}
                 >
-                  <span className="ml-2 xl:text-lg">Continue as Guest</span>
-                </Button>
-                <p className="text-sm text-gray-600 flex-1">
-                  Try out Github Trends with data from an example
-                  user/repository.
-                </p>
-              </div>
-            </>
-          )}
+                  <Image
+                    imageSrc={card.demoImageSrc}
+                    compact={false}
+                    extraClasses=""
+                  />
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
-      <div className="w-full h-full lg:w-2/5 flex lg:flex-col lg:p-8 relative overflow-hidden">
-        <div className="relative w-full h-full">
-          {cards.map((card, index) => {
-            const radius = 60;
-            const centerX = 70;
-            const startAngle = Math.PI * 0.75; // 135 degrees
-            const endAngle = Math.PI * 1.25; // 225 degrees
-
-            const angle =
-              startAngle +
-              (endAngle - startAngle) * (index / (cards.length - 1));
-            const x = centerX + radius * Math.cos(angle);
-
-            return (
+      {deleteModal && (
+        <div>
+          <div className="fixed left-0 top-0 w-full h-full">
+            <div className="w-full h-full flex justify-center items-center">
               <div
-                key={index}
-                style={{
-                  left: `${x}%`,
-                  position: 'relative',
-                  zoom: '0.5',
-                  marginBottom: '1%',
-                }}
+                className="w-96 p-4 bg-white rounded-sm border-2 border-gray-200"
+                ref={wrapperRef}
               >
-                <Image
-                  imageSrc={card.demoImageSrc}
-                  compact={false}
-                  extraClasses=""
-                />
+                <p className="mb-1 text-2xl text-gray-700">Delete Account</p>
+                <hr />
+                <br />
+                <p>
+                  Are you sure you want to delete your account from GitHub
+                  Trends?
+                </p>
+                <br />
+                <div className="flex flex-wrap">
+                  <Button
+                    className="bg-blue-500 text-white rounded-sm"
+                    onClick={() => setDeleteModal(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    className="bg-gray-200 ml-auto rounded-sm text-red-600 border-2"
+                    onClick={deleteAccountHandler}
+                  >
+                    Delete Account
+                  </Button>
+                </div>
               </div>
-            );
-          })}
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
