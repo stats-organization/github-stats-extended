@@ -3,7 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { saveSvgAsPng } from 'save-svg-as-png';
@@ -36,7 +36,7 @@ const DisplayStage = ({ filename, link, themeSuffix }) => {
       autoClose: 1500,
       hideProgressBar: true,
       closeOnClick: false,
-      pauseOnHover: false,
+      pauseOnHover: true,
       draggable: false,
       progress: undefined,
     });
@@ -49,7 +49,7 @@ const DisplayStage = ({ filename, link, themeSuffix }) => {
       autoClose: 1500,
       hideProgressBar: true,
       closeOnClick: false,
-      pauseOnHover: false,
+      pauseOnHover: true,
       draggable: false,
       progress: undefined,
     });
@@ -57,7 +57,6 @@ const DisplayStage = ({ filename, link, themeSuffix }) => {
 
   return (
     <div className="w-full flex flex-wrap">
-      <ToastContainer />
       <div className="h-auto lg:w-2/5 md:w-1/2">
         <div className="pr-10 p-10 rounded-sm bg-gray-200">
           <div className="flex flex-col items-center">

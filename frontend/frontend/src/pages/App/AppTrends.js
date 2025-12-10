@@ -14,8 +14,40 @@ import {
   useIsAuthenticated,
   useUserKey,
 } from '../../redux/selectors/userSelectors';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
+  const toMessage = (input) => {
+    if (typeof input === 'string') return input;
+    if (input.reason.message) return input.reason.message;
+    if (input.message) return input.message;
+    try {
+      return JSON.stringify(input);
+    } catch {
+      return 'Unknown error';
+    }
+  };
+
+  const showError = (event) => {
+    toast.error(toMessage(event), {
+      position: 'bottom-right',
+      autoClose: 1500,
+      hideProgressBar: true,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: false,
+      progress: undefined,
+    });
+  };
+
+  window.addEventListener('error', (event) => {
+    showError(event);
+  });
+  window.addEventListener('unhandledrejection', (event) => {
+    showError(event);
+  });
+
   const userKey = useUserKey();
   const isAuthenticated = useIsAuthenticated();
   const [stage, setStage] = useState(isAuthenticated ? 1 : 0);
@@ -50,6 +82,7 @@ function App() {
         <Header mode="trends" stage={stage} setStage={setStage} />
         <section className="bg-white text-gray-700 flex-grow">
           <HomeScreen stage={stage} setStage={setStage} />
+          <ToastContainer />
         </section>
       </Router>
     </div>
