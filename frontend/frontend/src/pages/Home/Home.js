@@ -51,6 +51,10 @@ const HomeScreen = ({ stage, setStage }) => {
 
   const [selectedCard, setSelectedCard] = useState('stats');
 
+  useEffect(() => {
+    setSelectedUserId(userId);
+  }, [userId]);
+
   // for stage three
   const [selectedStatsRank, setSelectedStatsRank] =
     useState(STATS_DEFAULT_RANK);

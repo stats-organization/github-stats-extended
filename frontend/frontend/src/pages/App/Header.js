@@ -91,7 +91,7 @@ const Header = ({ mode, stage, setStage }) => {
             >
               <button
                 type="button"
-                className="rounded-sm shadow bg-gray-200 hover:bg-gray-300 text-black px-3 py-1 flex items-center"
+                className="rounded-[0.25rem] shadow bg-gray-200 hover:bg-gray-300 text-black px-3 py-1 flex items-center"
               >
                 Star on
                 <GithubIcon className="ml-1.5 w-5 h-5" />

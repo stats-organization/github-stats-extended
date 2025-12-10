@@ -14,6 +14,7 @@ import {
   useIsAuthenticated,
   useUserToken,
 } from '../../redux/selectors/userSelectors';
+import axios from 'axios';
 
 const SvgInline = (props) => {
   const [svg, setSvg] = useState(null);
