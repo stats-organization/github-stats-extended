@@ -65,6 +65,7 @@ const SelectCardStage = ({ selectedCard, setSelectedCard, setStage }) => {
             imageSrc={card.demoImageSrc}
             selected={selectedCard === card.cardType}
             fixedSize="true"
+            stage={1}
           />
         </button>
       ))}

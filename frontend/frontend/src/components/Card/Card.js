@@ -5,18 +5,24 @@ import SVG from './SVG';
 import { classnames } from '../../utils';
 import { HOST } from '../../constants';
 
-export const Image = ({ imageSrc, compact, extraClasses = '' }) => {
+export const Image = ({ imageSrc, stage, compact, extraClasses = '' }) => {
   const fullImageSrc = `https://${HOST}/api${imageSrc}&client=wizard`;
 
   return (
     <div className={`${extraClasses} relative w-full relative`}>
-      <SVG className="object-cover" url={fullImageSrc} compact={compact} />
+      <SVG
+        className="object-cover"
+        url={fullImageSrc}
+        compact={compact}
+        stage={stage}
+      />
     </div>
   );
 };
 
 Image.propTypes = {
   imageSrc: PropTypes.string.isRequired,
+  stage: PropTypes.number.isRequired,
   compact: PropTypes.bool,
   extraClasses: PropTypes.string,
 };
@@ -30,6 +36,7 @@ export const Card = ({
   title,
   description,
   imageSrc,
+  stage,
   selected,
   compact,
   fixedSize,
@@ -50,6 +57,7 @@ export const Card = ({
         imageSrc={imageSrc}
         compact={compact}
         extraClasses={fixedSize ? 'flex justify-center' : ''}
+        stage={stage}
       />
     </div>
   );
@@ -59,6 +67,7 @@ Card.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   imageSrc: PropTypes.string.isRequired,
+  stage: PropTypes.number.isRequired,
   selected: PropTypes.bool,
   compact: PropTypes.bool,
   fixedSize: PropTypes.string,

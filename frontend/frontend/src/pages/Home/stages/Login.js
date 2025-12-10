@@ -252,6 +252,7 @@ const LoginStage = ({ setCurrItem }) => {
                     imageSrc={card.demoImageSrc}
                     compact={false}
                     extraClasses=""
+                    stage={0}
                   />
                 </div>
               );

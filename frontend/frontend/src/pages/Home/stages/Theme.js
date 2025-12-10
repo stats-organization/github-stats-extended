@@ -36,6 +36,7 @@ const ThemeStage = ({ theme, setTheme, setStage, fullSuffix }) => {
               description=""
               imageSrc={`${fullSuffix}&theme=${myTheme}`}
               selected={theme === myTheme}
+              stage={3}
             />
           </button>
         ))}

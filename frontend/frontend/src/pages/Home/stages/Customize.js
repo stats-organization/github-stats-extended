@@ -61,45 +61,6 @@ const CustomizeStage = ({
   return (
     <div className="w-full flex flex-wrap">
       <div className="h-auto lg:w-2/5 md:w-1/2 pr-10 p-10 rounded-sm bg-gray-200">
-        {cardType === CardTypes.STATS && (
-          <CheckboxSection
-            title="Show All Stats?"
-            text="Show all available statistics."
-            question="Show all stats?"
-            variable={showAllStats}
-            setVariable={setShowAllStats}
-          />
-        )}
-        {cardType === CardTypes.STATS && (
-          <StatsRankSection
-            selectedOption={selectedStatsRank}
-            setSelectedOption={setSelectedStatsRank}
-          />
-        )}
-        {cardType === CardTypes.STATS && (
-          <CheckboxSection
-            title="Show Icons?"
-            text="Show icons next to all stats."
-            question="Show icons?"
-            variable={showIcons}
-            setVariable={setShowIcons}
-          />
-        )}
-        {cardType === CardTypes.STATS && (
-          <CheckboxSection
-            title="Include All Commits?"
-            text="Count total commits or just commits of the last 365 days."
-            question="Include all commits?"
-            variable={includeAllCommits}
-            setVariable={setIncludeAllCommits}
-          />
-        )}
-        {cardType === CardTypes.TOP_LANGS && (
-          <LanguagesLayoutSection
-            selectedOption={selectedLanguagesLayout}
-            setSelectedOption={setSelectedLanguagesLayout}
-          />
-        )}
         {(cardType === CardTypes.STATS || cardType === CardTypes.TOP_LANGS) && (
           <TextSection
             title="Username"
@@ -139,7 +100,7 @@ const CustomizeStage = ({
               if (parts.length > 1) {
                 newValue = parts.slice(-1).join('/');
               }
-              setRepo(newValue);
+              setSelectedUserId(newValue);
             }}
             disabled={!isAuthenticated}
           />
@@ -253,6 +214,45 @@ const CustomizeStage = ({
             setValue={setWakatimeUser}
           />
         )}
+        {cardType === CardTypes.STATS && (
+          <CheckboxSection
+            title="Show All Stats?"
+            text="Show all available statistics."
+            question="Show all stats?"
+            variable={showAllStats}
+            setVariable={setShowAllStats}
+          />
+        )}
+        {cardType === CardTypes.STATS && (
+          <StatsRankSection
+            selectedOption={selectedStatsRank}
+            setSelectedOption={setSelectedStatsRank}
+          />
+        )}
+        {cardType === CardTypes.STATS && (
+          <CheckboxSection
+            title="Show Icons?"
+            text="Show icons next to all stats."
+            question="Show icons?"
+            variable={showIcons}
+            setVariable={setShowIcons}
+          />
+        )}
+        {cardType === CardTypes.STATS && (
+          <CheckboxSection
+            title="Include All Commits?"
+            text="Count total commits or just commits of the last 365 days."
+            question="Include all commits?"
+            variable={includeAllCommits}
+            setVariable={setIncludeAllCommits}
+          />
+        )}
+        {cardType === CardTypes.TOP_LANGS && (
+          <LanguagesLayoutSection
+            selectedOption={selectedLanguagesLayout}
+            setSelectedOption={setSelectedLanguagesLayout}
+          />
+        )}
         {cardType === CardTypes.WAKATIME && (
           <WakatimeLayoutSection
             selectedOption={selectedWakatimeLayout}
@@ -338,7 +338,7 @@ const CustomizeStage = ({
       </div>
       <div className="w-full lg:w-3/5 md:w-1/2 object-center pt-5 md:pt-0 pl-0 md:pl-5 lg:pl-0">
         <div className="w-full lg:w-3/5 mx-auto flex flex-col justify-center sticky top-32">
-          <Image imageSrc={fullSuffix} />
+          <Image imageSrc={fullSuffix} stage={2} />
         </div>
       </div>
     </div>
