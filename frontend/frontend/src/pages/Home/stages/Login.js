@@ -278,13 +278,13 @@ const LoginStage = ({ setCurrItem }) => {
                 <br />
                 <div className="flex flex-wrap">
                   <Button
-                    className="bg-blue-500 text-white rounded-[0.25rem]"
+                    className="bg-blue-500 hover:bg-blue-600 text-white rounded-[0.25rem]"
                     onClick={() => setDeleteModal(false)}
                   >
                     Cancel
                   </Button>
                   <Button
-                    className="bg-gray-200 ml-auto rounded-[0.25rem] text-red-600 border-2"
+                    className="bg-gray-200 hover:bg-gray-300 ml-auto rounded-[0.25rem] text-red-600 border-2"
                     onClick={deleteAccountHandler}
                   >
                     Delete Account
