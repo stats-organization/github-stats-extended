@@ -4,13 +4,6 @@
   "private": true,
   "dependencies": {
     "@babel/runtime": "^7.23.2",
-    "@nivo/bar": "^0.83.0",
-    "@nivo/calendar": "^0.83.0",
-    "@nivo/core": "^0.83.0",
-    "@nivo/pie": "^0.83.0",
-    "@nivo/radar": "^0.83.0",
-    "@nivo/swarmplot": "^0.83.0",
-    "@nivo/tooltip": "^0.83.0",
     "axios": "^1",
     "axios-cache-interceptor": "^1",
     "buffer": "^6.0.3",
