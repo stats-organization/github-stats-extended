@@ -58,6 +58,7 @@
     "tailwindcss": "^3.3.5"
   },
   "resolutions": {
+    "@svgr/webpack": "^6.0.0",
     "resolve-url-loader": "^5.0.0",
     "webpack-dev-server": "^5.2.2"
   },
