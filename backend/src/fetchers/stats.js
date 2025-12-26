@@ -114,7 +114,7 @@ const fetcher = (variables, token) => {
  * @param {string[]} ownerAffiliations The owner affiliations to filter by. Default: OWNER.
  * @returns {Promise<import('axios').AxiosResponse>} Axios response.
  *
- * @description This function supports multi-page fetching if the 'FETCH_MULTI_PAGE_STARS' environment variable is set to true.
+ * @description This function supports multi-page fetching if the 'FETCH_MULTI_PAGE_STARS' environment variable is set to true or a limit of fetches.
  */
 const statsFetcher = async ({
   username,
@@ -127,6 +127,7 @@ const statsFetcher = async ({
   let stats;
   let hasNextPage = true;
   let endCursor = null;
+  let fetchedPages = 0;
   while (hasNextPage) {
     const variables = {
       login: username,
@@ -146,17 +147,23 @@ const statsFetcher = async ({
     // Store stats data.
     const repoNodes = res.data.data.user.repositories.nodes;
     if (stats) {
+      if (fetchedPages === 1) {
+        // make deep copy of stats to avoid altering the cached response object in frontend
+        stats = structuredClone(stats);
+      }
       stats.data.data.user.repositories.nodes.push(...repoNodes);
     } else {
       stats = res;
     }
 
     // Disable multi page fetching on public Vercel instance due to rate limits.
+    fetchedPages++;
     const repoNodesWithStars = repoNodes.filter(
       (node) => node.stargazers.totalCount !== 0,
     );
     hasNextPage =
-      process.env.FETCH_MULTI_PAGE_STARS === "true" &&
+      (process.env.FETCH_MULTI_PAGE_STARS === "true" ||
+        process.env.FETCH_MULTI_PAGE_STARS > fetchedPages) &&
       repoNodes.length === repoNodesWithStars.length &&
       res.data.data.user.repositories.pageInfo.hasNextPage;
     endCursor = res.data.data.user.repositories.pageInfo.endCursor;

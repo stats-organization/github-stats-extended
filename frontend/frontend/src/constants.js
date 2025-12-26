@@ -31,7 +31,7 @@ export const DEMO_WAKATIME_USER = 'ffflabs';
 
 window.process = {
   env: {
-    FETCH_MULTI_PAGE_STARS: 'true',
+    FETCH_MULTI_PAGE_STARS: 10,
     PAT_1: 'placeholderPAT', // so the backend's retryer.js sees there is 1 PAT and sets `RETRIES` accordingly
   },
 };
