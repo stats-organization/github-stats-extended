@@ -148,8 +148,11 @@ const statsFetcher = async ({
     const repoNodes = res.data.data.user.repositories.nodes;
     if (stats) {
       if (fetchedPages === 1) {
-        // make deep copy of stats to avoid altering the cached response object in frontend
-        stats = structuredClone(stats);
+        // make deep copy of relevant stats fields to avoid altering the cached response object in frontend
+        stats = structuredClone({
+          data: stats.data,
+          statusText: stats.statusText,
+        });
       }
       stats.data.data.user.repositories.nodes.push(...repoNodes);
     } else {
