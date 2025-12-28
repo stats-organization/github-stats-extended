@@ -1,4 +1,4 @@
-# Contributing to [GitHub Stats Extended](https://github.com/martin-mfg/github-readme-stats)
+# Contributing to GitHub Stats Extended
 
 ## Local Development
 
