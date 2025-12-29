@@ -18,13 +18,13 @@ To run and test GitHub-Stats-Extended, you need to follow a few simple steps:
 
 ## Themes Contribution
 
-We have stopped the addition of new themes to decrease maintenance efforts. If you are considering contributing your theme just because you are using it personally, then instead of adding it to our theme collection, you can use card [customization options](./readme.md#customization).
+We have stopped the addition of new themes to decrease maintenance efforts. If you are considering contributing your theme just because you are using it personally, then instead of adding it to our theme collection, you can use card [customization options](../docs/advanced_documentation.md#customization).
 
 ## Translations Contribution
 
-GitHub-Stats-Extended supports multiple languages. If we are missing your language, you can contribute it! You can check the currently supported languages [here](./readme.md#available-locales).
+GitHub-Stats-Extended supports multiple languages. If we are missing your language, you can contribute it! You can check the currently supported languages [here](../docs/advanced_documentation.md#available-locales).
 
-To contribute your language you need to edit the [src/translations.js](./src/translations.js) file and add a new property to each object where the key is the language code in [ISO 639-1 standard](https://www.andiamo.co.uk/resources/iso-language-codes/) and the value is the translated string.
+To contribute your language you need to edit the [backend/src/translations.js](../backend/src/translations.js) file and add a new property to each object where the key is the language code in [ISO 639-1 standard](https://www.andiamo.co.uk/resources/iso-language-codes/) and the value is the translated string.
 
 ## Any contributions you make will be under the MIT Software License
 

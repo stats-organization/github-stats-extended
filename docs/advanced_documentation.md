@@ -9,7 +9,7 @@
 # GitHub Stats Card
 
 > [!WARNING]
-> By default, the stats card only shows statistics like stars, commits, and pull requests from public repositories. To show private statistics on the stats card, you should [deploy your own instance](#deploy-on-your-own) using your own GitHub API token.
+> By default, the stats card only shows statistics like stars, commits, and pull requests from public repositories. To show private statistics on the stats card, you should [deploy your own instance](deploy.md) using your own GitHub API token.
 
 > [!NOTE]
 > Available ranks are S (top 1%), A+ (12.5%), A (25%), A- (37.5%), B+ (50%), B (62.5%), B- (75%), C+ (87.5%) and C (everyone). This ranking scheme is based on the [Japanese academic grading](https://wikipedia.org/wiki/Academic_grading_in_Japan) system. The global percentile is calculated as a weighted sum of percentiles for each statistic (number of commits, pull requests, reviews, issues, stars, and followers), based on the cumulative distribution function of the [exponential](https://wikipedia.org/wiki/exponential_distribution) and the [log-normal](https://wikipedia.org/wiki/Log-normal_distribution) distributions. The implementation can be investigated at [src/calculateRank.js](https://github.com/anuraghazra/github-readme-stats/blob/master/src/calculateRank.js). The circle around the rank shows 100 minus the global percentile.
@@ -99,7 +99,7 @@ We have included a `transparent` theme that has a transparent background. This t
 
 ##### Add transparent alpha channel to a themes bg\_color
 
-You can use the `bg_color` parameter to make any of [the available themes](themes/README.md) transparent. This is done by setting the `bg_color` to a color with a transparent alpha channel (i.e. `bg_color=00000000`):
+You can use the `bg_color` parameter to make any of [the available themes](../backend/themes/README.md) transparent. This is done by setting the `bg_color` to a color with a transparent alpha channel (i.e. `bg_color=00000000`):
 
 ```md
 ![Anurag's GitHub stats](https://github-readme-stats-phi-jet-58.vercel.app/api?username=anuraghazra&show_icons=true&bg_color=00000000)
@@ -178,7 +178,7 @@ You can customize the appearance of all your cards however you wish with URL par
 | `border_color` | Card's border color. Does not apply when `hide_border` is enabled. | string (hex color) | `e4e2e2` |
 | `bg_color` | Card's background color. | string (hex color or a gradient in the form of *angle,start,end*) | `fffefe` |
 | `hide_border` | Hides the card's border. | boolean | `false` |
-| `theme` | Name of the theme, choose from [all available themes](themes/README.md). | enum | `default` |
+| `theme` | Name of the theme, choose from [all available themes](../backend/themes/README.md). | enum | `default` |
 | `cache_seconds` | Sets the cache header manually (min: 21600, max: 86400). | integer | `21600` |
 | `locale` | Sets the language in the card, you can check full list of available locales [here](#available-locales). | enum | `en` |
 | `border_radius` | Corner rounding on the card. | number | `4.5` |
@@ -378,7 +378,7 @@ Use [show\_owner](#options-1) query option to include the gist's owner username
 The top languages card shows your most frequently used languages.
 
 > [!WARNING]
-> By default, the language card shows language results only from public repositories. To include languages used in private repositories, you should [deploy your own instance](#deploy-on-your-own) using your own GitHub API token.
+> By default, the language card shows language results only from public repositories. To include languages used in private repositories, you should [deploy your own instance](deploy.md) using your own GitHub API token.
 
 > [!WARNING]
 > This card shows language usage only inside your own non-forked repositories, not depending on who the author of the commits is. It does not include your contributions into another users/organizations repositories. Currently there are no way to get this data from GitHub API. If you want this behavior to be improved you can support [this feature request](https://github.com/orgs/community/discussions/18230) created by [@rickstaa](https://github.com/rickstaa) inside GitHub Community.

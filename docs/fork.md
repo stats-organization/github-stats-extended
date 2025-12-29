@@ -12,7 +12,7 @@ GitHub-Stats-Extended adds a frontend which allows users to visually configure s
 
 ![frontend screenshot](frontend-screenshot.png)
 
-The frontend is based on [GitHub Trends](https://github.com/avgupta456/github-trends) by @avgupta456.
+The frontend is based on [GitHub Trends](https://github.com/avgupta456/github-trends) by [@avgupta456](https://github.com/avgupta456).
 
 ### Aggregate stats across organizations
 To include stars from repos which are not owned by you, but where you are a collaborator or organization member, add `&role=OWNER,ORGANIZATION_MEMBER,COLLABORATOR` to your stats card url. To include such repos in your language stats, you can also add the same parameter to your top languages card url.
@@ -23,7 +23,7 @@ The resolution of this most requested feature in github-readme-stats was [origin
 
 ### Improved performance and latency
 
-GitHub-Stats-Extended proactively precomputes and caches cards. This solves [the problem](https://github.com/anuraghazra/github-readme-stats/issues/2603) where cards wouldn't load on the first try. It also gives GitHub-Stats-Extended more time while generating cards in the background, which allows it to fetch more repo data:
+GitHub-Stats-Extended proactively precomputes and caches cards. This solves the problem where [cards wouldn't load on the first try](https://github.com/anuraghazra/github-readme-stats/issues/2603). It also gives GitHub-Stats-Extended more time while generating cards in the background, which allows it to fetch more repo data:
 
 ### Multi-page fetching for accurate star counts
 GitHub-Stats-Extended fetches up to 1000 of your starred repositories to accurately compute your stars count. In github-readme-stats, this is limited to 100 repos because github-readme-stats doesn't have the above-mentioned performance improvements.
