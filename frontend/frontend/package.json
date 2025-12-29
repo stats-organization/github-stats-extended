@@ -56,9 +56,8 @@
     "webpack-dev-server": "^5.2.2"
   },
   "scripts": {
-    "setup-trends": "cp ./public/trends.html ./public/index.html",
-    "start-trends": "yarn setup-trends && REACT_APP_MODE=trends craco start",
-    "build-trends": "yarn setup-trends && REACT_APP_MODE=trends craco build",
+    "start-trends": "craco start",
+    "build-trends": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
   },

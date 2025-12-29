@@ -157,7 +157,7 @@ const LoginStage = ({ setCurrItem }) => {
                     </span>
                   </Button>
                   <p className="text-sm text-gray-600 flex-1">
-                    This will delete your GitHub Trends account and then
+                    This will delete your GitHub-Stats-Extended account and then
                     redirect you to a GitHub screen where you can revoke your
                     access token.
                   </p>
@@ -172,7 +172,7 @@ const LoginStage = ({ setCurrItem }) => {
                     <span className="xl:text-lg">Log Out</span>
                   </Button>
                   <p className="text-sm text-gray-600 flex-1">
-                    Log out from GitHub Trends.
+                    Log out from GitHub-Stats-Extended.
                   </p>
                 </div>
               </>
@@ -217,7 +217,7 @@ const LoginStage = ({ setCurrItem }) => {
                     <span className="ml-2 xl:text-lg">Continue as Guest</span>
                   </Button>
                   <p className="text-sm text-gray-600 flex-1">
-                    Try out Github Trends with data from an example
+                    Try out GitHub-Stats-Extended with data from an example
                     user/repository.
                   </p>
                 </div>

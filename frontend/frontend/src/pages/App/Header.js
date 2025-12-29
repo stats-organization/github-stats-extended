@@ -4,13 +4,8 @@ import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
-import { GiHamburgerMenu as HamburgerIcon } from 'react-icons/gi';
-
-import { logout as _logout } from '../../redux/actions/userActions';
-import { useIsAuthenticated } from '../../redux/selectors/userSelectors';
 import appIcon from '../../assets/appLogo64.png';
 import { classnames } from '../../utils';
-import { GITHUB_PUBLIC_AUTH_URL } from '../../constants';
 import { FaGithub as GithubIcon } from 'react-icons/fa';
 import { ProgressBar } from '../../components';
 
@@ -60,27 +55,20 @@ MobileLink.propTypes = propTypes;
 
 MobileLink.defaultProps = defaultProps;
 
-const Header = ({ mode, stage, setStage }) => {
-  const [toggle, setToggle] = useState(false);
-
-  const isAuthenticated = useIsAuthenticated();
-
+const Header = ({ stage, setStage }) => {
   const dispatch = useDispatch();
-  const logout = () => dispatch(_logout());
 
   return (
     <>
       <div className="text-gray-100 bg-gray-800 shadow-md body-font z-50">
         <div className="px-5 py-2 flex flex-wrap">
-          {/* GitHub Trends Logo */}
+          {/* Logo */}
           <Link
             to="/"
             className="flex items-center title-font font-medium text-gray-50 mb-0 md:mr-8"
           >
             <img src={appIcon} alt="logo" className="w-6 h-6" />
-            {mode === 'trends' && (
-              <span className="ml-2 text-xl">GitHub Trends</span>
-            )}
+            <span className="ml-2 text-xl">GitHub Stats Extended</span>
           </Link>
           {/* Star on GitHub */}
           <div className="flex ml-auto items-center text-base justify-center">
@@ -116,7 +104,6 @@ const Header = ({ mode, stage, setStage }) => {
 };
 
 Header.propTypes = {
-  mode: PropTypes.string.isRequired,
   stage: PropTypes.number.isRequired,
   setStage: PropTypes.func.isRequired,
 };

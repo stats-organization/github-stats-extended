@@ -79,7 +79,7 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col">
       <Router basename="/frontend">
-        <Header mode="trends" stage={stage} setStage={setStage} />
+        <Header stage={stage} setStage={setStage} />
         <section className="bg-white text-gray-700 flex-grow">
           <HomeScreen stage={stage} setStage={setStage} />
           <ToastContainer />

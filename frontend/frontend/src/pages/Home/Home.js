@@ -261,7 +261,7 @@ const HomeScreen = ({ stage, setStage }) => {
       if (url.includes('code=')) {
         const tempPrivateAccess = url.includes('private');
         const newUrl = url.split('?code=');
-        const redirect = `${url.split(HOST)[0]}${HOST}/frontend/user`;
+        const redirect = `${url.split(HOST)[0]}${HOST}/frontend`;
         window.history.pushState({}, null, redirect);
         setIsLoading(true);
         const userKey = uuidv4();
@@ -322,13 +322,13 @@ const HomeScreen = ({ stage, setStage }) => {
                   <p>
                     {privateAccess ? (
                       <>
-                        You granted GitHub Trends access to both your{' '}
+                        You granted GitHub-Stats-Extended access to both your{' '}
                         <b>public and private</b> contributions.
                       </>
                     ) : (
                       <>
-                        You granted GitHub Trends access to your <b>public</b>{' '}
-                        contributions.
+                        You granted GitHub-Stats-Extended access to your{' '}
+                        <b>public</b> contributions.
                       </>
                     )}
                   </p>

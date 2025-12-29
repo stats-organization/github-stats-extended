@@ -1,21 +1,6 @@
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
 
-import { BACKEND_URL, HOST } from '../constants';
-
-const URL_PREFIX = BACKEND_URL;
-
-const setUserKey = async (code) => {
-  try {
-    const key = uuidv4();
-    const fullUrl = `${URL_PREFIX}/auth/web/set_user_key/${code}/${key}`;
-    await axios.post(fullUrl);
-    return key;
-  } catch (error) {
-    console.error(error);
-    return '';
-  }
-};
+import { HOST } from '../constants';
 
 const authenticate = async (code, privateAccess, userKey) => {
   try {
@@ -50,4 +35,4 @@ const deleteAccount = async (userId, userKey) => {
   }
 };
 
-export { setUserKey, authenticate, getUserMetadata, deleteAccount };
+export { authenticate, getUserMetadata, deleteAccount };
