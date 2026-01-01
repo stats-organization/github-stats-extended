@@ -223,6 +223,22 @@ const HomeScreen = ({ stage, setStage }) => {
   // for stage five
   const [gistUrl, setGistUrl] = useState('');
 
+  let guestHint;
+  switch (selectedCard) {
+    case CardTypes.STATS:
+    case CardTypes.TOP_LANGS:
+      guestHint = `username "${DEMO_USER}"`;
+      break;
+    case CardTypes.PIN:
+      guestHint = `repo "${DEMO_REPO}"`;
+      break;
+    case CardTypes.GIST:
+      guestHint = `Gist ID "${DEMO_GIST}"`;
+      break;
+    case CardTypes.WAKATIME:
+      guestHint = `WakaTime username "${DEMO_WAKATIME_USER}"`;
+  }
+
   useEffect(() => {
     const fetchGistUrl = async (gistId) => {
       try {
@@ -434,6 +450,11 @@ const HomeScreen = ({ stage, setStage }) => {
                 }
               })()}
               themeSuffix={themeSuffix}
+              guestHint={
+                isAuthenticated
+                  ? null
+                  : `Replace the sample ${guestHint} with your own after copying your Markdown or URL!`
+              }
             />
           )}
         </div>

@@ -12,7 +12,7 @@ import { Button, Image } from '../../../components';
 import { classnames } from '../../../utils';
 import { HOST } from '../../../constants';
 
-const DisplayStage = ({ filename, link, themeSuffix }) => {
+const DisplayStage = ({ filename, link, themeSuffix, guestHint }) => {
   const card = themeSuffix.split('?')[0];
 
   const downloadPNG = () => {
@@ -58,7 +58,7 @@ const DisplayStage = ({ filename, link, themeSuffix }) => {
   return (
     <div className="w-full flex flex-wrap">
       <div className="h-auto lg:w-2/5 md:w-1/2">
-        <div className="pr-10 p-10 rounded-sm bg-gray-200">
+        <div className="p-10 rounded-sm bg-gray-200">
           <div className="flex flex-col items-center">
             {[
               {
@@ -83,6 +83,7 @@ const DisplayStage = ({ filename, link, themeSuffix }) => {
               </Button>
             ))}
           </div>
+          {guestHint && <div className="pt-10 pl-10 pr-10">{guestHint}</div>}
         </div>
       </div>
       <div className="w-full lg:w-3/5 md:w-1/2 object-center pt-5 md:pt-0 pl-0 md:pl-5 lg:pl-0">
@@ -101,6 +102,7 @@ DisplayStage.propTypes = {
   filename: PropTypes.string.isRequired,
   link: PropTypes.string.isRequired,
   themeSuffix: PropTypes.string.isRequired,
+  guestHint: PropTypes.string.isRequired,
 };
 
 export default DisplayStage;

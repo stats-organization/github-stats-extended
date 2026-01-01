@@ -204,7 +204,7 @@ const LoginStage = ({ setCurrItem }) => {
                     </Button>
                   </a>
                   <p className="text-sm text-gray-600 flex-1">
-                    Includes contributions from private repositories for more
+                    Include contributions from private repositories for more
                     complete and accurate stats.
                   </p>
                 </div>
@@ -217,8 +217,8 @@ const LoginStage = ({ setCurrItem }) => {
                     <span className="ml-2 xl:text-lg">Continue as Guest</span>
                   </Button>
                   <p className="text-sm text-gray-600 flex-1">
-                    Try out GitHub-Stats-Extended with data from an example
-                    user/repository.
+                    Explore options using sample data. Insert your own username
+                    in the last step.
                   </p>
                 </div>
               </>

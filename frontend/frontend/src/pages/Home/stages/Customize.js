@@ -60,7 +60,7 @@ const CustomizeStage = ({
 
   return (
     <div className="w-full flex flex-wrap">
-      <div className="h-auto lg:w-2/5 md:w-1/2 pr-10 p-10 rounded-sm bg-gray-200">
+      <div className="h-auto lg:w-2/5 md:w-1/2 p-10 rounded-sm bg-gray-200">
         {(cardType === CardTypes.STATS || cardType === CardTypes.TOP_LANGS) && (
           <TextSection
             title="Username"
@@ -335,6 +335,17 @@ const CustomizeStage = ({
             max={3}
           />
         )}
+        <div className="pl-10 pr-10">
+          For more customization options check the{' '}
+          <a
+            href="https://github.com/stats-organization/github-stats-extended/blob/master/docs/advanced_documentation.md"
+            target="_blank"
+            className="underline text-blue-900"
+          >
+            customization documentation
+          </a>{' '}
+          after you copied your card URL in step 5.
+        </div>
       </div>
       <div className="w-full lg:w-3/5 md:w-1/2 object-center pt-5 md:pt-0 pl-0 md:pl-5 lg:pl-0">
         <div className="w-full lg:w-3/5 mx-auto flex flex-col justify-center sticky top-32">
