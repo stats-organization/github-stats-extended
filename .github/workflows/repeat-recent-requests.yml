@@ -24,7 +24,7 @@ jobs:
         with:
           url: "https://github-stats-extended.vercel.app/api/repeat-recent"
           method: "POST"
-          timeout: "62000"
+          timeout: "300000"
       - name: Show Response
         run: |
           echo ${{ steps.myRequest.outputs.response }}

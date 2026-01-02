@@ -1,12 +1,15 @@
-# Table of Contents
+# Advanced Customization
+
+## Table of Contents
 - [GitHub Stats Card](#github-stats-card)
 - [GitHub Extra Pins](#github-extra-pins)
 - [GitHub Gist Pins](#github-gist-pins)
 - [Top Languages Card](#top-languages-card)
 - [WakaTime Stats Card](#wakatime-stats-card)
 - [All Demos](#all-demos)
+- [Quick Tip (Align The Cards)](#quick-tip-align-the-cards)
 
-# GitHub Stats Card
+## GitHub Stats Card
 
 > [!WARNING]
 > By default, the stats card only shows statistics like stars, commits, and pull requests from public repositories. To show private statistics on the stats card, you should [deploy your own instance](deploy.md) using your own GitHub API token.
@@ -296,7 +299,7 @@ If we don't support your language, please consider contributing! You can find mo
 
 ***
 
-# GitHub Extra Pins
+## GitHub Extra Pins
 
 GitHub extra pins allow you to pin more than 6 repositories in your profile using a GitHub profile readme.
 
@@ -343,7 +346,7 @@ You can also specify the `repo` parameter in the form `<user_or_organization>/<r
 
 ![Readme Card](https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra\&repo=statykjs/statyk\&show_owner=true\&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented)
 
-# GitHub Gist Pins
+## GitHub Gist Pins
 
 GitHub gist pins allow you to pin gists in your GitHub profile using a GitHub profile readme.
 
@@ -373,7 +376,7 @@ Use [show\_owner](#options-1) query option to include the gist's owner username
 
 ![Gist Card](https://github-stats-extended.vercel.app/api/gist?id=bbfce31e0217a3689c8d961a356cb10d\&show_owner=true)
 
-# Top Languages Card
+## Top Languages Card
 
 The top languages card shows your most frequently used languages.
 
@@ -539,7 +542,7 @@ You can use the `&stats_format=bytes` option to display the stats in bytes inste
 
 ![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&stats_format=bytes)
 
-# WakaTime Stats Card
+## WakaTime Stats Card
 
 > [!WARNING]
 > Please be aware that we currently only show data from WakaTime profiles that are public. You therefore have to make sure that **BOTH** `Display code time publicly` and `Display languages, editors, os, categories publicly` are enabled.
@@ -586,7 +589,7 @@ You can customize the appearance and behavior of the WakaTime stats card using t
 
 ***
 
-# All Demos
+## All Demos
 
 *   Default
 
