@@ -86,9 +86,6 @@ const createTextNode = ({
   link,
   labelXOffset = 25,
 }) => {
-  console.log("label: " + label);
-  console.log("numberFormat" + numberFormat);
-
   const precision =
     typeof numberPrecision === "number" && !isNaN(numberPrecision)
       ? clampValue(numberPrecision, 0, 2)
