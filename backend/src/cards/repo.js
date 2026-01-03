@@ -113,6 +113,7 @@ const renderRepoCard = (repo, options = {}) => {
       value: totalPRsAuthored,
       id: "prs_authored",
       link: `https://github.com/search?q=${repoFilter}author%3A${username}&amp;type=pullrequests`,
+      number_format: "short",
     };
   }
   if (show.includes("prs_commented")) {
@@ -122,6 +123,7 @@ const renderRepoCard = (repo, options = {}) => {
       value: totalPRsCommented,
       id: "prs_commented",
       link: `https://github.com/search?q=${repoFilter}commenter%3A${username}+-author%3A${username}&amp;type=pullrequests`,
+      number_format: "short",
     };
   }
   if (show.includes("prs_reviewed")) {
@@ -131,6 +133,7 @@ const renderRepoCard = (repo, options = {}) => {
       value: totalPRsReviewed,
       id: "prs_reviewed",
       link: `https://github.com/search?q=${repoFilter}reviewed-by%3A${username}+-author%3A${username}&amp;type=pullrequests`,
+      number_format: "short",
     };
   }
   if (show.includes("issues_authored")) {
@@ -140,6 +143,7 @@ const renderRepoCard = (repo, options = {}) => {
       value: totalIssuesAuthored,
       id: "issues_authored",
       link: `https://github.com/search?q=${repoFilter}author%3A${username}&amp;type=issues`,
+      number_format: "short",
     };
   }
   if (show.includes("issues_commented")) {
@@ -149,6 +153,7 @@ const renderRepoCard = (repo, options = {}) => {
       value: totalIssuesCommented,
       id: "issues_commented",
       link: `https://github.com/search?q=${repoFilter}commenter%3A${username}+-author%3A${username}&amp;type=issues`,
+      number_format: "short",
     };
   }
 

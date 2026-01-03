@@ -100,9 +100,7 @@ export default async (req, res) => {
 
   try {
     await storeRequest(req);
-    console.log(show);
     const showStats = parseArray(show);
-    console.log(showStats);
     const repoData = await fetchRepo(
       username,
       repo,
@@ -122,7 +120,6 @@ export default async (req, res) => {
 
     setCacheHeaders(res, cacheSeconds);
 
-    console.log("before send");
     return res.send(
       renderRepoCard(repoData, {
         hide_border: parseBoolean(hide_border),
