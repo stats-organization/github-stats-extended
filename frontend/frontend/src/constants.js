@@ -7,7 +7,7 @@ export const CLIENT_ID = 'Ov23liZSweT9LJrck9i8';
 
 export const HOST = PROD
   ? 'github-stats-extended.vercel.app'
-  : 'localhost:3000';
+  : 'github-stats-extended-preview.vercel.app';
 
 export const REDIRECT_URI = PROD
   ? `https://${HOST}/frontend`

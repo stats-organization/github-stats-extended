@@ -309,10 +309,10 @@ Yay! You are no longer limited to 6 pinned repositories.
 
 Copy-paste this code into your readme and change the links.
 
-Endpoint: `api/pin?username=anuraghazra&repo=github-readme-stats`
+Endpoint: `api/pin?username=anuraghazra&repo=type-trident`
 
 ```md
-[![Readme Card](https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats)](https://github.com/stats-organization/github-stats-extended)
+[![Readme Card](https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=type-trident)](https://github.com/anuraghazra/type-trident)
 ```
 
 ### Options
@@ -523,24 +523,24 @@ You can use the `&stats_format=bytes` option to display the stats in bytes inste
 
 *   Donut Chart layout
 
-[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=donut)](https://github.com/stats-organization/github-stats-extended)
+[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=donut)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=donut)
 
 *   Donut Vertical Chart layout
 
-[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=donut-vertical)](https://github.com/stats-organization/github-stats-extended)
+[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=donut-vertical)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=donut-vertical)
 
 *   Pie Chart layout
 
-[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=pie)](https://github.com/stats-organization/github-stats-extended)
+[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=pie)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=pie)
 
 *   Hidden progress bars
 
-![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&hide_progress=true)
+[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&hide_progress=true)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&hide_progress=true)
 
 
 *  Display bytes instead of percentage
 
-![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&stats_format=bytes)
+[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&stats_format=bytes)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&stats_format=bytes)
 
 ## WakaTime Stats Card
 
@@ -553,7 +553,7 @@ You can use the `&stats_format=bytes` option to display the stats in bytes inste
 Change the `?username=` value to your [WakaTime](https://wakatime.com) username.
 
 ```md
-[![Harlok's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=ffflabs)](https://github.com/stats-organization/github-stats-extended)
+[![Harlok's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=ffflabs)](https://wakatime.com/@ffflabs)
 ```
 
 ### Options
@@ -678,10 +678,10 @@ By default, GitHub does not lay out the cards side by side. To do that, you can 
 ### Stats and top languages cards
 
 ```html
-<a href="https://github.com/anuraghazra/github-readme-stats">
+<a href="https://github-stats-extended.vercel.app/api?username=anuraghazra">
   <img height=200 align="center" src="https://github-stats-extended.vercel.app/api?username=anuraghazra" />
 </a>
-<a href="https://github.com/anuraghazra/convoychat">
+<a href="https://github-stats-extended.vercel.app/api/top-langs?username=anuraghazra&layout=compact&langs_count=8&card_width=320">
   <img height=200 align="center" src="https://github-stats-extended.vercel.app/api/top-langs?username=anuraghazra&layout=compact&langs_count=8&card_width=320" />
 </a>
 ```
@@ -689,10 +689,10 @@ By default, GitHub does not lay out the cards side by side. To do that, you can 
 <details>
 <summary>:eyes: Show example</summary>
 
-<a href="https://github.com/anuraghazra/github-readme-stats">
+<a href="https://github-stats-extended.vercel.app/api?username=anuraghazra">
   <img height=200 align="center" src="https://github-stats-extended.vercel.app/api?username=anuraghazra" />
 </a>
-<a href="https://github.com/anuraghazra/convoychat">
+<a href="https://github-stats-extended.vercel.app/api/top-langs?username=anuraghazra&layout=compact&langs_count=8&card_width=320">
   <img height=200 align="center" src="https://github-stats-extended.vercel.app/api/top-langs?username=anuraghazra&layout=compact&langs_count=8&card_width=320" />
 </a>
 

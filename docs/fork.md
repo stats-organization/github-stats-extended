@@ -19,7 +19,7 @@ To include stars from repos which are not owned by you, but where you are a coll
 
 See [here](advanced_documentation.md#filtering-by-repository-and-owner) for full feature documentation.
 
-The resolution of this most requested feature in github-readme-stats was [originally implemented](https://github.com/anuraghazra/github-readme-stats/issues/1#issuecomment-855681098) by @developStorm.
+The resolution of this most requested feature in github-readme-stats was [originally implemented](https://github.com/anuraghazra/github-readme-stats/issues/1#issuecomment-855681098) by [@developStorm](https://github.com/developStorm).
 
 ### Improved performance and latency
 
@@ -62,7 +62,7 @@ GitHub-Stats-Extended adds various other, minor improvements. For example, the r
 
 [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) is a great project, which unfortunately saw its development slow down in the past years, with [highly requested features](https://github.com/anuraghazra/github-readme-stats/issues/1935) getting delayed for a long time.
 
-One of the lovely contributors [wrote](https://github.com/anuraghazra/github-readme-stats/pull/3911#issuecomment-3377726545):
+One of the valued maintainers [wrote](https://github.com/anuraghazra/github-readme-stats/pull/3911#issuecomment-3377726545):
 > I joined the project as collaborator in the middle of 2023 and there was just a few guys in the team while hundreds of PRs, issues and discussions pending to be reviewed.
 >
 > The volume is overwhelming for the small team, especially taking into account that right now I'm alone online and working only sometimes when I have a free hours, so it took some time to get to your PR.

@@ -84,17 +84,17 @@ export default async (req, res) => {
     (repo && !safePattern.test(repo))
   ) {
     return res.send(
-      renderError(
-        "Something went wrong",
-        "Username or repository contains unsafe characters",
-        {
+      renderError({
+        message: "Something went wrong",
+        secondaryMessage: "Username or repository contains unsafe characters",
+        renderOptions: {
           title_color,
           text_color,
           bg_color,
           border_color,
           theme,
         },
-      ),
+      }),
     );
   }
 
