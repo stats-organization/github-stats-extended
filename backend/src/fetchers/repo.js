@@ -99,7 +99,7 @@ const fetchRepo = async (
     throw new MissingParamError(["repo"], urlExample);
   }
 
-  let res = await retryer(fetcher, { login: owner, repo: reponame });
+  let res = await retryer(fetcher, username, { login: owner, repo: reponame });
 
   const data = res.data.data;
 

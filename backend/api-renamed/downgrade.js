@@ -1,4 +1,4 @@
-import { getUserAccess, deleteUser } from "../src/common/database.js";
+import { getUserAccessByKey, deleteUser } from "../src/common/database.js";
 import axios from "axios";
 import { logger } from "../src/common/log.js";
 
@@ -23,7 +23,7 @@ export default async (req, res) => {
   }
 
   // get token and private access status
-  const userAccess = await getUserAccess(user_key);
+  const userAccess = await getUserAccessByKey(user_key);
   if (!userAccess) {
     res.statusCode = 404;
     res.send("user not found");

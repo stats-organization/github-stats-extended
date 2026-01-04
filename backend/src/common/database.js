@@ -197,7 +197,7 @@ export async function deleteUser(userKey) {
  * @param {string} userKey user key of the user to fetch information for
  * @returns {Promise<{token: string, privateAccess: boolean} | null>} token and private access status, or null if user not found
  */
-export async function getUserAccess(userKey) {
+export async function getUserAccessByKey(userKey) {
   if (!pool) {
     return null;
   }
@@ -210,6 +210,41 @@ export async function getUserAccess(userKey) {
     `;
   try {
     const { rows } = await pool.query(query, [userKey]);
+    if (rows.length === 0) {
+      return null;
+    }
+    return {
+      token: rows[0].access_token,
+      privateAccess: rows[0].private_access
+    };
+  } catch (err) {
+    if (err.code === "42P01") {
+      return null;
+    } else {
+      throw err;
+    }
+  }
+}
+
+/**
+ * Fetches token and private access status for a given username.
+ *
+ * @param {string} userName GitHub username of the user to fetch information for
+ * @returns {Promise<{token: string, privateAccess: boolean} | null>} token and private access status, or null if user not found
+ */
+export async function getUserAccessByName(userName) {
+  if (!pool) {
+    return null;
+  }
+
+  const query = `
+      SELECT access_token, private_access
+      FROM authenticated_users
+      WHERE user_id = $1
+      LIMIT 1
+    `;
+  try {
+    const { rows } = await pool.query(query, [userName]);
     if (rows.length === 0) {
       return null;
     }
