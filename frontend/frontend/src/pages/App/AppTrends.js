@@ -67,7 +67,7 @@ function App() {
       if (userKey && userKey.length > 0) {
         const userAccess = await getUserMetadata(userKey);
         if (userAccess === null) {
-          dispatch(_logout());
+          dispatch(_logout(userKey));
         } else {
           setUserAccess(userAccess);
         }

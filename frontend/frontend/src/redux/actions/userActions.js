@@ -6,8 +6,8 @@ export function login(userId, userKey) {
   return { type: LOGIN, payload: { userId, userKey } };
 }
 
-export function logout() {
-  return { type: LOGOUT, payload: {} };
+export function logout(userKey = null) {
+  return { type: LOGOUT, payload: { userKey: userKey } };
 }
 
 export function setUserAccess(token, privateAccess) {
