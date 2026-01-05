@@ -41,6 +41,7 @@ async function githubAuthenticate(code) {
     client_secret: process.env.OAUTH_CLIENT_SECRET,
     code,
     redirect_uri: process.env.OAUTH_REDIRECT_URI,
+    prompt: "select_account",
   });
 
   try {
