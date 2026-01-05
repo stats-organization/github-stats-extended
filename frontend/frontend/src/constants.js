@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-export const PROD = true;
+export const PROD = false;
 
 export const USE_LOGGER = true;
 
