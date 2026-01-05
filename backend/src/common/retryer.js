@@ -28,13 +28,13 @@ const retryer = async (fetcher, username, variables) => {
   }
 
   let PATs;
-  if (userPAT) {
-    PATs = [userPAT.token];
+  if (userPAT?.token) {
+    PATs = [{ name: `USER_${username}`, value: userPAT.token }];
   } else {
-    // Count the number of GitHub API tokens available.
-    PATs = Object.keys(process.env).filter((key) =>
+    const patNames = Object.keys(process.env).filter((key) =>
       /PAT_\d*$/.exec(key),
     );
+    PATs = patNames.map((name) => ({ name, value: process.env[name] }));
   }
   const RETRIES = process.env.NODE_ENV === "test" ? 7 : PATs.length;
 
@@ -44,12 +44,13 @@ const retryer = async (fetcher, username, variables) => {
   const startPAT = getRandomInt(PATs.length);
 
   for (let retries = 0; retries < RETRIES; retries++) {
-    const currentPAT = ((startPAT + retries) % PATs.length);
+    const currentPAT = PATs[(startPAT + retries) % PATs.length];
+
     try {
       let response = await fetcher(
         variables,
         // @ts-ignore
-        PATs[currentPAT],
+        currentPAT.value,
         // used in tests for faking rate limit
         retries,
       );
@@ -64,7 +65,7 @@ const retryer = async (fetcher, username, variables) => {
         /rate limit/i.test(errorMsg);
 
       if (isRateLimited) {
-        logger.log(`PAT_${currentPAT} Failed due to rate limiting`);
+        logger.log(`${currentPAT.name} Failed due to rate limiting`);
       } else {
         return response;
       }
@@ -85,7 +86,7 @@ const retryer = async (fetcher, username, variables) => {
         e?.response?.data?.message === "Sorry. Your account was suspended.";
 
       if (isBadCredential || isAccountSuspended) {
-        logger.log(`PAT_${currentPAT} Failed due to bad credentials`);
+        logger.log(`${currentPAT.name} Failed due to bad credentials`);
       } else {
         // HTTP error with a response → return it for caller-side handling
         return e.response;
