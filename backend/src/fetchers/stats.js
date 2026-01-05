@@ -139,7 +139,7 @@ const statsFetcher = async ({
       startTime,
       ownerAffiliations,
     };
-    let res = await retryer(fetcher, variables);
+    let res = await retryer(fetcher, username, variables);
     if (res.data.errors) {
       return res;
     }
@@ -221,7 +221,7 @@ const totalItemsFetcher = async (username, repo, owner, type, filter) => {
 
   let res;
   try {
-    res = await retryer(fetchTotalItems, {
+    res = await retryer(fetchTotalItems, username, {
       login: username,
       repo,
       owner,

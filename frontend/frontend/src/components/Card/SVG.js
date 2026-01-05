@@ -29,6 +29,10 @@ const SvgInline = (props) => {
     setShouldMock(stage === 0 || !isAuthenticated);
   }, [isAuthenticated, props.stage]);
 
+  useEffect(async () => {
+    await axios.storage.clear();
+  }, [userToken]);
+
   useEffect(() => {
     const loadSvg = async () => {
       process.env.PAT_1 = userToken;

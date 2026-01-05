@@ -2,18 +2,11 @@
 
 import { CustomError } from "./error.js";
 import { logger } from "./log.js";
+import { getUserAccessByKey, getUserAccessByName } from "./database.js";
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
-
-// Script variables.
-
-// Count the number of GitHub API tokens available.
-const PATs = Object.keys(process.env).filter((key) =>
-  /PAT_\d*$/.exec(key),
-).length;
-const RETRIES = process.env.NODE_ENV === "test" ? 7 : PATs;
 
 /**
  * @typedef {import("axios").AxiosResponse} AxiosResponse Axios response.
@@ -24,22 +17,39 @@ const RETRIES = process.env.NODE_ENV === "test" ? 7 : PATs;
  * Try to execute the fetcher function until it succeeds or the max number of retries is reached.
  *
  * @param {FetcherFunction} fetcher The fetcher function.
+ * @param username GitHub username of the user whose PAT to use, if available
  * @param {any} variables Object with arguments to pass to the fetcher function.
  * @returns {Promise<any>} The response from the fetcher function.
  */
-const retryer = async (fetcher, variables) => {
+const retryer = async (fetcher, username, variables) => {
+  let userPAT;
+  if (username) {
+    userPAT = await getUserAccessByName(username);
+  }
+
+  let PATs;
+  if (userPAT) {
+    PATs = [userPAT.token];
+  } else {
+    // Count the number of GitHub API tokens available.
+    PATs = Object.keys(process.env).filter((key) =>
+      /PAT_\d*$/.exec(key),
+    );
+  }
+  const RETRIES = process.env.NODE_ENV === "test" ? 7 : PATs.length;
+
   if (!RETRIES) {
     throw new CustomError("No GitHub API tokens found", CustomError.NO_TOKENS);
   }
-  const startPAT = getRandomInt(PATs);
+  const startPAT = getRandomInt(PATs.length);
 
   for (let retries = 0; retries < RETRIES; retries++) {
-    const currentPAT = ((startPAT + retries) % PATs) + 1;
+    const currentPAT = ((startPAT + retries) % PATs.length);
     try {
       let response = await fetcher(
         variables,
         // @ts-ignore
-        process.env[`PAT_${currentPAT}`],
+        PATs[currentPAT],
         // used in tests for faking rate limit
         retries,
       );
@@ -89,5 +99,5 @@ const retryer = async (fetcher, variables) => {
   );
 };
 
-export { retryer, RETRIES };
+export { retryer };
 export default retryer;

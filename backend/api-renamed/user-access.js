@@ -1,5 +1,5 @@
 import { logger } from "../src/common/log.js";
-import { getUserAccess } from "../src/common/database.js";
+import { getUserAccessByKey } from "../src/common/database.js";
 
 /**
  * @param {any} req The request.
@@ -8,7 +8,7 @@ import { getUserAccess } from "../src/common/database.js";
 export default async (req, res) => {
   const { user_key } = req.query;
   try {
-    const result = await getUserAccess(user_key);
+    const result = await getUserAccessByKey(user_key);
 
     if (!result) {
       res.statusCode = 404;

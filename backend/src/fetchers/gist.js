@@ -90,7 +90,7 @@ const fetchGist = async (id) => {
   if (!id) {
     throw new MissingParamError(["id"], "/api/gist?id=GIST_ID");
   }
-  const res = await retryer(fetcher, { gistName: id });
+  const res = await retryer(fetcher, null, { gistName: id });
   if (res.data.errors) {
     throw new Error(res.data.errors[0].message);
   }
