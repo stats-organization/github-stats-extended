@@ -3,7 +3,7 @@ export const PROD = false;
 
 export const USE_LOGGER = true;
 
-export const CLIENT_ID = 'Ov23liZSweT9LJrck9i8';
+export const CLIENT_ID = 'Ov23lilAc5biyyRY0K1u';
 
 export const HOST = PROD
   ? 'github-stats-extended.vercel.app'
