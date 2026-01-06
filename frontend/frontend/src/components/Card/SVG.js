@@ -34,6 +34,8 @@ const SvgInline = (props) => {
   }, [userToken]);
 
   useEffect(() => {
+    let isCurrent = true;
+
     const loadSvg = async () => {
       process.env.PAT_1 = userToken;
 
@@ -67,10 +69,17 @@ const SvgInline = (props) => {
         return;
       }
 
+      if (!isCurrent) {
+        return;
+      }
       setSvg(body);
       setLoaded(true);
     };
     loadSvg();
+
+    return () => {
+      isCurrent = false;
+    };
   }, [userToken, isAuthenticated, props.url, props.stage]);
 
   useEffect(() => {
