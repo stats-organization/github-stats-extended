@@ -9,7 +9,7 @@
   "rewrites": [
     {
       "source": "/frontend/:match*",
-      "destination": "https://gse-frontend-preview.vercel.app/:match*"
+      "destination": "https://gse-frontend.vercel.app/:match*"
     }
   ]
 }
