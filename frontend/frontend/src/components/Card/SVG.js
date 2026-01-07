@@ -9,7 +9,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 
 import { createMockReq, createMockRes } from '../../mock-http';
 import { default as router } from '../../backend/.vercel/output/functions/api.func/router.js';
-import { clearAxiosCache, setShouldMock } from '../../axios-override';
+import { setShouldMock } from '../../axios-override';
 import {
   useIsAuthenticated,
   useUserToken,
@@ -28,10 +28,6 @@ const SvgInline = (props) => {
   useEffect(() => {
     setShouldMock(stage === 0 || !isAuthenticated);
   }, [isAuthenticated, props.stage]);
-
-  useEffect(() => {
-    clearAxiosCache();
-  }, [userToken]);
 
   useEffect(() => {
     let isCurrent = true;

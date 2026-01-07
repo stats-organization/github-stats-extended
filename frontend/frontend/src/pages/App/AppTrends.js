@@ -13,9 +13,11 @@ import { getUserMetadata } from '../../api';
 import {
   useIsAuthenticated,
   useUserKey,
+  useUserToken,
 } from '../../redux/selectors/userSelectors';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { clearAxiosCache } from '../../axios-override';
 
 function App() {
   const toMessage = (input) => {
@@ -47,6 +49,11 @@ function App() {
   window.addEventListener('unhandledrejection', (event) => {
     showError(event);
   });
+
+  const userToken = useUserToken();
+  useEffect(() => {
+    clearAxiosCache();
+  }, [userToken]);
 
   const userKey = useUserKey();
   const isAuthenticated = useIsAuthenticated();
