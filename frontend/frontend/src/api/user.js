@@ -1,8 +1,6 @@
 import axios from 'axios';
 
 import { HOST } from '../constants';
-import { logout } from '../redux/actions/userActions';
-import { useDispatch } from 'react-redux';
 
 const authenticate = async (code, privateAccess, userKey) => {
   try {
@@ -23,15 +21,11 @@ const authenticate = async (code, privateAccess, userKey) => {
 };
 
 const getUserMetadata = async (userKey) => {
-  const dispatch = useDispatch();
   try {
     const fullUrl = `https://${HOST}/api/user-access?user_key=${userKey}`;
     const result = await axios.get(fullUrl);
     return result.data;
   } catch (error) {
-    if (error.response && error.response.status === 404) {
-      dispatch(logout(userKey));
-    }
     console.error(error);
     return null;
   }
