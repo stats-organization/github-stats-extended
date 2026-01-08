@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import { HOST } from '../constants';
-import { logout } from '../redux/actions/userActions';
 
 const authenticate = async (code, privateAccess, userKey) => {
   try {
@@ -27,9 +26,6 @@ const getUserMetadata = async (userKey) => {
     const result = await axios.get(fullUrl);
     return result.data;
   } catch (error) {
-    if (error.response && error.response.status === 404) {
-      logout(userKey);
-    }
     console.error(error);
     return null;
   }
