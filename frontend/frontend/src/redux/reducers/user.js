@@ -21,7 +21,7 @@ export default (state = initialState, action) => {
     case types.LOGOUT:
       if (
         action.payload.userKey !== null &&
-        action.payload.userKey !== localStorage.getItem('userKey')
+        action.payload.userKey !== JSON.parse(localStorage.getItem('userKey'))
       ) {
         return state;
       }
