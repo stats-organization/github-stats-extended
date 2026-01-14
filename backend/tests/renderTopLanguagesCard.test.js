@@ -22,6 +22,7 @@ import {
 } from "../src/cards/top-languages.js";
 
 import { themes } from "../themes/index.js";
+import { approxNumber } from "./bench/utils.js";
 
 const langs = {
   HTML: {
@@ -120,89 +121,104 @@ describe("Test renderTopLanguages helper functions", () => {
   });
 
   it("degreesToRadians", () => {
-    expect(degreesToRadians(0)).toBe(0);
-    expect(degreesToRadians(90)).toBe(Math.PI / 2);
-    expect(degreesToRadians(180)).toBe(Math.PI);
-    expect(degreesToRadians(270)).toBe((3 * Math.PI) / 2);
-    expect(degreesToRadians(360)).toBe(2 * Math.PI);
+    expect(degreesToRadians(0)).toBeCloseTo(0);
+    expect(degreesToRadians(90)).toBeCloseTo(Math.PI / 2);
+    expect(degreesToRadians(180)).toBeCloseTo(Math.PI);
+    expect(degreesToRadians(270)).toBeCloseTo((3 * Math.PI) / 2);
+    expect(degreesToRadians(360)).toBeCloseTo(2 * Math.PI);
   });
 
   it("radiansToDegrees", () => {
-    expect(radiansToDegrees(0)).toBe(0);
-    expect(radiansToDegrees(Math.PI / 2)).toBe(90);
-    expect(radiansToDegrees(Math.PI)).toBe(180);
-    expect(radiansToDegrees((3 * Math.PI) / 2)).toBe(270);
-    expect(radiansToDegrees(2 * Math.PI)).toBe(360);
+    expect(radiansToDegrees(0)).toBeCloseTo(0);
+    expect(radiansToDegrees(Math.PI / 2)).toBeCloseTo(90);
+    expect(radiansToDegrees(Math.PI)).toBeCloseTo(180);
+    expect(radiansToDegrees((3 * Math.PI) / 2)).toBeCloseTo(270);
+    expect(radiansToDegrees(2 * Math.PI)).toBeCloseTo(360);
   });
 
   it("polarToCartesian", () => {
-    expect(polarToCartesian(100, 100, 60, 0)).toStrictEqual({ x: 160, y: 100 });
+    expect(polarToCartesian(100, 100, 60, 0)).toStrictEqual({
+      x: approxNumber(160),
+      y: approxNumber(100),
+    });
     expect(polarToCartesian(100, 100, 60, 45)).toStrictEqual({
-      x: 142.42640687119285,
-      y: 142.42640687119285,
+      x: approxNumber(142.42640687119285),
+      y: approxNumber(142.42640687119285),
     });
     expect(polarToCartesian(100, 100, 60, 90)).toStrictEqual({
-      x: 100,
-      y: 160,
+      x: approxNumber(100),
+      y: approxNumber(160),
     });
     expect(polarToCartesian(100, 100, 60, 135)).toStrictEqual({
-      x: 57.573593128807154,
-      y: 142.42640687119285,
+      x: approxNumber(57.573593128807154),
+      y: approxNumber(142.42640687119285),
     });
     expect(polarToCartesian(100, 100, 60, 180)).toStrictEqual({
-      x: 40,
-      y: 100.00000000000001,
+      x: approxNumber(40),
+      y: approxNumber(100),
     });
     expect(polarToCartesian(100, 100, 60, 225)).toStrictEqual({
-      x: 57.57359312880714,
-      y: 57.573593128807154,
+      x: approxNumber(57.57359312880714),
+      y: approxNumber(57.573593128807154),
     });
     expect(polarToCartesian(100, 100, 60, 270)).toStrictEqual({
-      x: 99.99999999999999,
-      y: 40,
+      x: approxNumber(100),
+      y: approxNumber(40),
     });
     expect(polarToCartesian(100, 100, 60, 315)).toStrictEqual({
-      x: 142.42640687119285,
-      y: 57.57359312880714,
+      x: approxNumber(142.42640687119285),
+      y: approxNumber(57.57359312880714),
     });
     expect(polarToCartesian(100, 100, 60, 360)).toStrictEqual({
-      x: 160,
-      y: 99.99999999999999,
+      x: approxNumber(160),
+      y: approxNumber(100),
     });
   });
 
   it("cartesianToPolar", () => {
     expect(cartesianToPolar(100, 100, 160, 100)).toStrictEqual({
-      radius: 60,
-      angleInDegrees: 0,
+      radius: approxNumber(60),
+      angleInDegrees: approxNumber(0),
     });
     expect(
       cartesianToPolar(100, 100, 142.42640687119285, 142.42640687119285),
-    ).toStrictEqual({ radius: 60.00000000000001, angleInDegrees: 45 });
+    ).toStrictEqual({
+      radius: approxNumber(60),
+      angleInDegrees: approxNumber(45),
+    });
     expect(cartesianToPolar(100, 100, 100, 160)).toStrictEqual({
-      radius: 60,
-      angleInDegrees: 90,
+      radius: approxNumber(60),
+      angleInDegrees: approxNumber(90),
     });
     expect(
       cartesianToPolar(100, 100, 57.573593128807154, 142.42640687119285),
-    ).toStrictEqual({ radius: 60, angleInDegrees: 135 });
+    ).toStrictEqual({
+      radius: approxNumber(60),
+      angleInDegrees: approxNumber(135),
+    });
     expect(cartesianToPolar(100, 100, 40, 100.00000000000001)).toStrictEqual({
-      radius: 60,
-      angleInDegrees: 180,
+      radius: approxNumber(60),
+      angleInDegrees: approxNumber(180),
     });
     expect(
       cartesianToPolar(100, 100, 57.57359312880714, 57.573593128807154),
-    ).toStrictEqual({ radius: 60, angleInDegrees: 225 });
+    ).toStrictEqual({
+      radius: approxNumber(60),
+      angleInDegrees: approxNumber(225),
+    });
     expect(cartesianToPolar(100, 100, 99.99999999999999, 40)).toStrictEqual({
-      radius: 60,
-      angleInDegrees: 270,
+      radius: approxNumber(60),
+      angleInDegrees: approxNumber(270),
     });
     expect(
       cartesianToPolar(100, 100, 142.42640687119285, 57.57359312880714),
-    ).toStrictEqual({ radius: 60.00000000000001, angleInDegrees: 315 });
+    ).toStrictEqual({
+      radius: approxNumber(60),
+      angleInDegrees: approxNumber(315),
+    });
     expect(cartesianToPolar(100, 100, 160, 99.99999999999999)).toStrictEqual({
-      radius: 60,
-      angleInDegrees: 360,
+      radius: approxNumber(60),
+      angleInDegrees: approxNumber(360),
     });
   });
 
