@@ -1,13 +1,15 @@
-backend/.vercel
-backend/.env
-backend/node_modules
-backend/*.lock
-backend/coverage
-backend/benchmarks
-backend/vercel_token
-backend-copy
-frontend/frontend/.env
-frontend/frontend/src/backend
+node_modules
+
+apps/backend/.vercel
+apps/backend/.env
+apps/backend/node_modules
+apps/backend/*.lock
+apps/backend/coverage
+apps/backend/benchmarks
+apps/backend/vercel_token
+apps/backend-copy
+apps/frontend/.env
+apps/frontend/src/backend
 
 # IDE
 .idea/
