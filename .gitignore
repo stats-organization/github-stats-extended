@@ -5,6 +5,7 @@ backend/*.lock
 backend/coverage
 backend/benchmarks
 backend/vercel_token
+backend-copy
 frontend/frontend/.env
 frontend/frontend/src/backend
 

@@ -2,7 +2,7 @@
 
 ## Local Development
 
-To build GitHub-Stats-Extended locally, run the following commands:
+To set up the project GitHub-Stats-Extended locally, run the following commands:
 
 ```bash
 ./vercel-preparation.sh
