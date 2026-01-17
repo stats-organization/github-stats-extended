@@ -6,7 +6,9 @@ on:
   pull_request:
 
 jobs:
-  execute:
+  setup-project:
+    name: Setup project on ${{ matrix.os }}
+
     strategy:
       fail-fast: false
       matrix:
@@ -14,22 +16,16 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: latest
-
-      - name: Install Yarn
-        run: npm install -g yarn
-
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Make script executable
-        run: chmod +x ./vercel-preparation.sh
+      - name: Install Dependencies
+        uses: ./.github/actions/install-dependencies
+
+      - name: Run vercel-preparation.sh
+        run: |
+          chmod +x ./vercel-preparation.sh
+          ./vercel-preparation.sh
 
       - name: Run script
-        run: |
-          ./vercel-preparation.sh
-          (cd ./backend/ && npm install)
-          (cd ./frontend/frontend/ && yarn install && yarn build-trends)
+        run: pnpm --filter frontend run build-trends
