@@ -105,11 +105,10 @@ const GIST_DATA = {
 const CACHE_BURST_STRING = `v=${new Date().getTime()}`;
 
 describe("Fetch Cards", () => {
-  let VERCEL_PREVIEW_URL;
+  let VERCEL_PREVIEW_URL = "https://github-stats-extended.vercel.app";
 
   beforeAll(() => {
     process.env.NODE_ENV = "development";
-    VERCEL_PREVIEW_URL = process.env.VERCEL_PREVIEW_URL;
   });
 
   test("retrieve stats card", async () => {
