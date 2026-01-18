@@ -1,3 +1,10 @@
+/** @jest-environment node */
+/*
+Jest must use node for these tests because jsdom doesn't support the structuredClone call in stats.js.
+https://jestjs.io/docs/configuration#testenvironment-string
+https://github.com/jsdom/jsdom/issues/3363
+*/
+
 import { afterEach, beforeEach, describe, expect, it } from "@jest/globals";
 import "@testing-library/jest-dom";
 import axios from "axios";
@@ -519,6 +526,11 @@ describe("Test fetchStats", () => {
       totalStars: 300,
       totalDiscussionsStarted: 0,
       totalDiscussionsAnswered: 0,
+      totalIssuesAuthored: 0,
+      totalIssuesCommented: 0,
+      totalPRsAuthored: 0,
+      totalPRsCommented: 0,
+      totalPRsReviewed: 0,
       rank,
     });
   });
@@ -552,6 +564,11 @@ describe("Test fetchStats", () => {
       totalStars: 300,
       totalDiscussionsStarted: 0,
       totalDiscussionsAnswered: 0,
+      totalIssuesAuthored: 0,
+      totalIssuesCommented: 0,
+      totalPRsAuthored: 0,
+      totalPRsCommented: 0,
+      totalPRsReviewed: 0,
       rank,
     });
   });
