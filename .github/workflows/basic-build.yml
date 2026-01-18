@@ -25,11 +25,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Make script executable
-        run: chmod +x ./vercel-preparation.sh
-
-      - name: Run script
+      - name: Install and Build
         run: |
+          chmod +x ./vercel-preparation.sh
           ./vercel-preparation.sh
           (cd ./backend/ && npm install)
           (cd ./frontend/frontend/ && yarn install && yarn build-trends)
+
+      - name: Run Backend Tests
+        run: |
+            (cd ./backend/ && npm test)
