@@ -203,6 +203,11 @@ describe("Fetch Cards", () => {
   test("retrieve gist card", async () => {
     expect(VERCEL_PREVIEW_URL).toBeDefined();
 
+    console.log(
+      "accessing ",
+      `${VERCEL_PREVIEW_URL}/api/gist?id=${GIST_ID}&${CACHE_BURST_STRING}`,
+    );
+
     // Check if the Vercel preview instance Gist function is up and running.
     await expect(
       axios.get(
