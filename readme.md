@@ -915,9 +915,16 @@ Since the GitHub API only allows 5k requests per hour, my `https://github-readme
 8.  Click the `Continue with GitHub` button, search for the required Git Repository and import it by clicking the `Import` button. Alternatively, you can import a Third-Party Git Repository using the `Import Third-Party Git Repository ->` link at the bottom of the page.
     ![](https://files.catbox.moe/mg5p04.png)
 9.  Create a Personal Access Token (PAT) as described in the [previous section](#first-step-get-your-personal-access-token-pat).
-10. Add the PAT as an environment variable named `PAT_1` (as shown).
-    ![](https://files.catbox.moe/0yclio.png)
-11. Click deploy, and you're good to go. See your domains to use the API!
+10. Add the PAT as an environment variable named `PAT_1` (as shown).  
+    ![](https://files.catbox.moe/0yclio.png)  
+    Note: For enhanced security, you can add a variable as a sensitive variable. To do this:  
+    a. Go to `Environment Variables` in `Project Settings`, then choose `Add Environment Variable`.  
+    ![](https://files.catbox.moe/heprjw.jpg)  
+    b. Uncheck `Deployment` from `Environments`  
+    ![](https://files.catbox.moe/tiqgd0.jpg)  
+    c. Now you can make the variable `Sensitive` by checking the checkbox.  
+    ![](https://files.catbox.moe/mla5no.jpg)
+12. Click deploy, and you're good to go. See your domains to use the API!
 
 </details>
 
