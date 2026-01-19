@@ -6,8 +6,8 @@ on:
   pull_request:
 
 jobs:
-  setup-project:
-    name: Setup project on ${{ matrix.os }}
+  build-and-test:
+    name: Build and test on ${{ matrix.os }}
 
     strategy:
       fail-fast: false
@@ -27,5 +27,5 @@ jobs:
           chmod +x ./vercel-preparation.sh
           ./vercel-preparation.sh
 
-      - name: Run script
+      - name: Build frontend
         run: pnpm --filter frontend run build-trends

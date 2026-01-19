@@ -6,7 +6,7 @@ To set up the project GitHub-Stats-Extended locally, run the following commands:
 
 ```bash
 ./vercel-preparation.sh
-pnpm i
+pnpm install
 pnpm --filter frontend run build-trends
 ```
 
