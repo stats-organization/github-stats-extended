@@ -1,0 +1,5 @@
+{
+  "installCommand": "../../vercel-preparation.sh && pnpm install",
+  "buildCommand": "pnpm run build-trends",
+  "outputDirectory": "build"
+}

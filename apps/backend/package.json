@@ -29,7 +29,6 @@
     "generate-langs-json": "node scripts/generate-langs-json",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky",
     "lint": "npx eslint --max-warnings 0 \"./src/**/*.js\" \"./scripts/**/*.js\" \"./tests/**/*.js\" \"./api-renamed/**/*.js\" \"./themes/**/*.js\"",
     "bench": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.bench.config.js"
   },
@@ -51,7 +50,6 @@
     "express": "^5.2.1",
     "globals": "^16.5.0",
     "hjson": "^3.2.2",
-    "husky": "^9.1.7",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
     "js-yaml": "^4.1.1",

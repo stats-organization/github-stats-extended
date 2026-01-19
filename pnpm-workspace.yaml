@@ -1,0 +1,11 @@
+packages:
+  - apps/*
+
+catalog: null
+
+minimumReleaseAge: 10080
+
+onlyBuiltDependencies:
+  - core-js
+  - core-js-pure
+  - unrs-resolver

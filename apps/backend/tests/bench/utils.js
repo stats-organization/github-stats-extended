@@ -131,3 +131,17 @@ export const runAndLogStats = async (
 
   return stats;
 };
+
+export function approxNumber(expected, precision = 10) {
+  return {
+    asymmetricMatch(actual) {
+      if (typeof actual !== "number" || typeof expected !== "number")
+        return false;
+      const epsilon = Math.pow(10, -precision);
+      return Math.abs(actual - expected) < epsilon;
+    },
+    toAsymmetricMatcher() {
+      return `≈ ${expected} (precision ${precision})`;
+    },
+  };
+}
