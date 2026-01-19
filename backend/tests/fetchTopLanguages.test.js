@@ -3,6 +3,7 @@ import "@testing-library/jest-dom";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { fetchTopLanguages } from "../src/fetchers/top-languages.js";
+import { approxNumber } from "./bench/utils.js";
 
 const mock = new MockAdapter(axios);
 
@@ -70,13 +71,13 @@ describe("FetchTopLanguages", () => {
         color: "#0f0",
         count: 2,
         name: "HTML",
-        size: 20.000000000000004,
+        size: approxNumber(20.0),
       },
       javascript: {
         color: "#0ff",
         count: 2,
         name: "javascript",
-        size: 20.000000000000004,
+        size: approxNumber(20.0),
       },
     });
   });

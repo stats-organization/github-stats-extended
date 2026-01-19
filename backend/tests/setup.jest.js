@@ -3,3 +3,5 @@
 import { TextEncoder, TextDecoder } from "util";
 
 Object.assign(global, { TextDecoder, TextEncoder });
+process.env.PAT_1 = "dummyPAT1";
+process.env.PAT_2 = "dummyPAT2";

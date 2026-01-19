@@ -2,12 +2,15 @@
 
 ## Local Development
 
-To run and test GitHub-Stats-Extended, you need to follow a few simple steps:
+To set up the project GitHub-Stats-Extended locally, run the following commands:
 
-1. create [your own deployment](../docs/deploy.md)
-2. optional: add an SQL database; by using e.g. the ["Nile" integration](https://vercel.com/marketplace/nile) or by manually setting the environment variable `POSTGRES_URL`
-3. optional: [create your own OAuth App](https://github.com/settings/developers) and set environment variables `OAUTH_REDIRECT_URI`, `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` on Vercel accordingly
-4. optional: in addition to the Vercel project based on the `backend` folder, create a second project based on the `frontend/frontend` folder. No environment variables needed.
+```bash
+./vercel-preparation.sh
+(cd ./backend/ && npm install)
+(cd ./frontend/frontend/ && yarn install && yarn build-trends)
+```
+
+The easiest way to run and test the project is to deploy it to Vercel as described in the [deployment guide](../docs/deploy.md).
 
 ## Themes Contribution
 
