@@ -1,11 +1,11 @@
 /* eslint-disable react/no-array-index-key */
 
-import React, { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
 
-import { Button, Image } from '../../../components';
-import { classnames } from '../../../utils';
+import { Button, Image } from "../../../components";
+import { classnames } from "../../../utils";
 import {
   CLIENT_ID,
   DEMO_GIST,
@@ -15,16 +15,16 @@ import {
   GITHUB_PRIVATE_AUTH_URL,
   GITHUB_PUBLIC_AUTH_URL,
   HOST,
-} from '../../../constants';
-import { FaGithub as GithubIcon } from 'react-icons/fa';
-import { logout as _logout } from '../../../redux/actions/userActions';
+} from "../../../constants";
+import { FaGithub as GithubIcon } from "react-icons/fa";
+import { logout as _logout } from "../../../redux/actions/userActions";
 import {
   useIsAuthenticated,
   usePrivateAccess,
   useUserId,
   useUserKey,
-} from '../../../redux/selectors/userSelectors';
-import { deleteAccount } from '../../../api';
+} from "../../../redux/selectors/userSelectors";
+import { deleteAccount } from "../../../api";
 
 const LoginStage = ({ setCurrItem }) => {
   const userId = useUserId(null);
@@ -59,10 +59,10 @@ const LoginStage = ({ setCurrItem }) => {
       }
 
       // Bind the event listener
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
       return () => {
         // Unbind the event listener on clean up
-        document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener("mousedown", handleClickOutside);
       };
     }, [ref]);
   }
@@ -99,12 +99,12 @@ const LoginStage = ({ setCurrItem }) => {
 
   return (
     <div className="h-full flex flex-wrap">
-      <div className={classnames(deleteModal ? 'opacity-25' : '', 'md:flex')}>
+      <div className={classnames(deleteModal ? "opacity-25" : "", "md:flex")}>
         <div className="lg:block lg:w-3/5 lg:p-8">
           <div
             className={classnames(
-              'bg-gray-200 rounded-sm w-full h-full m-auto p-8 shadow',
-              'lg:h-auto',
+              "bg-gray-200 rounded-sm w-full h-full m-auto p-8 shadow",
+              "lg:h-auto",
             )}
           >
             {isAuthenticated ? (
@@ -243,9 +243,9 @@ const LoginStage = ({ setCurrItem }) => {
                   key={index}
                   style={{
                     left: `${x}%`,
-                    position: 'relative',
-                    zoom: '0.5',
-                    marginBottom: '1%',
+                    position: "relative",
+                    zoom: "0.5",
+                    marginBottom: "1%",
                   }}
                 >
                   <Image

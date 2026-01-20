@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import { classnames } from '../../utils';
+import { classnames } from "../../utils";
 
 // options is of form [{value: '', label: '', disabled: true/false}]
 const Input = ({
@@ -14,15 +14,15 @@ const Input = ({
   return (
     <select
       className={classnames(
-        'text-gray-700 bg-white select select-sm w-40 rounded-sm mt-4',
+        "text-gray-700 bg-white select select-sm w-40 rounded-sm mt-4",
         className,
       )}
       value={selectedOption.label}
-      onChange={(e) =>
+      onChange={(e) => {
         setSelectedOption(
           options.find((item) => item.label === e.target.value),
-          // eslint-disable-next-line prettier/prettier
-        )}
+        );
+      }}
       disabled={disabled}
     >
       {options.map((option) => (
@@ -30,7 +30,7 @@ const Input = ({
           key={option.value}
           disabled={option.disabled}
           className={classnames(
-            option.label === selectedOption.label && 'bg-blue-200',
+            option.label === selectedOption.label && "bg-blue-200",
           )}
         >
           {option.label}
@@ -59,7 +59,7 @@ Input.propTypes = {
 
 Input.defaultProps = {
   disabled: false,
-  className: '',
+  className: "",
 };
 
 export default Input;

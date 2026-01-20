@@ -1,20 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import { CheckboxSection, Image } from '../../../components';
-import { CardTypes } from '../../../utils';
-import TextSection from '../../../components/Home/TextSection';
-import NumericSection from '../../../components/Home/NumericSection';
-import StatsRankSection from '../../../components/Home/StatsRankSection';
-import LanguagesLayoutSection from '../../../components/Home/LanguagesLayoutSection';
-import WakatimeLayoutSection from '../../../components/Home/WakatimeLayoutSection';
+import { CheckboxSection, Image } from "../../../components";
+import { CardTypes } from "../../../utils";
+import TextSection from "../../../components/Home/TextSection";
+import NumericSection from "../../../components/Home/NumericSection";
+import StatsRankSection from "../../../components/Home/StatsRankSection";
+import LanguagesLayoutSection from "../../../components/Home/LanguagesLayoutSection";
+import WakatimeLayoutSection from "../../../components/Home/WakatimeLayoutSection";
 import {
   DEMO_GIST,
   DEMO_REPO,
   DEMO_USER,
   DEMO_WAKATIME_USER,
-} from '../../../constants';
-import { useIsAuthenticated } from '../../../redux/selectors/userSelectors';
+} from "../../../constants";
+import { useIsAuthenticated } from "../../../redux/selectors/userSelectors";
 
 const CustomizeStage = ({
   selectedCard,
@@ -70,7 +70,7 @@ const CustomizeStage = ({
                 <br />
                 {!isAuthenticated && (
                   <>
-                    Please{' '}
+                    Please{" "}
                     <a
                       href="#"
                       onClick={(e) => {
@@ -80,7 +80,7 @@ const CustomizeStage = ({
                       className="underline text-blue-900"
                     >
                       log in
-                    </a>{' '}
+                    </a>{" "}
                     to change the username.
                   </>
                 )}
@@ -91,14 +91,14 @@ const CustomizeStage = ({
             setValue={setSelectedUserId}
             onPaste={(e) => {
               e.preventDefault();
-              let newValue = e.clipboardData.getData('text');
+              let newValue = e.clipboardData.getData("text");
               // if the user pasted a full GitHub URL, extract username
-              if (newValue.endsWith('/')) {
+              if (newValue.endsWith("/")) {
                 newValue = newValue.slice(0, -1);
               }
-              let parts = newValue.split('/');
+              let parts = newValue.split("/");
               if (parts.length > 1) {
-                newValue = parts.slice(-1).join('/');
+                newValue = parts.slice(-1).join("/");
               }
               setSelectedUserId(newValue);
             }}
@@ -114,7 +114,7 @@ const CustomizeStage = ({
                 <br />
                 {!isAuthenticated && (
                   <>
-                    Please{' '}
+                    Please{" "}
                     <a
                       href="#"
                       onClick={(e) => {
@@ -124,7 +124,7 @@ const CustomizeStage = ({
                       className="underline text-blue-900"
                     >
                       log in
-                    </a>{' '}
+                    </a>{" "}
                     to change the repo.
                   </>
                 )}
@@ -135,14 +135,14 @@ const CustomizeStage = ({
             setValue={setRepo}
             onPaste={(e) => {
               e.preventDefault();
-              let newValue = e.clipboardData.getData('text');
+              let newValue = e.clipboardData.getData("text");
               // if the user pasted a full GitHub URL, extract owner/repo
-              if (newValue.endsWith('/')) {
+              if (newValue.endsWith("/")) {
                 newValue = newValue.slice(0, -1);
               }
-              let parts = newValue.split('/');
+              let parts = newValue.split("/");
               if (parts.length > 2) {
-                newValue = parts.slice(-2).join('/');
+                newValue = parts.slice(-2).join("/");
               }
               setRepo(newValue);
             }}
@@ -158,7 +158,7 @@ const CustomizeStage = ({
                 <br />
                 {!isAuthenticated && (
                   <>
-                    Please{' '}
+                    Please{" "}
                     <a
                       href="#"
                       onClick={(e) => {
@@ -168,7 +168,7 @@ const CustomizeStage = ({
                       className="underline text-blue-900"
                     >
                       log in
-                    </a>{' '}
+                    </a>{" "}
                     to change the gist id.
                   </>
                 )}
@@ -179,14 +179,14 @@ const CustomizeStage = ({
             setValue={setGist}
             onPaste={(e) => {
               e.preventDefault();
-              let newValue = e.clipboardData.getData('text');
+              let newValue = e.clipboardData.getData("text");
               // if the user pasted a full GitHub URL, extract Gist ID
-              if (newValue.endsWith('/')) {
+              if (newValue.endsWith("/")) {
                 newValue = newValue.slice(0, -1);
               }
-              let parts = newValue.split('/');
+              let parts = newValue.split("/");
               if (parts.length > 1) {
-                newValue = parts.slice(-1).join('/');
+                newValue = parts.slice(-1).join("/");
               }
               setGist(newValue);
             }}
@@ -198,14 +198,14 @@ const CustomizeStage = ({
             title="WakaTime Username"
             description={
               <>
-                Set your{' '}
+                Set your{" "}
                 <a
                   href="https://wakatime.com/"
                   target="_blank"
                   className="underline text-blue-900"
                 >
                   WakaTime
-                </a>{' '}
+                </a>{" "}
                 username to fetch your stats.
               </>
             }
@@ -336,14 +336,14 @@ const CustomizeStage = ({
           />
         )}
         <div className="pl-10 pr-10">
-          For more customization options check the{' '}
+          For more customization options check the{" "}
           <a
             href="https://github.com/stats-organization/github-stats-extended/blob/master/docs/advanced_documentation.md"
             target="_blank"
             className="underline text-blue-900"
           >
             customization documentation
-          </a>{' '}
+          </a>{" "}
           after you copied your card URL in step 5.
         </div>
       </div>

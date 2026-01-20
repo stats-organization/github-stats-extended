@@ -1,10 +1,10 @@
 /* eslint-disable react/no-danger */
 
-import React, { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
 
-import Section from './Section';
-import { classnames } from '../../utils';
+import Section from "./Section";
+import { classnames } from "../../utils";
 
 const TextSection = ({
   title,
@@ -43,8 +43,8 @@ const TextSection = ({
       <input
         type="text"
         className={classnames(
-          'border border-gray-300 rounded px-2 py-1 mt-2 w-3/4 min-w-48 max-w-xl',
-          disabled ? 'cursor-not-allowed' : '',
+          "border border-gray-300 rounded px-2 py-1 mt-2 w-3/4 min-w-48 max-w-xl",
+          disabled ? "cursor-not-allowed" : "",
         )}
         value={internalValue}
         onChange={(e) => setInternalValue(e.target.value)}
@@ -68,7 +68,7 @@ TextSection.propTypes = {
 
 TextSection.defaultProps = {
   disabled: false,
-  placeholder: '',
+  placeholder: "",
   onPaste: undefined,
 };
 

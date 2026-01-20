@@ -1,7 +1,5 @@
-.devcontainer
 .github
 .husky
-.vscode
 benchmarks
 coverage
 scripts
@@ -10,6 +8,4 @@ tests
 **/*.md
 **/*.svg
 .eslintrc.json
-.prettierignore
-.pretterrc.json
 codecov.yml

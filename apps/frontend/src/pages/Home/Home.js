@@ -1,36 +1,36 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
-import BounceLoader from 'react-spinners/BounceLoader';
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import PropTypes from "prop-types";
+import BounceLoader from "react-spinners/BounceLoader";
 
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import {
   CustomizeStage,
   DisplayStage,
   LoginStage,
   SelectCardStage,
   ThemeStage,
-} from './stages';
+} from "./stages";
 
-import { authenticate } from '../../api';
-import { login as _login } from '../../redux/actions/userActions';
+import { authenticate } from "../../api";
+import { login as _login } from "../../redux/actions/userActions";
 import {
   HOST,
   DEMO_USER,
   DEMO_WAKATIME_USER,
   DEMO_REPO,
   DEMO_GIST,
-} from '../../constants';
-import { CardTypes } from '../../utils';
-import { DEFAULT_OPTION as STATS_DEFAULT_RANK } from '../../components/Home/StatsRankSection';
-import { DEFAULT_OPTION as LANGUAGES_DEFAULT_LAYOUT } from '../../components/Home/LanguagesLayoutSection';
-import { DEFAULT_OPTION as WAKATIME_DEFAULT_LAYOUT } from '../../components/Home/WakatimeLayoutSection';
+} from "../../constants";
+import { CardTypes } from "../../utils";
+import { DEFAULT_OPTION as STATS_DEFAULT_RANK } from "../../components/Home/StatsRankSection";
+import { DEFAULT_OPTION as LANGUAGES_DEFAULT_LAYOUT } from "../../components/Home/LanguagesLayoutSection";
+import { DEFAULT_OPTION as WAKATIME_DEFAULT_LAYOUT } from "../../components/Home/WakatimeLayoutSection";
 import {
   useUserId,
   useIsAuthenticated,
   usePrivateAccess,
-} from '../../redux/selectors/userSelectors';
-import axios from 'axios';
+} from "../../redux/selectors/userSelectors";
+import axios from "axios";
 
 const HomeScreen = ({ stage, setStage }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -49,7 +49,7 @@ const HomeScreen = ({ stage, setStage }) => {
   const [gist, setGist] = useState(DEMO_GIST);
   const [wakatimeUser, setWakatimeUser] = useState(DEMO_WAKATIME_USER);
 
-  const [selectedCard, setSelectedCard] = useState('stats');
+  const [selectedCard, setSelectedCard] = useState("stats");
 
   useEffect(() => {
     setSelectedUserId(userId);
@@ -68,7 +68,7 @@ const HomeScreen = ({ stage, setStage }) => {
   const [showTitle, setShowTitle] = useState(true);
   const [showOwner, setShowOwner] = useState(false);
   const [descriptionLines, setDescriptionLines] = useState();
-  const [customTitle, setCustomTitle] = useState('');
+  const [customTitle, setCustomTitle] = useState("");
   const [langsCount, setLangsCount] = useState();
   const [showAllStats, setShowAllStats] = useState(false);
   const [showIcons, setShowIcons] = useState(false);
@@ -91,11 +91,11 @@ const HomeScreen = ({ stage, setStage }) => {
       setSelectedLanguagesLayout(LANGUAGES_DEFAULT_LAYOUT);
     }
 
-    if (theme === 'default' || theme === 'default_repocard') {
+    if (theme === "default" || theme === "default_repocard") {
       if (selectedCard === CardTypes.PIN || selectedCard === CardTypes.GIST) {
-        setTheme('default_repocard');
+        setTheme("default_repocard");
       } else {
-        setTheme('default');
+        setTheme("default");
       }
     }
   };
@@ -104,7 +104,7 @@ const HomeScreen = ({ stage, setStage }) => {
     resetCustomization();
   }, [selectedCard]);
 
-  let fullSuffix = `${selectedCard === CardTypes.STATS ? '' : '/' + selectedCard}?`;
+  let fullSuffix = `${selectedCard === CardTypes.STATS ? "" : "/" + selectedCard}?`;
 
   switch (selectedCard) {
     case CardTypes.STATS:
@@ -148,14 +148,14 @@ const HomeScreen = ({ stage, setStage }) => {
       selectedCard === CardTypes.TOP_LANGS ||
       selectedCard === CardTypes.WAKATIME)
   ) {
-    fullSuffix += '&hide_title=true';
+    fullSuffix += "&hide_title=true";
   }
 
   if (
     showOwner &&
     (selectedCard === CardTypes.PIN || selectedCard === CardTypes.GIST)
   ) {
-    fullSuffix += '&show_owner=true';
+    fullSuffix += "&show_owner=true";
   }
 
   if (descriptionLines && selectedCard === CardTypes.PIN) {
@@ -204,16 +204,16 @@ const HomeScreen = ({ stage, setStage }) => {
   }
 
   // for stage four
-  const [theme, setTheme] = useState('default');
+  const [theme, setTheme] = useState("default");
   let themeSuffix = fullSuffix;
 
   if (
     !(
-      (theme === 'default' &&
+      (theme === "default" &&
         [CardTypes.STATS, CardTypes.TOP_LANGS, CardTypes.WAKATIME].includes(
           selectedCard,
         )) ||
-      (theme === 'default_repocard' &&
+      (theme === "default_repocard" &&
         [CardTypes.PIN, CardTypes.GIST].includes(selectedCard))
     )
   ) {
@@ -221,7 +221,7 @@ const HomeScreen = ({ stage, setStage }) => {
   }
 
   // for stage five
-  const [gistUrl, setGistUrl] = useState('');
+  const [gistUrl, setGistUrl] = useState("");
 
   let guestHint;
   switch (selectedCard) {
@@ -247,7 +247,7 @@ const HomeScreen = ({ stage, setStage }) => {
         return result.data.html_url;
       } catch (error) {
         console.error(error);
-        return '';
+        return "";
       }
     };
 
@@ -274,9 +274,9 @@ const HomeScreen = ({ stage, setStage }) => {
       const url = window.location.href;
 
       // If Github API returns the code parameter
-      if (url.includes('code=')) {
-        const tempPrivateAccess = url.includes('private');
-        const newUrl = url.split('?code=');
+      if (url.includes("code=")) {
+        const tempPrivateAccess = url.includes("private");
+        const newUrl = url.split("?code=");
         const redirect = `${url.split(HOST)[0]}${HOST}/frontend`;
         window.history.pushState({}, null, redirect);
         setIsLoading(true);
@@ -313,11 +313,11 @@ const HomeScreen = ({ stage, setStage }) => {
             <div className="text-2xl text-gray-600 font-semibold">
               {
                 [
-                  'Login',
-                  'Select a Card',
-                  'Modify Card Parameters',
-                  'Choose a Theme',
-                  'Display your Card',
+                  "Login",
+                  "Select a Card",
+                  "Modify Card Parameters",
+                  "Choose a Theme",
+                  "Display your Card",
                 ][stage]
               }
             </div>
@@ -325,7 +325,7 @@ const HomeScreen = ({ stage, setStage }) => {
               {stage === 0 && isAuthenticated ? (
                 <div>
                   <p>
-                    You are logged in as{' '}
+                    You are logged in as{" "}
                     <a
                       href={`https://github.com/${userId}`}
                       target="_blank"
@@ -338,12 +338,12 @@ const HomeScreen = ({ stage, setStage }) => {
                   <p>
                     {privateAccess ? (
                       <>
-                        You granted GitHub-Stats-Extended access to both your{' '}
+                        You granted GitHub-Stats-Extended access to both your{" "}
                         <b>public and private</b> contributions.
                       </>
                     ) : (
                       <>
-                        You granted GitHub-Stats-Extended access to your{' '}
+                        You granted GitHub-Stats-Extended access to your{" "}
                         <b>public</b> contributions.
                       </>
                     )}
@@ -351,11 +351,11 @@ const HomeScreen = ({ stage, setStage }) => {
                 </div>
               ) : (
                 [
-                  '',
-                  'You will be able to customize your card in future steps.',
-                  '',
-                  '',
-                  'Display the finished card on GitHub, Twitter/X, LinkedIn, or anywhere else!',
+                  "",
+                  "You will be able to customize your card in future steps.",
+                  "",
+                  "",
+                  "Display the finished card on GitHub, Twitter/X, LinkedIn, or anywhere else!",
                 ][stage]
               )}
             </div>
@@ -439,7 +439,7 @@ const HomeScreen = ({ stage, setStage }) => {
                     return `https://${HOST}/api${themeSuffix}`;
                   case CardTypes.PIN:
                     let myRepo = repo;
-                    if (!myRepo.includes('/')) {
+                    if (!myRepo.includes("/")) {
                       myRepo = `${userId}/${myRepo}`;
                     }
                     return `https://github.com/${myRepo}`;

@@ -1,8 +1,8 @@
-import * as types from '../actions/userActions';
+import * as types from "../actions/userActions";
 
 const initialState = {
-  userId: JSON.parse(localStorage.getItem('userId')) || null,
-  userKey: JSON.parse(localStorage.getItem('userKey')) || null,
+  userId: JSON.parse(localStorage.getItem("userId")) || null,
+  userKey: JSON.parse(localStorage.getItem("userKey")) || null,
   token: null,
   privateAccess: null,
 };
@@ -11,8 +11,8 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case types.LOGIN:
-      localStorage.setItem('userId', JSON.stringify(action.payload.userId));
-      localStorage.setItem('userKey', JSON.stringify(action.payload.userKey));
+      localStorage.setItem("userId", JSON.stringify(action.payload.userId));
+      localStorage.setItem("userKey", JSON.stringify(action.payload.userKey));
       return {
         ...state,
         userId: action.payload.userId,
@@ -21,7 +21,7 @@ export default (state = initialState, action) => {
     case types.LOGOUT:
       if (
         action.payload.userKey !== null &&
-        action.payload.userKey !== JSON.parse(localStorage.getItem('userKey'))
+        action.payload.userKey !== JSON.parse(localStorage.getItem("userKey"))
       ) {
         return state;
       }

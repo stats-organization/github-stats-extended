@@ -1,9 +1,9 @@
-import axios from 'axios';
-import { HOST } from './constants';
+import axios from "axios";
+import { HOST } from "./constants";
 
 const fetchWakatimeStats = async ({ username, api_domain }) => {
   if (!username) {
-    throw new Error('missing parameter: username');
+    throw new Error("missing parameter: username");
   }
 
   const { data } = await axios.get(

@@ -378,7 +378,8 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
               // @ts-ignore
               progressBarColor: titleColor,
               // @ts-ignore
-              progressBarBackgroundColor: textColor === titleColor ? bgColor : textColor,
+              progressBarBackgroundColor:
+                textColor === titleColor ? bgColor : textColor,
               hideProgress: hide_progress,
               progressBarWidth: normalizedWidth - TOTAL_TEXT_WIDTH,
             });

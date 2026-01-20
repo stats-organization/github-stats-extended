@@ -1,22 +1,22 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import Section from './Section';
-import { Input } from '../Generic';
+import Section from "./Section";
+import { Input } from "../Generic";
 
 export const DEFAULT_OPTION = {
   id: 1,
-  label: 'Rank',
+  label: "Rank",
   disabled: false,
-  value: 'default',
+  value: "default",
 };
 
 const StatsRankSection = ({ selectedOption, setSelectedOption }) => {
   const options = [
     DEFAULT_OPTION,
-    { id: 2, label: 'Percentile', disabled: false, value: 'percentile' },
-    { id: 3, label: 'GitHub', disabled: false, value: 'github' },
-    { id: 4, label: 'None', disabled: false, value: 'default&hide_rank=true' },
+    { id: 2, label: "Percentile", disabled: false, value: "percentile" },
+    { id: 3, label: "GitHub", disabled: false, value: "github" },
+    { id: 4, label: "None", disabled: false, value: "default&hide_rank=true" },
   ];
 
   return (

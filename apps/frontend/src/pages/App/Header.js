@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import PropTypes from "prop-types";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-import appIcon from '../../assets/appLogo64.png';
-import { classnames } from '../../utils';
-import { FaGithub as GithubIcon } from 'react-icons/fa';
-import { ProgressBar } from '../../components';
+import appIcon from "../../assets/appLogo64.png";
+import { classnames } from "../../utils";
+import { FaGithub as GithubIcon } from "react-icons/fa";
+import { ProgressBar } from "../../components";
 
 const propTypes = {
   to: PropTypes.string.isRequired,
@@ -25,7 +25,7 @@ const StandardLink = ({ to, children, onClick, className }) => (
   <Link
     to={to}
     className={classnames(
-      'px-4 py-1 mr-3 rounded-sm bg-gray-200 hover:bg-gray-300 text-gray-700',
+      "px-4 py-1 mr-3 rounded-sm bg-gray-200 hover:bg-gray-300 text-gray-700",
       className,
     )}
     onClick={onClick}
@@ -42,7 +42,7 @@ const MobileLink = ({ to, children, onClick, className }) => (
   <Link
     to={to}
     className={classnames(
-      'block text-sm px-2 my-2 py-2 rounded-sm bg-gray-200 text-gray-700',
+      "block text-sm px-2 my-2 py-2 rounded-sm bg-gray-200 text-gray-700",
       className,
     )}
     onClick={onClick}
@@ -90,11 +90,11 @@ const Header = ({ stage, setStage }) => {
       </div>
       <ProgressBar
         items={[
-          'Login',
-          'Select Card',
-          'Modify Parameters',
-          'Select Theme',
-          'Display Card',
+          "Login",
+          "Select Card",
+          "Modify Parameters",
+          "Select Theme",
+          "Display Card",
         ]}
         currItem={stage}
         setCurrItem={setStage}

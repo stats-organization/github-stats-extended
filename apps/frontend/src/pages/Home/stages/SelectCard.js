@@ -1,51 +1,51 @@
 /* eslint-disable react/no-array-index-key */
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import { Card } from '../../../components';
-import { useUserId } from '../../../redux/selectors/userSelectors';
+import { Card } from "../../../components";
+import { useUserId } from "../../../redux/selectors/userSelectors";
 import {
   DEMO_GIST,
   DEMO_REPO,
   DEMO_USER,
   DEMO_WAKATIME_USER,
-} from '../../../constants';
-import { CardTypes } from '../../../utils';
+} from "../../../constants";
+import { CardTypes } from "../../../utils";
 
 const SelectCardStage = ({ selectedCard, setSelectedCard, setStage }) => {
   return (
     <div className="w-full flex flex-wrap">
       {[
         {
-          title: 'GitHub Stats Card',
-          description: 'your overall GitHub statistics',
+          title: "GitHub Stats Card",
+          description: "your overall GitHub statistics",
           demoImageSrc: `?username=${useUserId(DEMO_USER)}&include_all_commits=true`,
           cardType: CardTypes.STATS,
         },
         {
-          title: 'Top Languages Card',
-          description: 'your most frequently used languages',
+          title: "Top Languages Card",
+          description: "your most frequently used languages",
           demoImageSrc: `/top-langs?username=${useUserId(DEMO_USER)}&langs_count=4`,
           cardType: CardTypes.TOP_LANGS,
         },
         {
-          title: 'GitHub Extra Pin',
+          title: "GitHub Extra Pin",
           description:
-            'pin more than 6 repositories in your profile using a GitHub profile readme',
+            "pin more than 6 repositories in your profile using a GitHub profile readme",
           demoImageSrc: `/pin?repo=${DEMO_REPO}`,
           cardType: CardTypes.PIN,
         },
         {
-          title: 'GitHub Gist Pin',
+          title: "GitHub Gist Pin",
           description:
-            'pin gists in your GitHub profile using a GitHub profile readme',
+            "pin gists in your GitHub profile using a GitHub profile readme",
           demoImageSrc: `/gist?id=${DEMO_GIST}`,
           cardType: CardTypes.GIST,
         },
         {
-          title: 'WakaTime Stats Card',
-          description: 'your coding activity from WakaTime',
+          title: "WakaTime Stats Card",
+          description: "your coding activity from WakaTime",
           demoImageSrc: `/wakatime?username=${DEMO_WAKATIME_USER}&langs_count=6&card_width=450`,
           cardType: CardTypes.WAKATIME,
         },

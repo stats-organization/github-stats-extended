@@ -1,25 +1,25 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import Section from './Section';
-import { Input } from '../Generic';
+import Section from "./Section";
+import { Input } from "../Generic";
 
 export const DEFAULT_OPTION = {
   id: 1,
-  label: 'Normal',
+  label: "Normal",
   disabled: false,
-  value: 'default',
+  value: "default",
 };
 
 const WakatimeLayoutSection = ({ selectedOption, setSelectedOption }) => {
   const options = [
     DEFAULT_OPTION,
-    { id: 2, label: 'Compact', disabled: false, value: 'compact' },
+    { id: 2, label: "Compact", disabled: false, value: "compact" },
     {
       id: 3,
-      label: 'Text Only',
+      label: "Text Only",
       disabled: false,
-      value: 'default&hide_progress=true&card_width=315',
+      value: "default&hide_progress=true&card_width=315",
     },
   ];
 

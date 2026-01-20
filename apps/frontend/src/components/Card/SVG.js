@@ -1,20 +1,20 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-danger */
 
-import React, { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
 
-import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
-import { createMockReq, createMockRes } from '../../mock-http';
-import { default as router } from '../../backend/.vercel/output/functions/api.func/router.js';
-import { setShouldMock } from '../../axios-override';
+import { createMockReq, createMockRes } from "../../mock-http";
+import { default as router } from "../../backend/.vercel/output/functions/api.func/router.js";
+import { setShouldMock } from "../../axios-override";
 import {
   useIsAuthenticated,
   useUserToken,
-} from '../../redux/selectors/userSelectors';
-import axios from 'axios';
+} from "../../redux/selectors/userSelectors";
+import axios from "axios";
 
 const SvgInline = (props) => {
   const [svg, setSvg] = useState(null);
@@ -40,7 +40,7 @@ const SvgInline = (props) => {
       let body;
       let status;
 
-      if (isAuthenticated && (!userToken || userToken === 'placeholderPAT')) {
+      if (isAuthenticated && (!userToken || userToken === "placeholderPAT")) {
         // waiting for backend call to private-access
         return;
       }
@@ -51,7 +51,7 @@ const SvgInline = (props) => {
         status = res.status;
       } else {
         const req = createMockReq({
-          method: 'GET',
+          method: "GET",
           url: url,
         });
         const res = createMockRes();
@@ -61,7 +61,7 @@ const SvgInline = (props) => {
       }
 
       if (status >= 300) {
-        console.error('failed to fetch/generate SVG');
+        console.error("failed to fetch/generate SVG");
         return;
       }
 
@@ -83,12 +83,12 @@ const SvgInline = (props) => {
       // Attach shadow root if not already present
       let shadow = containerRef.current.shadowRoot;
       if (!shadow) {
-        shadow = containerRef.current.attachShadow({ mode: 'open' });
+        shadow = containerRef.current.attachShadow({ mode: "open" });
       }
       // Clear previous content
-      shadow.innerHTML = '';
+      shadow.innerHTML = "";
       // Insert SVG
-      const wrapper = document.createElement('div');
+      const wrapper = document.createElement("div");
       wrapper.innerHTML = svg;
       shadow.appendChild(wrapper);
     }
@@ -96,7 +96,7 @@ const SvgInline = (props) => {
 
   if (props.forceLoading || !loaded) {
     if (props.compact) {
-      return <Skeleton style={{ paddingBottom: '58%' }} />;
+      return <Skeleton style={{ paddingBottom: "58%" }} />;
     }
     // maximum dimensions of cards in SelectCard stage
     return <Skeleton className="h-[245px] w-[450px]" />;
@@ -115,7 +115,7 @@ SvgInline.propTypes = {
 };
 
 SvgInline.defaultProps = {
-  className: '',
+  className: "",
   forceLoading: false,
   compact: false,
 };

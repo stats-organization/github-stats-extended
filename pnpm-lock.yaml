@@ -14,8 +14,11 @@ importers:
   .:
     devDependencies:
       husky:
-        specifier: ^9.1.7
+        specifier: 9.1.7
         version: 9.1.7
+      prettier:
+        specifier: 3.7.4
+        version: 3.7.4
 
   apps/backend:
     dependencies:

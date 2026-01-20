@@ -1,35 +1,35 @@
 /* eslint-disable react/no-array-index-key */
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
 import {
   FaArrowLeft as LeftArrowIcon,
   FaArrowRight as RightArrowIcon,
-} from 'react-icons/fa';
+} from "react-icons/fa";
 
-import { classnames } from '../../utils';
+import { classnames } from "../../utils";
 
 const ProgressSection = ({ num, item, passed, isActive, onClick }) => {
   return (
     <button
       className={classnames(
-        'w-1/4 flex flex-col mx-2 p-2 cursor-pointer',
-        passed ? 'border-blue-500' : 'border-gray-500',
-        isActive ? 'border-t-[14px] -mt-[5px]' : 'border-t-4',
+        "w-1/4 flex flex-col mx-2 p-2 cursor-pointer",
+        passed ? "border-blue-500" : "border-gray-500",
+        isActive ? "border-t-[14px] -mt-[5px]" : "border-t-4",
       )}
       type="button"
       onClick={onClick}
     >
       <div
         className={classnames(
-          'text-lg font-bold',
-          passed ? 'text-blue-500' : 'text-gray-500',
-          isActive ? '-mt-[4px]' : '',
+          "text-lg font-bold",
+          passed ? "text-blue-500" : "text-gray-500",
+          isActive ? "-mt-[4px]" : "",
         )}
       >
         {`Step ${num + 1}`}
       </div>
-      <div className={classnames(passed ? 'text-gray-700' : 'text-gray-500')}>
+      <div className={classnames(passed ? "text-gray-700" : "text-gray-500")}>
         {item}
       </div>
     </button>
@@ -52,10 +52,10 @@ const ProgressBar = ({ items, currItem, setCurrItem }) => {
     <div className="w-full flex items-center sticky top-0 bg-gray-200 z-50 pt-3 pb-1 px-1 md:px-20 shadow-md">
       <LeftArrowIcon
         className={classnames(
-          'w-8 h-8',
+          "w-8 h-8",
           leftDisabled
-            ? 'text-gray-400 cursor-not-allowed'
-            : 'text-gray-700 cursor-pointer',
+            ? "text-gray-400 cursor-not-allowed"
+            : "text-gray-700 cursor-pointer",
         )}
         onClick={() => setCurrItem(Math.max(currItem - 1, 0))}
       />
@@ -75,10 +75,10 @@ const ProgressBar = ({ items, currItem, setCurrItem }) => {
       </div>
       <RightArrowIcon
         className={classnames(
-          'w-8 h-8',
+          "w-8 h-8",
           rightDisabled
-            ? 'text-gray-400 cursor-not-allowed'
-            : 'text-gray-700 cursor-pointer',
+            ? "text-gray-400 cursor-not-allowed"
+            : "text-gray-700 cursor-pointer",
         )}
         onClick={() => setCurrItem(Math.min(currItem + 1, items.length - 1))}
       />

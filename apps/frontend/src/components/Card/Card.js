@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import SVG from './SVG';
-import { classnames } from '../../utils';
-import { HOST } from '../../constants';
+import SVG from "./SVG";
+import { classnames } from "../../utils";
+import { HOST } from "../../constants";
 
-export const Image = ({ imageSrc, stage, compact, extraClasses = '' }) => {
+export const Image = ({ imageSrc, stage, compact, extraClasses = "" }) => {
   const fullImageSrc = `https://${HOST}/api${imageSrc}&client=wizard`;
 
   return (
@@ -29,7 +29,7 @@ Image.propTypes = {
 
 Image.defaultProps = {
   compact: false,
-  extraClasses: '',
+  extraClasses: "",
 };
 
 export const Card = ({
@@ -44,11 +44,11 @@ export const Card = ({
   return (
     <div
       className={classnames(
-        'p-6 rounded border-2',
-        fixedSize ? 'h-[370px] w-[510px]' : '',
+        "p-6 rounded border-2",
+        fixedSize ? "h-[370px] w-[510px]" : "",
         selected
-          ? 'border-blue-500 bg-blue-50'
-          : 'border-gray-200 bg-white hover:bg-gray-50',
+          ? "border-blue-500 bg-blue-50"
+          : "border-gray-200 bg-white hover:bg-gray-50",
       )}
     >
       <h2 className="text-xl font-medium title-font text-gray-900">{title}</h2>
@@ -56,7 +56,7 @@ export const Card = ({
       <Image
         imageSrc={imageSrc}
         compact={compact}
-        extraClasses={fixedSize ? 'flex justify-center' : ''}
+        extraClasses={fixedSize ? "flex justify-center" : ""}
         stage={stage}
       />
     </div>

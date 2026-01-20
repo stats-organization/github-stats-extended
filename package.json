@@ -3,11 +3,13 @@
   "private": true,
   "packageManager": "pnpm@10.28.0+sha512.05df71d1421f21399e053fde567cea34d446fa02c76571441bfc1c7956e98e363088982d940465fd34480d4d90a0668bc12362f8aa88000a64e83d0b0e47be48",
   "devDependencies": {
-    "husky": "^9.1.7"
+    "husky": "9.1.7",
+    "prettier": "3.7.4"
   },
   "scripts": {
     "prepare": "husky",
-    "test": "pnpm run -r test"
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "resolutions": {
     "@svgr/webpack": "^6.0.0",

@@ -37,11 +37,9 @@ jobs:
           close_comment:
             Closing this issue because it appears to be empty. Please update the
             issue for it to be reopened.
-          open_comment:
-            Reopening this issue because the author provided more information.
+          open_comment: Reopening this issue because the author provided more information.
           check_templates: true
           template_close_comment:
             Closing this issue since the issue template was not filled in.
             Please provide us with more information to have this issue reopened.
-          template_open_comment:
-            Reopening this issue because the author provided more information.
+          template_open_comment: Reopening this issue because the author provided more information.

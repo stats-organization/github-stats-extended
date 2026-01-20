@@ -1,3 +1,4 @@
+pnpm run format:check
 # TODO enable
 # npm test
 # npm run lint

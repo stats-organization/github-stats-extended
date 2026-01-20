@@ -1,39 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 import {
   logout as _logout,
   setUserAccess as _setUserAccess,
-} from '../../redux/actions/userActions';
+} from "../../redux/actions/userActions";
 
-import Header from './Header';
-import HomeScreen from '../Home';
-import { getUserMetadata } from '../../api';
+import Header from "./Header";
+import HomeScreen from "../Home";
+import { getUserMetadata } from "../../api";
 import {
   useIsAuthenticated,
   useUserKey,
   useUserToken,
-} from '../../redux/selectors/userSelectors';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { clearAxiosCache } from '../../axios-override';
+} from "../../redux/selectors/userSelectors";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { clearAxiosCache } from "../../axios-override";
 
 function App() {
   const toMessage = (input) => {
-    if (typeof input === 'string') return input;
+    if (typeof input === "string") return input;
     if (input.reason?.message) return input.reason.message;
     if (input.message) return input.message;
     try {
       return JSON.stringify(input);
     } catch {
-      return 'Unknown error';
+      return "Unknown error";
     }
   };
 
   const showError = (event) => {
     toast.error(toMessage(event), {
-      position: 'bottom-right',
+      position: "bottom-right",
       autoClose: 1500,
       hideProgressBar: true,
       closeOnClick: false,
@@ -43,10 +43,10 @@ function App() {
     });
   };
 
-  window.addEventListener('error', (event) => {
+  window.addEventListener("error", (event) => {
     showError(event);
   });
-  window.addEventListener('unhandledrejection', (event) => {
+  window.addEventListener("unhandledrejection", (event) => {
     showError(event);
   });
 

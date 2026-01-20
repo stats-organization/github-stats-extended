@@ -1,10 +1,10 @@
 /* eslint-disable react/no-danger */
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import Section from './Section';
-import { Checkbox } from '../Generic';
+import Section from "./Section";
+import { Checkbox } from "../Generic";
 
 const CheckboxSection = ({
   title,

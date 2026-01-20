@@ -1,3 +1,3 @@
-import AppTrends from './AppTrends';
+import AppTrends from "./AppTrends";
 
 export { AppTrends };

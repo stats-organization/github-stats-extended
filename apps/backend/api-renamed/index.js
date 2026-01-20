@@ -94,19 +94,18 @@ export default async (req, res) => {
     (owner && !safePattern.test(owner))
   ) {
     return res.send(
-      renderError(
-        {
-          message: "Something went wrong",
-          secondaryMessage: "Username, repository or owner contains unsafe characters",
-          renderOptions: {
-            title_color,
-            text_color,
-            bg_color,
-            border_color,
-            theme,
-          },
+      renderError({
+        message: "Something went wrong",
+        secondaryMessage:
+          "Username, repository or owner contains unsafe characters",
+        renderOptions: {
+          title_color,
+          text_color,
+          bg_color,
+          border_color,
+          theme,
         },
-      ),
+      }),
     );
   }
 
@@ -124,7 +123,7 @@ export default async (req, res) => {
       parseBoolean(include_all_commits),
       parseArray(exclude_repo),
       showStats.includes("prs_merged") ||
-      showStats.includes("prs_merged_percentage"),
+        showStats.includes("prs_merged_percentage"),
       showStats.includes("discussions_started"),
       showStats.includes("discussions_answered"),
       parseInt(commits_year, 10),
@@ -147,7 +146,9 @@ export default async (req, res) => {
     setCacheHeaders(res, cacheSeconds);
 
     return res.send(
-      renderStatsCard(stats, {
+      renderStatsCard(
+        stats,
+        {
           hide: parseArray(hide),
           show_icons: parseBoolean(show_icons),
           hide_title: parseBoolean(hide_title),

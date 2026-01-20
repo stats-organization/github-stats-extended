@@ -1,5 +1,5 @@
 export function createMockReq({
-  method = 'GET',
+  method = "GET",
   url,
   headers = {},
   body = null,
@@ -32,7 +32,7 @@ export function createMockRes() {
     },
 
     write(chunk) {
-      if (typeof chunk !== 'string') {
+      if (typeof chunk !== "string") {
         chunk = String(chunk);
       }
       chunks.push(chunk);
@@ -50,7 +50,7 @@ export function createMockRes() {
       return { ...headers };
     },
     _getBody() {
-      return chunks.join('');
+      return chunks.join("");
     },
   };
 

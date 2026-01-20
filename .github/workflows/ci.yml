@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+      - monorepo # to be removed once we complete monorepo tasks
+
+permissions: {}
+
+jobs:
+  build-and-test:
+    name: Build and test ${{ matrix.node }} on ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [24]
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Install Dependencies
+        uses: ./.github/actions/install-dependencies
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Run vercel-preparation.sh
+        run: |
+          chmod +x ./vercel-preparation.sh
+          ./vercel-preparation.sh
+
+      - name: Build frontend
+        run: pnpm --filter frontend run build-trends
+
+  code-checks:
+    name: Code checks
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Install Dependencies
+        uses: ./.github/actions/install-dependencies
+
+      - name: Format
+        run: pnpm run format:check

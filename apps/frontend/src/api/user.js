@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-import { HOST } from '../constants';
+import { HOST } from "../constants";
 
 const authenticate = async (code, privateAccess, userKey) => {
   try {
@@ -16,7 +16,7 @@ const authenticate = async (code, privateAccess, userKey) => {
     return userId;
   } catch (error) {
     console.error(error);
-    return '';
+    return "";
   }
 };
 
@@ -38,7 +38,7 @@ const deleteAccount = async (userId, userKey) => {
     return result.data; // no decorator
   } catch (error) {
     console.error(error);
-    return '';
+    return "";
   }
 };
 

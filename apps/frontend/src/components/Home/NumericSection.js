@@ -1,9 +1,9 @@
 /* eslint-disable react/no-danger */
 
-import React, { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
 
-import Section from './Section';
+import Section from "./Section";
 
 const NumericSection = ({
   title,
@@ -73,7 +73,7 @@ NumericSection.defaultProps = {
   max: undefined,
   step: 1,
   disabled: false,
-  placeholder: '',
+  placeholder: "",
 };
 
 export default NumericSection;

@@ -1,10 +1,10 @@
 /* eslint-disable react/no-array-index-key */
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import { Card } from '../../../components';
-import { themes } from '../../../backend/themes/index';
+import { Card } from "../../../components";
+import { themes } from "../../../backend/themes/index";
 
 const ThemeStage = ({ theme, setTheme, setStage, fullSuffix }) => {
   return (
@@ -14,12 +14,12 @@ const ThemeStage = ({ theme, setTheme, setStage, fullSuffix }) => {
           .filter(
             (myTheme) =>
               ![
-                'merko',
-                'blue-green',
-                'gotham',
-                'blueberry',
-                'outrun',
-                'holi',
+                "merko",
+                "blue-green",
+                "gotham",
+                "blueberry",
+                "outrun",
+                "holi",
               ].includes(myTheme),
           )
           .map((myTheme, index) => (
@@ -43,14 +43,14 @@ const ThemeStage = ({ theme, setTheme, setStage, fullSuffix }) => {
           ))}
       </div>
       <div className="pl-10 pr-10">
-        For more theme options check the{' '}
+        For more theme options check the{" "}
         <a
           href="https://github.com/stats-organization/github-stats-extended/blob/master/docs/advanced_documentation.md#themes"
           target="_blank"
           className="underline text-blue-900"
         >
           customization documentation
-        </a>{' '}
+        </a>{" "}
         after you copied your card URL in step 5.
       </div>
     </>

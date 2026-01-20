@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 import {
   FaArrowRight as ArrowRightIcon,
   FaArrowLeft as ArrowLeftIcon,
-} from 'react-icons/fa';
+} from "react-icons/fa";
 
-import { classnames } from '../../utils';
+import { classnames } from "../../utils";
 
 const Preview = ({ pages, details, showArrows }) => {
   const totalPages = pages.length;
@@ -38,7 +38,7 @@ const Preview = ({ pages, details, showArrows }) => {
         <img
           src={pages[page]}
           alt="preview"
-          className={showArrows ? 'w-3/4 mx-auto' : 'w-full'}
+          className={showArrows ? "w-3/4 mx-auto" : "w-full"}
         />
         {showArrows && (
           <ArrowRightIcon
@@ -50,8 +50,8 @@ const Preview = ({ pages, details, showArrows }) => {
       <br />
       <p
         className={classnames(
-          'w-full text-center',
-          'text-sm lg:text-lg xl:text-xl 2xl:text-2xl',
+          "w-full text-center",
+          "text-sm lg:text-lg xl:text-xl 2xl:text-2xl",
         )}
       >
         {details[page]}

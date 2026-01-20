@@ -215,7 +215,7 @@ export async function getUserAccessByKey(userKey) {
     }
     return {
       token: rows[0].access_token,
-      privateAccess: rows[0].private_access
+      privateAccess: rows[0].private_access,
     };
   } catch (err) {
     if (err.code === "42P01") {
@@ -250,7 +250,7 @@ export async function getUserAccessByName(userName) {
     }
     return {
       token: rows[0].access_token,
-      privateAccess: rows[0].private_access
+      privateAccess: rows[0].private_access,
     };
   } catch (err) {
     if (err.code === "42P01") {

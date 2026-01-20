@@ -53,10 +53,10 @@ export default async (req, res) => {
       },
     );
   } catch (err) {
-      logger.error(err);
-      res.statusCode = 500;
-      res.send("Failed to delete GitHub authorization with private access");
-      return;
+    logger.error(err);
+    res.statusCode = 500;
+    res.send("Failed to delete GitHub authorization with private access");
+    return;
   }
 
   await deleteUser(user_key);
@@ -68,6 +68,9 @@ export default async (req, res) => {
   }).toString();
 
   res.statusCode = 302;
-  res.setHeader("Location", `https://github.com/login/oauth/authorize?${params}`);
+  res.setHeader(
+    "Location",
+    `https://github.com/login/oauth/authorize?${params}`,
+  );
   res.end();
 };

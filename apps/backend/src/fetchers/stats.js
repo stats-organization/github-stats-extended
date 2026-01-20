@@ -5,10 +5,7 @@ import * as dotenv from "dotenv";
 import githubUsernameRegex from "github-username-regex";
 import { calculateRank } from "../calculateRank.js";
 import { retryer } from "../common/retryer.js";
-import {
-  buildSearchFilter,
-  parseOwnerAffiliations,
-} from "../common/ops.js";
+import { buildSearchFilter, parseOwnerAffiliations } from "../common/ops.js";
 import { logger } from "../common/log.js";
 import { excludeRepositories } from "../common/envs.js";
 import { CustomError, MissingParamError } from "../common/error.js";
@@ -191,10 +188,7 @@ const fetchTotalItems = (variables, token) => {
       `https://api.github.com/search/` +
       variables.type +
       `?per_page=1&q=` +
-      buildSearchFilter(variables.repo, variables.owner).replaceAll(
-        " ",
-        "+",
-      ) +
+      buildSearchFilter(variables.repo, variables.owner).replaceAll(" ", "+") +
       variables.filter,
     headers: {
       "Content-Type": "application/json",

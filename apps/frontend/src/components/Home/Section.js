@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import { HiOutlineLightningBolt as LightningIcon } from 'react-icons/hi';
+import { HiOutlineLightningBolt as LightningIcon } from "react-icons/hi";
 
 const Section = (props) => {
   return (
@@ -29,7 +29,7 @@ Section.propTypes = {
 };
 
 Section.defaultProps = {
-  title: 'Test',
+  title: "Test",
   children: <p className="leading-relaxed">This is a test!</p>,
 };
 

@@ -59,8 +59,7 @@ jobs:
           branch: "update_langs/patch"
           delete-branch: true
           title: Update languages JSON
-          body:
-            "The
+          body: "The
             [update-langs](https://github.com/anuraghazra/github-readme-stats/actions/workflows/update-langs.yaml)
             action found new/updated languages in the [upstream languages JSON
             file](https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml)."

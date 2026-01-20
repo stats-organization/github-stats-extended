@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import { classnames } from '../../utils';
+import { classnames } from "../../utils";
 
 const Button = (props) => {
   return (
@@ -11,7 +11,7 @@ const Button = (props) => {
       {...props}
       className={classnames(
         props.className,
-        'border-0 py-2 px-6 inline-flex focus:outline-none rounded-[0.25rem] text-lg',
+        "border-0 py-2 px-6 inline-flex focus:outline-none rounded-[0.25rem] text-lg",
       )}
     >
       {props.children}
@@ -25,7 +25,7 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
-  className: '',
+  className: "",
 };
 
 export default Button;

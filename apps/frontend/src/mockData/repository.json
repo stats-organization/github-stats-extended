@@ -24,9 +24,7 @@
   "errors": [
     {
       "type": "NOT_FOUND",
-      "path": [
-        "organization"
-      ],
+      "path": ["organization"],
       "locations": [
         {
           "line": 25,

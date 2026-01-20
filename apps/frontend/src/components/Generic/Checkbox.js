@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
 const Checkbox = ({ question, variable, setVariable, disabled }) => {
   return (
@@ -11,7 +11,7 @@ const Checkbox = ({ question, variable, setVariable, disabled }) => {
       <input
         type="checkbox"
         disabled={disabled}
-        checked={variable && !disabled ? 'checked' : ''}
+        checked={variable && !disabled ? "checked" : ""}
         className="checkbox mr-2"
         onChange={() => setVariable(!variable)}
       />

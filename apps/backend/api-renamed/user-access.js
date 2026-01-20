@@ -18,7 +18,7 @@ export default async (req, res) => {
 
     res.send({
       privateAccess: result.privateAccess,
-      token: result.token
+      token: result.token,
     });
   } catch (err) {
     logger.error(err);

@@ -34,9 +34,7 @@
         "user_view_type": "public",
         "site_admin": false
       },
-      "labels": [
-
-      ],
+      "labels": [],
       "state": "closed",
       "locked": false,
       "assignee": {
