@@ -45,9 +45,9 @@
     "tailwindcss": "^3.3.5"
   },
   "scripts": {
-    "start-trends": "craco start",
-    "build-trends": "craco build",
-    "test": "craco test",
+    "start-trends": "DISABLE_ESLINT_PLUGIN=true craco start",
+    "build-trends": "DISABLE_ESLINT_PLUGIN=true craco build",
+    "test": "DISABLE_ESLINT_PLUGIN=true craco test",
     "eject": "react-scripts eject"
   },
   "homepage": "/frontend",
