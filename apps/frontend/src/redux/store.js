@@ -4,7 +4,11 @@ import loggerMiddleware from "./logger";
 import rootReducer from "./reducers";
 import { USE_LOGGER } from "../constants";
 
-export default function configureStore(intialState) {
+/**
+ * @param {unknown?} initialState store initial state
+ * @returns {import('redux').Store} store
+ */
+export default function configureStore(initialState) {
   let middlewares = [];
   if (USE_LOGGER) {
     middlewares = [loggerMiddleware];
@@ -14,7 +18,7 @@ export default function configureStore(intialState) {
   const enhancers = [middlewareEnhancer];
   const composedEnhancers = compose(...enhancers);
 
-  const store = createStore(rootReducer, intialState, composedEnhancers);
+  const store = createStore(rootReducer, initialState, composedEnhancers);
 
   return store;
 }

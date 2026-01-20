@@ -42,11 +42,22 @@ const measurePerformance = async (fn) => {
  * Computes basic & extended statistics.
  *
  * @param {bigint[]} samples Array of samples in nanoseconds.
- * @returns {object} Stats
+ * @returns {{
+ *  runs: number
+ *  min: number
+ *  max: number
+ *  average: number
+ *  median: number
+ *  p75: number
+ *  p95: number
+ *  p99: number
+ *  stdev: number
+ *  totalTime: number
+ * }} Stats
  */
 const computeStats = (samples) => {
   const sorted = [...samples].sort((a, b) => (a < b ? -1 : 1));
-  const toNumber = (b) => Number(b); // safe for typical short benches
+  const toNumber = (/** @type {bigint} */ b) => Number(b); // safe for typical short benches
   const n = sorted.length;
   const sum = sorted.reduce((a, b) => a + b, 0n);
   const avg = Number(sum) / n;
@@ -54,7 +65,7 @@ const computeStats = (samples) => {
     n % 2
       ? toNumber(sorted[(n - 1) / 2])
       : (toNumber(sorted[n / 2 - 1]) + toNumber(sorted[n / 2])) / 2;
-  const p = (q) => {
+  const p = (/** @type {number} */ q) => {
     const idx = Math.min(n - 1, Math.floor((q / 100) * n));
     return toNumber(sorted[idx]);
   };
@@ -120,7 +131,7 @@ export const runAndLogStats = async (
 
   const stats = computeStats(processed);
 
-  const fmt = (ns) => formatTime(BigInt(Math.round(ns)));
+  const fmt = (/** @type {number} */ ns) => formatTime(BigInt(Math.round(ns)));
   console.log(
     `${fnName} | runs=${stats.runs} avg=${fmt(stats.average)} median=${fmt(
       stats.median,
@@ -132,11 +143,37 @@ export const runAndLogStats = async (
   return stats;
 };
 
+/**
+ * Creates an asymmetric matcher for approximate numeric equality.
+ *
+ * This helper is intended for use in test frameworks (e.g., Jest) where
+ * values need to be compared within a configurable decimal precision
+ * instead of strict equality.
+ *
+ * The comparison succeeds when:
+ *
+ *   |actual - expected| < 10^(-precision)
+ *
+ * For example, with `precision = 3`, values must be within `0.001`.
+ *
+ * @param {number} expected The expected numeric value to compare against.
+ *
+ * @param {number} [precision=10]
+ *   The number of decimal places of tolerance. Higher values mean stricter
+ *   comparison. Internally converted to epsilon = 10^-precision.
+ *
+ * @returns {{
+ *   asymmetricMatch(actual: unknown): boolean,
+ *   toAsymmetricMatcher(): string
+ * }} An object implementing Jest-style asymmetric matcher methods.
+ *
+ */
 export function approxNumber(expected, precision = 10) {
   return {
     asymmetricMatch(actual) {
-      if (typeof actual !== "number" || typeof expected !== "number")
+      if (typeof actual !== "number" || typeof expected !== "number") {
         return false;
+      }
       const epsilon = Math.pow(10, -precision);
       return Math.abs(actual - expected) < epsilon;
     },

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { HOST } from "./constants";
 
-const fetchWakatimeStats = async ({ username, api_domain }) => {
+const fetchWakatimeStats = async ({ username }) => {
   if (!username) {
     throw new Error("missing parameter: username");
   }

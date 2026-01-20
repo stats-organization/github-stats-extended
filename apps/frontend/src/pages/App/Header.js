@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React from "react";
 import PropTypes from "prop-types";
 
 import { Link } from "react-router-dom";
@@ -56,8 +55,6 @@ MobileLink.propTypes = propTypes;
 MobileLink.defaultProps = defaultProps;
 
 const Header = ({ stage, setStage }) => {
-  const dispatch = useDispatch();
-
   return (
     <>
       <div className="text-gray-100 bg-gray-800 shadow-md body-font z-50">

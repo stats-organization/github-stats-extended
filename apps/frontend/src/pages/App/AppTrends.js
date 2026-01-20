@@ -21,9 +21,15 @@ import { clearAxiosCache } from "../../axios-override";
 
 function App() {
   const toMessage = (input) => {
-    if (typeof input === "string") return input;
-    if (input.reason?.message) return input.reason.message;
-    if (input.message) return input.message;
+    if (typeof input === "string") {
+      return input;
+    }
+    if (input.reason?.message) {
+      return input.reason.message;
+    }
+    if (input.message) {
+      return input.message;
+    }
     try {
       return JSON.stringify(input);
     } catch {

@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 export const PROD = false;
 
 export const USE_LOGGER = true;

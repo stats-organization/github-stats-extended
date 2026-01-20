@@ -1,32 +1,32 @@
+import { defineConfig, globalIgnores } from "eslint/config";
 import globals from "globals";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
 import jsdoc from "eslint-plugin-jsdoc";
+import react from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-});
-
-export default [
-  ...compat.extends("prettier"),
+export default defineConfig(
+  globalIgnores([
+    "**/build",
+    //
+    "./apps/backend/.vercel/**/*",
+    "apps/frontend/src/backend/**/*",
+  ]),
+  js.configs.recommended,
   {
+    linterOptions: {
+      reportUnusedDisableDirectives: "error",
+    },
     languageOptions: {
       globals: {
         ...globals.node,
         ...globals.browser,
       },
-
-      ecmaVersion: 2022,
-      sourceType: "module",
     },
     plugins: {
       jsdoc,
+      react,
+      "react-hooks": reactHooks,
     },
     rules: {
       "no-unexpected-multiline": "error",
@@ -80,4 +80,33 @@ export default [
       "jsdoc/require-jsdoc": "warn",
     },
   },
-];
+  {
+    files: ["apps/backend/**/*.{js}"],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  {
+    files: ["apps/frontend/**/*.{js,jsx}"],
+    plugins: {
+      react,
+      "react-hooks": reactHooks,
+    },
+    languageOptions: {
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    rules: {
+      "react/jsx-uses-react": "error",
+      "react/jsx-uses-vars": "error",
+      "react/no-array-index-key": "warn",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+    },
+  },
+);
