@@ -1,3 +1,7 @@
+/**
+ * @param {Array<string>} args list of class names
+ * @returns string classname attribute
+ */
 export function classnames(...args) {
   return args.join(" ");
 }

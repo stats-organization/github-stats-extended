@@ -1,6 +1,7 @@
 // @ts-check
 
 import toEmoji from "emoji-name-map";
+import { CustomError } from "./error.js";
 
 const OWNER_AFFILIATIONS = ["OWNER", "COLLABORATOR", "ORGANIZATION_MEMBER"];
 

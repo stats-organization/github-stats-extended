@@ -13,8 +13,6 @@ import { classnames } from "../../../utils";
 import { HOST } from "../../../constants";
 
 const DisplayStage = ({ filename, link, themeSuffix, guestHint }) => {
-  const card = themeSuffix.split("?")[0];
-
   const downloadPNG = () => {
     saveSvgAsPng(
       document.getElementById("svgWrapper").shadowRoot.firstElementChild

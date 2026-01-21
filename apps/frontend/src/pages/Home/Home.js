@@ -76,6 +76,8 @@ const HomeScreen = ({ stage, setStage }) => {
   const [enableAnimations, setEnableAnimations] = useState(true);
   const [usePercent, setUsePercent] = useState(false);
 
+  const [theme, setTheme] = useState("default");
+
   const resetCustomization = () => {
     if (selectedCard === CardTypes.TOP_LANGS) {
       setLangsCount(4);
@@ -204,7 +206,6 @@ const HomeScreen = ({ stage, setStage }) => {
   }
 
   // for stage four
-  const [theme, setTheme] = useState("default");
   let themeSuffix = fullSuffix;
 
   if (
@@ -419,6 +420,7 @@ const HomeScreen = ({ stage, setStage }) => {
           )}
           {stage === 4 && (
             <DisplayStage
+              // eslint-disable-next-line consistent-return
               filename={(() => {
                 switch (selectedCard) {
                   case CardTypes.STATS:
@@ -432,17 +434,20 @@ const HomeScreen = ({ stage, setStage }) => {
                     return `${wakatimeUser}_card`;
                 }
               })()}
+              // eslint-disable-next-line consistent-return
               link={(() => {
                 switch (selectedCard) {
                   case CardTypes.STATS:
                   case CardTypes.TOP_LANGS:
                     return `https://${HOST}/api${themeSuffix}`;
-                  case CardTypes.PIN:
+
+                  case CardTypes.PIN: {
                     let myRepo = repo;
                     if (!myRepo.includes("/")) {
                       myRepo = `${userId}/${myRepo}`;
                     }
                     return `https://github.com/${myRepo}`;
+                  }
                   case CardTypes.GIST:
                     return gistUrl;
                   case CardTypes.WAKATIME:

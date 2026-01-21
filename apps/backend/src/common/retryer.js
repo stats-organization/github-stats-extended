@@ -2,8 +2,18 @@
 
 import { CustomError } from "./error.js";
 import { logger } from "./log.js";
-import { getUserAccessByKey, getUserAccessByName } from "./database.js";
+import { getUserAccessByName } from "./database.js";
 
+/**
+ * Returns a random integer from 0 (inclusive) to `max` (exclusive).
+ *
+ * The value is generated using `Math.random()` and uniformly distributed
+ * across the range.
+ *
+ * @param {number} max The upper bound (exclusive). Must be a positive number.
+ *
+ * @returns {number} A random integer `n` such that `0 <= n < max`.
+ */
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
@@ -17,7 +27,7 @@ function getRandomInt(max) {
  * Try to execute the fetcher function until it succeeds or the max number of retries is reached.
  *
  * @param {FetcherFunction} fetcher The fetcher function.
- * @param username GitHub username of the user whose PAT to use, if available
+ * @param {string?} username GitHub username of the user whose PAT to use, if available
  * @param {any} variables Object with arguments to pass to the fetcher function.
  * @returns {Promise<any>} The response from the fetcher function.
  */
