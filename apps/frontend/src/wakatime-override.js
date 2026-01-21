@@ -1,7 +1,9 @@
 import axios from "axios";
 import { HOST } from "./constants";
 
-const fetchWakatimeStats = async ({ username }) => {
+// See https://github.com/stats-organization/github-stats-extended/pull/27#discussion_r2712184285
+// eslint-disable-next-line no-unused-vars
+const fetchWakatimeStats = async ({ username, api_domain }) => {
   if (!username) {
     throw new Error("missing parameter: username");
   }

@@ -1,5 +1,5 @@
 /**
- * @param  {Array<string>} classes list of class names
+ * @param {Array<string>} args list of class names
  * @returns string classname attribute
  */
 export function classnames(...args) {
