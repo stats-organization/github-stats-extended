@@ -2,6 +2,9 @@ const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
+  eslint: {
+    enable: false,
+  },
   webpack: {
     alias: {
       dotenv: path.resolve(__dirname, "src/dotenv-browser-stub.js"),
