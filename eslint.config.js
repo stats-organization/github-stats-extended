@@ -1,17 +1,17 @@
-import { defineConfig, globalIgnores } from "eslint/config";
+import { fileURLToPath } from "node:url";
+
+import { defineConfig } from "eslint/config";
 import globals from "globals";
 import js from "@eslint/js";
 import jsdoc from "eslint-plugin-jsdoc";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
+import { includeIgnoreFile } from "@eslint/compat";
+
+const gitignorePath = fileURLToPath(new URL(".gitignore", import.meta.url));
 
 export default defineConfig(
-  globalIgnores([
-    "**/build",
-    //
-    "./apps/backend/.vercel/**/*",
-    "apps/frontend/src/backend/**/*",
-  ]),
+  includeIgnoreFile(gitignorePath, "Imported .gitignore patterns"),
   js.configs.recommended,
   {
     linterOptions: {
