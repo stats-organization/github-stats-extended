@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import Section from "./Section";
-import { Checkbox } from "../Generic";
+import { Section } from "./Section";
+import { Checkbox } from "../Generic/Checkbox";
 
 const CheckboxSection = ({
   title,
@@ -38,4 +38,4 @@ CheckboxSection.defaultProps = {
   disabled: false,
 };
 
-export default CheckboxSection;
+export { CheckboxSection };

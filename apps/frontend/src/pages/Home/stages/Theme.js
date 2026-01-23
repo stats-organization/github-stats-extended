@@ -3,7 +3,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { Card } from "../../../components";
+import { Card } from "../../../components/Card/Card";
 import { themes } from "../../../backend/themes/index";
 
 const ThemeStage = ({ theme, setTheme, setStage, fullSuffix }) => {

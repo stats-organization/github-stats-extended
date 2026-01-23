@@ -1,12 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { CheckboxSection, Image } from "../../../components";
 import { CardTypes } from "../../../utils";
-import TextSection from "../../../components/Home/TextSection";
-import NumericSection from "../../../components/Home/NumericSection";
-import StatsRankSection from "../../../components/Home/StatsRankSection";
-import LanguagesLayoutSection from "../../../components/Home/LanguagesLayoutSection";
+import { Image } from "../../../components/Card/Card";
+import { CheckboxSection } from "../../../components/Home/CheckboxSection";
+import { TextSection } from "../../../components/Home/TextSection";
+import { NumericSection } from "../../../components/Home/NumericSection";
+import { StatsRankSection } from "../../../components/Home/StatsRankSection";
+import { LanguagesLayoutSection } from "../../../components/Home/LanguagesLayoutSection";
 import WakatimeLayoutSection from "../../../components/Home/WakatimeLayoutSection";
 import {
   DEMO_GIST,

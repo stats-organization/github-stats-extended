@@ -33,4 +33,4 @@ Section.defaultProps = {
   children: <p className="leading-relaxed">This is a test!</p>,
 };
 
-export default Section;
+export { Section };

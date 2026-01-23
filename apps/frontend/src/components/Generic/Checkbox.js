@@ -31,4 +31,4 @@ Checkbox.defaultProps = {
   disabled: false,
 };
 
-export default Checkbox;
+export { Checkbox };

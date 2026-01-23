@@ -27,4 +27,4 @@ Button.defaultProps = {
   className: "",
 };
 
-export default Button;
+export { Button };

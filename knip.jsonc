@@ -1,6 +1,5 @@
 {
   "$schema": "./node_modules/knip/schema.json",
-  "ignoreWorkspaces": ["apps/frontend/**"],
   "workspaces": {
     "apps/backend": {
       "entry": [
@@ -16,6 +15,27 @@
       "ignoreDependencies": [
         "jest", // used by test scripts referencing binary due to lack of ESM support
         "@octokit/request-error" // used by js scripts executed in a GitHub actions not listed in deps
+      ]
+    },
+    "apps/frontend": {
+      "entry": [
+        "src/index.js",
+        "src/dotenv-browser-stub.js",
+        "src/wakatime-override.js",
+
+        "craco.config.js"
+      ],
+      "ignoreDependencies": [
+        // used by webpack as polyfill
+        "url",
+        "buffer",
+        "util",
+
+        // below dependencies are added because backend folder is copied inside frontend folder,
+        // so some of his dependencies must be present here
+        "github-username-regex",
+        "emoji-name-map",
+        "word-wrap"
       ]
     }
   }

@@ -92,4 +92,4 @@ ProgressBar.propTypes = {
   setCurrItem: PropTypes.func.isRequired,
 };
 
-export default ProgressBar;
+export { ProgressBar };

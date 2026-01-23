@@ -4,7 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 
-import { Button, Image } from "../../../components";
+import { Button } from "../../../components/Generic/Button";
+import { Image } from "../../../components/Card/Card";
 import { classnames } from "../../../utils";
 import {
   CLIENT_ID,

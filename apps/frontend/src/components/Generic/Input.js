@@ -62,4 +62,4 @@ Input.defaultProps = {
   className: "",
 };
 
-export default Input;
+export { Input };
