@@ -1,5 +1,4 @@
-pnpm run format:check
+pnpm lint-staged
 pnpm run lint
 # TODO enable
 # npm test
-# npx lint-staged

@@ -672,4 +672,3 @@ const renderStatsCard = (
 };
 
 export { renderStatsCard, createTextNode };
-export default renderStatsCard;

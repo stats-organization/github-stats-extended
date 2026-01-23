@@ -159,4 +159,3 @@ const fetchRepo = async (
 };
 
 export { fetchRepo };
-export default fetchRepo;

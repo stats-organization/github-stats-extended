@@ -12,6 +12,8 @@
     "eslint-plugin-react-hooks": "7.0.1",
     "globals": "16.5.0",
     "husky": "9.1.7",
+    "knip": "5.81.0",
+    "lint-staged": "16.2.7",
     "prettier": "3.7.4"
   },
   "scripts": {
@@ -19,7 +21,11 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint:fix": "eslint --fix",
+    "lint:knip": "knip"
+  },
+  "lint-staged": {
+    "*.{js,ts,css}": "prettier --write"
   },
   "resolutions": {
     "eslint": "9.39.2",

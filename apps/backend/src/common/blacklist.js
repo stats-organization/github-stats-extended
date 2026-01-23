@@ -7,4 +7,3 @@ const blacklist = [
 ];
 
 export { blacklist };
-export default blacklist;

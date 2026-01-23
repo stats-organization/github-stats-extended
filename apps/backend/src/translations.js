@@ -1126,7 +1126,6 @@ const isLocaleAvailable = (locale) => {
 };
 
 export {
-  availableLocales,
   isLocaleAvailable,
   langCardLocales,
   repoCardLocales,

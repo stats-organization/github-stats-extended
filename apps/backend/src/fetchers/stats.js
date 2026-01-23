@@ -455,4 +455,3 @@ const fetchStats = async (
 };
 
 export { fetchStats, fetchRepoUserStats };
-export default fetchStats;

@@ -1,0 +1,22 @@
+{
+  "$schema": "./node_modules/knip/schema.json",
+  "ignoreWorkspaces": ["apps/frontend/**"],
+  "workspaces": {
+    "apps/backend": {
+      "entry": [
+        "api-renamed/*.js",
+        "express.js",
+
+        "jest.*.js",
+        "tests/bench/*.bench.js"
+      ],
+      "ignoreFiles": [
+        "_dot_vercel_copy/**/*" // Hopefully by using a npm package this file will be removed
+      ],
+      "ignoreDependencies": [
+        "jest", // used by test scripts referencing binary due to lack of ESM support
+        "@octokit/request-error" // used by js scripts executed in a GitHub actions not listed in deps
+      ]
+    }
+  }
+}

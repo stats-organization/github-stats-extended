@@ -1,9 +1,9 @@
 import "dotenv/config";
-import statsCard from "./api/index.js";
-import repoCard from "./api/pin.js";
-import langCard from "./api/top-langs.js";
-import wakatimeCard from "./api/wakatime.js";
-import gistCard from "./api/gist.js";
+import statsCard from "./api-renamed/index.js";
+import repoCard from "./api-renamed/pin.js";
+import langCard from "./api-renamed/top-langs.js";
+import wakatimeCard from "./api-renamed/wakatime.js";
+import gistCard from "./api-renamed/gist.js";
 import express from "express";
 
 const app = express();

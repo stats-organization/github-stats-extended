@@ -111,4 +111,3 @@ const fetchGist = async (id) => {
 };
 
 export { fetchGist };
-export default fetchGist;

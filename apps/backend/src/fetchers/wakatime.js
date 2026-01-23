@@ -34,4 +34,3 @@ const fetchWakatimeStats = async ({ username, api_domain }) => {
 };
 
 export { fetchWakatimeStats };
-export default fetchWakatimeStats;

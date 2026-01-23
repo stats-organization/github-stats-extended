@@ -463,5 +463,3 @@ export const themes = {
     bg_color: "35,4158d0,c850c0,ffcc70",
   },
 };
-
-export default themes;
