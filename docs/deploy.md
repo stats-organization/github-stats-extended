@@ -1,14 +1,65 @@
 # Deploy on your own
 
-Since the GitHub API only allows a limited number of requests per hour, my `https://github-stats-extended.vercel.app/api` could possibly hit the rate limiter. If you host it on your own Vercel server, then you do not have to worry about anything. Also, if you don't want to give my GitHub-Stats-Extended instance access to your private contributions but still want to include these contributions in your stats, you can simply host your own instance.
+Since the GitHub API only allows a limited number of requests per hour, my `https://github-stats-extended.vercel.app/api` could possibly hit the rate limiter. If you deploy it yourself via GitHub Actions or your own hosted instance, then you do not have to worry about anything. Also, if you don't want to give my GitHub-Stats-Extended instance access to your private contributions but still want to include these contributions in your stats, you can simply host your own instance.
 
-## First step: get your Personal Access Token (PAT)
+GitHub Actions is the simplest setup with static SVGs stored in your repo but less frequent updates, while self-hosting takes more work and can serve fresher stats (with caching).
+
+## GitHub Actions
+
+GitHub Actions generates static SVGs and avoids per-request API calls. By default it uses `GITHUB_TOKEN` (public stats only), for private stats, set a [PAT](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) as a secret and pass it to the action instead.
+
+Create `/.github/workflows/grs.yml` in your profile repo (`USERNAME/USERNAME`):
+
+```yaml
+name: Update README cards
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate stats card
+        uses: readme-tools/github-readme-stats-action@v1
+        with:
+          card: stats
+          options: username=${{ github.repository_owner }}&show_icons=true
+          path: profile/stats.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit cards
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add profile/*.svg
+          git commit -m "Update README cards" || exit 0
+          git push
+```
+
+Then embed from your profile README:
+
+```md
+![Stats](./profile/stats.svg)
+```
+
+See more options and examples in the [GitHub Readme Stats Action README](https://github.com/stats-organization/github-readme-stats-action#readme).
+
+## Self-hosted (Vercel/Other)
+
+Running your own instance avoids public rate limits and gives you full control over caching, tokens, and private stats.
+
+### First step: get your Personal Access Token (PAT)
 
 For deploying your own instance of GitHub Stats Extended, you will need to create a GitHub Personal Access Token (PAT). Below are the steps to create one and the scopes you need to select for both classic and fine-grained tokens.
 
 Selecting the right scopes for your token is important in case you want to display private contributions on your cards.
 
-### Classic token
+#### Classic token
 
 * Go to [Account -> Settings -> Developer Settings -> Personal access tokens -> Tokens (classic)](https://github.com/settings/tokens).
     * Click on `Generate new token -> Generate new token (classic)`.
@@ -17,7 +68,7 @@ Selecting the right scopes for your token is important in case you want to displ
         * read:user
     * Click on `Generate token` and copy it.
 
-### Fine-grained token
+#### Fine-grained token
 
 > [!WARNING]\
 > This limits the scope of commits to public repositories only.
@@ -35,9 +86,9 @@ Selecting the right scopes for your token is important in case you want to displ
         * Pull requests: read-only
     * Click on `Generate token` and copy it.
 
-## On Vercel
+### On Vercel
 
-### :film\_projector: [Check Out Step By Step Video Tutorial By @codeSTACKr](https://youtu.be/n6d4KHSKqGk?t=107)
+<b>:film\_projector: [Check Out Step By Step Video Tutorial By @codeSTACKr](https://youtu.be/n6d4KHSKqGk?t=107)</b>
 
 Click on the deploy button to get started!
 
@@ -60,6 +111,13 @@ Click on the deploy button to get started!
 9. Create a Personal Access Token (PAT) as described in the [previous section](#first-step-get-your-personal-access-token-pat).
 10. Add the PAT as an environment variable named `PAT_1` (as shown).
     ![](https://files.catbox.moe/0yclio.png)
+    Note: For enhanced security, you can add a variable as a sensitive variable. To do this:
+    1. Go to `Environment Variables` in `Project Settings`, then choose `Add Environment Variable`.
+       ![](https://files.catbox.moe/heprjw.jpg)
+    2. Uncheck `Deployment` from `Environments`
+       ![](https://files.catbox.moe/tiqgd0.jpg)
+    3. Now you can make the variable `Sensitive` by checking the checkbox.
+       ![](https://files.catbox.moe/mla5no.jpg)
 11. As `Root directory` select the `apps/backend` folder.
 12. Click deploy, and you're good to go. See your domains to use the API!
 13. optional: add an SQL database; by using e.g. the ["Nile" integration](https://vercel.com/marketplace/nile) or by manually setting the environment variable `POSTGRES_URL`
@@ -68,7 +126,7 @@ Click on the deploy button to get started!
 
 </details>
 
-## On other platforms
+### On other platforms
 
 > [!WARNING]
 > This way of using GitHub-Stats-Extended is not officially supported and was added to cater to some particular use cases where Vercel could not be used (e.g. [#2341](https://github.com/anuraghazra/github-readme-stats/discussions/2341)). The support for this method, therefore, is limited.
@@ -85,7 +143,7 @@ Click on the deploy button to get started!
     5.  You're done 🎉
        </details>
 
-## Available environment variables
+### Available environment variables
 
 GitHub Readme Stats provides several environment variables that can be used to customize the behavior of your self-hosted instance. These include:
 
@@ -131,7 +189,7 @@ See [the Vercel documentation](https://vercel.com/docs/concepts/projects/environ
 > [!WARNING]
 > Please remember to redeploy your instance after making any changes to the environment variables so that the updates take effect. The changes will not be applied to the previous deployments.
 
-## Keep your fork up to date
+### Keep your fork up to date
 
 You can keep your fork, and thus your private Vercel instance up to date with the upstream using GitHub's [Sync Fork button](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork). You can also use the [pull](https://github.com/wei/pull) package created by [@wei](https://github.com/wei) to automate this process.
 

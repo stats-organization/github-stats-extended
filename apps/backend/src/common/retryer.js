@@ -46,14 +46,13 @@ const retryer = async (fetcher, username, variables) => {
     );
     PATs = patNames.map((name) => ({ name, value: process.env[name] }));
   }
-  const RETRIES = process.env.NODE_ENV === "test" ? 7 : PATs.length;
 
-  if (!RETRIES) {
+  if (!PATs.length) {
     throw new CustomError("No GitHub API tokens found", CustomError.NO_TOKENS);
   }
   const startPAT = getRandomInt(PATs.length);
 
-  for (let retries = 0; retries < RETRIES; retries++) {
+  for (let retries = 0; retries < PATs.length; retries++) {
     const currentPAT = PATs[(startPAT + retries) % PATs.length];
 
     try {

@@ -216,6 +216,7 @@ const getDisplayValue = (size, percentages, format) => {
  * @param {object} props Function properties.
  * @param {number} props.width The card width
  * @param {string} props.color Color of the programming language.
+ * @param {string} props.progBarBgColor Color of the background of progress bar.
  * @param {string} props.name Name of the programming language.
  * @param {number} props.size Size of the programming language.
  * @param {number} props.totalSize Total size of all languages.
@@ -226,6 +227,7 @@ const getDisplayValue = (size, percentages, format) => {
 const createProgressTextNode = ({
   width,
   color,
+  progBarBgColor,
   name,
   size,
   totalSize,
@@ -250,7 +252,9 @@ const createProgressTextNode = ({
         color,
         width: progressWidth,
         progress,
-        progressBarBackgroundColor: "#ddd",
+        progressBarBackgroundColor: progBarBgColor
+          ? `#${progBarBgColor}`
+          : "#ddd",
         delay: staggerDelay + 300,
       })}
     </g>
@@ -367,10 +371,17 @@ const createDonutLanguagesNode = ({ langs, totalSize, statsFormat }) => {
  * @param {Lang[]} langs Array of programming languages.
  * @param {number} width Card width.
  * @param {number} totalLanguageSize Total size of all languages.
+ * @param progBarBgColor Color of the background of progress bar.
  * @param {string} statsFormat Stats format.
  * @returns {string} Normal layout card SVG object.
  */
-const renderNormalLayout = (langs, width, totalLanguageSize, statsFormat) => {
+const renderNormalLayout = (
+  langs,
+  width,
+  totalLanguageSize,
+  progBarBgColor,
+  statsFormat,
+) => {
   return flexLayout({
     items: langs.map((lang, index) => {
       return createProgressTextNode({
@@ -381,6 +392,7 @@ const renderNormalLayout = (langs, width, totalLanguageSize, statsFormat) => {
         totalSize: totalLanguageSize,
         statsFormat,
         index,
+        progBarBgColor,
       });
     }),
     gap: 40,
@@ -787,6 +799,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
     title_color,
     text_color,
     bg_color,
+    prog_bar_bg_color,
     hide,
     hide_progress,
     theme,
@@ -872,6 +885,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
       langs,
       width,
       totalLanguageSize,
+      prog_bar_bg_color,
       stats_format,
     );
   }
