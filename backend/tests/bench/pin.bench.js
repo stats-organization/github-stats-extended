@@ -1,4 +1,4 @@
-import pin from "../../api/pin.js";
+import pin from "../../api-renamed/pin.js";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { it, jest } from "@jest/globals";

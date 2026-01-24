@@ -1,13 +1,21 @@
 // @ts-check
 
-import { afterEach, describe, expect, it, jest } from "@jest/globals";
+import {
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  jest,
+} from "@jest/globals";
 import "@testing-library/jest-dom";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import gist from "../api-renamed/gist.js";
 import { renderGistCard } from "../src/cards/gist.js";
 import { renderError } from "../src/common/render.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
+
+let gist;
 
 const gist_data = {
   data: {
@@ -51,6 +59,11 @@ afterEach(() => {
 });
 
 describe("Test /api/gist", () => {
+  beforeAll(async () => {
+    const module = await import("../api-renamed/gist.js");
+    gist = module.default;
+  });
+
   it("should test the request", async () => {
     const req = {
       query: {
@@ -202,3 +215,74 @@ describe("Test /api/gist", () => {
     );
   });
 });
+
+/*
+describe("Test /api/gist with gist whitelist", () => {
+  beforeAll(async () => {
+    process.env.GIST_WHITELIST = "bbfce31e0217a3689c8d961a356cb10d";
+    jest.resetModules();
+
+    // Reapply the axios module mock so newly loaded modules (after reset) get the same instance.
+    await jest.unstable_mockModule("axios", () => ({ default: axios }));
+
+    const module = await import("../api-renamed/gist.js");
+    gist = module.default;
+
+    // Recreate MockAdapter on the same shared axios instance.
+    mock = new MockAdapter(axios, { onNoMatch: "throwException" });
+  });
+
+  it("should render successfully if id in whitelist", async () => {
+
+    const req = {
+      query: {
+        id: "bbfce31e0217a3689c8d961a356cb10d",
+      },
+    };
+    const res = {
+      setHeader: jest.fn(),
+      send: jest.fn(),
+    };
+    mock.onPost("https://api.github.com/graphql").reply(200, gist_data);
+
+    await gist(req, res);
+
+    // expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svgxml");
+    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
+    expect(res.send).toHaveBeenCalledWith(
+      renderGistCard({
+        name: gist_data.data.viewer.gist.files[0].name,
+        nameWithOwner: `${gist_data.data.viewer.gist.owner.login}/${gist_data.data.viewer.gist.files[0].name}`,
+        description: gist_data.data.viewer.gist.description,
+        language: gist_data.data.viewer.gist.files[0].language.name,
+        starsCount: gist_data.data.viewer.gist.stargazerCount,
+        forksCount: gist_data.data.viewer.gist.forks.totalCount,
+      }),
+    );
+  });
+
+  it("should render error card if id not in whitelist", async () => {
+    const req = {
+      query: {
+        id: "9bae0392ee3a26bac5cc388a6c8b1469",
+      },
+    };
+    const res = {
+      setHeader: jest.fn(),
+      send: jest.fn(),
+    };
+    mock.onPost("https://api.github.com/graphql").reply(200, gist_data);
+
+    await gist(req, res);
+
+    // expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svgxml");
+    expect(res.send).toHaveBeenCalledWith(
+      renderError({
+        message: "This gist ID is not whitelisted",
+        secondaryMessage: "Please deploy your own instance",
+        renderOptions: { show_repo_link: false },
+      }),
+    );
+  });
+});
+*/

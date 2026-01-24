@@ -2,7 +2,7 @@
 
 import { CustomError } from "./error.js";
 import { logger } from "./log.js";
-import { getUserAccessByKey, getUserAccessByName } from "./database.js";
+import { getUserAccessByName } from "./database.js";
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);

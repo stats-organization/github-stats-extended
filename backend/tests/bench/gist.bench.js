@@ -1,4 +1,4 @@
-import gist from "../../api/gist.js";
+import gist from "../../api-renamed/gist.js";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { it, jest } from "@jest/globals";

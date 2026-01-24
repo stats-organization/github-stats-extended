@@ -1,4 +1,4 @@
-import api from "../../api/index.js";
+import api from "../../api-renamed/index.js";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { it, jest } from "@jest/globals";

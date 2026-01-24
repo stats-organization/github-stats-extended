@@ -101,7 +101,7 @@ describe("Test fetchGist", () => {
     );
   });
 
-  it("should throw error if reaponse contains them", async () => {
+  it("should throw error if response contains them", async () => {
     mock.onPost("https://api.github.com/graphql").reply(200, gist_errors_data);
 
     await expect(fetchGist("bbfce31e0217a3689c8d961a356cb10d")).rejects.toThrow(
