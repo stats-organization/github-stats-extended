@@ -83,4 +83,4 @@ SelectCardStage.defaultProps = {
   selectedCard: null,
 };
 
-export default SelectCardStage;
+export { SelectCardStage };

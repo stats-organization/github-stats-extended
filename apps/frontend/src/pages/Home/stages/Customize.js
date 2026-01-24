@@ -397,4 +397,4 @@ CustomizeStage.propTypes = {
   setStage: PropTypes.func.isRequired,
 };
 
-export default CustomizeStage;
+export { CustomizeStage };

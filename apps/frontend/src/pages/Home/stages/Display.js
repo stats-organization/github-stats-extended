@@ -104,4 +104,4 @@ DisplayStage.propTypes = {
   guestHint: PropTypes.string.isRequired,
 };
 
-export default DisplayStage;
+export { DisplayStage };

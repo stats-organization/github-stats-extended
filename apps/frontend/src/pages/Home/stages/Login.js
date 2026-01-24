@@ -304,4 +304,4 @@ LoginStage.propTypes = {
   setCurrItem: PropTypes.func.isRequired,
 };
 
-export default LoginStage;
+export { LoginStage };

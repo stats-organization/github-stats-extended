@@ -64,4 +64,4 @@ ThemeStage.propTypes = {
   fullSuffix: PropTypes.string.isRequired,
 };
 
-export default ThemeStage;
+export { ThemeStage };
