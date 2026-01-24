@@ -8,8 +8,8 @@ import {
 } from "../../redux/actions/userActions";
 
 import Header from "./Header";
-import HomeScreen from "../Home/Home";
-import { getUserMetadata } from "../../api/user";
+import HomeScreen from "../Home";
+import { getUserMetadata } from "../../api";
 import {
   useIsAuthenticated,
   useUserKey,
@@ -19,7 +19,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { clearAxiosCache } from "../../axios-override";
 
-export function App() {
+function App() {
   const toMessage = (input) => {
     if (typeof input === "string") {
       return input;
@@ -101,3 +101,5 @@ export function App() {
     </div>
   );
 }
+
+export default App;

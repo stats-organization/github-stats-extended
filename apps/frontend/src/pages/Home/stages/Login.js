@@ -25,7 +25,7 @@ import {
   useUserId,
   useUserKey,
 } from "../../../redux/selectors/userSelectors";
-import { deleteAccount } from "../../../api/user";
+import { deleteAccount } from "../../../api";
 
 const LoginStage = ({ setCurrItem }) => {
   const userId = useUserId(null);
