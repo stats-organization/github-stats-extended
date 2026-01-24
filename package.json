@@ -14,7 +14,8 @@
     "husky": "9.1.7",
     "knip": "5.81.0",
     "lint-staged": "16.2.7",
-    "prettier": "3.7.4"
+    "prettier": "3.7.4",
+    "typescript": "5.9.3"
   },
   "scripts": {
     "prepare": "husky",
@@ -25,13 +26,6 @@
     "lint:knip": "knip"
   },
   "lint-staged": {
-    "*.{js,ts,css}": "prettier --write"
-  },
-  "resolutions": {
-    "eslint": "9.39.2",
-    "eslint-plugin-react-hooks": "7.0.1",
-    "@svgr/webpack": "^6.0.0",
-    "resolve-url-loader": "^5.0.0",
-    "webpack-dev-server": "^5.2.2"
+    "*.{js,ts,css,yaml,yml}": "prettier --write"
   }
 }

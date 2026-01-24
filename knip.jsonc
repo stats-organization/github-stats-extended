@@ -19,18 +19,11 @@
     },
     "apps/frontend": {
       "entry": [
-        "src/index.js",
+        "src/index.jsx",
         "src/dotenv-browser-stub.js",
-        "src/wakatime-override.js",
-
-        "craco.config.js"
+        "src/wakatime-override.js"
       ],
       "ignoreDependencies": [
-        // used by webpack as polyfill
-        "url",
-        "buffer",
-        "util",
-
         // below dependencies are added because backend folder is copied inside frontend folder,
         // so some of his dependencies must be present here
         "github-username-regex",
