@@ -11,7 +11,7 @@ import { LoginStage } from "./stages/Login";
 import { SelectCardStage } from "./stages/SelectCard";
 import { ThemeStage } from "./stages/Theme";
 
-import { authenticate } from "../../api";
+import { authenticate } from "../../api/user";
 import { login as _login } from "../../redux/actions/userActions";
 import {
   HOST,
