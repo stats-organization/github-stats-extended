@@ -8,7 +8,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { saveSvgAsPng } from "save-svg-as-png";
 
-import { Button, Image } from "../../../components";
+import { Button } from "../../../components/Generic/Button";
+import { Image } from "../../../components/Card/Card";
 import { classnames } from "../../../utils";
 import { HOST } from "../../../constants";
 
@@ -103,4 +104,4 @@ DisplayStage.propTypes = {
   guestHint: PropTypes.string.isRequired,
 };
 
-export default DisplayStage;
+export { DisplayStage };

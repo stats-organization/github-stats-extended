@@ -3,7 +3,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { Card } from "../../../components";
+import { Card } from "../../../components/Card/Card";
 import { useUserId } from "../../../redux/selectors/userSelectors";
 import {
   DEMO_GIST,
@@ -83,4 +83,4 @@ SelectCardStage.defaultProps = {
   selectedCard: null,
 };
 
-export default SelectCardStage;
+export { SelectCardStage };

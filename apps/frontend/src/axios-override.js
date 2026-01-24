@@ -124,5 +124,3 @@ axios.defaults.adapter = async (config) => {
       return defaultAdapter(config);
   }
 };
-
-export const { get, post } = cachedAxios;

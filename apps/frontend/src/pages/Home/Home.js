@@ -4,13 +4,12 @@ import PropTypes from "prop-types";
 import BounceLoader from "react-spinners/BounceLoader";
 
 import { v4 as uuidv4 } from "uuid";
-import {
-  CustomizeStage,
-  DisplayStage,
-  LoginStage,
-  SelectCardStage,
-  ThemeStage,
-} from "./stages";
+
+import { CustomizeStage } from "./stages/Customize";
+import { DisplayStage } from "./stages/Display";
+import { LoginStage } from "./stages/Login";
+import { SelectCardStage } from "./stages/SelectCard";
+import { ThemeStage } from "./stages/Theme";
 
 import { authenticate } from "../../api";
 import { login as _login } from "../../redux/actions/userActions";

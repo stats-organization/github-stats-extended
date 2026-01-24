@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import Section from "./Section";
-import { Input } from "../Generic";
+import { Section } from "./Section";
+import { Input } from "../Generic/Input";
 
 export const DEFAULT_OPTION = {
   id: 1,
@@ -48,4 +48,4 @@ LanguagesLayoutSection.propTypes = {
   setSelectedOption: PropTypes.func.isRequired,
 };
 
-export default LanguagesLayoutSection;
+export { LanguagesLayoutSection };

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import appIcon from "../../assets/appLogo64.png";
 import { classnames } from "../../utils";
 import { FaGithub as GithubIcon } from "react-icons/fa";
-import { ProgressBar } from "../../components";
+import { ProgressBar } from "../../components/Home/Progress";
 
 const propTypes = {
   to: PropTypes.string.isRequired,

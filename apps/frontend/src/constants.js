@@ -1,4 +1,4 @@
-export const PROD = false;
+const PROD = false;
 
 export const USE_LOGGER = true;
 
@@ -8,7 +8,7 @@ export const HOST = PROD
   ? "github-stats-extended.vercel.app"
   : "github-stats-extended-preview.vercel.app";
 
-export const REDIRECT_URI = `https://${HOST}/frontend`;
+const REDIRECT_URI = `https://${HOST}/frontend`;
 
 export const GITHUB_PRIVATE_AUTH_URL = `https://github.com/login/oauth/authorize?scope=user,repo&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}/private`;
 export const GITHUB_PUBLIC_AUTH_URL = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}/public`;

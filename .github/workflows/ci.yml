@@ -57,6 +57,12 @@ jobs:
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies
 
+      # needed to resolve .vercel folder from apps/frontend/src/components/Card/SVG.js
+      - name: Run vercel-preparation.sh
+        run: |
+          chmod +x ./vercel-preparation.sh
+          ./vercel-preparation.sh
+
       - name: Format
         run: pnpm run format:check
 
