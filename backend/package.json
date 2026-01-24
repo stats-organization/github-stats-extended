@@ -47,9 +47,9 @@
     "color-contrast-checker": "^2.1.0",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-jsdoc": "^62.0.1",
+    "eslint-plugin-jsdoc": "^62.4.1",
     "express": "^5.2.1",
-    "globals": "^17.0.0",
+    "globals": "^17.1.0",
     "hjson": "^3.2.2",
     "husky": "^9.1.7",
     "jest": "^30.2.0",
@@ -58,7 +58,7 @@
     "lint-staged": "^16.2.7",
     "lodash.snakecase": "^4.1.1",
     "parse-diff": "^0.11.1",
-    "prettier": "^3.8.0"
+    "prettier": "^3.8.1"
   },
   "dependencies": {
     "axios": "^1.13.1",
