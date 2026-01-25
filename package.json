@@ -26,6 +26,6 @@
     "lint:knip": "knip"
   },
   "lint-staged": {
-    "*.{js,ts,css,yaml,yml}": "prettier --write"
+    "*.{js,jsx,ts,tsx,css,json,jsonc,yaml,yml}": "prettier --write"
   }
 }
