@@ -6,6 +6,6 @@ catalog: null
 minimumReleaseAge: 10080
 
 onlyBuiltDependencies:
-  - core-js
-  - core-js-pure
+  - "@swc/core"
+  - esbuild
   - unrs-resolver

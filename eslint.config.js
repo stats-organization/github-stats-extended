@@ -102,7 +102,7 @@ export default defineConfig(
       },
     },
     rules: {
-      "react/jsx-uses-react": "error",
+      "react/jsx-no-undef": "error",
       "react/jsx-uses-vars": "error",
       "react/no-array-index-key": "warn",
       "react-hooks/rules-of-hooks": "error",
