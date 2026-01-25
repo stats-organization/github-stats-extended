@@ -1,0 +1,11 @@
+{
+  "extends": ["../../tsconfig.base.json"],
+  "include": ["src", "src/**/*.json"],
+  "compilerOptions": {
+    "composite": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "outDir": "./build-ts",
+    "resolveJsonModule": true
+  }
+}

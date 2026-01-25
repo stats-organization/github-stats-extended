@@ -20,9 +20,10 @@
     "apps/frontend": {
       "entry": [
         "src/index.jsx",
-        "src/dotenv-browser-stub.js",
-        "src/wakatime-override.js"
+        "src/dotenv-browser-stub.ts", // referenced by vite.config.ts
+        "src/wakatime-override.ts"
       ],
+
       "ignoreDependencies": [
         // below dependencies are added because backend folder is copied inside frontend folder,
         // so some of his dependencies must be present here

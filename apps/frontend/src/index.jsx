@@ -1,13 +1,11 @@
 import "./axios-override";
-import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 
-import configureStore from "./redux/store";
-import { AppTrends } from "./pages/App";
-import "./index.css";
+import { store } from "./redux/store";
+import { AppTrends } from "./pages/App/AppTrends";
 
-export const store = configureStore();
+import "./index.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

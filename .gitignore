@@ -29,6 +29,9 @@ apps/frontend/.env
 apps/frontend/src/backend
 apps/frontend/build
 
+build-ts
+tsconfig.tsbuildinfo
+
 # IDE
 .idea/
 .vscode/*

@@ -23,7 +23,8 @@
     "format:check": "prettier --check .",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
-    "lint:knip": "knip"
+    "lint:knip": "knip",
+    "typecheck": "tsc --build --noEmit"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,css,json,jsonc,yaml,yml}": "prettier --write"
