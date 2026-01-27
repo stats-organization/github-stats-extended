@@ -285,13 +285,13 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
       // If Github API returns the code parameter
       if (url.includes("code=")) {
         const tempPrivateAccess = url.includes("private");
-        const newUrl = url.split("?code=");
+        const newUrl = url.split("?code=", 2) as [string, string];
         const redirect = `${url.split(HOST)[0]}${HOST}/frontend`;
         window.history.pushState({}, "", redirect);
         setIsLoading(true);
         const userKey = uuidv4();
         const newUserId = await authenticate(
-          newUrl[1] as string,
+          newUrl[1],
           tempPrivateAccess,
           userKey,
         );
