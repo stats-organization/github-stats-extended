@@ -1,7 +1,7 @@
 export const STAGE_LABELS = [
   "Login",
-  "Select Card",
-  "Modify Parameters",
-  "Select Theme",
-  "Display Card",
+  "Select a Card",
+  "Modify Card Parameters",
+  "Choose a Theme",
+  "Display your Card",
 ];
