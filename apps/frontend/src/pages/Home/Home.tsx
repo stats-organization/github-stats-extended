@@ -50,7 +50,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
   };
 
   // for stage two
-  const [selectedUserId, setSelectedUserId] = useState(userId as string);
+  const [selectedUserId, setSelectedUserId] = useState(userId);
   const [repo, setRepo] = useState(DEMO_REPO);
   const [gist, setGist] = useState(DEMO_GIST);
   const [wakatimeUser, setWakatimeUser] = useState(DEMO_WAKATIME_USER);
@@ -58,7 +58,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
   const [selectedCard, setSelectedCard] = useState<CardType>(CardType.STATS);
 
   useEffect(() => {
-    setSelectedUserId(userId as string);
+    setSelectedUserId(userId);
   }, [userId]);
 
   // for stage three
@@ -408,7 +408,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
               setIncludeAllCommits={setIncludeAllCommits}
               enableAnimations={enableAnimations}
               setEnableAnimations={setEnableAnimations}
-              selectedUserId={selectedUserId as string}
+              selectedUserId={selectedUserId}
               setSelectedUserId={setSelectedUserId}
               repo={repo}
               setRepo={setRepo}
