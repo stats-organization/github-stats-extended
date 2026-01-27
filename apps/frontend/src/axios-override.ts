@@ -54,7 +54,7 @@ function createMockResponse<TData, TConfig>(
 }
 
 // store shouldMock outside React context so the interceptor can access it
-let shouldMock: null | boolean = null;
+let shouldMock: boolean = false;
 
 export function setShouldMock(newShouldMock: boolean): void {
   shouldMock = newShouldMock;
