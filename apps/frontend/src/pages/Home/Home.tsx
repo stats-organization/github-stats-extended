@@ -73,9 +73,11 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
 
   const [showTitle, setShowTitle] = useState(true);
   const [showOwner, setShowOwner] = useState(false);
-  const [descriptionLines, setDescriptionLines] = useState(5);
+  const [descriptionLines, setDescriptionLines] = useState<
+    number | undefined
+  >();
   const [customTitle, setCustomTitle] = useState("");
-  const [langsCount, setLangsCount] = useState(3);
+  const [langsCount, setLangsCount] = useState<number | undefined>();
   const [showAllStats, setShowAllStats] = useState(false);
   const [showIcons, setShowIcons] = useState(false);
   const [includeAllCommits, setIncludeAllCommits] = useState(true);
@@ -84,33 +86,27 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
 
   const [theme, setTheme] = useState("default");
 
-  const resetCustomization = () => {
-    if (selectedCard === CardType.TOP_LANGS) {
+  const handleCardTypeChange = (cardType: CardType) => {
+    if (cardType === CardType.TOP_LANGS) {
       setLangsCount(4);
-    }
-    if (selectedCard === CardType.WAKATIME) {
-      setLangsCount(6);
-    }
-
-    if (selectedCard === CardType.TOP_LANGS) {
       setSelectedWakatimeLayout(WAKATIME_DEFAULT_LAYOUT);
-    }
-    if (selectedCard === CardType.WAKATIME) {
+    } else if (cardType === CardType.WAKATIME) {
+      setLangsCount(6);
       setSelectedLanguagesLayout(LANGUAGES_DEFAULT_LAYOUT);
     }
 
     if (theme === "default" || theme === "default_repocard") {
-      if (selectedCard === CardType.PIN || selectedCard === CardType.GIST) {
+      if (cardType === CardType.PIN || cardType === CardType.GIST) {
         setTheme("default_repocard");
       } else {
         setTheme("default");
       }
     }
-  };
 
-  useEffect(() => {
-    resetCustomization();
-  }, [selectedCard]);
+    setSelectedCard(cardType);
+    // Go to the next stage
+    setStage(2);
+  };
 
   let fullSuffix = `${selectedCard === CardType.STATS ? "" : "/" + selectedCard}?`;
 
@@ -375,10 +371,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
           {stage === 1 && (
             <SelectCardStage
               selectedCardType={selectedCard}
-              onCardTypeChange={(cardType) => {
-                setSelectedCard(cardType);
-                setStage(2);
-              }}
+              onCardTypeChange={handleCardTypeChange}
             />
           )}
           {stage === 2 && (

@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import type { JSX } from "react";
+import type { JSX, ReactNode } from "react";
 
 import { Section } from "./Section";
 
 interface NumericSectionProps {
   title: string;
-  text: string;
-  value?: number;
-  onValueChange: (value: number) => void;
+  description: ReactNode;
+  value?: number | undefined;
+  onValueChange: (value: number | undefined) => void;
   min: number;
   max: number;
   step?: number;
@@ -17,7 +17,7 @@ interface NumericSectionProps {
 
 export function NumericSection({
   title,
-  text,
+  description,
   value,
   onValueChange,
   min,
@@ -38,13 +38,13 @@ export function NumericSection({
       return undefined;
     }
 
-    const maybeNumber = internalValue && parseInt(internalValue, 10);
-    if (typeof maybeNumber !== "number" || Number.isNaN(maybeNumber)) {
-      return;
-    }
-
     debounceTimeout.current = setTimeout(() => {
-      onValueChange(maybeNumber);
+      const maybeNumber = internalValue && parseInt(internalValue, 10);
+      if (typeof maybeNumber !== "number" || Number.isNaN(maybeNumber)) {
+        onValueChange(undefined);
+      } else {
+        onValueChange(maybeNumber);
+      }
     }, 700);
 
     return () => {
@@ -58,11 +58,11 @@ export function NumericSection({
 
   return (
     <Section title={title}>
-      <p>{text}</p>
+      <p>{description}</p>
       <input
         type="number"
         className="border border-gray-300 rounded px-2 py-1 mt-2 w-1/4"
-        value={internalValue}
+        value={internalValue ?? ""}
         onChange={(e) => setInternalValue(e.target.value)}
         min={min}
         max={max}

@@ -40,14 +40,14 @@ interface CustomizeStageProps {
   setWakatimeUser: Updater<string>;
   showTitle: boolean;
   setShowTitle: Updater<boolean>;
-  descriptionLines: number;
-  setDescriptionLines: Updater<number>;
+  descriptionLines: number | undefined;
+  setDescriptionLines: Updater<number | undefined>;
   showOwner: boolean;
   setShowOwner: Updater<boolean>;
   customTitle: string;
   setCustomTitle: Updater<string>;
-  langsCount: number;
-  setLangsCount: Updater<number>;
+  langsCount: number | undefined;
+  setLangsCount: Updater<number | undefined>;
   showIcons: boolean;
   setShowIcons: Updater<boolean>;
   showAllStats: boolean;
@@ -309,7 +309,13 @@ export function CustomizeStage({
           cardType === CardType.WAKATIME) && (
           <NumericSection
             title="Language Count"
-            text="Set the number of languages to be shown.<br>Leave empty for default count."
+            description={
+              <>
+                Set the number of languages to be shown.
+                <br />
+                Leave empty for default count.
+              </>
+            }
             value={langsCount}
             onValueChange={setLangsCount}
             min={1}
@@ -374,7 +380,14 @@ export function CustomizeStage({
         {cardType === CardType.PIN && (
           <NumericSection
             title="Description Lines Count"
-            text="Set the number of lines for the description. Will be clamped between 1 and 3.<br>Leave empty for automatic adjustment."
+            description={
+              <>
+                Set the number of lines for the description. Will be clamped
+                between 1 and 3.
+                <br />
+                Leave empty for automatic adjustment.
+              </>
+            }
             value={descriptionLines}
             onValueChange={setDescriptionLines}
             min={1}
