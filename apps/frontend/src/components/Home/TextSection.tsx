@@ -33,7 +33,7 @@ export function TextSection({
   }, [value]);
 
   useEffect(() => {
-    // Debounce setValue
+    // Debounce onValueChange
     if (debounceTimeout.current) {
       clearTimeout(debounceTimeout.current);
     }

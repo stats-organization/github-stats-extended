@@ -5,7 +5,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 import { createMockRequest, createMockResponse } from "../../mock-http.js";
-// @ts-expect-error will npm package
+// @ts-expect-error will be solved by npm package
 import { default as router } from "../../backend/.vercel/output/functions/api.func/router.js";
 import { setShouldMock } from "../../axios-override.js";
 import {

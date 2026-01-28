@@ -21,7 +21,7 @@ import type { StageIndex } from "../../../models/Stage";
 
 type Updater<T> = React.Dispatch<React.SetStateAction<T>>;
 
-// todo convert iusing on or consider using context API
+/** @todo todo consider using React context API to avoid prop drilling */
 interface CustomizeStageProps {
   selectedCard: CardType;
   selectedStatsRank: SelectOption;
@@ -29,7 +29,7 @@ interface CustomizeStageProps {
   selectedLanguagesLayout: SelectOption;
   setSelectedLanguagesLayout: Updater<SelectOption>;
   selectedWakatimeLayout: SelectOption;
-  setSelectedWakatimeLayout: React.Dispatch<React.SetStateAction<SelectOption>>;
+  setSelectedWakatimeLayout: Updater<SelectOption>;
   selectedUserId: string;
   setSelectedUserId: Updater<string>;
   repo: string;

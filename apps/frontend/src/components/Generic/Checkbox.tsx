@@ -7,9 +7,12 @@ interface CheckboxProps {
   disabled?: boolean;
 }
 
-export function Checkbox(props: CheckboxProps): JSX.Element {
-  const { question, checked, onCheckedChange, disabled = false } = props;
-
+export function Checkbox({
+  question,
+  checked,
+  onCheckedChange,
+  disabled = false,
+}: CheckboxProps): JSX.Element {
   return (
     <label className="flex inline-row mt-4">
       <input

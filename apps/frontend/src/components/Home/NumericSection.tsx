@@ -30,7 +30,7 @@ export function NumericSection({
   const debounceTimeout = useRef<number | null>(null);
 
   useEffect(() => {
-    // Debounce setValue
+    // Debounce onValueChange
     if (debounceTimeout.current) {
       clearTimeout(debounceTimeout.current);
     }
