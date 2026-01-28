@@ -24,6 +24,7 @@ import {
   usePrivateAccess,
 } from "../../redux/selectors/userSelectors";
 import { STAGE_LABELS } from "../../models/Stage";
+import type { StageIndex } from "../../models/Stage";
 
 import { CustomizeStage } from "./stages/Customize";
 import { DisplayStage } from "./stages/Display";
@@ -32,8 +33,8 @@ import { SelectCardStage } from "./stages/SelectCard";
 import { ThemeStage } from "./stages/Theme";
 
 interface HomeScreenProps {
-  stage: number;
-  setStage: (stageIndex: number) => void;
+  stage: StageIndex;
+  setStage: (stageIndex: StageIndex) => void;
 }
 
 export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
@@ -320,7 +321,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
         <div className="m-4 rounded-sm">
           <div className="lg:p-4">
             <div className="text-2xl text-gray-600 font-semibold">
-              {STAGE_LABELS[stage]}
+              {STAGE_LABELS[stage].title}
             </div>
             <div>
               {stage === 0 && isAuthenticated ? (

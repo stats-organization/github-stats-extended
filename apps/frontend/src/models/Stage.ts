@@ -1,7 +1,28 @@
 export const STAGE_LABELS = [
-  "Login",
-  "Select a Card",
-  "Modify Card Parameters",
-  "Choose a Theme",
-  "Display your Card",
-];
+  {
+    title: "Login",
+    shortTitle: "Login",
+  },
+  {
+    title: "Select a Card",
+    shortTitle: "Select Card",
+  },
+  {
+    title: "Modify Card Parameters",
+    shortTitle: "Modify Parameters",
+  },
+  {
+    title: "Choose a Theme",
+    shortTitle: "Select Theme",
+  },
+  {
+    title: "Display your Card",
+    shortTitle: "Display Card",
+  },
+] as const satisfies Array<{ title: string; shortTitle: string }>;
+
+export type StageIndex = {
+  [K in keyof typeof STAGE_LABELS]: K extends `${infer N extends number}`
+    ? N
+    : never;
+}[keyof typeof STAGE_LABELS];

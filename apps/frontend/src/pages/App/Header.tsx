@@ -4,11 +4,14 @@ import appIcon from "../../assets/appLogo64.png";
 import { FaGithub as GithubIcon } from "react-icons/fa";
 import { ProgressBar } from "../../components/Home/Progress";
 import { STAGE_LABELS } from "../../models/Stage";
+import type { StageIndex } from "../../models/Stage";
 
 interface HeaderProps {
-  currStageIndex: number;
-  onStageIndexChange: (stageIndex: number) => void;
+  currStageIndex: StageIndex;
+  onStageIndexChange: (stageIndex: StageIndex) => void;
 }
+
+const items = STAGE_LABELS.map((it) => it.shortTitle);
 
 export function Header({
   currStageIndex,
@@ -45,9 +48,11 @@ export function Header({
         </div>
       </div>
       <ProgressBar
-        items={STAGE_LABELS}
+        items={items}
         currItemIndex={currStageIndex}
-        onItemClick={onStageIndexChange}
+        onItemClick={(itemIndex) => {
+          onStageIndexChange(itemIndex as StageIndex);
+        }}
       />
     </>
   );

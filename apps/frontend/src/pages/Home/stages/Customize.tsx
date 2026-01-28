@@ -16,8 +16,8 @@ import {
   DEMO_WAKATIME_USER,
 } from "../../../constants";
 import { useIsAuthenticated } from "../../../redux/selectors/userSelectors";
-
 import type { SelectOption } from "../../../components/Generic/Select";
+import type { StageIndex } from "../../../models/Stage";
 
 type Updater<T> = React.Dispatch<React.SetStateAction<T>>;
 
@@ -59,7 +59,7 @@ interface CustomizeStageProps {
   usePercent: boolean;
   setUsePercent: Updater<boolean>;
   fullSuffix: string;
-  setStage: (stageIndex: number) => void;
+  setStage: (stageIndex: StageIndex) => void;
 }
 
 export function CustomizeStage({

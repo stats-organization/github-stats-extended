@@ -15,6 +15,7 @@ import {
   useUserKey,
   useUserToken,
 } from "../../redux/selectors/userSelectors";
+import type { StageIndex } from "../../models/Stage";
 
 import { Header } from "./Header";
 
@@ -53,7 +54,7 @@ export function AppTrends() {
   const userToken = useUserToken();
   const isAuthenticated = useIsAuthenticated();
 
-  const [stage, setStage] = useState(isAuthenticated ? 1 : 0);
+  const [stage, setStage] = useState<StageIndex>(isAuthenticated ? 1 : 0);
 
   const dispatch = useDispatch();
 
