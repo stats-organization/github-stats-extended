@@ -1,0 +1,32 @@
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    // Type Checking
+    "strict": true,
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    // Modules
+    "module": "nodenext",
+    "target": "esnext",
+    "types": [],
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+
+    // Interop Constraints
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+
+    // Language and Environment
+    "jsx": "react-jsx",
+
+    // Completeness
+    "skipLibCheck": true
+  }
+}
