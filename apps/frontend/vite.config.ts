@@ -27,10 +27,16 @@ export default defineConfig({
     {
       name: "empty-pg-package",
       resolveId(id) {
-        if (id === "pg") return id;
+        if (id === "pg") {
+          return id;
+        }
+        return undefined;
       },
       load(id) {
-        if (id === "pg") return "export default {}";
+        if (id === "pg") {
+          return "export default {}";
+        }
+        return undefined;
       },
     },
   ],

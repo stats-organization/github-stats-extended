@@ -75,11 +75,13 @@ export function ProgressBar({
           return (
             <ProgressSection
               num={index}
-              key={index}
+              key={item} // each step should have a unique name
               item={item}
               passed={currItemIndex >= index}
               isActive={currItemIndex === index}
-              onClick={() => onItemClick(index)}
+              onClick={() => {
+                onItemClick(index);
+              }}
             />
           );
         })}
@@ -89,9 +91,9 @@ export function ProgressBar({
           "text-gray-400 cursor-not-allowed": rightDisabled,
           "text-gray-700 cursor-pointer": !rightDisabled,
         })}
-        onClick={() =>
-          onItemClick(Math.min(currItemIndex + 1, items.length - 1))
-        }
+        onClick={() => {
+          onItemClick(Math.min(currItemIndex + 1, items.length - 1));
+        }}
       />
     </div>
   );

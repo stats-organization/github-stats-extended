@@ -29,7 +29,7 @@ axios.get = cachedAxios.get.bind(cachedAxios);
 axios.post = cachedAxios.post.bind(cachedAxios);
 
 export function clearAxiosCache(): void {
-  cachedAxios.storage.clear?.();
+  void cachedAxios.storage.clear?.();
 }
 
 function createMockResponse<TData, TConfig>(
@@ -54,7 +54,7 @@ function createMockResponse<TData, TConfig>(
 }
 
 // store shouldMock outside React context so the interceptor can access it
-let shouldMock: boolean = false;
+let shouldMock = false;
 
 export function setShouldMock(newShouldMock: boolean): void {
   shouldMock = newShouldMock;
@@ -68,7 +68,17 @@ axios.defaults.adapter = async (config) => {
     return defaultAdapter(config);
   }
 
-  const params = config.data ? JSON.parse(config.data) : {};
+  interface Params {
+    query?: string;
+    variables?: {
+      login: string;
+      repo: string;
+      gistName: string;
+    };
+  }
+  const params = (
+    config.data ? JSON.parse(config.data as string) : {}
+  ) as Params;
 
   if (
     config.url === "https://api.github.com/graphql" &&
@@ -103,8 +113,9 @@ axios.defaults.adapter = async (config) => {
   if (
     config.url === "https://api.github.com/graphql" &&
     params.query?.includes("fragment RepoInfo on Repository {") &&
-    params.variables?.login === "anuraghazra" &&
-    params.variables?.repo === "github-readme-stats"
+    params.variables &&
+    params.variables.login === "anuraghazra" &&
+    params.variables.repo === "github-readme-stats"
   ) {
     return createMockResponse(repository, config);
   }

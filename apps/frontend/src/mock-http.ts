@@ -52,9 +52,9 @@ interface CreateMockResponseResult {
 }
 
 export function createMockResponse(): CreateMockResponseResult {
-  let statusCode = 200;
+  const statusCode = 200;
   const headers: HeaderMap = {};
-  let chunks: Array<unknown> = [];
+  const chunks: Array<unknown> = [];
 
   const res: CreateMockResponseResult = {
     statusCode,

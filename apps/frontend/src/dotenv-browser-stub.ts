@@ -1,4 +1,4 @@
 // Safe browser stub for dotenv
-export function config(): {} {
+export function config(): { parsed: Record<string, never> } {
   return { parsed: {} };
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { JSX } from "react";
 import { useDispatch } from "react-redux";
 import BounceLoader from "react-spinners/BounceLoader";
@@ -6,7 +6,7 @@ import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
 import { authenticate } from "../../api/user";
-import { login as _login } from "../../redux/slices/user";
+import { login } from "../../redux/slices/user";
 import {
   HOST,
   DEMO_USER,
@@ -46,12 +46,8 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
 
   const dispatch = useDispatch();
 
-  const login = (newUserId: string, userKey: string) => {
-    dispatch(_login({ userId: newUserId, userKey }));
-  };
-
   // for stage two
-  const [selectedUserId, setSelectedUserId] = useState(userId);
+  const [selectedUserId, setSelectedUserId] = useState<string>(userId);
   const [repo, setRepo] = useState(DEMO_REPO);
   const [gist, setGist] = useState(DEMO_GIST);
   const [wakatimeUser, setWakatimeUser] = useState(DEMO_WAKATIME_USER);
@@ -230,38 +226,34 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
   // for stage five
   const [gistUrl, setGistUrl] = useState("");
 
-  let guestHint;
-  switch (selectedCard) {
-    case CardType.STATS:
-    case CardType.TOP_LANGS:
-      guestHint = `username "${DEMO_USER}"`;
-      break;
-    case CardType.PIN:
-      guestHint = `repo "${DEMO_REPO}"`;
-      break;
-    case CardType.GIST:
-      guestHint = `Gist ID "${DEMO_GIST}"`;
-      break;
-    case CardType.WAKATIME:
-      guestHint = `WakaTime username "${DEMO_WAKATIME_USER}"`;
-      break;
-    default:
-      selectedCard satisfies never;
-  }
+  const guestHint = useMemo(() => {
+    switch (selectedCard) {
+      case CardType.STATS:
+      case CardType.TOP_LANGS:
+        return `username "${DEMO_USER}"`;
+      case CardType.PIN:
+        return `repo "${DEMO_REPO}"`;
+      case CardType.GIST:
+        return `Gist ID "${DEMO_GIST}"`;
+      case CardType.WAKATIME:
+        return `WakaTime username "${DEMO_WAKATIME_USER}"`;
+      default:
+        selectedCard satisfies never;
+        return "";
+    }
+  }, [selectedCard]);
 
   useEffect(() => {
-    const fetchGistUrl = async (gistId: string) => {
+    async function fetchGistURL() {
       try {
-        const fullUrl = `https://api.github.com/gists/${gistId}`;
-        const result = await axios.get(fullUrl);
-        return result.data.html_url;
+        const fullUrl = `https://api.github.com/gists/${gist}`;
+        const result = await axios.get<{ html_url: string }>(fullUrl);
+        setGistUrl(result.data.html_url);
       } catch (error) {
         console.error(error);
-        return "";
       }
-    };
-
-    fetchGistUrl(gist).then(setGistUrl);
+    }
+    void fetchGistURL();
   }, [gist]);
 
   const contentSectionRef = useRef<HTMLDivElement | null>(null);
@@ -287,7 +279,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
       if (url.includes("code=")) {
         const tempPrivateAccess = url.includes("private");
         const newUrl = url.split("?code=", 2) as [string, string];
-        const redirect = `${url.split(HOST)[0]}${HOST}/frontend`;
+        const redirect = `${url.split(HOST)[0] as string}${HOST}/frontend`;
         window.history.pushState({}, "", redirect);
         setIsLoading(true);
         const userKey = uuidv4();
@@ -296,13 +288,15 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
           tempPrivateAccess,
           userKey,
         );
-        login(newUserId, userKey);
+
+        dispatch(login({ userId: newUserId, userKey }));
+
         setIsLoading(false);
       }
     }
 
-    redirectCode();
-  }, []);
+    void redirectCode();
+  }, [dispatch]);
 
   if (isLoading) {
     return (
@@ -377,7 +371,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
           )}
           {stage === 2 && (
             <CustomizeStage
-              selectedCard={selectedCard || CardType.STATS}
+              selectedCard={selectedCard}
               selectedStatsRank={selectedStatsRank}
               setSelectedStatsRank={setSelectedStatsRank}
               selectedLanguagesLayout={selectedLanguagesLayout}
@@ -428,7 +422,6 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
           )}
           {stage === 4 && (
             <DisplayStage
-              // eslint-disable-next-line consistent-return
               filename={(() => {
                 switch (selectedCard) {
                   case CardType.STATS:
@@ -445,7 +438,6 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
                     return "";
                 }
               })()}
-              // eslint-disable-next-line consistent-return
               link={(() => {
                 switch (selectedCard) {
                   case CardType.STATS:

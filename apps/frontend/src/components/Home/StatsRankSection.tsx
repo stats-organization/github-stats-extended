@@ -20,7 +20,7 @@ const options: Array<SelectOption> = [
 ];
 
 interface StatsRankSectionProps {
-  selectedOption: SelectOption;
+  selectedOption: SelectOption | undefined;
   onOptionChange: (option: SelectOption) => void;
 }
 

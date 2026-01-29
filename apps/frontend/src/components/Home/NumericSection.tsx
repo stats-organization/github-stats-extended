@@ -38,7 +38,7 @@ export function NumericSection({
       return undefined;
     }
 
-    debounceTimeout.current = setTimeout(() => {
+    debounceTimeout.current = window.setTimeout(() => {
       const maybeNumber = internalValue && parseInt(internalValue, 10);
       if (typeof maybeNumber !== "number" || Number.isNaN(maybeNumber)) {
         onValueChange(undefined);
@@ -50,7 +50,7 @@ export function NumericSection({
     return () => {
       clearTimeout(debounceTimeout.current as number);
     };
-  }, [internalValue]);
+  }, [internalValue, onValueChange, value]);
 
   useEffect(() => {
     setInternalValue(value?.toString());
@@ -63,7 +63,9 @@ export function NumericSection({
         type="number"
         className="border border-gray-300 rounded px-2 py-1 mt-2 w-1/4"
         value={internalValue ?? ""}
-        onChange={(e) => setInternalValue(e.target.value)}
+        onChange={(e) => {
+          setInternalValue(e.target.value);
+        }}
         min={min}
         max={max}
         step={step}

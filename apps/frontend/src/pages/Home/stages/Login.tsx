@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { JSX, RefObject } from "react";
 import clsx from "clsx";
 import { useDispatch } from "react-redux";
@@ -16,7 +16,7 @@ import {
   HOST,
 } from "../../../constants";
 import { FaGithub as GithubIcon } from "react-icons/fa";
-import { logout as _logout } from "../../../redux/slices/user";
+import { logout } from "../../../redux/slices/user";
 import {
   useIsAuthenticated,
   usePrivateAccess,
@@ -24,6 +24,30 @@ import {
   useUserKey,
 } from "../../../redux/selectors/userSelectors";
 import { deleteAccount } from "../../../api/user";
+
+function useOutsideAlerter(
+  ref: RefObject<HTMLElement | null>,
+  action: () => void,
+) {
+  useEffect(() => {
+    /**
+     * Alert if clicked on outside of element
+     */
+    function handleClickOutside(event: MouseEvent) {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        action();
+      }
+    }
+
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [action, ref]);
+}
 
 interface LoginStageProps {
   onContinueAsGuestClick: () => void;
@@ -33,16 +57,16 @@ export function LoginStage({
   onContinueAsGuestClick,
 }: LoginStageProps): JSX.Element {
   const userId = useUserId();
-  const userKey = useUserKey();
+  const userKey = useUserKey() as string;
   const privateAccess = usePrivateAccess();
   const isAuthenticated = useIsAuthenticated();
 
   const dispatch = useDispatch();
   const [deleteModal, setDeleteModal] = useState(false);
 
-  const logout = () => {
-    dispatch(_logout({ userKey: null }));
-  };
+  const handleLogout = useCallback(() => {
+    dispatch(logout({ userKey: null }));
+  }, [dispatch]);
 
   const openDeleteModal = () => {
     setDeleteModal(true);
@@ -52,37 +76,13 @@ export function LoginStage({
     setDeleteModal(false);
   };
 
-  function useOutsideAlerter(
-    ref: RefObject<HTMLElement | null>,
-    action: () => void,
-  ) {
-    useEffect(() => {
-      /**
-       * Alert if clicked on outside of element
-       */
-      function handleClickOutside(event: MouseEvent) {
-        if (ref.current && !ref.current.contains(event.target as Node)) {
-          action();
-        }
-      }
-
-      // Bind the event listener
-      document.addEventListener("mousedown", handleClickOutside);
-
-      return () => {
-        // Unbind the event listener on clean up
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, [ref]);
-  }
-
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef, closeDeleteModal);
 
-  const deleteAccountHandler = async () => {
-    const success = await deleteAccount(userId as string, userKey as string);
+  const handleAccountDelete = async () => {
+    const success = await deleteAccount(userId as string, userKey);
     if (success) {
-      logout();
+      handleLogout();
       window.location.href = `https://github.com/settings/connections/applications/${CLIENT_ID}`;
     }
   };
@@ -171,7 +171,7 @@ export function LoginStage({
                 <div className="mt-6 flex items-center gap-4">
                   <Button
                     className="h-12 flex justify-center items-center w-[320px] text-black border border-black bg-white hover:bg-gray-100"
-                    onClick={logout}
+                    onClick={handleLogout}
                   >
                     <span className="xl:text-lg">Log Out</span>
                   </Button>
@@ -244,6 +244,7 @@ export function LoginStage({
 
               return (
                 <div
+                  // eslint-disable-next-line react/no-array-index-key
                   key={index}
                   style={{
                     left: `${x}%`,
@@ -282,13 +283,16 @@ export function LoginStage({
                 <div className="flex flex-wrap">
                   <Button
                     className="bg-blue-500 hover:bg-blue-600 text-white rounded-[0.25rem]"
-                    onClick={() => setDeleteModal(false)}
+                    onClick={() => {
+                      setDeleteModal(false);
+                    }}
                   >
                     Cancel
                   </Button>
                   <Button
                     className="bg-gray-200 hover:bg-gray-300 ml-auto rounded-[0.25rem] text-red-600 border-2"
-                    onClick={deleteAccountHandler}
+                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                    onClick={handleAccountDelete}
                   >
                     Delete Account
                   </Button>

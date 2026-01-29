@@ -1,6 +1,6 @@
-const PROD = false;
+const PROD = false as boolean;
 
-export const USE_LOGGER = true;
+export const USE_LOGGER = true as boolean;
 
 export const CLIENT_ID = "Ov23lilAc5biyyRY0K1u";
 
@@ -23,4 +23,4 @@ window.process = {
     FETCH_MULTI_PAGE_STARS: "10",
     PAT_1: "placeholderPAT", // so the backend's retryer.js sees there is 1 PAT and sets `RETRIES` accordingly
   },
-};
+} as (typeof window)["process"];

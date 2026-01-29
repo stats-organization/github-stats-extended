@@ -28,7 +28,7 @@ const options: Array<SelectOption> = [
 ];
 
 interface WakatimeLayoutSectionProps {
-  selectedOption: SelectOption;
+  selectedOption: SelectOption | undefined;
   onOptionChange: (option: SelectOption) => void;
 }
 

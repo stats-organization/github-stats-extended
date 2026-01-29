@@ -2,23 +2,22 @@ import axios from "axios";
 import { HOST } from "./constants";
 
 // See https://github.com/stats-organization/github-stats-extended/pull/27#discussion_r2712184285
-// eslint-disable-next-line no-unused-vars
 const fetchWakatimeStats = async ({
   username,
   api_domain: _,
 }: {
   username: string;
   api_domain: string;
-}) => {
+}): Promise<unknown> => {
   if (!username) {
     throw new Error("missing parameter: username");
   }
 
-  const { data } = await axios.get(
+  const res = await axios.get<unknown>(
     `https://${HOST}/api/wakatime-proxy?username=${username}`,
   );
 
-  return data;
+  return res.data;
 };
 
 export { fetchWakatimeStats };

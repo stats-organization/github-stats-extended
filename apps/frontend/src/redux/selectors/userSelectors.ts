@@ -2,14 +2,11 @@ import { useSelector } from "react-redux";
 
 import type { StoreState } from "../store";
 
-export const useUserId = <
-  TUserName extends string | undefined,
-  TOutput = TUserName extends string ? string : string | null,
->(
+export const useUserId = <TUserName extends string | undefined>(
   fallbackUsername?: TUserName,
-): TOutput => {
+): TUserName => {
   const storeValue = useSelector((state: StoreState) => state.user.userId);
-  return (storeValue || fallbackUsername || null) as TOutput;
+  return (storeValue || fallbackUsername || null) as TUserName;
 };
 
 export const useIsAuthenticated = (): boolean => {

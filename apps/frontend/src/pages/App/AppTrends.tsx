@@ -25,12 +25,16 @@ const toMessage = (
   if (typeof input === "string") {
     return input;
   }
-  if ("reason" in input && input.reason?.message) {
-    return input.reason.message;
+  type MaybeErrorReason = { message: string } | null;
+  const reason = ("reason" in input ? input.reason : null) as MaybeErrorReason;
+  if (reason?.message === "string") {
+    return reason.message as string;
   }
+
   if ("message" in input && input.message) {
     return input.message;
   }
+
   try {
     return JSON.stringify(input);
   } catch {
@@ -80,7 +84,7 @@ export function AppTrends() {
     if (isAuthenticated && stage === 0) {
       setStage(1);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, stage]);
 
   useEffect(() => {
     async function getPrivateAccess() {
@@ -93,8 +97,8 @@ export function AppTrends() {
         }
       }
     }
-    getPrivateAccess();
-  }, [userKey]);
+    void getPrivateAccess();
+  }, [dispatch, userKey]);
 
   return (
     <div className="min-h-screen flex flex-col">

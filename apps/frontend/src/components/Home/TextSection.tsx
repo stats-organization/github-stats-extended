@@ -35,17 +35,19 @@ export function TextSection({
   useEffect(() => {
     // Debounce onValueChange
     if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current);
+      window.clearTimeout(debounceTimeout.current);
     }
     if (internalValue === value) {
       return undefined;
     }
-    debounceTimeout.current = setTimeout(() => {
+    debounceTimeout.current = window.setTimeout(() => {
       onValueChange(internalValue);
     }, 700);
     // return cleanup function:
-    return () => clearTimeout(debounceTimeout.current as number);
-  }, [internalValue]);
+    return () => {
+      window.clearTimeout(debounceTimeout.current as number);
+    };
+  }, [internalValue, onValueChange, value]);
 
   return (
     <Section title={title}>
@@ -57,7 +59,9 @@ export function TextSection({
           { "cursor-not-allowed": disabled },
         )}
         value={internalValue}
-        onChange={(e) => setInternalValue(e.target.value)}
+        onChange={(e) => {
+          setInternalValue(e.target.value);
+        }}
         disabled={disabled}
         placeholder={placeholder}
         onPaste={onPaste}

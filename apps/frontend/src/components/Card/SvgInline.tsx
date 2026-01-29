@@ -21,6 +21,9 @@ interface SvgInlineProps {
   forceLoading?: boolean;
 }
 
+/**
+ *
+ */
 export function SvgInline(props: SvgInlineProps): JSX.Element {
   const {
     url,
@@ -30,7 +33,7 @@ export function SvgInline(props: SvgInlineProps): JSX.Element {
     forceLoading = false,
   } = props;
 
-  const [svg, setSvg] = useState(null);
+  const [svg, setSvg] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const userToken = useUserToken();
@@ -49,7 +52,7 @@ export function SvgInline(props: SvgInlineProps): JSX.Element {
 
       setLoaded(false);
 
-      let body;
+      let body: string;
       let status;
 
       if (isAuthenticated && (!userToken || userToken === "placeholderPAT")) {
@@ -58,7 +61,7 @@ export function SvgInline(props: SvgInlineProps): JSX.Element {
       }
 
       if (stage === 4 && !isAuthenticated) {
-        let res = await axios.get(url);
+        const res = await axios.get<string>(url);
         body = res.data;
         status = res.status;
       } else {
@@ -67,8 +70,10 @@ export function SvgInline(props: SvgInlineProps): JSX.Element {
           url,
         });
         const res = createMockResponse();
+        // will be solved by npm package
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         await router(req, res);
-        body = res._getBody();
+        body = res._getBody() as string;
         status = res._getStatusCode();
       }
 
@@ -83,7 +88,7 @@ export function SvgInline(props: SvgInlineProps): JSX.Element {
       setSvg(body);
       setLoaded(true);
     };
-    loadSvg();
+    void loadSvg();
 
     return () => {
       isCurrent = false;

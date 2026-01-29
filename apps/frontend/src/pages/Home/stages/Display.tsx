@@ -34,7 +34,7 @@ export function DisplayStage({
   };
 
   const copyMarkdown = () => {
-    navigator.clipboard.writeText(
+    void navigator.clipboard.writeText(
       `[![GitHub Stats](https://${HOST}/api${themeSuffix})](${link})`,
     );
     toast.info("Copied to Clipboard!", {
@@ -48,7 +48,7 @@ export function DisplayStage({
   };
 
   const copyUrl = () => {
-    navigator.clipboard.writeText(`https://${HOST}/api${themeSuffix}`);
+    void navigator.clipboard.writeText(`https://${HOST}/api${themeSuffix}`);
     toast.info("Copied to Clipboard!", {
       position: "bottom-right",
       autoClose: 1500,
@@ -70,11 +70,19 @@ export function DisplayStage({
                 highlight: true,
                 onClick: copyMarkdown,
               },
-              { title: "Copy URL", highlight: false, onClick: copyUrl },
-              { title: "Download PNG", highlight: false, onClick: downloadPNG },
-            ].map((item, index) => (
+              {
+                title: "Copy URL",
+                highlight: false,
+                onClick: copyUrl,
+              },
+              {
+                title: "Download PNG",
+                highlight: false,
+                onClick: downloadPNG,
+              },
+            ].map((item) => (
               <Button
-                key={index}
+                key={item.title}
                 className={clsx("m-4 w-60 flex justify-center", {
                   "bg-blue-500 hover:bg-blue-600 text-white": item.highlight,
                   "bg-white hover:bg-gray-100 text-black": !item.highlight,

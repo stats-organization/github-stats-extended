@@ -7,6 +7,7 @@ import jsdoc from "eslint-plugin-jsdoc";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import { includeIgnoreFile } from "@eslint/compat";
+import tseslint from "typescript-eslint";
 
 const gitignorePath = fileURLToPath(new URL(".gitignore", import.meta.url));
 
@@ -25,8 +26,6 @@ export default defineConfig(
     },
     plugins: {
       jsdoc,
-      react,
-      "react-hooks": reactHooks,
     },
     rules: {
       "no-unexpected-multiline": "error",
@@ -64,7 +63,6 @@ export default defineConfig(
       "no-this-before-super": "error",
       "object-shorthand": ["warn"],
       "no-mixed-spaces-and-tabs": "warn",
-      "no-multiple-empty-lines": "warn",
       "no-negated-condition": "warn",
       "no-unneeded-ternary": "warn",
       "keyword-spacing": [
@@ -81,6 +79,43 @@ export default defineConfig(
     },
   },
   {
+    files: ["**/*.{d.ts,ts,tsx}"],
+    ignores: ["apps/backend/**"],
+    extends: [tseslint.configs.strictTypeChecked, tseslint.configs.stylistic],
+    rules: {
+      "@typescript-eslint/array-type": ["error", { default: "generic" }],
+      "@typescript-eslint/restrict-template-expressions": [
+        "error",
+        {
+          allowAny: false,
+          allowBoolean: true, // for query parameters
+          allowNever: false,
+          allowNullish: false,
+          allowNumber: true,
+          allowRegExp: false,
+        },
+      ],
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          args: "all",
+          argsIgnorePattern: "^_",
+        },
+      ],
+
+      // We don't need this we have typescript
+      "jsdoc/require-returns": "off",
+      "jsdoc/require-returns-description": "off",
+      "jsdoc/require-param-description": "off",
+      "jsdoc/require-jsdoc": "off",
+    },
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+      },
+    },
+  },
+  {
     files: ["apps/backend/**/*.{js}"],
     languageOptions: {
       globals: {
@@ -89,7 +124,7 @@ export default defineConfig(
     },
   },
   {
-    files: ["apps/frontend/**/*.{js,jsx}"],
+    files: ["apps/frontend/**/*.{js,jsx,ts,tsx}"],
     plugins: {
       react,
       "react-hooks": reactHooks,

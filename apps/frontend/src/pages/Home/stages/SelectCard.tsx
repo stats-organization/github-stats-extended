@@ -67,10 +67,10 @@ export function SelectCardStage({
 
   return (
     <div className="w-full flex flex-wrap">
-      {options.map((card, index) => (
+      {options.map((card) => (
         <button
           className="p-2 lg:p-4"
-          key={index}
+          key={card.cardType}
           type="button"
           onClick={() => {
             onCardTypeChange(card.cardType);

@@ -6,10 +6,12 @@ const authenticate = async (
   code: string,
   privateAccess: boolean,
   userKey: string,
-) => {
+): Promise<string> => {
   try {
     const fullUrl = `https://${HOST}/api/authenticate?code=${code}&private_access=${privateAccess}&user_key=${userKey}`;
-    const result = await axios.post(fullUrl);
+    const result = await axios.post<{ userId: string; needDowngrade: boolean }>(
+      fullUrl,
+    );
     const { userId, needDowngrade } = result.data;
     if (needDowngrade) {
       console.info(
@@ -24,12 +26,17 @@ const authenticate = async (
   }
 };
 
+interface UserMetaDataResponse {
+  token: string;
+  privateAccess: string;
+}
+
 const getUserMetadata = async (
   userKey: string,
-): Promise<null | { token: string; privateAccess: string }> => {
+): Promise<null | UserMetaDataResponse> => {
   try {
     const fullUrl = `https://${HOST}/api/user-access?user_key=${userKey}`;
-    const result = await axios.get(fullUrl);
+    const result = await axios.get<UserMetaDataResponse>(fullUrl);
     return result.data;
   } catch (error) {
     console.error(error);

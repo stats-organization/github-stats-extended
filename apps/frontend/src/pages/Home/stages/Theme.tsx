@@ -18,7 +18,8 @@ export function ThemeStage({
   return (
     <>
       <div className="flex flex-wrap">
-        {Object.keys(themes)
+        {/* Needed until themes is proper types */}
+        {Object.keys(themes as Record<string, string>)
           .filter(
             (myTheme) =>
               ![
@@ -30,10 +31,10 @@ export function ThemeStage({
                 "holi",
               ].includes(myTheme),
           )
-          .map((myTheme, index) => (
+          .map((myTheme) => (
             <button
               className="p-2 lg:p-4"
-              key={index}
+              key={myTheme}
               type="button"
               onClick={() => {
                 onThemeChange(myTheme);

@@ -14,9 +14,17 @@ export interface UserState {
   privateAccess: string | null;
 }
 
+function getFromLocalStorage(key: string): string | null {
+  const storageValue = localStorage.getItem(key);
+  if (!storageValue) {
+    return null;
+  }
+  return (JSON.parse(storageValue) as string) || null;
+}
+
 const initialState: UserState = {
-  userId: JSON.parse(localStorage.getItem("userId") as string) || null,
-  userKey: JSON.parse(localStorage.getItem("userKey") as string) || null,
+  userId: getFromLocalStorage("userId"),
+  userKey: getFromLocalStorage("userKey"),
   token: null,
   privateAccess: null,
 };

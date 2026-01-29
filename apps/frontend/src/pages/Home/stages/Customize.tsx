@@ -101,7 +101,7 @@ export function CustomizeStage({
   fullSuffix,
   setStage,
 }: CustomizeStageProps): JSX.Element {
-  const cardType = selectedCard || CardType.STATS;
+  const cardType = selectedCard;
   const isAuthenticated = useIsAuthenticated();
 
   return (
@@ -142,7 +142,7 @@ export function CustomizeStage({
               if (newValue.endsWith("/")) {
                 newValue = newValue.slice(0, -1);
               }
-              let parts = newValue.split("/");
+              const parts = newValue.split("/");
               if (parts.length > 1) {
                 newValue = parts.slice(-1).join("/");
               }
@@ -186,7 +186,7 @@ export function CustomizeStage({
               if (newValue.endsWith("/")) {
                 newValue = newValue.slice(0, -1);
               }
-              let parts = newValue.split("/");
+              const parts = newValue.split("/");
               if (parts.length > 2) {
                 newValue = parts.slice(-2).join("/");
               }
@@ -230,7 +230,7 @@ export function CustomizeStage({
               if (newValue.endsWith("/")) {
                 newValue = newValue.slice(0, -1);
               }
-              let parts = newValue.split("/");
+              const parts = newValue.split("/");
               if (parts.length > 1) {
                 newValue = parts.slice(-1).join("/");
               }

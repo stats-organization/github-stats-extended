@@ -46,7 +46,7 @@ const options: Array<SelectOption> = [
 ];
 
 interface LanguagesLayoutSectionProps {
-  selectedLanguageLayoutOption: SelectOption;
+  selectedLanguageLayoutOption: SelectOption | undefined;
   onLanguageLayoutOptionChange: (option: SelectOption) => void;
 }
 
