@@ -18,7 +18,6 @@ interface SelectProps {
   onOptionChange: (option: SelectOption) => void;
 }
 
-// options is of form [{value: '', label: '', disabled: true/false}]
 export function Select({
   options,
   selectedOption,
