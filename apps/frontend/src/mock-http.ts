@@ -31,13 +31,6 @@ export function createMockRequest(
 ): CreateMockRequestResult {
   const { headers = {}, ...rest } = options;
 
-  if (options.method === "POST") {
-    return {
-      ...rest,
-      headers,
-    };
-  }
-
   return { ...rest, headers };
 }
 
