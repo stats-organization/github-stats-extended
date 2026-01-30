@@ -19,5 +19,5 @@ export default {
     "<rootDir>/tests/E2E/",
     "<rootDir>/.vercel/",
   ],
-  testRegex: "(\\.bench)\\.(ts|tsx|js)$",
+  testRegex: "(\\.selfhosted)\\.(ts|tsx|js)$",
 };

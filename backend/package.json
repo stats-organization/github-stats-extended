@@ -23,6 +23,7 @@
     "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
     "test:update:snapshot": "node --experimental-vm-modules node_modules/jest/bin/jest.js -u",
     "test:e2e": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.e2e.config.js",
+    "test:selfhosted": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.selfhosted.config.js",
     "theme-readme-gen": "node scripts/generate-theme-doc",
     "preview-theme": "node scripts/preview-theme",
     "close-stale-theme-prs": "node scripts/close-stale-theme-prs",
