@@ -3,5 +3,8 @@ export default {
   transform: {},
   testEnvironment: "node",
   coverageProvider: "v8",
-  testMatch: ["<rootDir>/tests/e2e/**/*.test.js"],
+  testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.vercel/"],
+  modulePathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.vercel/"],
+  coveragePathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.vercel/"],
+  testRegex: "(\\.e2e)\\.(ts|tsx|js)$",
 };

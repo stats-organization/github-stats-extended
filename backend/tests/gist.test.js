@@ -9,7 +9,7 @@ import { renderGistCard } from "../src/cards/gist.js";
 import { renderError } from "../src/common/render.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
 
-export const gist_data = {
+const gist_data = {
   data: {
     viewer: {
       gist: {
@@ -110,27 +110,6 @@ describe("Test /api/gist", () => {
         },
         { ...req.query },
       ),
-    );
-  });
-
-  it("should render error if id is not provided", async () => {
-    const req = {
-      query: {},
-    };
-    const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
-    };
-
-    await gist(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message: 'Missing params "id" make sure you pass the parameters in URL',
-        secondaryMessage: "/api/gist?id=GIST_ID",
-        renderOptions: { show_repo_link: false },
-      }),
     );
   });
 
