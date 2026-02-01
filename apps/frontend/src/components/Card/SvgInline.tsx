@@ -21,9 +21,6 @@ interface SvgInlineProps {
   forceLoading?: boolean;
 }
 
-/**
- *
- */
 export function SvgInline(props: SvgInlineProps): JSX.Element {
   const {
     url,

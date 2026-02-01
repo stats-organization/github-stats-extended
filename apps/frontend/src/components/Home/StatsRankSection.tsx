@@ -20,7 +20,7 @@ const options: Array<SelectOption> = [
 ];
 
 interface StatsRankSectionProps {
-  selectedOption: SelectOption | undefined;
+  selectedOption: SelectOption;
   onOptionChange: (option: SelectOption) => void;
 }
 
@@ -33,7 +33,7 @@ export function StatsRankSection({
       <p>Select a progress style.</p>
       <Select
         options={options}
-        selectedOption={selectedOption || DEFAULT_OPTION}
+        selectedOption={selectedOption}
         onOptionChange={onOptionChange}
       />
     </Section>

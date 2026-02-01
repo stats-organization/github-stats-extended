@@ -4,6 +4,18 @@ import { Card } from "../../../components/Card/Card";
 // @ts-expect-error this will be provided by the npm package
 import { themes } from "../../../backend/themes/index";
 
+// to be removed once npm package has been created
+type ThemeData = Record<
+  string,
+  {
+    title_color: string;
+    icon_color: string;
+    text_color: string;
+    bg_color: string;
+    border_color: string;
+  }
+>;
+
 interface ThemeStageProps {
   fullSuffix: string;
   theme: string;
@@ -18,8 +30,8 @@ export function ThemeStage({
   return (
     <>
       <div className="flex flex-wrap">
-        {/* Needed until themes is proper types */}
-        {Object.keys(themes as Record<string, string>)
+        {/* Needed until themes is typed correctly and retrieved from npm package */}
+        {Object.keys(themes as ThemeData)
           .filter(
             (myTheme) =>
               ![

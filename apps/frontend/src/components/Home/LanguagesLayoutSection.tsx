@@ -46,7 +46,7 @@ const options: Array<SelectOption> = [
 ];
 
 interface LanguagesLayoutSectionProps {
-  selectedLanguageLayoutOption: SelectOption | undefined;
+  selectedLanguageLayoutOption: SelectOption;
   onLanguageLayoutOptionChange: (option: SelectOption) => void;
 }
 
@@ -59,7 +59,7 @@ export function LanguagesLayoutSection({
       <p>Select a card layout.</p>
       <Select
         options={options}
-        selectedOption={selectedLanguageLayoutOption || DEFAULT_OPTION}
+        selectedOption={selectedLanguageLayoutOption}
         onOptionChange={onLanguageLayoutOptionChange}
       />
     </Section>

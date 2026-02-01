@@ -28,7 +28,7 @@ const options: Array<SelectOption> = [
 ];
 
 interface WakatimeLayoutSectionProps {
-  selectedOption: SelectOption | undefined;
+  selectedOption: SelectOption;
   onOptionChange: (option: SelectOption) => void;
 }
 
@@ -41,7 +41,7 @@ export function WakatimeLayoutSection({
       <p>Select a card layout.</p>
       <Select
         options={options}
-        selectedOption={selectedOption || DEFAULT_OPTION}
+        selectedOption={selectedOption}
         onOptionChange={onOptionChange}
       />
     </Section>

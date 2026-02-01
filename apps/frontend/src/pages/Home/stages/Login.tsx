@@ -57,30 +57,30 @@ export function LoginStage({
   onContinueAsGuestClick,
 }: LoginStageProps): JSX.Element {
   const userId = useUserId();
-  const userKey = useUserKey() as string;
+  const userKey = useUserKey();
   const privateAccess = usePrivateAccess();
   const isAuthenticated = useIsAuthenticated();
 
   const dispatch = useDispatch();
-  const [deleteModal, setDeleteModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleLogout = useCallback(() => {
     dispatch(logout({ userKey: null }));
   }, [dispatch]);
 
   const openDeleteModal = () => {
-    setDeleteModal(true);
+    setShowDeleteModal(true);
   };
 
   const closeDeleteModal = () => {
-    setDeleteModal(false);
+    setShowDeleteModal(false);
   };
 
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef, closeDeleteModal);
 
   const handleAccountDelete = async () => {
-    const success = await deleteAccount(userId as string, userKey);
+    const success = await deleteAccount(userId as string, userKey as string);
     if (success) {
       handleLogout();
       window.location.href = `https://github.com/settings/connections/applications/${CLIENT_ID}`;
@@ -108,7 +108,7 @@ export function LoginStage({
 
   return (
     <div className="h-full flex flex-wrap">
-      <div className={clsx("md:flex", { "opacity-25": deleteModal })}>
+      <div className={clsx("md:flex", { "opacity-25": showDeleteModal })}>
         <div className="lg:block lg:w-3/5 lg:p-8">
           <div className="bg-gray-200 rounded-sm w-full h-full m-auto p-8 shadow lg:h-auto">
             {isAuthenticated ? (
@@ -118,7 +118,7 @@ export function LoginStage({
                   {privateAccess ? (
                     <div className="flex items-center gap-4">
                       <a
-                        href={`https://${HOST}/api/downgrade?user_key=${userKey}`}
+                        href={`https://${HOST}/api/downgrade?user_key=${userKey as string}`}
                       >
                         <Button className="h-12 flex justify-center items-center w-[320px] text-black border border-black bg-white hover:bg-gray-100">
                           <GithubIcon className="w-6 h-6" />
@@ -244,8 +244,7 @@ export function LoginStage({
 
               return (
                 <div
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={index}
+                  key={card.demoImageSrc}
                   style={{
                     left: `${x}%`,
                     position: "relative",
@@ -264,7 +263,7 @@ export function LoginStage({
           </div>
         </div>
       </div>
-      {deleteModal && (
+      {showDeleteModal && (
         <div>
           <div className="fixed left-0 top-0 w-full h-full">
             <div className="w-full h-full flex justify-center items-center">
@@ -284,7 +283,7 @@ export function LoginStage({
                   <Button
                     className="bg-blue-500 hover:bg-blue-600 text-white rounded-[0.25rem]"
                     onClick={() => {
-                      setDeleteModal(false);
+                      setShowDeleteModal(false);
                     }}
                   >
                     Cancel

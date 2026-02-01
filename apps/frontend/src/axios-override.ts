@@ -71,9 +71,9 @@ axios.defaults.adapter = async (config) => {
   interface Params {
     query?: string;
     variables?: {
-      login: string;
-      repo: string;
-      gistName: string;
+      login?: string;
+      repo?: string;
+      gistName?: string;
     };
   }
   const params = (
