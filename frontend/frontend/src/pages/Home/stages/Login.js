@@ -273,7 +273,7 @@ const LoginStage = ({ setCurrItem }) => {
                 <br />
                 <p>
                   Are you sure you want to delete your account from GitHub
-                  Trends?
+                  Stats Extended?
                 </p>
                 <br />
                 <div className="flex flex-wrap">
