@@ -28,7 +28,7 @@ import type { StageIndex } from "../../models/Stage";
 
 import { CustomizeStage } from "./stages/Customize";
 import { DisplayStage } from "./stages/Display";
-import { LoginStage } from "./stages/Login";
+import { LoginStage } from "./stages/Login/Login";
 import { SelectCardStage } from "./stages/SelectCard";
 import { ThemeStage } from "./stages/Theme";
 
@@ -358,7 +358,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
           </div>
           {stage === 0 && (
             <LoginStage
-              onContinueAsGuestClick={() => {
+              onContinueAsGuest={() => {
                 setStage(1);
               }}
             />
