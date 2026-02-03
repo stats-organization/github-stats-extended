@@ -41,9 +41,6 @@ afterEach(() => {
 });
 
 describe("Test /api/gist with gist whitelist", () => {
-
-  // TODO: execute   it("should test the request", async () => {
-
   it("should render error card if id not in whitelist", async () => {
     const req = {
       query: {
@@ -58,7 +55,7 @@ describe("Test /api/gist with gist whitelist", () => {
 
     await gist(req, res);
 
-    // expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svgxml");
+    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
     expect(res.send).toHaveBeenCalledWith(
       renderError({
         message: "This gist ID is not whitelisted",
