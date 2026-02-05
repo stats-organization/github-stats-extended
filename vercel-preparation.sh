@@ -12,4 +12,6 @@ cp -R apps/backend/. apps/backend-copy/
 # `shopt` includes dot-files in the `mv` operation
 (shopt -s dotglob && mv apps/backend-copy/* apps/backend/.vercel/output/functions/api.func/)
 cp -R apps/backend/.vercel/output/functions/api.func/_dot_vercel_copy/output apps/backend/.vercel/
+rm -rf apps/backend/node_modules
+du -hcs ./apps/backend/
 cp -R apps/backend apps/frontend/src/backend/
