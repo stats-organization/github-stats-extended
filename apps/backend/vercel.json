@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "pnpm install && ../../vercel-preparation.sh",
+  "buildCommand": "pnpm --filter ./apps/backend/ --legacy deploy ./apps/deployment/ && rm -rf ./apps/backend/ && mv ./apps/deployment/ ./apps/backend/ && ../../vercel-preparation.sh",
   "redirects": [
     {
       "source": "/",
