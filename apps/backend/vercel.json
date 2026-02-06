@@ -10,7 +10,7 @@
   "rewrites": [
     {
       "source": "/frontend/:match*",
-      "destination": "https://github-stats-extended-frontend-git-d78d21-martin-mfgs-projects.vercel.app/:match*"
+      "destination": "https://gse-frontend-preview.vercel.app/:match*"
     }
   ]
 }
