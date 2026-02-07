@@ -123,7 +123,6 @@ Click on the deploy button to get started!
 13. optional: add an SQL database; by using e.g. the ["Nile" integration](https://vercel.com/marketplace/nile) or by manually setting the environment variable `POSTGRES_URL`
 14. optional: [create your own OAuth App](https://github.com/settings/developers) and set environment variables `OAUTH_REDIRECT_URI`, `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` on Vercel accordingly
 15. optional: in addition to the Vercel project based on the `apps/backend` folder, create a second project based on the `apps/frontend` folder. No environment variables needed.
-16. optional: if your Vercel deployments fail but after a redeployment without build cache they work, add an environment variable [`VERCEL_FORCE_NO_BUILD_CACHE`](https://vercel.com/docs/deployments/troubleshoot-a-build#managing-build-cache) with value `1` to force Vercel to not use the build cache.
 
 </details>
 
