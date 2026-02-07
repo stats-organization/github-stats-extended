@@ -10,6 +10,10 @@ on:
       - master
       - monorepo # to be removed once we complete monorepo tasks
 
+concurrency:
+  group: "${{ github.workflow }}-${{ github.head_ref }}"
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 permissions: {}
 
 jobs:
