@@ -38,3 +38,10 @@ tsconfig.tsbuildinfo
 !.vscode/extensions.json
 !.vscode/settings.json
 *.code-workspace
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+playwright/.auth/

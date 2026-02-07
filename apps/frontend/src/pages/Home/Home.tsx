@@ -314,9 +314,9 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
       <div className="flex flex-col">
         <div className="m-4 rounded-sm">
           <div className="lg:p-4">
-            <div className="text-2xl text-gray-600 font-semibold">
+            <h1 className="text-2xl text-gray-600 font-semibold">
               {STAGE_LABELS[stage].title}
-            </div>
+            </h1>
             <div>
               {stage === 0 && isAuthenticated ? (
                 <div>

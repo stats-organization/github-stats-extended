@@ -46,6 +46,29 @@ jobs:
       - name: Build frontend
         run: pnpm --filter frontend run build
 
+  frontend-test-e2e:
+    name: frontend E2E test
+
+    permissions:
+      contents: read
+
+    timeout-minutes: 60
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Install Dependencies
+        uses: ./.github/actions/install-dependencies
+
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: pnpm --filter frontend run test:e2e
+
   code-checks:
     name: Code checks
 

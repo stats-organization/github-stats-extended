@@ -1,6 +1,12 @@
 {
   "extends": ["../../tsconfig.base.json"],
-  "include": ["src", "src/**/*.json", "vite.config.ts"],
+  "include": [
+    "src",
+    "src/**/*.json",
+    "e2e",
+    "vite.config.ts",
+    "playwright.config.ts"
+  ],
   "compilerOptions": {
     "lib": ["DOM"],
     "composite": true,

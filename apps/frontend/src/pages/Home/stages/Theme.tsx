@@ -16,6 +16,20 @@ type ThemeData = Record<
   }
 >;
 
+const excludedThemes = [
+  "merko",
+  "blue-green",
+  "gotham",
+  "blueberry",
+  "outrun",
+  "holi",
+];
+
+const themeList = Object.keys(
+  /* Needed until themes is typed correctly and retrieved from npm package */
+  themes as ThemeData,
+).filter((myTheme) => !excludedThemes.includes(myTheme));
+
 interface ThemeStageProps {
   fullSuffix: string;
   theme: string;
@@ -30,37 +44,24 @@ export function ThemeStage({
   return (
     <>
       <div className="flex flex-wrap">
-        {/* Needed until themes is typed correctly and retrieved from npm package */}
-        {Object.keys(themes as ThemeData)
-          .filter(
-            (myTheme) =>
-              ![
-                "merko",
-                "blue-green",
-                "gotham",
-                "blueberry",
-                "outrun",
-                "holi",
-              ].includes(myTheme),
-          )
-          .map((myTheme) => (
-            <button
-              className="p-2 lg:p-4"
-              key={myTheme}
-              type="button"
-              onClick={() => {
-                onThemeChange(myTheme);
-              }}
-            >
-              <Card
-                title={myTheme}
-                description=""
-                imageSrc={`${fullSuffix}&theme=${myTheme}`}
-                selected={theme === myTheme}
-                stage={3}
-              />
-            </button>
-          ))}
+        {themeList.map((myTheme) => (
+          <button
+            className="p-2 lg:p-4"
+            key={myTheme}
+            type="button"
+            onClick={() => {
+              onThemeChange(myTheme);
+            }}
+          >
+            <Card
+              title={myTheme}
+              description=""
+              imageSrc={`${fullSuffix}&theme=${myTheme}`}
+              selected={theme === myTheme}
+              stage={3}
+            />
+          </button>
+        ))}
       </div>
       <div className="pl-10 pr-10">
         For more theme options check the{" "}
