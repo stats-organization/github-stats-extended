@@ -47,7 +47,7 @@ jobs:
         run: pnpm --filter frontend run build
 
   frontend-test-e2e:
-    name: frontend E2E test
+    name: Frontend E2E test
 
     permissions:
       contents: read
@@ -65,6 +65,11 @@ jobs:
 
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
+
+      - name: Run vercel-preparation.sh
+        run: |
+          chmod +x ./vercel-preparation.sh
+          ./vercel-preparation.sh
 
       - name: Run Playwright tests
         run: pnpm --filter frontend run test:e2e
