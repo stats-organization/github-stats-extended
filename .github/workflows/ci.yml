@@ -41,7 +41,7 @@ jobs:
           ./vercel-preparation.sh
 
       - name: Build frontend
-        run: pnpm --filter frontend run build-trends
+        run: pnpm --filter frontend run build
 
   code-checks:
     name: Code checks

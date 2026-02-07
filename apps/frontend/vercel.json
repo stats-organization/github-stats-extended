@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "cd ../../ && pnpm install && rm -rf ./apps/frontend/node_modules && ./vercel-preparation.sh && pnpm --filter ./apps/frontend/ --legacy deploy ./apps/deployment/ && mv ./apps/deployment/node_modules/ ./apps/frontend/node_modules/",
-  "buildCommand": "pnpm run build-trends",
+  "installCommand": "cd ../../ && git clean ./apps -fx && pnpm install && rm -rf ./apps/frontend/node_modules && ./vercel-preparation.sh && pnpm --filter ./apps/frontend/ --legacy deploy ./apps/deployment/ && mv ./apps/deployment/node_modules/ ./apps/frontend/node_modules/",
+  "buildCommand": "pnpm run build",
   "outputDirectory": "build"
 }

@@ -4,10 +4,19 @@ import { defineConfig } from "vite";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import react from "@vitejs/plugin-react-swc";
 
+import StringReplace from "vite-plugin-string-replace";
+
 // https://vitejs.dev/config/
 export default defineConfig({
   base: "/frontend/",
   plugins: [
+    StringReplace([
+      {
+        search: "process.env",
+        replace: "window.process.env",
+        fileName: ".*backend.*",
+      },
+    ]),
     nodePolyfills({
       include: [
         "path",
@@ -45,10 +54,6 @@ export default defineConfig({
 
     /** @todo use chunks to split bundle? */
     chunkSizeWarningLimit: 800,
-  },
-  define: {
-    // Prevent Vite from injecting process.env like Webpack DefinePlugin
-    "process.env": {},
   },
   resolve: {
     alias: [
