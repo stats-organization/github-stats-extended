@@ -56,6 +56,17 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    # Use official playwright docker image, which already includes browsers and related system dependencies.
+    # By doing this ci time we can skip the following step:
+    #
+    # ```yml
+    # - name: Install Playwright Browsers
+    #   run: pnpm exec playwright install --with-deps
+    # ```
+    #
+    # By doing so job execution time is reduced by ~20s
+    #
+    # @see https://playwright.dev/docs/docker
     container:
       image: mcr.microsoft.com/playwright:v1.58.0-noble
 
