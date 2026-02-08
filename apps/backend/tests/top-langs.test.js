@@ -4,10 +4,11 @@ import { afterEach, describe, expect, it, jest } from "@jest/globals";
 import "@testing-library/jest-dom";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+
 import topLangs from "../api-renamed/top-langs.js";
 import { renderTopLanguages } from "../src/cards/top-languages.js";
-import { renderError } from "../src/common/render.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
+import { renderError } from "../src/common/render.js";
 
 const data_langs = {
   data: {

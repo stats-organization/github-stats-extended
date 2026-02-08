@@ -1,7 +1,7 @@
 import axios, { getAdapter } from "axios";
 import { setupCache } from "axios-cache-interceptor";
-import { HOST } from "./constants";
 
+import { HOST } from "./constants";
 import additionalUserStars from "./mockData/additional_user_stars.json" with { type: "json" };
 import commentedIssues from "./mockData/commented_issues.json" with { type: "json" };
 import commentedPrs from "./mockData/commented_prs.json" with { type: "json" };

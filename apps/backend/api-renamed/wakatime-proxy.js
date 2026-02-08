@@ -1,5 +1,5 @@
-import { fetchWakatimeStats } from "../src/fetchers/wakatime.js";
 import { logger } from "../src/common/log.js";
+import { fetchWakatimeStats } from "../src/fetchers/wakatime.js";
 
 /**
  * @param {any} req The request.

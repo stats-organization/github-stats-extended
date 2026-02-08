@@ -1,20 +1,23 @@
 /**
  * @file This script is used to preview the theme on theme PRs.
  */
-import * as dotenv from "dotenv";
-dotenv.config();
+import { info } from "console";
+import { inspect } from "util";
 
 import { debug, setFailed } from "@actions/core";
-import github from "@actions/github";
+import { default as github } from "@actions/github";
 import ColorContrastChecker from "color-contrast-checker";
-import { info } from "console";
+import * as dotenv from "dotenv";
 import Hjson from "hjson";
 import snakeCase from "lodash.snakecase";
 import parse from "parse-diff";
-import { inspect } from "util";
-import { isValidHexColor, isValidGradient } from "../src/common/color.js";
+
+import { isValidGradient, isValidHexColor } from "../src/common/color.js";
 import { themes } from "../themes/index.js";
+
 import { getGithubToken, getRepoInfo } from "./helpers.js";
+
+dotenv.config();
 
 const COMMENTER = "github-actions[bot]";
 

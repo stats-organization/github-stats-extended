@@ -1,7 +1,9 @@
-import pin from "../../api-renamed/pin.js";
+import { it, jest } from "@jest/globals";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { it, jest } from "@jest/globals";
+
+import pin from "../../api-renamed/pin.js";
+
 import { runAndLogStats } from "./utils.js";
 
 const data_repo = {

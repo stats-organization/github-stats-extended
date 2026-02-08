@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import type { JSX, MouseEventHandler } from "react";
-
 import {
   FaArrowLeft as LeftArrowIcon,
   FaArrowRight as RightArrowIcon,

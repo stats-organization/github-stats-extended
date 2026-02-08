@@ -1,5 +1,6 @@
-import { getUserAccessByKey, deleteUser } from "../src/common/database.js";
 import axios from "axios";
+
+import { deleteUser, getUserAccessByKey } from "../src/common/database.js";
 import { logger } from "../src/common/log.js";
 
 export default async (req, res) => {

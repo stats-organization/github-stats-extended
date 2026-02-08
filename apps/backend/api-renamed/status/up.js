@@ -8,8 +8,8 @@
  */
 
 import { request } from "../../src/common/http.js";
-import retryer from "../../src/common/retryer.js";
 import { logger } from "../../src/common/log.js";
+import retryer from "../../src/common/retryer.js";
 
 export const RATE_LIMIT_SECONDS = 60 * 3; // 1 request per 3 minutes
 

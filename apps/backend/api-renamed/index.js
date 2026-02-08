@@ -8,6 +8,7 @@ import {
   setCacheHeaders,
   setErrorCacheHeaders,
 } from "../src/common/cache.js";
+import { storeRequest } from "../src/common/database.js";
 import {
   MissingParamError,
   retrieveSecondaryMessage,
@@ -16,7 +17,6 @@ import { parseArray, parseBoolean } from "../src/common/ops.js";
 import { renderError } from "../src/common/render.js";
 import { fetchStats } from "../src/fetchers/stats.js";
 import { isLocaleAvailable } from "../src/translations.js";
-import { storeRequest } from "../src/common/database.js";
 
 // @ts-ignore
 export default async (req, res) => {

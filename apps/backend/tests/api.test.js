@@ -10,11 +10,12 @@ import {
 } from "@jest/globals";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+
 import api from "../api-renamed/index.js";
 import { calculateRank } from "../src/calculateRank.js";
 import { renderStatsCard } from "../src/cards/stats.js";
-import { renderError } from "../src/common/render.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
+import { renderError } from "../src/common/render.js";
 
 /**
  * @type {import("../src/fetchers/stats").StatsData}

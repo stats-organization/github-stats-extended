@@ -1,5 +1,5 @@
-import type { JSX, ReactNode } from "react";
 import clsx from "clsx";
+import type { JSX, ReactNode } from "react";
 
 import { LoginBoxDemoCards } from "./LoginBoxDemoCards";
 
