@@ -46,6 +46,9 @@ jobs:
       - name: Build frontend
         run: pnpm --filter frontend run build
 
+      - name: Run backend tests
+        run: pnpm --filter github-readme-stats run test
+
   frontend-test-e2e:
     name: Frontend E2E test
 

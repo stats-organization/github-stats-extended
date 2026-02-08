@@ -45,25 +45,25 @@ test("navigates between steps", async ({ page }) => {
   // We are at stage 1
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Login");
 
-  // Go to to stage 2
+  // Go to stage 2
   await page.getByRole("button", { name: "Select card" }).click();
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "Select a Card",
   );
 
-  // Go to to stage 3
+  // Go to stage 3
   await page.getByRole("button", { name: "Modify parameters" }).click();
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "Modify Card Parameters",
   );
 
-  // Go to to stage 4
+  // Go to stage 4
   await page.getByRole("button", { name: "Select theme" }).click();
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "Choose a Theme",
   );
 
-  // Go to to stage 5
+  // Go to stage 5
   await page.getByRole("button", { name: "Display card" }).click();
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "Display your Card",
