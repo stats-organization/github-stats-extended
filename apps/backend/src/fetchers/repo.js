@@ -1,0 +1,161 @@
+// @ts-check
+
+import { MissingParamError } from "../common/error.js";
+import { request } from "../common/http.js";
+import { retryer } from "../common/retryer.js";
+import { fetchRepoUserStats } from "./stats.js";
+
+/**
+ * Repo data fetcher.
+ *
+ * @param {object} variables Fetcher variables.
+ * @param {string} token GitHub token.
+ * @returns {Promise<import('axios').AxiosResponse>} The response.
+ */
+const fetcher = (variables, token) => {
+  return request(
+    {
+      query: `
+      fragment RepoInfo on Repository {
+        name
+        nameWithOwner
+        isPrivate
+        isArchived
+        isTemplate
+        stargazers {
+          totalCount
+        }
+        description
+        primaryLanguage {
+          color
+          id
+          name
+        }
+        forkCount
+      }
+      query getRepo($login: String!, $repo: String!) {
+        user(login: $login) {
+          repository(name: $repo) {
+            ...RepoInfo
+          }
+        }
+        organization(login: $login) {
+          repository(name: $repo) {
+            ...RepoInfo
+          }
+        }
+      }
+    `,
+      variables,
+    },
+    {
+      Authorization: `token ${token}`,
+    },
+  );
+};
+
+const urlExample = "/api/pin?username=USERNAME&amp;repo=REPO_NAME";
+
+/**
+ * @typedef {import("./types").RepositoryData} RepositoryData Repository data.
+ */
+
+/**
+ * Fetch repository data.
+ *
+ * @param {string} username GitHub username.
+ * @param {string} reponame GitHub repository name.
+ * @returns {Promise<RepositoryData>} Repository data.
+ */
+const fetchRepo = async (
+  username,
+  reponame,
+  include_prs_authored = false,
+  include_prs_commented = false,
+  include_prs_reviewed = false,
+  include_issues_authored = false,
+  include_issues_commented = false,
+) => {
+  let owner = username;
+  if (reponame && reponame.includes("/")) {
+    const [parsed_owner, parsed_repo] = reponame.split("/");
+    owner = parsed_owner;
+    reponame = parsed_repo;
+  }
+
+  if (owner && !username) {
+    username = owner;
+  }
+  if (username && !owner) {
+    owner = username;
+  }
+  if (!username && !reponame) {
+    throw new MissingParamError(["username", "repo"], urlExample);
+  }
+  if (!username) {
+    throw new MissingParamError(["username"], urlExample);
+  }
+  if (!reponame) {
+    throw new MissingParamError(["repo"], urlExample);
+  }
+
+  let res = await retryer(fetcher, username, { login: owner, repo: reponame });
+
+  const data = res.data.data;
+
+  if (!data.user && !data.organization) {
+    throw new Error("Not found");
+  }
+
+  const isUser = data.organization === null && data.user;
+  const isOrg = data.user === null && data.organization;
+
+  if (isUser) {
+    if (!data.user.repository || data.user.repository.isPrivate) {
+      throw new Error("User Repository Not found");
+    }
+    let repoUserStats = await fetchRepoUserStats(
+      username,
+      [owner + "/" + reponame],
+      [],
+      include_prs_authored,
+      include_prs_commented,
+      include_prs_reviewed,
+      include_issues_authored,
+      include_issues_commented,
+    );
+    return {
+      ...repoUserStats,
+      ...data.user.repository,
+      starCount: data.user.repository.stargazers.totalCount,
+    };
+  }
+
+  if (isOrg) {
+    if (
+      !data.organization.repository ||
+      data.organization.repository.isPrivate
+    ) {
+      throw new Error("Organization Repository Not found");
+    }
+    let repoUserStats = await fetchRepoUserStats(
+      username,
+      [owner + "/" + reponame],
+      [],
+      include_prs_authored,
+      include_prs_commented,
+      include_prs_reviewed,
+      include_issues_authored,
+      include_issues_commented,
+    );
+    return {
+      ...repoUserStats,
+      ...data.organization.repository,
+      starCount: data.organization.repository.stargazers.totalCount,
+    };
+  }
+
+  throw new Error("Unexpected behavior");
+};
+
+export { fetchRepo };

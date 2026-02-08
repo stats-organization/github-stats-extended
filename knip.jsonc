@@ -1,0 +1,36 @@
+{
+  "$schema": "./node_modules/knip/schema.json",
+  "workspaces": {
+    "apps/backend": {
+      "entry": [
+        "api-renamed/*.js",
+        "express.js",
+
+        "jest.*.js",
+        "tests/bench/*.bench.js"
+      ],
+      "ignoreFiles": [
+        "_dot_vercel_copy/**/*" // Hopefully by using a npm package this file will be removed
+      ],
+      "ignoreDependencies": [
+        "jest", // used by test scripts referencing binary due to lack of ESM support
+        "@octokit/request-error" // used by js scripts executed in a GitHub actions not listed in deps
+      ]
+    },
+    "apps/frontend": {
+      "entry": [
+        "src/index.jsx",
+        "src/dotenv-browser-stub.ts", // referenced by vite.config.ts
+        "src/wakatime-override.ts"
+      ],
+
+      "ignoreDependencies": [
+        // below dependencies are added because backend folder is copied inside frontend folder,
+        // so some of his dependencies must be present here
+        "github-username-regex",
+        "emoji-name-map",
+        "word-wrap"
+      ]
+    }
+  }
+}

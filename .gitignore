@@ -1,13 +1,36 @@
-backend/.vercel
-backend/.env
-backend/node_modules
-backend/*.lock
-backend/coverage
-backend/benchmarks
-backend/vercel_token
-backend-copy
-frontend/frontend/.env
-frontend/frontend/src/backend
+node_modules
+
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS
+.DS_Store
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Project
+coverage
+
+apps/backend/.vercel
+apps/backend/.env
+apps/backend/node_modules
+apps/backend/*.lock
+apps/backend/coverage
+apps/backend/benchmarks
+apps/backend/vercel_token
+apps/backend-copy
+
+apps/frontend/.env
+apps/frontend/src/backend
+apps/frontend/build
+
+build-ts
+tsconfig.tsbuildinfo
 
 # IDE
 .idea/
@@ -15,3 +38,10 @@ frontend/frontend/src/backend
 !.vscode/extensions.json
 !.vscode/settings.json
 *.code-workspace
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+playwright/.auth/

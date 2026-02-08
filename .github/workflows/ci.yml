@@ -1,0 +1,119 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.head_ref }}"
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions: {}
+
+jobs:
+  build-and-test:
+    name: Build and test ${{ matrix.node }} on ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [24]
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Install Dependencies
+        uses: ./.github/actions/install-dependencies
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Run vercel-preparation.sh
+        run: |
+          chmod +x ./vercel-preparation.sh
+          ./vercel-preparation.sh
+
+      - name: Build frontend
+        run: pnpm --filter frontend run build
+
+  frontend-test-e2e:
+    name: Frontend E2E test
+
+    permissions:
+      contents: read
+
+    timeout-minutes: 60
+
+    runs-on: ubuntu-latest
+
+    # Use official playwright docker image, which already includes browsers and related system dependencies.
+    # By doing this ci time we can skip the following step:
+    #
+    # ```yml
+    # - name: Install Playwright Browsers
+    #   run: pnpm exec playwright install --with-deps
+    # ```
+    #
+    # By doing so job execution time is reduced by ~20s
+    #
+    # @see https://playwright.dev/docs/docker
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.0-noble
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Install Dependencies
+        uses: ./.github/actions/install-dependencies
+
+      - name: Run vercel-preparation.sh
+        run: |
+          chmod +x ./vercel-preparation.sh
+          ./vercel-preparation.sh
+
+      - name: Run Playwright tests
+        run: pnpm --filter frontend run test:e2e
+
+  code-checks:
+    name: Code checks
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Install Dependencies
+        uses: ./.github/actions/install-dependencies
+
+      # needed to resolve .vercel folder from apps/frontend/src/components/Card/SVG.js
+      - name: Run vercel-preparation.sh
+        run: |
+          chmod +x ./vercel-preparation.sh
+          ./vercel-preparation.sh
+
+      - name: Format
+        run: pnpm run format:check
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Lint (knip)
+        run: pnpm run lint:knip
+
+      - name: Typecheck
+        run: pnpm run typecheck

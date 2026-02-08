@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "yzhang.markdown-all-in-one",
+    "prettier.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "github.vscode-github-actions"
+  ]
+}

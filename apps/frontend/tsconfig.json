@@ -1,0 +1,18 @@
+{
+  "extends": ["../../tsconfig.base.json"],
+  "include": [
+    "src",
+    "src/**/*.json",
+    "e2e",
+    "vite.config.ts",
+    "playwright.config.ts"
+  ],
+  "compilerOptions": {
+    "lib": ["DOM"],
+    "composite": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "outDir": "./build-ts",
+    "resolveJsonModule": true
+  }
+}
