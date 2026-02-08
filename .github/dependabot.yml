@@ -5,30 +5,36 @@ updates:
     directory: "/"
     schedule:
       interval: cron
-      cronjob: "10 13 * * *"
+      cronjob: every day at 5am
     open-pull-requests-limit: 10
     commit-message:
       prefix: "build(deps)"
       prefix-development: "build(deps-dev)"
+    cooldown:
+      default-days: 7
 
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
       interval: cron
-      cronjob: "10 13 * * *"
+      cronjob: every day at 5am
     open-pull-requests-limit: 10
     commit-message:
       prefix: "ci(deps)"
       prefix-development: "ci(deps-dev)"
+    cooldown:
+      default-days: 7
 
   # Maintain dependencies for Devcontainers
   - package-ecosystem: devcontainers
     directory: "/"
     schedule:
       interval: cron
-      cronjob: "10 13 * * *"
+      cronjob: every day at 5am
     open-pull-requests-limit: 10
     commit-message:
       prefix: "build(deps)"
       prefix-development: "build(deps-dev)"
+    cooldown:
+      default-days: 7
