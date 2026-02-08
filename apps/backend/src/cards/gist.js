@@ -1,6 +1,6 @@
 // @ts-check
 
-import Card from "../common/Card.js";
+import { default as Card } from "../common/Card.js";
 import { getCardColors } from "../common/color.js";
 import { kFormatter, wrapTextMultiline } from "../common/fmt.js";
 import { encodeHTML } from "../common/html.js";

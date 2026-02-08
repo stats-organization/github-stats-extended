@@ -4,7 +4,7 @@ import { includeIgnoreFile } from "@eslint/compat";
 import js from "@eslint/js";
 import { defineConfig } from "eslint/config";
 import { importX } from "eslint-plugin-import-x";
-import jsdoc from "eslint-plugin-jsdoc";
+import { default as jsdoc } from "eslint-plugin-jsdoc";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
@@ -19,7 +19,6 @@ export default defineConfig(
   {
     extends: [importX.flatConfigs.recommended, importX.flatConfigs.typescript],
     rules: {
-      "import-x/no-named-as-default": "off",
       "import-x/consistent-type-specifier-style": ["error", "prefer-top-level"],
       "import-x/order": [
         "error",
