@@ -1,6 +1,4 @@
-import pkg from "pg";
-// eslint-disable-next-line import-x/no-named-as-default-member
-const { Pool } = pkg;
+import { Pool } from "pg";
 
 export const pool = process.env.POSTGRES_URL
   ? new Pool({
