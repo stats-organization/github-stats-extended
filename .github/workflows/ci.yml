@@ -56,15 +56,15 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.0-noble
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
 
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies
-
-      - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
 
       - name: Run vercel-preparation.sh
         run: |
