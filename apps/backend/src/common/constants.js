@@ -2,7 +2,7 @@
 
 /**
  * Valid owner affiliations for GitHub API queries.
- * @type {string[]}
+ * @type {Array<string>}
  */
 const OWNER_AFFILIATIONS = ["OWNER", "COLLABORATOR", "ORGANIZATION_MEMBER"];
 
