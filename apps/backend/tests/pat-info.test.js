@@ -12,7 +12,7 @@ import {
 } from "@jest/globals";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { dotenv } from "dotenv";
+import * as dotenv from "dotenv";
 
 import patInfo, { RATE_LIMIT_SECONDS } from "../api-renamed/status/pat-info.js";
 

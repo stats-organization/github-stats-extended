@@ -33,15 +33,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Install Dependencies
-        uses: ./.github/actions/install-dependencies
-        with:
-          node-version: ${{ matrix.node }}
-
       - name: Run vercel-preparation.sh
         run: |
           chmod +x ./vercel-preparation.sh
           ./vercel-preparation.sh
+
+      - name: Install Dependencies
+        uses: ./.github/actions/install-dependencies
+        with:
+          node-version: ${{ matrix.node }}
 
       - name: Build frontend
         run: pnpm --filter frontend run build
