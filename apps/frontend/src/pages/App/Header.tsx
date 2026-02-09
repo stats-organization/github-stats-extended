@@ -1,7 +1,7 @@
 import type { JSX } from "react";
+import { FaGithub as GithubIcon } from "react-icons/fa";
 
 import appIcon from "../../assets/appLogo64.png";
-import { FaGithub as GithubIcon } from "react-icons/fa";
 import { ProgressBar } from "../../components/Home/Progress";
 import { STAGE_LABELS } from "../../models/Stage";
 import type { StageIndex } from "../../models/Stage";

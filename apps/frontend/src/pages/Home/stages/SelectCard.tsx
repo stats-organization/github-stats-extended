@@ -1,5 +1,7 @@
+import { useMemo } from "react";
+import type { JSX } from "react";
+
 import { Card } from "../../../components/Card/Card";
-import { useUserId } from "../../../redux/selectors/userSelectors";
 import {
   DEMO_GIST,
   DEMO_REPO,
@@ -7,7 +9,7 @@ import {
   DEMO_WAKATIME_USER,
 } from "../../../constants";
 import { CardType } from "../../../models/CardType";
-import { useMemo, type JSX } from "react";
+import { useUserId } from "../../../redux/selectors/userSelectors";
 
 interface SelectCardStageProps {
   selectedCardType: CardType;

@@ -1,13 +1,12 @@
-import type React from "react";
-import type { JSX } from "react";
+import type { JSX, default as React } from "react";
 
-import { CardType } from "../../../models/CardType";
 import { CardImage } from "../../../components/Card/CardImage";
+import type { SelectOption } from "../../../components/Generic/Select";
 import { CheckboxSection } from "../../../components/Home/CheckboxSection";
-import { TextSection } from "../../../components/Home/TextSection";
+import { LanguagesLayoutSection } from "../../../components/Home/LanguagesLayoutSection";
 import { NumericSection } from "../../../components/Home/NumericSection";
 import { StatsRankSection } from "../../../components/Home/StatsRankSection";
-import { LanguagesLayoutSection } from "../../../components/Home/LanguagesLayoutSection";
+import { TextSection } from "../../../components/Home/TextSection";
 import { WakatimeLayoutSection } from "../../../components/Home/WakatimeLayoutSection";
 import {
   DEMO_GIST,
@@ -15,9 +14,9 @@ import {
   DEMO_USER,
   DEMO_WAKATIME_USER,
 } from "../../../constants";
-import { useIsAuthenticated } from "../../../redux/selectors/userSelectors";
-import type { SelectOption } from "../../../components/Generic/Select";
+import { CardType } from "../../../models/CardType";
 import type { StageIndex } from "../../../models/Stage";
+import { useIsAuthenticated } from "../../../redux/selectors/userSelectors";
 
 type Updater<T> = React.Dispatch<React.SetStateAction<T>>;
 

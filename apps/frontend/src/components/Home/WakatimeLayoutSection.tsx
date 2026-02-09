@@ -1,8 +1,9 @@
 import type { JSX } from "react";
 
-import { Section } from "./Section";
 import { Select } from "../Generic/Select";
 import type { SelectOption } from "../Generic/Select";
+
+import { Section } from "./Section";
 
 export const DEFAULT_OPTION: SelectOption = {
   id: 1,

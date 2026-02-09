@@ -1,9 +1,9 @@
 // @ts-check
 
 import { Card } from "../common/Card.js";
+import { I18n } from "../common/I18n.js";
 import { getCardColors } from "../common/color.js";
 import { formatBytes } from "../common/fmt.js";
-import { I18n } from "../common/I18n.js";
 import { chunkArray, clampValue, lowercaseTrim } from "../common/ops.js";
 import {
   createProgressNode,

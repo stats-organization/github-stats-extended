@@ -1,30 +1,30 @@
+import axios from "axios";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { JSX } from "react";
 import { useDispatch } from "react-redux";
 import BounceLoader from "react-spinners/BounceLoader";
-import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
 import { authenticate } from "../../api/user";
-import { login } from "../../redux/slices/user";
-import {
-  HOST,
-  DEMO_USER,
-  DEMO_WAKATIME_USER,
-  DEMO_REPO,
-  DEMO_GIST,
-} from "../../constants";
-import { CardType } from "../../models/CardType";
-import { DEFAULT_OPTION as STATS_DEFAULT_RANK } from "../../components/Home/StatsRankSection";
 import { DEFAULT_OPTION as LANGUAGES_DEFAULT_LAYOUT } from "../../components/Home/LanguagesLayoutSection";
+import { DEFAULT_OPTION as STATS_DEFAULT_RANK } from "../../components/Home/StatsRankSection";
 import { DEFAULT_OPTION as WAKATIME_DEFAULT_LAYOUT } from "../../components/Home/WakatimeLayoutSection";
 import {
-  useUserId,
-  useIsAuthenticated,
-  usePrivateAccess,
-} from "../../redux/selectors/userSelectors";
+  DEMO_GIST,
+  DEMO_REPO,
+  DEMO_USER,
+  DEMO_WAKATIME_USER,
+  HOST,
+} from "../../constants";
+import { CardType } from "../../models/CardType";
 import { STAGE_LABELS } from "../../models/Stage";
 import type { StageIndex } from "../../models/Stage";
+import {
+  useIsAuthenticated,
+  usePrivateAccess,
+  useUserId,
+} from "../../redux/selectors/userSelectors";
+import { login } from "../../redux/slices/user";
 
 import { CustomizeStage } from "./stages/Customize";
 import { DisplayStage } from "./stages/Display";

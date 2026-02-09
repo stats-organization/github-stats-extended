@@ -1,7 +1,9 @@
-import api from "../../api-renamed/index.js";
+import { it, jest } from "@jest/globals";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { it, jest } from "@jest/globals";
+
+import api from "../../api-renamed/index.js";
+
 import { runAndLogStats } from "./utils.js";
 
 const stats = {

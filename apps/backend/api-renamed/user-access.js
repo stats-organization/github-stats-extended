@@ -1,5 +1,5 @@
-import { logger } from "../src/common/log.js";
 import { getUserAccessByKey } from "../src/common/database.js";
+import { logger } from "../src/common/log.js";
 
 /**
  * @param {any} req The request.

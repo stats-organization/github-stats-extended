@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import { HOST } from "./constants";
 
 // See https://github.com/stats-organization/github-stats-extended/pull/27#discussion_r2712184285

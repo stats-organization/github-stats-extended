@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, jest } from "@jest/globals";
 import "@testing-library/jest-dom";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+
 import wakatime from "../api-renamed/wakatime.js";
 import { renderWakatimeCard } from "../src/cards/wakatime.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";

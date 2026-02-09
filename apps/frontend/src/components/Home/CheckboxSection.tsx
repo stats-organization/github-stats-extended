@@ -1,6 +1,8 @@
-import { Section } from "./Section";
-import { Checkbox } from "../Generic/Checkbox";
 import type { JSX } from "react";
+
+import { Checkbox } from "../Generic/Checkbox";
+
+import { Section } from "./Section";
 
 interface CheckboxSectionProps {
   title: string;

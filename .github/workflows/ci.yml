@@ -100,14 +100,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Install Dependencies
-        uses: ./.github/actions/install-dependencies
-
-      # needed to resolve .vercel folder from apps/frontend/src/components/Card/SVG.js
+      # Heads up!
+      #
+      # 1. Execution of this script is needed to resolve `.vercel` folder from `apps/frontend/src/components/Card/SVG.js`
+      # 2. This scripts removes `apps/backend/node_modules` breaking ESLint’s module resolution.
+      #    Dependency installation must occur after running ./vercel-preparation.sh.
       - name: Run vercel-preparation.sh
         run: |
           chmod +x ./vercel-preparation.sh
           ./vercel-preparation.sh
+
+      - name: Install Dependencies
+        uses: ./.github/actions/install-dependencies
 
       - name: Format
         run: pnpm run format:check

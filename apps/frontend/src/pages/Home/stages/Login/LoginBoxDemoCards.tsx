@@ -2,10 +2,10 @@ import type { JSX } from "react";
 
 import { CardImage } from "../../../../components/Card/CardImage";
 import {
+  DEMO_GIST,
   DEMO_REPO,
   DEMO_USER,
   DEMO_WAKATIME_USER,
-  DEMO_GIST,
 } from "../../../../constants";
 
 const cards: Array<{ demoImageSrc: string }> = [

@@ -1,6 +1,8 @@
 import { describe, expect, it } from "@jest/globals";
+
 import "@testing-library/jest-dom";
 import { calculateRank } from "../src/calculateRank.js";
+
 import { approxNumber } from "./bench/utils.js";
 
 describe("Test calculateRank", () => {

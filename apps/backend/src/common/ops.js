@@ -1,8 +1,9 @@
 // @ts-check
 
 import toEmoji from "emoji-name-map";
-import { CustomError } from "./error.js";
+
 import { OWNER_AFFILIATIONS } from "./constants.js";
+import { CustomError } from "./error.js";
 
 /**
  * Returns boolean if value is either "true" or "false" else the value as it is.

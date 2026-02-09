@@ -1,13 +1,15 @@
 /**
  * @file Script that can be used to close stale theme PRs that have a `invalid` label.
  */
-import * as dotenv from "dotenv";
-dotenv.config();
-
 import { debug, setFailed } from "@actions/core";
-import github from "@actions/github";
+import * as github from "@actions/github";
+// eslint-disable-next-line import-x/no-unresolved
 import { RequestError } from "@octokit/request-error";
+import * as dotenv from "dotenv";
+
 import { getGithubToken, getRepoInfo } from "./helpers.js";
+
+dotenv.config();
 
 const CLOSING_COMMENT = `
 	\rThis theme PR has been automatically closed due to inactivity. Please reopen it if you want to continue working on it.\

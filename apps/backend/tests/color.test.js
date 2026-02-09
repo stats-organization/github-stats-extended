@@ -1,5 +1,6 @@
-import { getCardColors } from "../src/common/color";
 import { describe, expect, it } from "@jest/globals";
+
+import { getCardColors } from "../src/common/color";
 
 describe("Test color.js", () => {
   it("getCardColors: should return expected values", () => {

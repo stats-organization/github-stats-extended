@@ -1,9 +1,10 @@
 // @ts-check
 
 import { describe, expect, it, jest } from "@jest/globals";
+
 import "@testing-library/jest-dom";
-import { retryer } from "../src/common/retryer.js";
 import { logger } from "../src/common/log.js";
+import { retryer } from "../src/common/retryer.js";
 
 const fetcher = jest.fn((variables, token) => {
   logger.log(variables, token);
