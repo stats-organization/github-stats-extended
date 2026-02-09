@@ -1,18 +1,18 @@
 // @ts-check
 
-import {
-  measureText,
-  flexLayout,
-  iconWithLabel,
-  createLanguageNode,
-} from "../common/render.js";
-import Card from "../common/Card.js";
+import { default as Card } from "../common/Card.js";
 import { getCardColors } from "../common/color.js";
 import { kFormatter, wrapTextMultiline } from "../common/fmt.js";
 import { encodeHTML } from "../common/html.js";
 import { icons } from "../common/icons.js";
 import languageColors from "../common/languageColors.json" with { type: "json" };
 import { parseEmojis } from "../common/ops.js";
+import {
+  createLanguageNode,
+  flexLayout,
+  iconWithLabel,
+  measureText,
+} from "../common/render.js";
 
 const ICON_SIZE = 16;
 const CARD_DEFAULT_WIDTH = 400;

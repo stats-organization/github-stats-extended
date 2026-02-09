@@ -1,19 +1,46 @@
 import { fileURLToPath } from "node:url";
 
-import { defineConfig } from "eslint/config";
-import globals from "globals";
+import { includeIgnoreFile } from "@eslint/compat";
 import js from "@eslint/js";
-import jsdoc from "eslint-plugin-jsdoc";
+import { defineConfig } from "eslint/config";
+import { importX } from "eslint-plugin-import-x";
+import { default as jsdoc } from "eslint-plugin-jsdoc";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
-import { includeIgnoreFile } from "@eslint/compat";
-import tseslint from "typescript-eslint";
+import globals from "globals";
+import { default as tseslint } from "typescript-eslint";
 
 const gitignorePath = fileURLToPath(new URL(".gitignore", import.meta.url));
 
 export default defineConfig(
   includeIgnoreFile(gitignorePath, "Imported .gitignore patterns"),
   js.configs.recommended,
+
+  {
+    extends: [importX.flatConfigs.recommended, importX.flatConfigs.typescript],
+    rules: {
+      "import-x/consistent-type-specifier-style": ["error", "prefer-top-level"],
+      "import-x/order": [
+        "error",
+        {
+          groups: [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index",
+          ],
+          alphabetize: {
+            order: "asc",
+            caseInsensitive: false,
+          },
+          named: { enabled: true, export: false },
+          "newlines-between": "always",
+        },
+      ],
+    },
+  },
   {
     linterOptions: {
       reportUnusedDisableDirectives: "error",

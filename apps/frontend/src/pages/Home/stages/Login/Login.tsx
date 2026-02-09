@@ -2,8 +2,8 @@ import type { JSX } from "react";
 
 import { useIsAuthenticated } from "../../../../redux/selectors/userSelectors";
 
-import { LoginOptions } from "./LoginOptions";
 import { LoginAccountManagement } from "./LoginAccountManagement";
+import { LoginOptions } from "./LoginOptions";
 
 interface LoginStageProps {
   onContinueAsGuest: () => void;

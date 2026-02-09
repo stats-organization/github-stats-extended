@@ -1,8 +1,8 @@
 // @ts-check
 
+import { getUserAccessByName } from "./database.js";
 import { CustomError } from "./error.js";
 import { logger } from "./log.js";
-import { getUserAccessByName } from "./database.js";
 
 /**
  * Returns a random integer from 0 (inclusive) to `max` (exclusive).

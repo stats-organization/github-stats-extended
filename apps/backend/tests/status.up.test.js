@@ -5,6 +5,7 @@
 import { afterEach, describe, expect, it, jest } from "@jest/globals";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+
 import up, { RATE_LIMIT_SECONDS } from "../api-renamed/status/up.js";
 
 const mock = new MockAdapter(axios);

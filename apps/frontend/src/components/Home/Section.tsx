@@ -1,5 +1,4 @@
 import type { JSX, ReactNode } from "react";
-
 import { HiOutlineLightningBolt as LightningIcon } from "react-icons/hi";
 
 interface SectionProps {

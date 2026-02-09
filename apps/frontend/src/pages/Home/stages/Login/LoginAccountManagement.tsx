@@ -1,22 +1,23 @@
-import { useCallback, useState, type JSX } from "react";
-import { useDispatch } from "react-redux";
+import { useCallback, useState } from "react";
+import type { JSX } from "react";
 import { FaGithub as GithubIcon } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 
+import { deleteAccount } from "../../../../api/user";
+import { Button } from "../../../../components/Generic/Button";
+import {
+  CLIENT_ID,
+  GITHUB_PRIVATE_AUTH_URL,
+  HOST,
+} from "../../../../constants";
 import {
   usePrivateAccess,
   useUserId,
   useUserKey,
 } from "../../../../redux/selectors/userSelectors";
-import { deleteAccount } from "../../../../api/user";
-import { Button } from "../../../../components/Generic/Button";
-import {
-  CLIENT_ID,
-  HOST,
-  GITHUB_PRIVATE_AUTH_URL,
-} from "../../../../constants";
-import { LoginAccountDeleteModal } from "./LoginAccountDeleteModal";
 import { logout } from "../../../../redux/slices/user";
 
+import { LoginAccountDeleteModal } from "./LoginAccountDeleteModal";
 import { LoginBox } from "./LoginBox";
 
 export function LoginAccountManagement(): JSX.Element {

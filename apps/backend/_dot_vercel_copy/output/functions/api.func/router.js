@@ -1,16 +1,17 @@
-import { default as api } from "./api-renamed/index.js";
+/* eslint-disable import-x/no-unresolved */
+import { default as authenticate } from "./api-renamed/authenticate.js";
+import { default as deleteUser } from "./api-renamed/delete-user.js";
+import { default as downgrade } from "./api-renamed/downgrade.js";
 import { default as gist } from "./api-renamed/gist.js";
+import { default as api } from "./api-renamed/index.js";
 import { default as pin } from "./api-renamed/pin.js";
-import { default as topLangs } from "./api-renamed/top-langs.js";
-import { default as wakatime } from "./api-renamed/wakatime.js";
-import { default as wakatimeProxy } from "./api-renamed/wakatime-proxy.js";
 import { default as repeatRecent } from "./api-renamed/repeat-recent.js";
 import { default as patInfo } from "./api-renamed/status/pat-info.js";
 import { default as statusUp } from "./api-renamed/status/up.js";
-import { default as authenticate } from "./api-renamed/authenticate.js";
-import { default as deleteUser } from "./api-renamed/delete-user.js";
+import { default as topLangs } from "./api-renamed/top-langs.js";
 import { default as userAccess } from "./api-renamed/user-access.js";
-import { default as downgrade } from "./api-renamed/downgrade.js";
+import { default as wakatimeProxy } from "./api-renamed/wakatime-proxy.js";
+import { default as wakatime } from "./api-renamed/wakatime.js";
 
 export default async (req, res) => {
   // remaining code expects express.js-like request and response objects

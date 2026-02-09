@@ -1,8 +1,8 @@
 // @ts-check
 
-import { retryer } from "../common/retryer.js";
 import { MissingParamError } from "../common/error.js";
 import { request } from "../common/http.js";
+import { retryer } from "../common/retryer.js";
 
 const QUERY = `
 query gistInfo($gistName: String!) {

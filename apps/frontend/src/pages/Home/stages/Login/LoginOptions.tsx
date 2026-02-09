@@ -3,8 +3,8 @@ import { FaGithub as GithubIcon } from "react-icons/fa";
 
 import { Button } from "../../../../components/Generic/Button";
 import {
-  GITHUB_PUBLIC_AUTH_URL,
   GITHUB_PRIVATE_AUTH_URL,
+  GITHUB_PUBLIC_AUTH_URL,
 } from "../../../../constants";
 
 import { LoginBox } from "./LoginBox";

@@ -1,8 +1,9 @@
 import axios from "axios";
+
 import {
-  pool,
   deleteOldRequests,
   getRecentRequests,
+  pool,
 } from "./common/database.js";
 
 /**

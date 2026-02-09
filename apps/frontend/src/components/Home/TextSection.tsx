@@ -1,6 +1,6 @@
+import { clsx } from "clsx";
 import { useEffect, useRef, useState } from "react";
 import type { ClipboardEventHandler, JSX, ReactNode } from "react";
-import clsx from "clsx";
 
 import { Section } from "./Section";
 

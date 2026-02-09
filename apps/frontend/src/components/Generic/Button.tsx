@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { clsx } from "clsx";
 import type { HTMLProps, JSX, ReactNode } from "react";
 
 interface ButtonProps extends HTMLProps<HTMLButtonElement> {

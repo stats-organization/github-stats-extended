@@ -2,6 +2,7 @@ import { describe, expect, it } from "@jest/globals";
 import { queryAllByTestId, queryByTestId } from "@testing-library/dom";
 import "@testing-library/jest-dom";
 import { cssToObject } from "@uppercod/css-to-object";
+
 import {
   MIN_CARD_WIDTH,
   calculateCompactLayoutHeight,
@@ -20,8 +21,8 @@ import {
   renderTopLanguages,
   trimTopLanguages,
 } from "../src/cards/top-languages.js";
-
 import { themes } from "../themes/index.js";
+
 import { approxNumber } from "./bench/utils.js";
 
 const langs = {
