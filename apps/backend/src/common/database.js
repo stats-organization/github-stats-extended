@@ -1,5 +1,4 @@
-import pkg from "pg";
-const { Pool } = pkg;
+import { Pool } from "pg";
 
 export const pool = process.env.POSTGRES_URL
   ? new Pool({

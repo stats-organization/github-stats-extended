@@ -43,7 +43,7 @@ export default defineConfig({
       },
       load(id) {
         if (id === "pg") {
-          return "export default {}";
+          return "export class Pool { constructor(config) {} }";
         }
         return undefined;
       },
