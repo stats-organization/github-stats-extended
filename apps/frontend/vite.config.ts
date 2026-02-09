@@ -31,7 +31,10 @@ export default defineConfig({
 
     react(),
 
-    // mock pg (postgres) package in the browser to avoid runtime errors
+    /**
+     * mock pg (postgres) package in the browser to avoid runtime errors
+     * @see apps/backend/src/common/database.js
+     */
     {
       name: "empty-pg-package",
       resolveId(id) {
