@@ -7,7 +7,7 @@
     "@reduxjs/toolkit": "2.11.2",
     "axios": "^1",
     "axios-cache-interceptor": "^1",
-    "daisyui": "2.31.0",
+    "daisyui": "5.5.17",
     "emoji-name-map": "^2.0.3",
     "github-username-regex": "^1.0.0",
     "react": "18.3.1",
