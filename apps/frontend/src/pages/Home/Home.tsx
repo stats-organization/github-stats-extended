@@ -26,6 +26,7 @@ import {
 } from "../../redux/selectors/userSelectors";
 import { login } from "../../redux/slices/user";
 
+import { getFullSuffix } from "./getFullSuffix";
 import { CustomizeStage } from "./stages/Customize";
 import { DisplayStage } from "./stages/Display";
 import { LoginStage } from "./stages/Login/Login";
@@ -105,107 +106,26 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
     setStage(2);
   };
 
-  let fullSuffix = `${selectedCard === CardType.STATS ? "" : "/" + selectedCard}?`;
-
-  switch (selectedCard) {
-    case CardType.STATS:
-    case CardType.TOP_LANGS:
-      fullSuffix += `username=${selectedUserId}`;
-      break;
-    case CardType.PIN:
-      fullSuffix += `username=${userId}&repo=${repo}`;
-      break;
-    case CardType.GIST:
-      fullSuffix += `id=${gist}`;
-      break;
-    case CardType.WAKATIME:
-      fullSuffix += `username=${wakatimeUser}`;
-      break;
-
-    default:
-      selectedCard satisfies never;
-  }
-
-  if (
-    selectedStatsRank !== STATS_DEFAULT_RANK &&
-    selectedCard === CardType.STATS
-  ) {
-    fullSuffix += `&rank_icon=${selectedStatsRank.value}`;
-  }
-
-  if (
-    selectedLanguagesLayout !== LANGUAGES_DEFAULT_LAYOUT &&
-    selectedCard === CardType.TOP_LANGS
-  ) {
-    fullSuffix += `&layout=${selectedLanguagesLayout.value}`;
-  }
-
-  if (
-    selectedWakatimeLayout !== WAKATIME_DEFAULT_LAYOUT &&
-    selectedCard === CardType.WAKATIME
-  ) {
-    fullSuffix += `&layout=${selectedWakatimeLayout.value}`;
-  }
-
-  if (
-    !showTitle &&
-    (selectedCard === CardType.STATS ||
-      selectedCard === CardType.TOP_LANGS ||
-      selectedCard === CardType.WAKATIME)
-  ) {
-    fullSuffix += "&hide_title=true";
-  }
-
-  if (
-    showOwner &&
-    (selectedCard === CardType.PIN || selectedCard === CardType.GIST)
-  ) {
-    fullSuffix += "&show_owner=true";
-  }
-
-  if (descriptionLines && selectedCard === CardType.PIN) {
-    fullSuffix += `&description_lines_count=${descriptionLines}`;
-  }
-
-  if (
-    customTitle &&
-    (selectedCard === CardType.STATS || selectedCard === CardType.WAKATIME)
-  ) {
-    const encodedTitle = encodeURIComponent(customTitle);
-    fullSuffix += `&custom_title=${encodedTitle}`;
-  }
-
-  if (
-    langsCount &&
-    (selectedCard === CardType.TOP_LANGS || selectedCard === CardType.WAKATIME)
-  ) {
-    fullSuffix += `&langs_count=${langsCount}`;
-  }
-
-  if (showAllStats && selectedCard === CardType.STATS) {
-    fullSuffix += `&show=reviews,discussions_started,discussions_answered,prs_merged,prs_merged_percentage,prs_commented,prs_reviewed,issues_commented`;
-  }
-
-  if (showIcons && selectedCard === CardType.STATS) {
-    fullSuffix += `&show_icons=true`;
-  }
-
-  if (includeAllCommits && selectedCard === CardType.STATS) {
-    fullSuffix += `&include_all_commits=true`;
-  }
-
-  if (
-    !enableAnimations &&
-    (selectedCard === CardType.STATS ||
-      selectedCard === CardType.TOP_LANGS ||
-      selectedCard === CardType.WAKATIME)
-  ) {
-    fullSuffix += `&disable_animations=${!enableAnimations}`;
-  }
-
-  if (usePercent && selectedCard === CardType.WAKATIME) {
-    fullSuffix += `&display_format=percent`;
-  }
+  const fullSuffix = getFullSuffix({
+    selectedCard,
+    selectedUserId,
+    repo,
+    gist,
+    wakatimeUser,
+    selectedStatsRank,
+    selectedLanguagesLayout,
+    selectedWakatimeLayout,
+    showTitle,
+    showOwner,
+    descriptionLines,
+    customTitle,
+    langsCount,
+    showAllStats,
+    showIcons,
+    includeAllCommits,
+    enableAnimations,
+    usePercent,
+  });
 
   // for stage four
   let themeSuffix = fullSuffix;
