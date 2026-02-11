@@ -5,8 +5,9 @@ import { DEFAULT_OPTION as WAKATIME_DEFAULT_LAYOUT } from "../../components/Home
 import { CardType } from "../../models/CardType";
 
 interface Options {
-  selectedCard: CardType;
+  userId: string;
   selectedUserId: string;
+  selectedCard: CardType;
   repo: string;
   gist: string;
   wakatimeUser: string;
@@ -26,6 +27,7 @@ interface Options {
 }
 
 export function getFullSuffix({
+  userId,
   selectedCard,
   selectedUserId,
   repo,
@@ -53,7 +55,21 @@ export function getFullSuffix({
       fullSuffix += `username=${selectedUserId}`;
       break;
     case CardType.PIN:
-      fullSuffix += `username=${selectedUserId}&repo=${repo}`;
+      /**
+       * We should use the name of the logged-in user, not the value entered in the
+       * username field in step 3.
+       *
+       * This input is not shown when the PIN card type is selected,
+       * but it may still contain a different value if the user previously chose another card type.
+       *
+       * For example,
+       * 1. the user could select the STATS card
+       * 2. enter a username
+       * 3. then go back and switch to the PIN card, leaving the old value behind.
+       *
+       * @see https://github.com/stats-organization/github-stats-extended/pull/73#discussion_r2792177515
+       */
+      fullSuffix += `username=${userId}&repo=${repo}`;
       break;
     case CardType.GIST:
       fullSuffix += `id=${gist}`;

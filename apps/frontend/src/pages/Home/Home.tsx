@@ -107,6 +107,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
   };
 
   const fullSuffix = getFullSuffix({
+    userId,
     selectedCard,
     selectedUserId,
     repo,

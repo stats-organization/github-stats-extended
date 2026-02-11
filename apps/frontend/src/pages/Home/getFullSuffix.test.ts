@@ -10,6 +10,7 @@ import { getFullSuffix } from "./getFullSuffix";
 const baseOptions = {
   selectedCard: CardType.STATS,
   selectedUserId: "john",
+  userId: "john-github",
   repo: "repo1",
   gist: "gist1",
   wakatimeUser: "wakaUser",
@@ -66,7 +67,7 @@ describe("getFullSuffix", () => {
     );
   });
 
-  it("builds pin suffix", () => {
+  it("builds pin suffix using userId not selectedUserId", () => {
     const result = getFullSuffix({
       ...baseOptions,
       selectedCard: CardType.PIN,
@@ -75,7 +76,7 @@ describe("getFullSuffix", () => {
     });
 
     expect(result).toBe(
-      "/pin?username=john&repo=repo1&show_owner=true&description_lines_count=3",
+      "/pin?username=john-github&repo=repo1&show_owner=true&description_lines_count=3",
     );
   });
 
