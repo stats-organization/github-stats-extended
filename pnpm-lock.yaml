@@ -142,8 +142,8 @@ importers:
         specifier: ^1
         version: 1.11.4(axios@1.13.4)
       daisyui:
-        specifier: 5.5.16
-        version: 5.5.16
+        specifier: 5.5.17
+        version: 5.5.17
       emoji-name-map:
         specifier: ^2.0.3
         version: 2.0.3
@@ -157,8 +157,8 @@ importers:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
       react-icons:
-        specifier: ^4.11.0
-        version: 4.12.0(react@18.3.1)
+        specifier: ^5.5.0
+        version: 5.5.0(react@18.3.1)
       react-loading-skeleton:
         specifier: ^3.3.1
         version: 3.5.0(react@18.3.1)
@@ -2047,8 +2047,8 @@ packages:
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
 
-  daisyui@5.5.16:
-    resolution: {integrity: sha512-EPGcgduRIwXoQPuIl+r2BXRQsOutvf7UEB/mBfRiD2fdOYYnUqDU5PNp2eONnRqo1DxSsnD01gCRPccH65FWtQ==}
+  daisyui@5.5.17:
+    resolution: {integrity: sha512-Y8QWps/990Epp0Gn+7ReeALSXgwrd3W36waokJvHgqUdYx6t2sj0e1krW3+YqviBa57XTJqHJNTt8HMvcODL2Q==}
 
   data-urls@5.0.0:
     resolution: {integrity: sha512-ZYP5VBHshaDAiVZxjbRVcFJpc+4xGgT0bK3vzy1HLN8jTO975HEbuYzZJcHoQEY5K1a0z8YayJkyVETa08eNTg==}
@@ -3717,8 +3717,8 @@ packages:
     peerDependencies:
       react: ^18.3.1
 
-  react-icons@4.12.0:
-    resolution: {integrity: sha512-IBaDuHiShdZqmfc/TwHu6+d6k2ltNCf3AszxNmjJc1KUfXdEeRJOKyNvLmAHaarhzGmTSVygNdyu8/opXv2gaw==}
+  react-icons@5.5.0:
+    resolution: {integrity: sha512-MEFcXdkP3dLo8uumGI5xN3lDFNsRtrjbOEKDLD7yv76v4wpnEq2Lt2qeHaQOr34I/wPN3s3+N08WkQ+CW37Xiw==}
     peerDependencies:
       react: '*'
 
@@ -6371,7 +6371,7 @@ snapshots:
 
   csstype@3.2.3: {}
 
-  daisyui@5.5.16: {}
+  daisyui@5.5.17: {}
 
   data-urls@5.0.0:
     dependencies:
@@ -8412,7 +8412,7 @@ snapshots:
       react: 18.3.1
       scheduler: 0.23.2
 
-  react-icons@4.12.0(react@18.3.1):
+  react-icons@5.5.0(react@18.3.1):
     dependencies:
       react: 18.3.1
 
