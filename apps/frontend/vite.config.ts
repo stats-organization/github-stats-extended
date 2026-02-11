@@ -1,5 +1,6 @@
 import path from "node:path";
 
+import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vite";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
@@ -30,6 +31,7 @@ export default defineConfig({
     }),
 
     react(),
+    tailwindcss(),
 
     /**
      * mock pg (postgres) package in the browser to avoid runtime errors

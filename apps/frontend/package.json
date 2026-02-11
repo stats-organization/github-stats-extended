@@ -5,9 +5,10 @@
   "type": "module",
   "dependencies": {
     "@reduxjs/toolkit": "2.11.2",
+    "@tailwindcss/vite": "^4.1.18",
     "axios": "^1",
     "axios-cache-interceptor": "^1",
-    "daisyui": "2.31.0",
+    "daisyui": "5.5.16",
     "emoji-name-map": "^2.0.3",
     "github-username-regex": "^1.0.0",
     "react": "18.3.1",
@@ -27,10 +28,8 @@
     "@types/react-dom": "18.3.7",
     "@types/uuid": "9.0.8",
     "@vitejs/plugin-react-swc": "4.2.2",
-    "autoprefixer": "^10.4.24",
     "clsx": "2.1.1",
-    "postcss": "^8.4.31",
-    "tailwindcss": "^3.3.5",
+    "tailwindcss": "4.1.18",
     "vite": "7.3.1",
     "vite-plugin-node-polyfills": "0.25.0",
     "vite-plugin-string-replace": "^1.1.5"

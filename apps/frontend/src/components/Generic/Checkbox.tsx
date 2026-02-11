@@ -19,7 +19,7 @@ export function Checkbox({
         type="checkbox"
         disabled={disabled}
         checked={checked}
-        className="checkbox mr-2"
+        className="checkbox bg-white mr-2"
         onChange={() => {
           onCheckedChange(!checked);
         }}
