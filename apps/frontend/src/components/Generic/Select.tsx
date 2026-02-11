@@ -40,6 +40,7 @@ export function Select({
       {options.map((option) => (
         <option
           key={option.value}
+          value={option.value}
           disabled={option.disabled}
           className={clsx({
             "bg-blue-200": option.value === selectedOption.value,

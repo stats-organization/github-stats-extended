@@ -5,7 +5,7 @@
   "type": "module",
   "dependencies": {
     "@reduxjs/toolkit": "2.11.2",
-    "@tailwindcss/vite": "^4.1.18",
+    "@tailwindcss/vite": "4.1.18",
     "axios": "^1",
     "axios-cache-interceptor": "^1",
     "daisyui": "5.5.17",
