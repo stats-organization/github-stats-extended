@@ -30,14 +30,16 @@
     "@vitejs/plugin-react-swc": "4.2.2",
     "clsx": "2.1.1",
     "tailwindcss": "4.1.18",
-    "vite": "7.3.1",
+    "vite": "catalog:default",
     "vite-plugin-node-polyfills": "0.25.0",
-    "vite-plugin-string-replace": "^1.1.5"
+    "vite-plugin-string-replace": "1.1.5",
+    "vitest": "catalog:default"
   },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "test": "vitest",
     "test:e2e": "playwright test",
     "typecheck": "tsc --noEmit"
   },
