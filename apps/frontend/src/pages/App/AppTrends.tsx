@@ -18,8 +18,6 @@ import { HomeScreen } from "../Home/Home";
 
 import { Header } from "./Header";
 
-import "react-toastify/dist/ReactToastify.css";
-
 const toMessage = (
   input: string | ErrorEvent | PromiseRejectionEvent,
 ): string => {

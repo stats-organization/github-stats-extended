@@ -7,8 +7,6 @@ import { CardImage } from "../../../components/Card/CardImage";
 import { Button } from "../../../components/Generic/Button";
 import { HOST } from "../../../constants";
 
-import "react-toastify/dist/ReactToastify.css";
-
 interface DisplayStageProps {
   filename: string;
   link: string;
