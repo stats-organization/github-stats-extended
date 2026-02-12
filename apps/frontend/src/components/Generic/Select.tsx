@@ -28,7 +28,7 @@ export function Select({
   return (
     <select
       className={clsx(
-        "text-gray-700 bg-white select select-sm w-40 rounded-sm mt-4",
+        "text-gray-700 text-base bg-white select select-sm w-40 rounded-sm mt-4",
         className,
       )}
       value={selectedOption.value}
@@ -40,6 +40,7 @@ export function Select({
       {options.map((option) => (
         <option
           key={option.value}
+          value={option.value}
           disabled={option.disabled}
           className={clsx({
             "bg-blue-200": option.value === selectedOption.value,

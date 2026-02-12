@@ -61,7 +61,7 @@ export function NumericSection({
       <p>{description}</p>
       <input
         type="number"
-        className="border border-gray-300 rounded px-2 py-1 mt-2 w-1/4"
+        className="border border-gray-300 bg-white rounded px-2 py-1 mt-2 w-1/4"
         value={internalValue ?? ""}
         onChange={(e) => {
           setInternalValue(e.target.value);
