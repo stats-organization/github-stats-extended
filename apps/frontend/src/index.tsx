@@ -1,5 +1,6 @@
 import "./axios-override";
 
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 
@@ -11,7 +12,9 @@ import "./index.css";
 const root = createRoot(document.getElementById("root") as HTMLElement);
 
 root.render(
-  <Provider store={store}>
-    <AppTrends />
-  </Provider>,
+  <StrictMode>
+    <Provider store={store}>
+      <AppTrends />
+    </Provider>
+  </StrictMode>,
 );
