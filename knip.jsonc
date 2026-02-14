@@ -13,8 +13,7 @@
         "_dot_vercel_copy/**/*" // Hopefully by using a npm package this file will be removed
       ],
       "ignoreDependencies": [
-        "jest", // used by test scripts referencing binary due to lack of ESM support
-        "@octokit/request-error" // used by js scripts executed in a GitHub actions not listed in deps
+        "jest" // used by test scripts referencing binary due to lack of ESM support
       ]
     },
     "apps/frontend": {
