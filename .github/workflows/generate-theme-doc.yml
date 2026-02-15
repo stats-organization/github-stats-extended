@@ -7,27 +7,26 @@ on:
       - "apps/backend/themes/index.js"
   workflow_dispatch:
 
-permissions:
-  actions: read
-  checks: read
-  contents: write
-  deployments: read
-  issues: read
-  discussions: read
-  packages: read
-  pages: read
-  pull-requests: write
-  repository-projects: read
-  security-events: read
-  statuses: read
+permissions: {}
 
 jobs:
-  generateThemeDoc:
+  generate-theme-doc:
     runs-on: ubuntu-latest
     name: Generate theme doc
-    strategy:
-      matrix:
-        node-version: [24]
+
+    permissions:
+      actions: read
+      checks: read
+      contents: write
+      deployments: read
+      issues: read
+      discussions: read
+      packages: read
+      pages: read
+      pull-requests: write
+      repository-projects: read
+      security-events: read
+      statuses: read
 
     steps:
       - name: Checkout code
@@ -35,17 +34,15 @@ jobs:
 
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies
-        with:
-          node-version: ${{ matrix.node }}
 
-      - name: generate readme
+      - name: Generate readme
         run: |
           pnpm --filter github-readme-stats run theme-readme-gen
 
       - name: Create Pull Request if themes README has changed
         uses: peter-evans/create-pull-request@8
         with:
-          commit-message: "refactor: update themes README"
+          commit-message: "feat(backend): update themes README"
           branch: "update_themes_readme/patch"
           delete-branch: true
           title: Update themes README

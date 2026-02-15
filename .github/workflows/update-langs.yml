@@ -28,14 +28,13 @@ permissions:
   statuses: read
 
 jobs:
-  updateLanguages:
-    if: github.repository == 'anuraghazra/github-readme-stats' ||
-      github.repository == 'stats-organization/github-readme-stats' || github.repository == 'stats-organization/github-stats-extended'
+  update-languages:
+    if: |
+      github.repository == 'anuraghazra/github-readme-stats' ||
+      github.repository == 'stats-organization/github-readme-stats' ||
+      github.repository == 'stats-organization/github-stats-extended'
     name: Update supported languages
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [24]
 
     steps:
       - name: Checkout code
@@ -43,8 +42,6 @@ jobs:
 
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies
-        with:
-          node-version: ${{ matrix.node }}
 
       - name: Run update-languages-json.js script
         run: pnpm --filter github-readme-stats run generate-langs-json
@@ -52,7 +49,7 @@ jobs:
       - name: Create Pull Request if upstream language file is changed
         uses: peter-evans/create-pull-request@8
         with:
-          commit-message: "refactor: update languages JSON"
+          commit-message: "feat(backend): update languages JSON"
           branch: "update_langs/patch"
           delete-branch: true
           title: Update languages JSON
