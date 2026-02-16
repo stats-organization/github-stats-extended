@@ -47,7 +47,7 @@ jobs:
         run: pnpm --filter github-readme-stats run generate-langs-json
 
       - name: Create Pull Request if upstream language file is changed
-        uses: peter-evans/create-pull-request@8
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: "feat(backend): update languages JSON"
           branch: "update_langs/patch"

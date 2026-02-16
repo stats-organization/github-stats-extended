@@ -40,7 +40,7 @@ jobs:
           pnpm --filter github-readme-stats run theme-readme-gen
 
       - name: Create Pull Request if themes README has changed
-        uses: peter-evans/create-pull-request@8
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: "feat(backend): update themes README"
           branch: "update_themes_readme/patch"
