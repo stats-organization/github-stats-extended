@@ -26,6 +26,6 @@ axios
     //console.dir(languageColors);
     fs.writeFileSync(
       LANGS_FILEPATH,
-      JSON.stringify(languageColors, null, "    "),
+      JSON.stringify(languageColors, null, "  "),
     );
   });
