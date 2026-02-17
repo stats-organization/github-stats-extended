@@ -1,12 +1,11 @@
 import { clsx } from "clsx";
-import { saveSvgAsPng } from "save-svg-as-png";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
-import { Button } from "../../../components/Generic/Button";
-import { CardImage } from "../../../components/Card/CardImage";
-import { HOST } from "../../../constants";
 import type { JSX } from "react";
+import { toast } from "react-toastify";
+import { saveSvgAsPng } from "save-svg-as-png";
+
+import { CardImage } from "../../../components/Card/CardImage";
+import { Button } from "../../../components/Generic/Button";
+import { HOST } from "../../../constants";
 
 interface DisplayStageProps {
   filename: string;

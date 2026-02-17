@@ -1,21 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 
-import {
-  logout as _logout,
-  setUserAccess as _setUserAccess,
-} from "../../redux/slices/user";
-import { clearAxiosCache } from "../../axios-override";
-import { HomeScreen } from "../Home/Home";
 import { getUserMetadata } from "../../api/user";
+import { clearAxiosCache } from "../../axios-override";
+import type { StageIndex } from "../../models/Stage";
 import {
   useIsAuthenticated,
   useUserKey,
   useUserToken,
 } from "../../redux/selectors/userSelectors";
-import type { StageIndex } from "../../models/Stage";
+import {
+  logout as _logout,
+  setUserAccess as _setUserAccess,
+} from "../../redux/slices/user";
+import { HomeScreen } from "../Home/Home";
 
 import { Header } from "./Header";
 

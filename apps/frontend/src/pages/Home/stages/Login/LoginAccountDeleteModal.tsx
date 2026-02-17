@@ -1,4 +1,5 @@
-import { useEffect, useRef, type JSX, type RefObject } from "react";
+import { useEffect, useRef } from "react";
+import type { JSX, RefObject } from "react";
 import { createPortal } from "react-dom";
 
 import { Button } from "../../../../components/Generic/Button";

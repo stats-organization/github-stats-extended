@@ -1,13 +1,12 @@
 // @ts-check
 
 import { Card } from "../common/Card.js";
+import { I18n } from "../common/I18n.js";
 import { getCardColors } from "../common/color.js";
 import { CustomError } from "../common/error.js";
 import { kFormatter } from "../common/fmt.js";
-import { I18n } from "../common/I18n.js";
 import { icons, rankIcon } from "../common/icons.js";
-import { clampValue } from "../common/ops.js";
-import { buildSearchFilter } from "../common/ops.js";
+import { buildSearchFilter, clampValue } from "../common/ops.js";
 import { flexLayout, measureText } from "../common/render.js";
 import { statCardLocales, wakatimeCardLocales } from "../translations.js";
 

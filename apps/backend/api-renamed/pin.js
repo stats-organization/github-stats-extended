@@ -8,16 +8,15 @@ import {
   setCacheHeaders,
   setErrorCacheHeaders,
 } from "../src/common/cache.js";
+import { storeRequest } from "../src/common/database.js";
 import {
   MissingParamError,
   retrieveSecondaryMessage,
 } from "../src/common/error.js";
-import { parseBoolean } from "../src/common/ops.js";
-import { parseArray } from "../src/common/ops.js";
+import { parseArray, parseBoolean } from "../src/common/ops.js";
 import { renderError } from "../src/common/render.js";
 import { fetchRepo } from "../src/fetchers/repo.js";
 import { isLocaleAvailable } from "../src/translations.js";
-import { storeRequest } from "../src/common/database.js";
 
 // @ts-ignore
 export default async (req, res) => {

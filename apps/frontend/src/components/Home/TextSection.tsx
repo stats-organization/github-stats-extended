@@ -1,6 +1,6 @@
+import { clsx } from "clsx";
 import { useEffect, useRef, useState } from "react";
 import type { ClipboardEventHandler, JSX, ReactNode } from "react";
-import clsx from "clsx";
 
 import { Section } from "./Section";
 
@@ -56,7 +56,7 @@ export function TextSection({
         type="text"
         className={clsx(
           "border border-gray-300 rounded px-2 py-1 mt-2 w-3/4 min-w-48 max-w-xl",
-          { "cursor-not-allowed": disabled },
+          { "cursor-not-allowed bg-gray-100": disabled, "bg-white": !disabled },
         )}
         value={internalValue}
         onChange={(e) => {

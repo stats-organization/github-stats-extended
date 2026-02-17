@@ -1,12 +1,12 @@
 // @ts-check
 
 import { Card } from "../common/Card.js";
-import { getCardColors } from "../common/color.js";
 import { I18n } from "../common/I18n.js";
+import { getCardColors } from "../common/color.js";
+import languageColors from "../common/languageColors.json" with { type: "json" };
 import { clampValue, lowercaseTrim } from "../common/ops.js";
 import { createProgressNode, flexLayout } from "../common/render.js";
 import { wakatimeCardLocales } from "../translations.js";
-import languageColors from "../common/languageColors.json" with { type: "json" };
 
 const DEFAULT_CARD_WIDTH = 495;
 const MIN_CARD_WIDTH = 250;

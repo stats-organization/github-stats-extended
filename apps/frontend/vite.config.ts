@@ -1,10 +1,10 @@
 import path from "node:path";
 
-import { defineConfig } from "vite";
-import { nodePolyfills } from "vite-plugin-node-polyfills";
+import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react-swc";
-
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 import StringReplace from "vite-plugin-string-replace";
+import { defineConfig } from "vitest/config";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -31,8 +31,12 @@ export default defineConfig({
     }),
 
     react(),
+    tailwindcss(),
 
-    // mock pg (postgres) package in the browser to avoid runtime errors
+    /**
+     * mock pg (postgres) package in the browser to avoid runtime errors
+     * @see apps/backend/src/common/database.js
+     */
     {
       name: "empty-pg-package",
       resolveId(id) {
@@ -43,7 +47,7 @@ export default defineConfig({
       },
       load(id) {
         if (id === "pg") {
-          return "export default {}";
+          return "export class Pool { constructor(config) {} }";
         }
         return undefined;
       },
@@ -72,5 +76,9 @@ export default defineConfig({
         ),
       },
     ],
+  },
+  test: {
+    dir: "./src",
+    exclude: ["**/backend/**"],
   },
 });

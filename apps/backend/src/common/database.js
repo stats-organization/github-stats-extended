@@ -1,5 +1,8 @@
-import pkg from "pg";
-const { Pool } = pkg;
+/**
+ * In the browser this has to be mocked to avoid runtime errors
+ * @see apps/frontend/vite.config.ts
+ */
+import { Pool } from "pg";
 
 export const pool = process.env.POSTGRES_URL
   ? new Pool({

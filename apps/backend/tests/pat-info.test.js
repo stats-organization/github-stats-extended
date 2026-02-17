@@ -2,9 +2,6 @@
  * @file Tests for the status/pat-info cloud function.
  */
 
-import dotenv from "dotenv";
-dotenv.config();
-
 import {
   afterEach,
   beforeAll,
@@ -15,7 +12,11 @@ import {
 } from "@jest/globals";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import * as dotenv from "dotenv";
+
 import patInfo, { RATE_LIMIT_SECONDS } from "../api-renamed/status/pat-info.js";
+
+dotenv.config();
 
 const mock = new MockAdapter(axios);
 

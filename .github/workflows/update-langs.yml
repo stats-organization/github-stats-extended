@@ -28,41 +28,33 @@ permissions:
   statuses: read
 
 jobs:
-  updateLanguages:
-    if: github.repository == 'anuraghazra/github-readme-stats' ||
-      github.repository == 'stats-organization/github-readme-stats'
+  update-languages:
+    if: |
+      github.repository == 'anuraghazra/github-readme-stats' ||
+      github.repository == 'stats-organization/github-readme-stats' ||
+      github.repository == 'stats-organization/github-stats-extended'
     name: Update supported languages
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [22.x]
 
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Checkout code
+        uses: actions/checkout@v6
 
-      - name: Setup Node
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-        env:
-          CI: true
+      - name: Install Dependencies
+        uses: ./.github/actions/install-dependencies
 
       - name: Run update-languages-json.js script
-        run: npm run generate-langs-json
+        run: pnpm --filter github-readme-stats run generate-langs-json
 
       - name: Create Pull Request if upstream language file is changed
-        uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
+        uses: peter-evans/create-pull-request@v8
         with:
-          commit-message: "refactor: update languages JSON"
+          commit-message: "feat(backend): update languages JSON"
           branch: "update_langs/patch"
           delete-branch: true
           title: Update languages JSON
           body: "The
-            [update-langs](https://github.com/anuraghazra/github-readme-stats/actions/workflows/update-langs.yaml)
+            [update-langs](https://github.com/stats-organization/github-stats-extended/actions/workflows/update-langs.yml)
             action found new/updated languages in the [upstream languages JSON
             file](https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml)."
-          labels: "ci, lang-card"
+          labels: "ci"

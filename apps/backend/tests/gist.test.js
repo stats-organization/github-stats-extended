@@ -4,10 +4,11 @@ import { afterEach, describe, expect, it, jest } from "@jest/globals";
 import "@testing-library/jest-dom";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+
 import gist from "../api-renamed/gist.js";
 import { renderGistCard } from "../src/cards/gist.js";
-import { renderError } from "../src/common/render.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
+import { renderError } from "../src/common/render.js";
 
 const gist_data = {
   data: {

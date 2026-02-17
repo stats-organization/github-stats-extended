@@ -1,8 +1,8 @@
 import type { JSX } from "react";
 
-import { Card } from "../../../components/Card/Card";
 // @ts-expect-error this will be provided by the npm package
 import { themes } from "../../../backend/themes/index";
+import { Card } from "../../../components/Card/Card";
 
 // to be removed once npm package has been created
 type ThemeData = Record<
