@@ -2,7 +2,6 @@ export default {
   clearMocks: true,
   transform: {},
   testEnvironment: "jsdom",
-  modulePathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.vercel/"],
   testMatch: [
     "<rootDir>/tests/*.test.{ts,tsx,js}",
     "<rootDir>/tests/private-instance/*.test.{ts,tsx,js}",
