@@ -46,9 +46,6 @@ jobs:
       - name: Run update-languages-json.js script
         run: pnpm --filter github-readme-stats run generate-langs-json
 
-      - name: Format
-        run: pnpm run format
-
       - name: Create Pull Request if upstream language file is changed
         uses: peter-evans/create-pull-request@v8
         with:
