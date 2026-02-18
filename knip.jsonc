@@ -25,11 +25,7 @@
       ]
     },
     "apps/frontend": {
-      "entry": [
-        "src/index.tsx",
-        "src/dotenv-browser-stub.ts", // referenced by vite.config.ts
-        "src/wakatime-override.ts"
-      ],
+      "entry": ["src/index.tsx", "src/wakatime-override.ts"],
 
       "ignoreDependencies": [
         // below dependencies are added because backend folder is copied inside frontend folder,

@@ -1,4 +1,3 @@
-import "dotenv/config";
 import express from "express";
 
 import gistCard from "./api-renamed/gist.js";
