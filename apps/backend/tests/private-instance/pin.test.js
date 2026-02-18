@@ -7,7 +7,7 @@ import MockAdapter from "axios-mock-adapter";
 
 import pin from "../../api-renamed/pin.js";
 import { renderError } from "../../src/common/render.js";
-import { data_user } from "../pin.test.js";
+import { data_user } from "../test-data/pin-data.js";
 
 const mock = new MockAdapter(axios);
 

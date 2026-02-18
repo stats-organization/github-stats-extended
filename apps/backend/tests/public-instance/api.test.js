@@ -1,13 +1,12 @@
 // @ts-check
 
 import { afterEach, describe, expect, it, jest } from "@jest/globals";
-import "@testing-library/jest-dom";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 
-import gist from "../../api-renamed/gist.js";
+import api from "../../api-renamed/index.js";
 import { renderError } from "../../src/common/render.js";
-import { gist_data } from "../test-data/gist-data.js";
+import { data_stats } from "../test-data/api-data.js";
 
 const mock = new MockAdapter(axios);
 
@@ -15,24 +14,26 @@ afterEach(() => {
   mock.reset();
 });
 
-describe("Test /api/gist", () => {
-  it("should render error if id is not provided", async () => {
+describe("Test /api/", () => {
+  it("should render error card if username in blacklist", async () => {
     const req = {
-      query: {},
+      query: {
+        username: "renovate-bot",
+      },
     };
     const res = {
       setHeader: jest.fn(),
       send: jest.fn(),
     };
-    mock.onPost("https://api.github.com/graphql").reply(200, gist_data);
+    mock.onPost("https://api.github.com/graphql").replyOnce(200, data_stats);
 
-    await gist(req, res);
+    await api(req, res);
 
     expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
     expect(res.send).toHaveBeenCalledWith(
       renderError({
-        message: 'Missing params "id" make sure you pass the parameters in URL',
-        secondaryMessage: "/api/gist?id=GIST_ID",
+        message: "This username is blacklisted",
+        secondaryMessage: "Please deploy your own instance",
         renderOptions: { show_repo_link: false },
       }),
     );

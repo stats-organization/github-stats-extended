@@ -7,7 +7,7 @@ import MockAdapter from "axios-mock-adapter";
 
 import gist from "../../api-renamed/gist.js";
 import { renderError } from "../../src/common/render.js";
-import { gist_data } from "../gist.test.js";
+import { gist_data } from "../test-data/gist-data.js";
 
 const mock = new MockAdapter(axios);
 

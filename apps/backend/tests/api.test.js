@@ -17,23 +17,7 @@ import { renderStatsCard } from "../src/cards/stats.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
 import { renderError } from "../src/common/render.js";
 
-/**
- * @type {import("../src/fetchers/stats").StatsData}
- */
-const stats = {
-  name: "Anurag Hazra",
-  totalStars: 100,
-  totalCommits: 200,
-  totalIssues: 300,
-  totalPRs: 400,
-  totalPRsMerged: 320,
-  mergedPRsPercentage: 80,
-  totalReviews: 50,
-  totalDiscussionsStarted: 10,
-  totalDiscussionsAnswered: 40,
-  contributedTo: 50,
-  rank: { level: "DEV", percentile: 0 },
-};
+import { data_stats, stats } from "./test-data/api-data.js";
 
 stats.rank = calculateRank({
   all_commits: false,
@@ -45,38 +29,6 @@ stats.rank = calculateRank({
   stars: stats.totalStars,
   followers: 0,
 });
-
-const data_stats = {
-  data: {
-    user: {
-      name: stats.name,
-      repositoriesContributedTo: { totalCount: stats.contributedTo },
-      commits: {
-        totalCommitContributions: stats.totalCommits,
-      },
-      reviews: {
-        totalPullRequestReviewContributions: stats.totalReviews,
-      },
-      pullRequests: { totalCount: stats.totalPRs },
-      mergedPullRequests: { totalCount: stats.totalPRsMerged },
-      openIssues: { totalCount: stats.totalIssues },
-      closedIssues: { totalCount: 0 },
-      followers: { totalCount: 0 },
-      repositoryDiscussions: { totalCount: stats.totalDiscussionsStarted },
-      repositoryDiscussionComments: {
-        totalCount: stats.totalDiscussionsAnswered,
-      },
-      repositories: {
-        totalCount: 1,
-        nodes: [{ stargazers: { totalCount: 100 } }],
-        pageInfo: {
-          hasNextPage: false,
-          endCursor: "cursor",
-        },
-      },
-    },
-  },
-};
 
 const error = {
   errors: [
@@ -353,21 +305,6 @@ describe("Test /api/", () => {
         icon_color: "fff",
         text_color: "fff",
         bg_color: "fff",
-      }),
-    );
-  });
-
-  it("should render error card if username in blacklist", async () => {
-    const { req, res } = faker({ username: "renovate-bot" }, data_stats);
-
-    await api(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message: "This username is blacklisted",
-        secondaryMessage: "Please deploy your own instance",
-        renderOptions: { show_repo_link: false },
       }),
     );
   });

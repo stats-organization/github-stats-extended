@@ -7,7 +7,7 @@ import MockAdapter from "axios-mock-adapter";
 
 import topLangs from "../../api-renamed/top-langs.js";
 import { renderError } from "../../src/common/render.js";
-import { data_langs } from "../top-langs.test.js";
+import { data_langs } from "../test-data/langs-data.js";
 
 const mock = new MockAdapter(axios);
 

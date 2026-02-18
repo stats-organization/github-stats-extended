@@ -10,40 +10,7 @@ import { renderTopLanguages } from "../src/cards/top-languages.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
 import { renderError } from "../src/common/render.js";
 
-export const data_langs = {
-  data: {
-    user: {
-      repositories: {
-        nodes: [
-          {
-            languages: {
-              edges: [{ size: 150, node: { color: "#0f0", name: "HTML" } }],
-            },
-          },
-          {
-            languages: {
-              edges: [{ size: 100, node: { color: "#0f0", name: "HTML" } }],
-            },
-          },
-          {
-            languages: {
-              edges: [
-                { size: 100, node: { color: "#0ff", name: "javascript" } },
-              ],
-            },
-          },
-          {
-            languages: {
-              edges: [
-                { size: 100, node: { color: "#0ff", name: "javascript" } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  },
-};
+import { data_langs } from "./test-data/langs-data.js";
 
 const error = {
   errors: [
