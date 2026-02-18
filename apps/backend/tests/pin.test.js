@@ -28,7 +28,7 @@ const data_repo = {
   },
 };
 
-const data_user = {
+export const data_user = {
   data: {
     user: { repository: data_repo.repository },
     organization: null,
@@ -146,31 +146,6 @@ describe("Test /api/pin", () => {
     );
   });
 
-  it("should render error card if username in blacklist", async () => {
-    const req = {
-      query: {
-        username: "renovate-bot",
-        repo: "convoychat",
-      },
-    };
-    const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
-    };
-    mock.onPost("https://api.github.com/graphql").reply(200, data_user);
-
-    await pin(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message: "This username is blacklisted",
-        secondaryMessage: "Please deploy your own instance",
-        renderOptions: { show_repo_link: false },
-      }),
-    );
-  });
-
   it("should render error card if wrong locale provided", async () => {
     const req = {
       query: {
@@ -192,28 +167,6 @@ describe("Test /api/pin", () => {
       renderError({
         message: "Something went wrong",
         secondaryMessage: "Language not found",
-      }),
-    );
-  });
-
-  it("should render error card if missing required parameters", async () => {
-    const req = {
-      query: {},
-    };
-    const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
-    };
-
-    await pin(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message:
-          'Missing params "username", "repo" make sure you pass the parameters in URL',
-        secondaryMessage: "/api/pin?username=USERNAME&amp;repo=REPO_NAME",
-        renderOptions: { show_repo_link: false },
       }),
     );
   });

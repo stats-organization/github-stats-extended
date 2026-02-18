@@ -10,7 +10,7 @@ import { renderGistCard } from "../src/cards/gist.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
 import { renderError } from "../src/common/render.js";
 
-const gist_data = {
+export const gist_data = {
   data: {
     viewer: {
       gist: {
@@ -147,6 +147,7 @@ describe("Test /api/gist", () => {
       setHeader: jest.fn(),
       send: jest.fn(),
     };
+    mock.onPost("https://api.github.com/graphql").reply(200, gist_data);
 
     await gist(req, res);
 
