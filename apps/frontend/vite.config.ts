@@ -62,13 +62,6 @@ export default defineConfig({
   resolve: {
     alias: [
       {
-        find: "dotenv",
-        replacement: path.resolve(
-          import.meta.dirname,
-          "src/dotenv-browser-stub.ts",
-        ),
-      },
-      {
         find: "../src/fetchers/wakatime.js",
         replacement: path.resolve(
           import.meta.dirname,

@@ -10,40 +10,7 @@ import { renderTopLanguages } from "../src/cards/top-languages.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
 import { renderError } from "../src/common/render.js";
 
-const data_langs = {
-  data: {
-    user: {
-      repositories: {
-        nodes: [
-          {
-            languages: {
-              edges: [{ size: 150, node: { color: "#0f0", name: "HTML" } }],
-            },
-          },
-          {
-            languages: {
-              edges: [{ size: 100, node: { color: "#0f0", name: "HTML" } }],
-            },
-          },
-          {
-            languages: {
-              edges: [
-                { size: 100, node: { color: "#0ff", name: "javascript" } },
-              ],
-            },
-          },
-          {
-            languages: {
-              edges: [
-                { size: 100, node: { color: "#0ff", name: "javascript" } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  },
-};
+import { data_langs } from "./test-data/langs-data.js";
 
 const error = {
   errors: [
@@ -171,30 +138,6 @@ describe("Test /api/top-langs", () => {
       renderError({
         message: "Something went wrong",
         secondaryMessage: "Incorrect layout input",
-      }),
-    );
-  });
-
-  it("should render error card if username in blacklist", async () => {
-    const req = {
-      query: {
-        username: "renovate-bot",
-      },
-    };
-    const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
-    };
-    mock.onPost("https://api.github.com/graphql").reply(200, data_langs);
-
-    await topLangs(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message: "This username is blacklisted",
-        secondaryMessage: "Please deploy your own instance",
-        renderOptions: { show_repo_link: false },
       }),
     );
   });

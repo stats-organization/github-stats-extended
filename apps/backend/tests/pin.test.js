@@ -10,30 +10,7 @@ import { renderRepoCard } from "../src/cards/repo.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
 import { renderError } from "../src/common/render.js";
 
-const data_repo = {
-  repository: {
-    username: "anuraghazra",
-    name: "convoychat",
-    stargazers: {
-      totalCount: 38000,
-    },
-    description: "Help us take over the world! React + TS + GraphQL Chat App",
-    primaryLanguage: {
-      color: "#2b7489",
-      id: "MDg6TGFuZ3VhZ2UyODc=",
-      name: "TypeScript",
-    },
-    forkCount: 100,
-    isTemplate: false,
-  },
-};
-
-const data_user = {
-  data: {
-    user: { repository: data_repo.repository },
-    organization: null,
-  },
-};
+import { data_repo, data_user } from "./test-data/pin-data.js";
 
 const mock = new MockAdapter(axios);
 
@@ -146,31 +123,6 @@ describe("Test /api/pin", () => {
     );
   });
 
-  it("should render error card if username in blacklist", async () => {
-    const req = {
-      query: {
-        username: "renovate-bot",
-        repo: "convoychat",
-      },
-    };
-    const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
-    };
-    mock.onPost("https://api.github.com/graphql").reply(200, data_user);
-
-    await pin(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message: "This username is blacklisted",
-        secondaryMessage: "Please deploy your own instance",
-        renderOptions: { show_repo_link: false },
-      }),
-    );
-  });
-
   it("should render error card if wrong locale provided", async () => {
     const req = {
       query: {
@@ -192,28 +144,6 @@ describe("Test /api/pin", () => {
       renderError({
         message: "Something went wrong",
         secondaryMessage: "Language not found",
-      }),
-    );
-  });
-
-  it("should render error card if missing required parameters", async () => {
-    const req = {
-      query: {},
-    };
-    const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
-    };
-
-    await pin(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message:
-          'Missing params "username", "repo" make sure you pass the parameters in URL',
-        secondaryMessage: "/api/pin?username=USERNAME&amp;repo=REPO_NAME",
-        renderOptions: { show_repo_link: false },
       }),
     );
   });

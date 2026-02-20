@@ -6,6 +6,7 @@ import MockAdapter from "axios-mock-adapter";
 import wakatime from "../api-renamed/wakatime.js";
 import { renderWakatimeCard } from "../src/cards/wakatime.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
+import { renderError } from "../src/index.js";
 
 const wakaTimeData = {
   data: {
@@ -99,6 +100,14 @@ const wakaTimeData = {
   },
 };
 
+const wakaTimeNotFoundData = {
+  data: {
+    viewer: {
+      gist: null,
+    },
+  },
+};
+
 const mock = new MockAdapter(axios);
 
 afterEach(() => {
@@ -122,6 +131,44 @@ describe("Test /api/wakatime", () => {
     expect(res.send).toHaveBeenCalledWith(
       renderWakatimeCard(wakaTimeData.data, {}),
     );
+  });
+
+  it("should render error if wrong locale is provided", async () => {
+    const username = "anuraghazra";
+    const req = { query: { username, locale: "asdf" } };
+    const res = { setHeader: jest.fn(), send: jest.fn() };
+    mock
+      .onGet(
+        `https://wakatime.com/api/v1/users/${username}/stats?is_including_today=true`,
+      )
+      .reply(200, wakaTimeData);
+
+    await wakatime(req, res);
+
+    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
+    expect(res.send).toHaveBeenCalledWith(
+      renderError({
+        message: "Something went wrong",
+        secondaryMessage: "Language not found",
+      }),
+    );
+  });
+
+  it("should render error if user data is not accessible", async () => {
+    const username = "anuraghazra";
+    const req = { query: { username } };
+    const res = { setHeader: jest.fn(), send: jest.fn() };
+    mock
+      .onGet(
+        `https://wakatime.com/api/v1/users/${username}/stats?is_including_today=true`,
+      )
+      .reply(200, wakaTimeNotFoundData);
+
+    await wakatime(req, res);
+
+    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
+    expect(res.send).toHaveBeenCalledTimes(1);
+    expect(res.send.mock.calls[0][0]).toMatchSnapshot();
   });
 
   it("should have proper cache", async () => {

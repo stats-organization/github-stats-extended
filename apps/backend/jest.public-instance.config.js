@@ -2,7 +2,9 @@ export default {
   clearMocks: true,
   transform: {},
   testEnvironment: "jsdom",
-  coverageProvider: "v8",
-  testMatch: ["<rootDir>/tests/bench/*.bench.{ts,js}"],
+  testMatch: [
+    "<rootDir>/tests/*.test.{ts,js}",
+    "<rootDir>/tests/public-instance/*.test.{ts,js}",
+  ],
   setupFiles: ["<rootDir>/tests/setup.jest.js"],
 };

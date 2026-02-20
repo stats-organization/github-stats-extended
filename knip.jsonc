@@ -2,6 +2,14 @@
   "$schema": "./node_modules/knip/schema.json",
   "workspaces": {
     "apps/backend": {
+      "jest": {
+        "config": [
+          "jest.config.js",
+          "jest.*.config.js",
+          "package.json" // included by default, see https://knip.dev/reference/plugins/jest
+        ]
+      },
+
       "entry": [
         "api-renamed/*.js",
         "express.js",
@@ -17,11 +25,7 @@
       ]
     },
     "apps/frontend": {
-      "entry": [
-        "src/index.tsx",
-        "src/dotenv-browser-stub.ts", // referenced by vite.config.ts
-        "src/wakatime-override.ts"
-      ],
+      "entry": ["src/index.tsx", "src/wakatime-override.ts"],
 
       "ignoreDependencies": [
         // below dependencies are added because backend folder is copied inside frontend folder,

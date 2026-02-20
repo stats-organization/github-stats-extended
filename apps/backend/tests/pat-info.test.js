@@ -12,11 +12,8 @@ import {
 } from "@jest/globals";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import * as dotenv from "dotenv";
 
 import patInfo, { RATE_LIMIT_SECONDS } from "../api-renamed/status/pat-info.js";
-
-dotenv.config();
 
 const mock = new MockAdapter(axios);
 
@@ -73,7 +70,7 @@ afterEach(() => {
 
 describe("Test /api/status/pat-info", () => {
   beforeAll(() => {
-    // reset patenv first so that dotenv doesn't populate them with local envs
+    // reset patenv first so that they are not populated with local envs
     process.env = {};
     process.env.PAT_1 = "testPAT1";
     process.env.PAT_2 = "testPAT2";

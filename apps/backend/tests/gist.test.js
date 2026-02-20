@@ -10,32 +10,7 @@ import { renderGistCard } from "../src/cards/gist.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
 import { renderError } from "../src/common/render.js";
 
-const gist_data = {
-  data: {
-    viewer: {
-      gist: {
-        description:
-          "List of countries and territories in English and Spanish: name, continent, capital, dial code, country codes, TLD, and area in sq km. Lista de países y territorios en Inglés y Español: nombre, continente, capital, código de teléfono, códigos de país, dominio y área en km cuadrados. Updated 2023",
-        owner: {
-          login: "Yizack",
-        },
-        stargazerCount: 33,
-        forks: {
-          totalCount: 11,
-        },
-        files: [
-          {
-            name: "countries.json",
-            language: {
-              name: "JSON",
-            },
-            size: 85858,
-          },
-        ],
-      },
-    },
-  },
-};
+import { gist_data } from "./test-data/gist-data.js";
 
 const gist_not_found_data = {
   data: {
@@ -114,27 +89,6 @@ describe("Test /api/gist", () => {
     );
   });
 
-  it("should render error if id is not provided", async () => {
-    const req = {
-      query: {},
-    };
-    const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
-    };
-
-    await gist(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message: 'Missing params "id" make sure you pass the parameters in URL',
-        secondaryMessage: "/api/gist?id=GIST_ID",
-        renderOptions: { show_repo_link: false },
-      }),
-    );
-  });
-
   it("should render error if gist is not found", async () => {
     const req = {
       query: {
@@ -168,6 +122,7 @@ describe("Test /api/gist", () => {
       setHeader: jest.fn(),
       send: jest.fn(),
     };
+    mock.onPost("https://api.github.com/graphql").reply(200, gist_data);
 
     await gist(req, res);
 
