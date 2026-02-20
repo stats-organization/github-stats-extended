@@ -3,8 +3,8 @@ export default {
   transform: {},
   testEnvironment: "jsdom",
   testMatch: [
-    "<rootDir>/tests/*.test.{ts,tsx,js}",
-    "<rootDir>/tests/private-instance/*.test.{ts,tsx,js}",
+    "<rootDir>/tests/*.test.{ts,js}",
+    "<rootDir>/tests/private-instance/*.test.{ts,js}",
   ],
   setupFiles: [
     "<rootDir>/tests/setup.jest.js",

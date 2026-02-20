@@ -3,5 +3,5 @@ export default {
   transform: {},
   testEnvironment: "node",
   coverageProvider: "v8",
-  testMatch: ["<rootDir>/tests/e2e/*.test.{ts,tsx,js}"],
+  testMatch: ["<rootDir>/tests/e2e/*.test.{ts,js}"],
 };
