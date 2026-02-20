@@ -1,7 +1,7 @@
 // @ts-check
 
 /**
- * @type {import("../src/fetchers/stats").StatsData}
+ * @type {import("../../src/fetchers/stats").StatsData}
  */
 export const stats = {
   name: "Anurag Hazra",
