@@ -100,6 +100,14 @@ const wakaTimeData = {
   },
 };
 
+const wakaTimeNotFoundData = {
+  data: {
+    viewer: {
+      gist: null,
+    },
+  },
+};
+
 const mock = new MockAdapter(axios);
 
 afterEach(() => {
@@ -144,6 +152,23 @@ describe("Test /api/wakatime", () => {
         secondaryMessage: "Language not found",
       }),
     );
+  });
+
+  it("should render error if user data is not accessible", async () => {
+    const username = "anuraghazra";
+    const req = { query: { username } };
+    const res = { setHeader: jest.fn(), send: jest.fn() };
+    mock
+      .onGet(
+        `https://wakatime.com/api/v1/users/${username}/stats?is_including_today=true`,
+      )
+      .reply(200, wakaTimeNotFoundData);
+
+    await wakatime(req, res);
+
+    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
+    expect(res.send).toHaveBeenCalledTimes(1);
+    expect(res.send.mock.calls[0][0]).toMatchSnapshot();
   });
 
   it("should have proper cache", async () => {
