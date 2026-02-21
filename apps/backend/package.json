@@ -45,7 +45,7 @@
     "axios": "^1.13.5",
     "emoji-name-map": "^2.0.3",
     "github-username-regex": "^1.0.0",
-    "pg": "^8.16.2",
+    "pg": "^8.18.0",
     "word-wrap": "^1.2.5"
   },
   "engines": {
