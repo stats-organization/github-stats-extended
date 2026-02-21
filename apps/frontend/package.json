@@ -11,7 +11,7 @@
     "daisyui": "5.5.18",
     "emoji-name-map": "^2.0.3",
     "github-username-regex": "^1.0.0",
-    "react": "18.3.1",
+    "react": "19.2.4",
     "react-dom": "18.3.1",
     "react-icons": "^5.5.0",
     "react-loading-skeleton": "^3.3.1",
@@ -24,7 +24,7 @@
     "word-wrap": "^1.2.5"
   },
   "devDependencies": {
-    "@types/react": "18.3.27",
+    "@types/react": "19.2.14",
     "@types/react-dom": "18.3.7",
     "@vitejs/plugin-react-swc": "4.2.3",
     "clsx": "2.1.1",
