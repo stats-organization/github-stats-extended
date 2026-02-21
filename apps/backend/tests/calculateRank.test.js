@@ -1,9 +1,10 @@
-import { describe, expect, it } from "@jest/globals";
+import { describe, expect, it } from "vitest";
 
-import "@testing-library/jest-dom";
 import { calculateRank } from "../src/calculateRank.js";
 
 import { approxNumber } from "./bench/utils.js";
+
+import "@testing-library/jest-dom/vitest";
 
 describe("Test calculateRank", () => {
   it("new user gets C rank", () => {

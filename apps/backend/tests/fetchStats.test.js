@@ -1,17 +1,11 @@
-/** @jest-environment node */
-/*
-Jest must use node for these tests because jsdom doesn't support the structuredClone call in stats.js.
-https://jestjs.io/docs/configuration#testenvironment-string
-https://github.com/jsdom/jsdom/issues/3363
-*/
-
-import { afterEach, beforeEach, describe, expect, it } from "@jest/globals";
-import "@testing-library/jest-dom";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { calculateRank } from "../src/calculateRank.js";
 import { fetchStats } from "../src/fetchers/stats.js";
+
+import "@testing-library/jest-dom/vitest";
 
 // Test parameters.
 const data_stats = {
@@ -260,7 +254,7 @@ describe("Test fetchStats", () => {
   });
 
   it("should throw specific error when include_all_commits true and invalid username", async () => {
-    expect(fetchStats("asdf///---", true)).rejects.toThrow(
+    await expect(fetchStats("asdf///---", true)).rejects.toThrow(
       new Error("Invalid username provided."),
     );
   });
@@ -272,8 +266,8 @@ describe("Test fetchStats", () => {
       )
       .reply(200, { error: "Some test error message" });
 
-    expect(fetchStats("anuraghazra", true)).rejects.toThrow(
-      new Error("Could not fetch data from GitHub REST API."),
+    await expect(fetchStats("anuraghazra", true)).rejects.toThrow(
+      "Could not fetch data from GitHub REST API.",
     );
   });
 

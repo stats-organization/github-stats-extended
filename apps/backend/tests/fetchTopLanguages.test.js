@@ -1,11 +1,12 @@
-import { afterEach, describe, expect, it } from "@jest/globals";
-import "@testing-library/jest-dom";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { afterEach, describe, expect, it } from "vitest";
 
 import { fetchTopLanguages } from "../src/fetchers/top-languages.js";
 
 import { approxNumber } from "./bench/utils.js";
+
+import "@testing-library/jest-dom/vitest";
 
 const mock = new MockAdapter(axios);
 

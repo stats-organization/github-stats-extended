@@ -2,8 +2,8 @@
  * @file Contains end-to-end tests for the Vercel preview instance.
  */
 
-import { beforeAll, describe, expect, test } from "@jest/globals";
 import axios from "axios";
+import { beforeAll, describe, expect, test } from "vitest";
 
 import { renderGistCard } from "../../src/cards/gist.js";
 import { renderRepoCard } from "../../src/cards/repo.js";

@@ -1,12 +1,17 @@
 // @ts-check
 
-import { describe, expect, it } from "@jest/globals";
 import { queryByTestId } from "@testing-library/dom";
+import { afterEach, describe, expect, it } from "vitest";
 
-import "@testing-library/jest-dom/jest-globals";
 import { renderError } from "../src/common/render.js";
 
+import "@testing-library/jest-dom/vitest";
+
 describe("Test render.js", () => {
+  afterEach(() => {
+    document.body.innerHTML = "";
+  });
+
   it("should test renderError", () => {
     document.body.innerHTML = renderError({ message: "Something went wrong" });
     expect(

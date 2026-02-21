@@ -2,16 +2,9 @@
  * @file Tests for the status/pat-info cloud function.
  */
 
-import {
-  afterEach,
-  beforeAll,
-  describe,
-  expect,
-  it,
-  jest,
-} from "@jest/globals";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 import patInfo, { RATE_LIMIT_SECONDS } from "../api-renamed/status/pat-info.js";
 
@@ -30,8 +23,8 @@ const faker = (query) => {
     query: { ...query },
   };
   const res = {
-    setHeader: jest.fn(),
-    send: jest.fn(),
+    setHeader: vi.fn(),
+    send: vi.fn(),
   };
 
   return { req, res };

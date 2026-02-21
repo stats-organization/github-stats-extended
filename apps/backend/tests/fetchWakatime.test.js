@@ -1,9 +1,10 @@
-import { afterEach, describe, expect, it } from "@jest/globals";
-import "@testing-library/jest-dom";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { afterEach, describe, expect, it } from "vitest";
 
 import { fetchWakatimeStats } from "../src/fetchers/wakatime.js";
+
+import "@testing-library/jest-dom/vitest";
 
 const mock = new MockAdapter(axios);
 

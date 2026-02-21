@@ -1,9 +1,10 @@
-import { afterEach, describe, expect, it } from "@jest/globals";
-import "@testing-library/jest-dom";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { afterEach, describe, expect, it } from "vitest";
 
 import { fetchRepo } from "../src/fetchers/repo.js";
+
+import "@testing-library/jest-dom/vitest";
 
 const data_repo = {
   repository: {

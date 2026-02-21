@@ -1,12 +1,13 @@
-import { afterEach, describe, expect, it, jest } from "@jest/globals";
-import "@testing-library/jest-dom";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import wakatime from "../api-renamed/wakatime.js";
 import { renderWakatimeCard } from "../src/cards/wakatime.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
 import { renderError } from "../src/index.js";
+
+import "@testing-library/jest-dom/vitest";
 
 const wakaTimeData = {
   data: {
@@ -118,7 +119,7 @@ describe("Test /api/wakatime", () => {
   it("should test the request", async () => {
     const username = "anuraghazra";
     const req = { query: { username } };
-    const res = { setHeader: jest.fn(), send: jest.fn() };
+    const res = { setHeader: vi.fn(), send: vi.fn() };
     mock
       .onGet(
         `https://wakatime.com/api/v1/users/${username}/stats?is_including_today=true`,
@@ -136,7 +137,7 @@ describe("Test /api/wakatime", () => {
   it("should render error if wrong locale is provided", async () => {
     const username = "anuraghazra";
     const req = { query: { username, locale: "asdf" } };
-    const res = { setHeader: jest.fn(), send: jest.fn() };
+    const res = { setHeader: vi.fn(), send: vi.fn() };
     mock
       .onGet(
         `https://wakatime.com/api/v1/users/${username}/stats?is_including_today=true`,
@@ -157,7 +158,7 @@ describe("Test /api/wakatime", () => {
   it("should render error if user data is not accessible", async () => {
     const username = "anuraghazra";
     const req = { query: { username } };
-    const res = { setHeader: jest.fn(), send: jest.fn() };
+    const res = { setHeader: vi.fn(), send: vi.fn() };
     mock
       .onGet(
         `https://wakatime.com/api/v1/users/${username}/stats?is_including_today=true`,
@@ -174,7 +175,7 @@ describe("Test /api/wakatime", () => {
   it("should have proper cache", async () => {
     const username = "anuraghazra";
     const req = { query: { username } };
-    const res = { setHeader: jest.fn(), send: jest.fn() };
+    const res = { setHeader: vi.fn(), send: vi.fn() };
     mock
       .onGet(
         `https://wakatime.com/api/v1/users/${username}/stats?is_including_today=true`,
