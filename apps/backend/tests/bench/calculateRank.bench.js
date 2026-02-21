@@ -1,11 +1,10 @@
-import { it } from "@jest/globals";
+import { bench } from "vitest";
 
 import { calculateRank } from "../../src/calculateRank.js";
 
-import { runAndLogStats } from "./utils.js";
-
-it("calculateRank", async () => {
-  await runAndLogStats("calculateRank", () => {
+bench(
+  "calculateRank",
+  async () => {
     calculateRank({
       all_commits: false,
       commits: 1300,
@@ -16,5 +15,6 @@ it("calculateRank", async () => {
       stars: 600000,
       followers: 50000,
     });
-  });
-});
+  },
+  { warmupIterations: 50 },
+);

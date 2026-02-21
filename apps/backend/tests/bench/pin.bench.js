@@ -1,10 +1,8 @@
-import { it, jest } from "@jest/globals";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { bench, vi } from "vitest";
 
 import pin from "../../api-renamed/pin.js";
-
-import { runAndLogStats } from "./utils.js";
 
 const data_repo = {
   repository: {
@@ -34,8 +32,9 @@ const data_user = {
 const mock = new MockAdapter(axios);
 mock.onPost("https://api.github.com/graphql").reply(200, data_user);
 
-it("test /api/pin", async () => {
-  await runAndLogStats("test /api/pin", async () => {
+bench(
+  "test /api/pin",
+  async () => {
     const req = {
       query: {
         username: "anuraghazra",
@@ -43,10 +42,11 @@ it("test /api/pin", async () => {
       },
     };
     const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
+      setHeader: vi.fn(),
+      send: vi.fn(),
     };
 
     await pin(req, res);
-  });
-});
+  },
+  { warmupIterations: 50 },
+);

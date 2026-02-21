@@ -1,23 +1,24 @@
 // @ts-check
 
-import { describe, expect, it, jest } from "@jest/globals";
+import { describe, expect, it, vi } from "vitest";
 
-import "@testing-library/jest-dom";
+import "@testing-library/jest-dom/vitest";
+
 import { logger } from "../src/common/log.js";
 import { retryer } from "../src/common/retryer.js";
 
-const fetcher = jest.fn((variables, token) => {
+const fetcher = vi.fn((variables, token) => {
   logger.log(variables, token);
   return new Promise((res) => res({ data: "ok" }));
 });
 
-const fetcherFail = jest.fn(() => {
+const fetcherFail = vi.fn(() => {
   return new Promise((res) =>
     res({ data: { errors: [{ type: "RATE_LIMITED" }] } }),
   );
 });
 
-const fetcherFailOnSecondTry = jest.fn((_vars, _token, retries) => {
+const fetcherFailOnSecondTry = vi.fn((_vars, _token, retries) => {
   return new Promise((res) => {
     // faking rate limit
     // @ts-ignore
@@ -28,7 +29,7 @@ const fetcherFailOnSecondTry = jest.fn((_vars, _token, retries) => {
   });
 });
 
-const fetcherFailWithMessageBasedRateLimitErr = jest.fn(
+const fetcherFailWithMessageBasedRateLimitErr = vi.fn(
   (_vars, _token, retries) => {
     return new Promise((res) => {
       // faking rate limit

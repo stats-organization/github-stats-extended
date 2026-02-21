@@ -1,10 +1,8 @@
-import { it, jest } from "@jest/globals";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { bench, vi } from "vitest";
 
 import gist from "../../api-renamed/gist.js";
-
-import { runAndLogStats } from "./utils.js";
 
 const gist_data = {
   data: {
@@ -36,18 +34,20 @@ const gist_data = {
 const mock = new MockAdapter(axios);
 mock.onPost("https://api.github.com/graphql").reply(200, gist_data);
 
-it("test /api/gist", async () => {
-  await runAndLogStats("test /api/gist", async () => {
+bench(
+  "test /api/gist",
+  async () => {
     const req = {
       query: {
         id: "bbfce31e0217a3689c8d961a356cb10d",
       },
     };
     const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
+      setHeader: vi.fn(),
+      send: vi.fn(),
     };
 
     await gist(req, res);
-  });
-});
+  },
+  { warmupIterations: 50 },
+);

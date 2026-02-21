@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Test /api/wakatime should render error if user data is not accessible 1`] = `
+exports[`Test /api/wakatime > should render error if user data is not accessible 1`] = `
 "
       <svg
         width="495"

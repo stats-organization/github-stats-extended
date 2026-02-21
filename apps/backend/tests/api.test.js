@@ -1,15 +1,8 @@
 // @ts-check
 
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  jest,
-} from "@jest/globals";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import api from "../api-renamed/index.js";
 import { calculateRank } from "../src/calculateRank.js";
@@ -52,8 +45,8 @@ const faker = (query, data) => {
     },
   };
   const res = {
-    setHeader: jest.fn(),
-    send: jest.fn(),
+    setHeader: vi.fn(),
+    send: vi.fn(),
   };
   mock.onPost("https://api.github.com/graphql").replyOnce(200, data);
 

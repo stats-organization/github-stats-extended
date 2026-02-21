@@ -1,11 +1,11 @@
-import { describe, expect, it } from "@jest/globals";
 import { queryByTestId } from "@testing-library/dom";
+import { describe, expect, it } from "vitest";
 
 import { renderWakatimeCard } from "../src/cards/wakatime.js";
 
 import { wakaTimeData } from "./fetchWakatime.test.js";
 
-import "@testing-library/jest-dom";
+import "@testing-library/jest-dom/vitest";
 
 describe("Test Render WakaTime Card", () => {
   it("should render correctly", () => {

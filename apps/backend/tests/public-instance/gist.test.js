@@ -1,8 +1,8 @@
 // @ts-check
 
-import { afterEach, describe, expect, it, jest } from "@jest/globals";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import gist from "../../api-renamed/gist.js";
 import { renderError } from "../../src/common/render.js";
@@ -20,8 +20,8 @@ describe("Test /api/gist", () => {
       query: {},
     };
     const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
+      setHeader: vi.fn(),
+      send: vi.fn(),
     };
     mock.onPost("https://api.github.com/graphql").reply(200, gist_data);
 

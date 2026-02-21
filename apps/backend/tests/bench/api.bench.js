@@ -1,10 +1,8 @@
-import { it, jest } from "@jest/globals";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { bench, vi } from "vitest";
 
 import api from "../../api-renamed/index.js";
-
-import { runAndLogStats } from "./utils.js";
 
 const stats = {
   name: "Anurag Hazra",
@@ -63,18 +61,20 @@ const faker = (query, data) => {
     },
   };
   const res = {
-    setHeader: jest.fn(),
-    send: jest.fn(),
+    setHeader: vi.fn(),
+    send: vi.fn(),
   };
   mock.onPost("https://api.github.com/graphql").replyOnce(200, data);
 
   return { req, res };
 };
 
-it("test /api", async () => {
-  await runAndLogStats("test /api", async () => {
+bench(
+  "test /api",
+  async () => {
     const { req, res } = faker({}, data_stats);
 
     await api(req, res);
-  });
-});
+  },
+  { warmupIterations: 50 },
+);
