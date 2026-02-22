@@ -1,6 +1,6 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { bench, vi } from "vitest";
+import { bench, describe, vi } from "vitest";
 
 import api from "../../api-renamed/index.js";
 
@@ -69,12 +69,14 @@ const faker = (query, data) => {
   return { req, res };
 };
 
-bench(
-  "test /api",
-  async () => {
-    const { req, res } = faker({}, data_stats);
+describe("/api", () => {
+  bench(
+    "base",
+    async () => {
+      const { req, res } = faker({}, data_stats);
 
-    await api(req, res);
-  },
-  { warmupIterations: 50 },
-);
+      await api(req, res);
+    },
+    { warmupIterations: 50 },
+  );
+});

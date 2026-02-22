@@ -1,6 +1,6 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { bench, vi } from "vitest";
+import { bench, describe, vi } from "vitest";
 
 import pin from "../../api-renamed/pin.js";
 
@@ -32,21 +32,23 @@ const data_user = {
 const mock = new MockAdapter(axios);
 mock.onPost("https://api.github.com/graphql").reply(200, data_user);
 
-bench(
-  "test /api/pin",
-  async () => {
-    const req = {
-      query: {
-        username: "anuraghazra",
-        repo: "convoychat",
-      },
-    };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
-    };
+describe("/api/pin", () => {
+  bench(
+    "base",
+    async () => {
+      const req = {
+        query: {
+          username: "anuraghazra",
+          repo: "convoychat",
+        },
+      };
+      const res = {
+        setHeader: vi.fn(),
+        send: vi.fn(),
+      };
 
-    await pin(req, res);
-  },
-  { warmupIterations: 50 },
-);
+      await pin(req, res);
+    },
+    { warmupIterations: 50 },
+  );
+});
