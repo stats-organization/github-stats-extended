@@ -1,4 +1,4 @@
-import { describe, expect, it } from "@jest/globals";
+import { describe, expect, it } from "vitest";
 
 import { I18n } from "../src/common/I18n.js";
 import { statCardLocales } from "../src/translations.js";

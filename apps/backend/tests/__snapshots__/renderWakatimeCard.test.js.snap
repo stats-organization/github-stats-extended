@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Test Render WakaTime Card should render correctly 1`] = `
+exports[`Test Render WakaTime Card > should render correctly 1`] = `
 "
       <svg
         width="495"
@@ -158,7 +158,7 @@ exports[`Test Render WakaTime Card should render correctly 1`] = `
     "
 `;
 
-exports[`Test Render WakaTime Card should render correctly with compact layout 1`] = `
+exports[`Test Render WakaTime Card > should render correctly with compact layout 1`] = `
 "
       <svg
         width="495"
@@ -310,7 +310,7 @@ exports[`Test Render WakaTime Card should render correctly with compact layout 1
     "
 `;
 
-exports[`Test Render WakaTime Card should render correctly with compact layout when langs_count is set 1`] = `
+exports[`Test Render WakaTime Card > should render correctly with compact layout when langs_count is set 1`] = `
 "
       <svg
         width="495"
@@ -462,7 +462,7 @@ exports[`Test Render WakaTime Card should render correctly with compact layout w
     "
 `;
 
-exports[`Test Render WakaTime Card should render correctly with percent display format 1`] = `
+exports[`Test Render WakaTime Card > should render correctly with percent display format 1`] = `
 "
       <svg
         width="495"

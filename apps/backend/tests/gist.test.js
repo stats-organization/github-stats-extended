@@ -1,9 +1,8 @@
 // @ts-check
 
-import { afterEach, describe, expect, it, jest } from "@jest/globals";
-import "@testing-library/jest-dom";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import gist from "../api-renamed/gist.js";
 import { renderGistCard } from "../src/cards/gist.js";
@@ -11,6 +10,8 @@ import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
 import { renderError } from "../src/common/render.js";
 
 import { gist_data } from "./test-data/gist-data.js";
+
+import "@testing-library/jest-dom/vitest";
 
 const gist_not_found_data = {
   data: {
@@ -34,8 +35,8 @@ describe("Test /api/gist", () => {
       },
     };
     const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
+      setHeader: vi.fn(),
+      send: vi.fn(),
     };
     mock.onPost("https://api.github.com/graphql").reply(200, gist_data);
 
@@ -66,8 +67,8 @@ describe("Test /api/gist", () => {
       },
     };
     const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
+      setHeader: vi.fn(),
+      send: vi.fn(),
     };
     mock.onPost("https://api.github.com/graphql").reply(200, gist_data);
 
@@ -96,8 +97,8 @@ describe("Test /api/gist", () => {
       },
     };
     const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
+      setHeader: vi.fn(),
+      send: vi.fn(),
     };
     mock
       .onPost("https://api.github.com/graphql")
@@ -119,8 +120,8 @@ describe("Test /api/gist", () => {
       },
     };
     const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
+      setHeader: vi.fn(),
+      send: vi.fn(),
     };
     mock.onPost("https://api.github.com/graphql").reply(200, gist_data);
 
@@ -142,8 +143,8 @@ describe("Test /api/gist", () => {
       },
     };
     const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
+      setHeader: vi.fn(),
+      send: vi.fn(),
     };
     mock.onPost("https://api.github.com/graphql").reply(200, gist_data);
 

@@ -1,10 +1,11 @@
-import { describe, expect, it } from "@jest/globals";
 import { queryByTestId } from "@testing-library/dom";
-import "@testing-library/jest-dom";
 import { cssToObject } from "@uppercod/css-to-object";
+import { describe, expect, it } from "vitest";
 
 import { renderGistCard } from "../src/cards/gist.js";
 import { themes } from "../themes/index.js";
+
+import "@testing-library/jest-dom/vitest";
 
 /**
  * @type {import("../src/fetchers/gist").GistData}

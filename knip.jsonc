@@ -2,26 +2,9 @@
   "$schema": "./node_modules/knip/schema.json",
   "workspaces": {
     "apps/backend": {
-      "jest": {
-        "config": [
-          "jest.config.js",
-          "jest.*.config.js",
-          "package.json" // included by default, see https://knip.dev/reference/plugins/jest
-        ]
-      },
-
-      "entry": [
-        "api-renamed/*.js",
-        "express.js",
-
-        "jest.*.js",
-        "tests/bench/*.bench.js"
-      ],
+      "entry": ["api-renamed/*.js", "express.js", "tests/bench/*.bench.js"],
       "ignoreFiles": [
         "_dot_vercel_copy/**/*" // Hopefully by using a npm package this file will be removed
-      ],
-      "ignoreDependencies": [
-        "jest" // used by test scripts referencing binary due to lack of ESM support
       ]
     },
     "apps/frontend": {

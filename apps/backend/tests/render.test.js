@@ -1,10 +1,11 @@
 // @ts-check
 
-import { describe, expect, it } from "@jest/globals";
 import { queryByTestId } from "@testing-library/dom";
+import { describe, expect, it } from "vitest";
 
-import "@testing-library/jest-dom/jest-globals";
 import { renderError } from "../src/common/render.js";
+
+import "@testing-library/jest-dom/vitest";
 
 describe("Test render.js", () => {
   it("should test renderError", () => {

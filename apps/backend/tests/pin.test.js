@@ -1,9 +1,8 @@
 // @ts-check
 
-import { afterEach, describe, expect, it, jest } from "@jest/globals";
-import "@testing-library/jest-dom";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import pin from "../api-renamed/pin.js";
 import { renderRepoCard } from "../src/cards/repo.js";
@@ -11,6 +10,8 @@ import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
 import { renderError } from "../src/common/render.js";
 
 import { data_repo, data_user } from "./test-data/pin-data.js";
+
+import "@testing-library/jest-dom/vitest";
 
 const mock = new MockAdapter(axios);
 
@@ -27,8 +28,8 @@ describe("Test /api/pin", () => {
       },
     };
     const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
+      setHeader: vi.fn(),
+      send: vi.fn(),
     };
     mock.onPost("https://api.github.com/graphql").reply(200, data_user);
 
@@ -57,8 +58,8 @@ describe("Test /api/pin", () => {
       },
     };
     const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
+      setHeader: vi.fn(),
+      send: vi.fn(),
     };
     mock.onPost("https://api.github.com/graphql").reply(200, data_user);
 
@@ -85,8 +86,8 @@ describe("Test /api/pin", () => {
       },
     };
     const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
+      setHeader: vi.fn(),
+      send: vi.fn(),
     };
     mock
       .onPost("https://api.github.com/graphql")
@@ -108,8 +109,8 @@ describe("Test /api/pin", () => {
       },
     };
     const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
+      setHeader: vi.fn(),
+      send: vi.fn(),
     };
     mock
       .onPost("https://api.github.com/graphql")
@@ -132,8 +133,8 @@ describe("Test /api/pin", () => {
       },
     };
     const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
+      setHeader: vi.fn(),
+      send: vi.fn(),
     };
     mock.onPost("https://api.github.com/graphql").reply(200, data_user);
 
@@ -156,8 +157,8 @@ describe("Test /api/pin", () => {
       },
     };
     const res = {
-      setHeader: jest.fn(),
-      send: jest.fn(),
+      setHeader: vi.fn(),
+      send: vi.fn(),
     };
     mock.onPost("https://api.github.com/graphql").reply(200, data_user);
 

@@ -1,7 +1,6 @@
-import { describe, expect, it } from "@jest/globals";
 import { queryAllByTestId, queryByTestId } from "@testing-library/dom";
-import "@testing-library/jest-dom";
 import { cssToObject } from "@uppercod/css-to-object";
+import { describe, expect, it } from "vitest";
 
 import {
   MIN_CARD_WIDTH,
@@ -23,7 +22,9 @@ import {
 } from "../src/cards/top-languages.js";
 import { themes } from "../themes/index.js";
 
-import { approxNumber } from "./bench/utils.js";
+import { approxNumber } from "./utils.js";
+
+import "@testing-library/jest-dom/vitest";
 
 const langs = {
   HTML: {

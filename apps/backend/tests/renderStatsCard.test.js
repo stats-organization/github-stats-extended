@@ -1,15 +1,16 @@
-import { describe, expect, it } from "@jest/globals";
 import {
   getByTestId,
   queryAllByTestId,
   queryByTestId,
 } from "@testing-library/dom";
-import "@testing-library/jest-dom";
 import { cssToObject } from "@uppercod/css-to-object";
+import { describe, expect, it } from "vitest";
 
 import { renderStatsCard } from "../src/cards/stats.js";
 import { CustomError } from "../src/common/error.js";
 import { themes } from "../themes/index.js";
+
+import "@testing-library/jest-dom/vitest";
 
 const stats = {
   name: "Anurag Hazra",
