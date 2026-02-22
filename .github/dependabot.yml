@@ -12,6 +12,9 @@ updates:
       prefix-development: "build(deps-dev)"
     cooldown:
       default-days: 7
+    ignore:
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
 
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: github-actions
