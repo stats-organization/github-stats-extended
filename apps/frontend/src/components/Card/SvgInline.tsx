@@ -113,7 +113,11 @@ export function SvgInline(props: SvgInlineProps): JSX.Element {
       return <Skeleton style={{ paddingBottom: "58%" }} />;
     }
     // maximum dimensions of cards in SelectCard stage
-    return <Skeleton className="h-[245px] w-[450px]" />;
+    return (
+      <div className=" w-[450px]">
+        <Skeleton className="h-[245px]" />
+      </div>
+    );
   }
 
   // Render a container div for the shadow DOM
