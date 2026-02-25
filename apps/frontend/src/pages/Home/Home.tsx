@@ -193,10 +193,10 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
 
   useEffect(() => {
     async function redirectCode() {
-      // After requesting Github access, Github redirects back to your app with a code parameter
+      // After requesting GitHub access, GitHub redirects back to your app with a code parameter
       const url = window.location.href;
 
-      // If Github API returns the code parameter
+      // If GitHub API returns the code parameter
       if (url.includes("code=")) {
         const tempPrivateAccess = url.includes("private");
         const newUrl = url.split("?code=", 2) as [string, string];
