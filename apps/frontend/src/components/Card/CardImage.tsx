@@ -20,7 +20,7 @@ export const CardImage = ({
   const fullImageSrc = `https://${HOST}/api${imageSrc}&client=wizard`;
 
   return (
-    <div className={clsx("relative w-full relative", className)}>
+    <div className={clsx("w-full relative", className)}>
       <SvgInline
         className="object-cover"
         url={fullImageSrc}
