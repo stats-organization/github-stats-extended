@@ -139,7 +139,7 @@ axios.defaults.adapter = async (config) => {
       return createMockResponse(reviewedPrs, config);
     case "https://api.github.com/search/issues?per_page=1&q=commenter:anuraghazra+-author:anuraghazra+type:issue":
       return createMockResponse(commentedIssues, config);
-    case `https://${HOST}/api/wakatime-proxy?username=ffflabs`:
+    case `https://${HOST}/api/wakatime-proxy?username=alan`:
       return createMockResponse(wakatimeProxy, config);
     default:
       return defaultAdapter(config);

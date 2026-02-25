@@ -553,7 +553,7 @@ You can use the `&stats_format=bytes` option to display the stats in bytes inste
 Change the `?username=` value to your [WakaTime](https://wakatime.com) username.
 
 ```md
-[![Harlok's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=ffflabs)](https://wakatime.com/@ffflabs)
+[![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan)](https://wakatime.com/@alan)
 ```
 
 ### Options
@@ -579,13 +579,13 @@ You can customize the appearance and behavior of the WakaTime stats card using t
 
 ### Demo
 
-![Harlok's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=ffflabs)
+![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan)
 
-![Harlok's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=ffflabs\&card_width=315\&hide_progress=true)
+![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan\&card_width=315\&hide_progress=true)
 
 *   Compact layout
 
-![Harlok's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=ffflabs\&layout=compact)
+![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan\&layout=compact)
 
 ***
 
@@ -667,7 +667,7 @@ Choose from any of the [default themes](#themes)
 
 *   WakaTime card
 
-![Harlok's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=ffflabs)
+![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan)
 
 ***
 

@@ -16,7 +16,7 @@ export const GITHUB_PUBLIC_AUTH_URL = `https://github.com/login/oauth/authorize?
 export const DEMO_USER = "anuraghazra";
 export const DEMO_REPO = "anuraghazra/github-readme-stats";
 export const DEMO_GIST = "bbfce31e0217a3689c8d961a356cb10d";
-export const DEMO_WAKATIME_USER = "ffflabs";
+export const DEMO_WAKATIME_USER = "alan";
 
 window.process = {
   env: {

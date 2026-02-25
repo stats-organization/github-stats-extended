@@ -38,7 +38,7 @@ As more comfortable alternative, use the [GitHub-Stats-Extended Wizard](https://
 
 - ...and development time:
 
-  [![Harlok's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=ffflabs&langs_count=6)](https://wakatime.com/@ffflabs)
+  [![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan&langs_count=6)](https://wakatime.com/@alan)
 
 - Pin more than 6 repos in your GitHub profile:
 
