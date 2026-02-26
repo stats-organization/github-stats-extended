@@ -80,17 +80,18 @@ export function AppTrends() {
   }, [userToken]);
 
   {
-    /**
-     * This effect mus be executed only on page load,
-     * otherwise logged in user are unable to go back on first step
+    /*
+     * This effect must only be executed when `isAuthenticated` changes,
+     * otherwise logged-in user are unable to go back to step 1.
      */
-    const hasCheckedUserAuthStatusOnLoad = useRef(false);
+    const prevIsAuthenticated = useRef(isAuthenticated);
+
     useEffect(() => {
-      if (hasCheckedUserAuthStatusOnLoad.current) {
+      if (prevIsAuthenticated.current === isAuthenticated) {
         return;
       }
 
-      hasCheckedUserAuthStatusOnLoad.current = true;
+      prevIsAuthenticated.current = isAuthenticated;
 
       if (isAuthenticated && stage === 0) {
         setStage(1);

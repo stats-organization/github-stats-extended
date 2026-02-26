@@ -1,7 +1,13 @@
 import axios, { getAdapter } from "axios";
 import { setupCache } from "axios-cache-interceptor";
 
-import { HOST } from "./constants";
+import {
+  DEMO_GIST,
+  DEMO_REPO,
+  DEMO_USER,
+  DEMO_WAKATIME_USER,
+  HOST,
+} from "./constants";
 import additionalUserStars from "./mockData/additional_user_stars.json" with { type: "json" };
 import commentedIssues from "./mockData/commented_issues.json" with { type: "json" };
 import commentedPrs from "./mockData/commented_prs.json" with { type: "json" };
@@ -85,7 +91,7 @@ axios.defaults.adapter = async (config) => {
     params.query?.includes(
       "query userInfo($login: String!, $after: String, $includeMergedPullRequests:",
     ) &&
-    params.variables?.login === "anuraghazra"
+    params.variables?.login === DEMO_USER
   ) {
     return createMockResponse(userStats, config);
   }
@@ -95,7 +101,7 @@ axios.defaults.adapter = async (config) => {
     params.query?.includes(
       "query userInfo($login: String!, $after: String, $ownerAffiliations:",
     ) &&
-    params.variables?.login === "anuraghazra"
+    params.variables?.login === DEMO_USER
   ) {
     return createMockResponse(additionalUserStars, config);
   }
@@ -105,7 +111,7 @@ axios.defaults.adapter = async (config) => {
     params.query?.includes(
       "query userInfo($login: String!, $ownerAffiliations:",
     ) &&
-    params.variables?.login === "anuraghazra"
+    params.variables?.login === DEMO_USER
   ) {
     return createMockResponse(topLanguages, config);
   }
@@ -114,8 +120,8 @@ axios.defaults.adapter = async (config) => {
     config.url === "https://api.github.com/graphql" &&
     params.query?.includes("fragment RepoInfo on Repository {") &&
     params.variables &&
-    params.variables.login === "anuraghazra" &&
-    params.variables.repo === "github-readme-stats"
+    params.variables.login === DEMO_REPO.split("/")[0] &&
+    params.variables.repo === DEMO_REPO.split("/")[1]
   ) {
     return createMockResponse(repository, config);
   }
@@ -123,23 +129,23 @@ axios.defaults.adapter = async (config) => {
   if (
     config.url === "https://api.github.com/graphql" &&
     params.query?.includes("query gistInfo(") &&
-    params.variables?.gistName === "bbfce31e0217a3689c8d961a356cb10d"
+    params.variables?.gistName === DEMO_GIST
   ) {
     return createMockResponse(gist_graphql, config);
   }
 
   switch (config.url) {
-    case "https://api.github.com/gists/bbfce31e0217a3689c8d961a356cb10d":
+    case `https://api.github.com/gists/${DEMO_GIST}`:
       return createMockResponse(gist_rest, config);
-    case "https://api.github.com/search/commits?per_page=1&q=author:anuraghazra":
+    case `https://api.github.com/search/commits?per_page=1&q=author:${DEMO_USER}`:
       return createMockResponse(commits, config);
-    case "https://api.github.com/search/issues?per_page=1&q=commenter:anuraghazra+-author:anuraghazra+type:pr":
+    case `https://api.github.com/search/issues?per_page=1&q=commenter:${DEMO_USER}+-author:${DEMO_USER}+type:pr`:
       return createMockResponse(commentedPrs, config);
-    case "https://api.github.com/search/issues?per_page=1&q=reviewed-by:anuraghazra+-author:anuraghazra+type:pr":
+    case `https://api.github.com/search/issues?per_page=1&q=reviewed-by:${DEMO_USER}+-author:${DEMO_USER}+type:pr`:
       return createMockResponse(reviewedPrs, config);
-    case "https://api.github.com/search/issues?per_page=1&q=commenter:anuraghazra+-author:anuraghazra+type:issue":
+    case `https://api.github.com/search/issues?per_page=1&q=commenter:${DEMO_USER}+-author:${DEMO_USER}+type:issue`:
       return createMockResponse(commentedIssues, config);
-    case `https://${HOST}/api/wakatime-proxy?username=ffflabs`:
+    case `https://${HOST}/api/wakatime-proxy?username=${DEMO_WAKATIME_USER}`:
       return createMockResponse(wakatimeProxy, config);
     default:
       return defaultAdapter(config);
