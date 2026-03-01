@@ -206,6 +206,7 @@ Here is a list of all available locales:
 | --- | --- |
 | `ar` | Arabic |
 | `az` | Azerbaijani |
+| `be` | Belarusian |
 | `bn` | Bengali |
 | `bg` | Bulgarian |
 | `my` | Burmese |
@@ -219,12 +220,12 @@ Here is a list of all available locales:
 | `fi` | Finnish |
 | `fr` | French |
 | `de` | German |
-| `el` | Greek |
 
 </td><td>
 
 | Code | Locale |
 | --- | --- |
+| `el` | Greek |
 | `he` | Hebrew |
 | `hi` | Hindi |
 | `hu` | Hungarian |
