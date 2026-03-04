@@ -55,6 +55,7 @@ export default defineConfig({
   ],
   build: {
     outDir: "build",
+    sourcemap: true,
 
     /** @todo use chunks to split bundle? */
     chunkSizeWarningLimit: 800,
