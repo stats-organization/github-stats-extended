@@ -28,7 +28,7 @@
     "@types/react-dom": "18.3.7",
     "@vitejs/plugin-react-swc": "4.2.3",
     "clsx": "2.1.1",
-    "tailwindcss": "4.1.18",
+    "tailwindcss": "4.2.1",
     "vite": "catalog:default",
     "vite-plugin-node-polyfills": "0.25.0",
     "vite-plugin-string-replace": "1.1.5",
