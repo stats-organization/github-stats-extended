@@ -61,7 +61,10 @@ async function githubAuthenticate(code, privateAccess) {
     const accessToken = body && body.access_token ? body.access_token : null;
 
     if (!accessToken) {
-      throw new Error("OAuth Error: access_token missing from response");
+      throw new Error(
+        "OAuth Error: access_token missing from response: " +
+          JSON.stringify(body),
+      );
     }
 
     const userId = await getUserFromToken(accessToken);

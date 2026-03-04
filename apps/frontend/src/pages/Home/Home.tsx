@@ -199,7 +199,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
       // If GitHub API returns the code parameter
       if (url.includes("code=")) {
         const tempPrivateAccess = url.includes("private");
-        const newUrl = url.split("?code=", 2) as [string, string];
+        const newUrl = url.split("code=", 2) as [string, string];
         const redirect = `${url.split(HOST)[0] as string}${HOST}/frontend`;
         window.history.pushState({}, "", redirect);
         setIsLoading(true);
