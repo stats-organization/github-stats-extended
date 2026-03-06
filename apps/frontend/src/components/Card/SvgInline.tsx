@@ -122,6 +122,7 @@ export function SvgInline(props: SvgInlineProps): JSX.Element {
     );
   }
 
+  // Render a container div for the shadow DOM
   // Using a different key than the skeletons above to ensure react doesn't reuse the node, which would keep its old shadow DOM content visible.
   return (
     <div
