@@ -110,16 +110,25 @@ export function SvgInline(props: SvgInlineProps): JSX.Element {
 
   if (forceLoading || !loaded) {
     if (compact) {
-      return <Skeleton style={{ paddingBottom: "58%" }} />;
+      return (
+        <Skeleton key="compactSkeleton" style={{ paddingBottom: "58%" }} />
+      );
     }
     // maximum dimensions of cards in SelectCard stage
     return (
       <div className=" w-[450px]">
-        <Skeleton className="h-[245px]" />
+        <Skeleton key="skeleton" className="h-[245px]" />
       </div>
     );
   }
 
-  // Render a container div for the shadow DOM
-  return <div ref={containerRef} id="svgWrapper" className={className} />;
+  // Using a different key than the skeletons above to ensure react doesn't reuse the node, which would keep its old shadow DOM content visible.
+  return (
+    <div
+      key="svgWrapper"
+      ref={containerRef}
+      id="svgWrapper"
+      className={className}
+    />
+  );
 }
