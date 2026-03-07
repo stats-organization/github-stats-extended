@@ -228,10 +228,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
   }
 
   return (
-    <div
-      ref={contentSectionRef}
-      className="h-full px-2 lg:px-8 text-gray-600 body-font"
-    >
+    <div ref={contentSectionRef} className="h-full px-2 lg:px-8 text-gray-600">
       <div className="flex flex-col">
         <div className="m-4 rounded-sm">
           <div className="lg:p-4">
