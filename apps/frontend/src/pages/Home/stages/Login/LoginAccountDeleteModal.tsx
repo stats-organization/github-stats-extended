@@ -45,10 +45,10 @@ export function LoginAccountDeleteModal(
     <div className="fixed left-0 top-0 w-full h-full">
       <div className="w-full h-full flex justify-center items-center">
         <div
-          className="w-96 p-4 bg-white rounded-sm border-2 border-gray-200"
+          className="w-96 p-4 bg-white rounded-sm border-2 border-gray-200 text-gray-700"
           ref={wrapperRef}
         >
-          <p className="mb-1 text-2xl text-gray-700">Delete Account</p>
+          <p className="mb-1 text-2xl">Delete Account</p>
           <hr />
           <br />
           <p>
