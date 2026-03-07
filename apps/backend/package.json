@@ -1,0 +1,52 @@
+{
+  "name": "github-readme-stats",
+  "version": "1.0.0",
+  "description": "Dynamically generate stats for your GitHub readme",
+  "keywords": [
+    "github-readme-stats",
+    "readme-stats",
+    "cards",
+    "card-generator"
+  ],
+  "main": "src/index.js",
+  "type": "module",
+  "homepage": "https://github-stats-extended.vercel.app/frontend",
+  "bugs": {
+    "url": "https://github.com/stats-organization/github-stats-extended/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stats-organization/github-stats-extended.git"
+  },
+  "scripts": {
+    "test": "vitest",
+    "test:update:snapshot": "vitest -u",
+    "test:e2e": "vitest --config vitest.config.e2e.ts",
+    "theme-readme-gen": "node scripts/generate-theme-doc",
+    "generate-langs-json": "node scripts/generate-langs-json",
+    "bench": "vitest bench --run --config vitest.config.bench.ts"
+  },
+  "author": "Anurag Hazra",
+  "license": "MIT",
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@uppercod/css-to-object": "^1.1.1",
+    "@vitest/coverage-v8": "catalog:default",
+    "axios-mock-adapter": "^2.1.0",
+    "express": "^5.2.1",
+    "js-yaml": "^4.1.1",
+    "jsdom": "28.1.0",
+    "vitest": "catalog:default"
+  },
+  "dependencies": {
+    "axios": "^1.13.5",
+    "emoji-name-map": "^2.0.3",
+    "github-username-regex": "^1.0.0",
+    "pg": "^8.18.0",
+    "word-wrap": "^1.2.5"
+  },
+  "engines": {
+    "node": "24.x"
+  }
+}

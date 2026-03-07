@@ -1,0 +1,5 @@
+pnpm-lock.yaml
+
+# https://github.com/stats-organization/github-stats-extended/pull/26#discussion_r2709033732
+# Avoid prettier format on md files to simplify merge on upstream repo
+*.md
