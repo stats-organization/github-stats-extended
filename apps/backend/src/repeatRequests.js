@@ -48,16 +48,21 @@ async function makeRequests(urls, poolSize) {
 }
 
 /**
- * Repeats requests made in the last 8 days, excluding those made in the last 11 hours.
+ * Repeats requests made in the last 8 days (or configured interval), excluding those made in the last 11 hours (or configured interval).
  */
 export async function repeatRecentRequests() {
   if (!pool) {
     console.error("Postgres pool is not initialized.");
     return;
   }
-
-  await deleteOldRequests();
-  const urls = await getRecentRequests();
+  let maxInterval = process.env.DELETE_AFTER_HOURS
+    ? `${process.env.DELETE_AFTER_HOURS} hours`
+    : "8 days";
+  let minInterval = process.env.UPDATE_AFTER_HOURS
+    ? `${process.env.UPDATE_AFTER_HOURS} hours`
+    : "11 hours";
+  await deleteOldRequests(maxInterval);
+  const urls = await getRecentRequests(minInterval, maxInterval);
   if (urls.length === 0) {
     console.log("No recent requests found.");
   } else {

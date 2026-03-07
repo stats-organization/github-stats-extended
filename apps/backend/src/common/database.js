@@ -71,16 +71,16 @@ export async function storeRequest(req) {
 }
 
 /**
- * Deletes all requests older than 8 days from the database.
+ * Deletes all requests older than the specified time from the database.
  */
-export async function deleteOldRequests() {
+export async function deleteOldRequests(interval) {
   if (!pool) {
     return;
   }
 
   const deleteQuery = `
       DELETE FROM requests
-      WHERE user_requested_at < NOW() - INTERVAL '8 days'
+      WHERE user_requested_at < NOW() - INTERVAL '${interval}'
     `;
   try {
     let result = await pool.query(deleteQuery);
@@ -95,11 +95,11 @@ export async function deleteOldRequests() {
 }
 
 /**
- * Fetches all requests which are between 11 hours and 8 days old.
+ * Fetches all requests which are between minInterval and maxInterval old.
  *
- * @returns {Promise<string[]>} Array of all requests between 11 hours and 8 days old.
+ * @returns {Promise<string[]>} Array of all requests between minInterval and maxInterval old.
  */
-export async function getRecentRequests() {
+export async function getRecentRequests(minInterval, maxInterval) {
   if (!pool) {
     return [];
   }
@@ -107,8 +107,8 @@ export async function getRecentRequests() {
   const query = `
       SELECT request
       FROM requests
-      WHERE requested_at >= NOW() - INTERVAL '8 days'
-        AND requested_at < NOW() - INTERVAL '11 hours'
+      WHERE requested_at >= NOW() - INTERVAL '${maxInterval}'
+        AND requested_at < NOW() - INTERVAL '${minInterval}'
       ORDER BY requested_at ASC
       `;
   let rows;
