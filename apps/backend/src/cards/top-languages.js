@@ -2,7 +2,7 @@
 
 import { Card } from "../common/Card.js";
 import { I18n } from "../common/I18n.js";
-import { getCardColors } from "../common/color.js";
+import { fallbackColor, getCardColors } from "../common/color.js";
 import { formatBytes } from "../common/fmt.js";
 import { chunkArray, clampValue, lowercaseTrim } from "../common/ops.js";
 import {
@@ -252,9 +252,7 @@ const createProgressTextNode = ({
         color,
         width: progressWidth,
         progress,
-        progressBarBackgroundColor: progBarBgColor
-          ? `#${progBarBgColor}`
-          : "#ddd",
+        progressBarBackgroundColor: progBarBgColor,
         delay: staggerDelay + 300,
       })}
     </g>
@@ -885,7 +883,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
       langs,
       width,
       totalLanguageSize,
-      prog_bar_bg_color,
+      fallbackColor(prog_bar_bg_color, "#ddd"),
       stats_format,
     );
   }
