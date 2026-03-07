@@ -1,0 +1,22 @@
+{
+  "$schema": "./node_modules/knip/schema.json",
+  "workspaces": {
+    "apps/backend": {
+      "entry": ["api-renamed/*.js", "express.js", "tests/bench/*.bench.js"],
+      "ignoreFiles": [
+        "_dot_vercel_copy/**/*" // Hopefully by using a npm package this file will be removed
+      ]
+    },
+    "apps/frontend": {
+      "entry": ["src/wakatime-override.ts"],
+
+      "ignoreDependencies": [
+        // below dependencies are added because backend folder is copied inside frontend folder,
+        // so some of his dependencies must be present here
+        "github-username-regex",
+        "emoji-name-map",
+        "word-wrap"
+      ]
+    }
+  }
+}

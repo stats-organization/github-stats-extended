@@ -1,0 +1,4 @@
+pnpm lint-staged
+pnpm run lint
+# TODO enable
+# npm test

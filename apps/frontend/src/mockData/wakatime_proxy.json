@@ -1,0 +1,255 @@
+{
+  "id": "6c0b00b7-f277-4454-b889-6c58c9f488c9",
+  "user_id": "66b6796d-eb84-4bb9-b9d2-8dc882f4c6ac",
+  "range": "last_7_days",
+  "timeout": 15,
+  "writes_only": false,
+  "ai_additions": 16,
+  "ai_deletions": 0,
+  "human_additions": 0,
+  "human_deletions": 0,
+  "holidays": 2,
+  "status": "ok",
+  "categories": [
+    {
+      "name": "Coding",
+      "total_seconds": 8673.080165,
+      "percent": 81.4,
+      "digital": "2:24",
+      "decimal": "2.40",
+      "text": "2 hrs 24 mins",
+      "hours": 2,
+      "minutes": 24
+    },
+    {
+      "name": "Meeting",
+      "total_seconds": 1500,
+      "percent": 14.08,
+      "digital": "0:25",
+      "decimal": "0.42",
+      "text": "25 mins",
+      "hours": 0,
+      "minutes": 25
+    },
+    {
+      "name": "AI Coding",
+      "total_seconds": 390.931491,
+      "percent": 3.67,
+      "digital": "0:06",
+      "decimal": "0.10",
+      "text": "6 mins",
+      "hours": 0,
+      "minutes": 6
+    },
+    {
+      "name": "Writing Docs",
+      "total_seconds": 91,
+      "percent": 0.85,
+      "digital": "0:01",
+      "decimal": "0.02",
+      "text": "1 min",
+      "hours": 0,
+      "minutes": 1
+    }
+  ],
+  "percent_calculated": 100,
+  "human_readable_total_including_other_language": "2 hrs 57 mins",
+  "human_readable_daily_average": "29 mins",
+  "languages": [
+    {
+      "name": "HTML",
+      "total_seconds": 2771,
+      "percent": 26.01,
+      "digital": "0:46",
+      "decimal": "0.77",
+      "text": "46 mins",
+      "hours": 0,
+      "minutes": 46
+    },
+    {
+      "name": "YAML",
+      "total_seconds": 2465,
+      "percent": 23.13,
+      "digital": "0:41",
+      "decimal": "0.68",
+      "text": "41 mins",
+      "hours": 0,
+      "minutes": 41
+    },
+    {
+      "name": "Other",
+      "total_seconds": 1710.011656,
+      "percent": 16.05,
+      "digital": "0:28",
+      "decimal": "0.47",
+      "text": "28 mins",
+      "hours": 0,
+      "minutes": 28
+    },
+    {
+      "name": "Python",
+      "total_seconds": 1449,
+      "percent": 13.6,
+      "digital": "0:24",
+      "decimal": "0.40",
+      "text": "24 mins",
+      "hours": 0,
+      "minutes": 24
+    },
+    {
+      "name": "Text",
+      "total_seconds": 797,
+      "percent": 7.48,
+      "digital": "0:13",
+      "decimal": "0.22",
+      "text": "13 mins",
+      "hours": 0,
+      "minutes": 13
+    },
+    {
+      "name": "XML",
+      "total_seconds": 554,
+      "percent": 5.2,
+      "digital": "0:09",
+      "decimal": "0.15",
+      "text": "9 mins",
+      "hours": 0,
+      "minutes": 9
+    },
+    {
+      "name": "JSON",
+      "total_seconds": 263,
+      "percent": 2.47,
+      "digital": "0:04",
+      "decimal": "0.07",
+      "text": "4 mins",
+      "hours": 0,
+      "minutes": 4
+    },
+    {
+      "name": "Go",
+      "total_seconds": 232,
+      "percent": 2.18,
+      "digital": "0:03",
+      "decimal": "0.05",
+      "text": "3 mins",
+      "hours": 0,
+      "minutes": 3
+    },
+    {
+      "name": "solution",
+      "total_seconds": 170,
+      "percent": 1.6,
+      "digital": "0:02",
+      "decimal": "0.03",
+      "text": "2 mins",
+      "hours": 0,
+      "minutes": 2
+    },
+    {
+      "name": "Less",
+      "total_seconds": 95,
+      "percent": 0.89,
+      "digital": "0:01",
+      "decimal": "0.02",
+      "text": "1 min",
+      "hours": 0,
+      "minutes": 1
+    },
+    {
+      "name": "Markdown",
+      "total_seconds": 91,
+      "percent": 0.85,
+      "digital": "0:01",
+      "decimal": "0.02",
+      "text": "1 min",
+      "hours": 0,
+      "minutes": 1
+    },
+    {
+      "name": "C#",
+      "total_seconds": 58,
+      "percent": 0.54,
+      "digital": "0:00",
+      "decimal": "0.00",
+      "text": "0 secs",
+      "hours": 0,
+      "minutes": 0
+    }
+  ],
+  "total_seconds_including_other_language": 10655.011656,
+  "human_readable_total": "2 hrs 29 mins",
+  "is_already_updating": false,
+  "human_readable_daily_average_including_other_language": "35 mins",
+  "is_up_to_date": true,
+  "operating_systems": [
+    {
+      "total_seconds": 9155.011656,
+      "name": "Mac",
+      "percent": 85.92,
+      "digital": "2:32",
+      "decimal": "2.53",
+      "text": "2 hrs 32 mins",
+      "hours": 2,
+      "minutes": 32
+    },
+    {
+      "total_seconds": 1500,
+      "name": "Unknown OS",
+      "percent": 14.08,
+      "digital": "0:25",
+      "decimal": "0.42",
+      "text": "25 mins",
+      "hours": 0,
+      "minutes": 25
+    }
+  ],
+  "is_stuck": false,
+  "daily_average_including_other_language": 2131,
+  "days_minus_holidays": 5,
+  "days_including_holidays": 7,
+  "daily_average": 1789,
+  "is_up_to_date_pending_future": false,
+  "editors": [
+    {
+      "total_seconds": 8764.080165,
+      "name": "Vim",
+      "percent": 82.25,
+      "digital": "2:26",
+      "decimal": "2.43",
+      "text": "2 hrs 26 mins",
+      "hours": 2,
+      "minutes": 26
+    },
+    {
+      "total_seconds": 1500,
+      "name": "Google Calendar",
+      "percent": 14.08,
+      "digital": "0:25",
+      "decimal": "0.42",
+      "text": "25 mins",
+      "hours": 0,
+      "minutes": 25
+    },
+    {
+      "total_seconds": 390.931491,
+      "name": "Claude Code",
+      "percent": 3.67,
+      "digital": "0:06",
+      "decimal": "0.10",
+      "text": "6 mins",
+      "hours": 0,
+      "minutes": 6
+    }
+  ],
+  "total_seconds": 8945,
+  "is_cached": true,
+  "username": "alan",
+  "is_including_today": false,
+  "human_readable_range": "last week",
+  "is_coding_activity_visible": true,
+  "is_language_usage_visible": true,
+  "is_editor_usage_visible": true,
+  "is_category_usage_visible": true,
+  "is_os_usage_visible": true
+}
