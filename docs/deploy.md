@@ -145,7 +145,7 @@ Click on the deploy button to get started!
 
 ### Available environment variables
 
-GitHub Readme Stats provides several environment variables that can be used to customize the behavior of your self-hosted instance. These include:
+GitHub Stats Extended provides several environment variables that can be used to customize the behavior of your self-hosted instance. These include:
 
 <table>
   <thead>
@@ -160,6 +160,16 @@ GitHub Readme Stats provides several environment variables that can be used to c
       <td><code>CACHE_SECONDS</code></td>
       <td>Sets the cache duration in seconds for the generated cards. This variable takes precedence over the default cache timings for the public instance. If this variable is not set, the default cache duration is 24 hours (86,400 seconds).</td>
       <td>Any positive integer or <code>0</code> to disable caching</td>
+    </tr>
+    <tr>
+      <td><code>UPDATE_AFTER_HOURS</code></td>
+      <td>Sets the duration in hours after which the server <a href="fork.md#improved-performance-and-latency">proactively regenerates</a> a previously requested card.</td>
+      <td>Any int or float</td>
+    </tr>
+    <tr>
+      <td><code>DELETE_AFTER_HOURS</code></td>
+      <td>Sets the duration in hours after which the server stops <a href="fork.md#improved-performance-and-latency">proactively regenerating</a> a previously requested card if it hasn't been requested again in the meantime.</td>
+      <td>Any int or float</td>
     </tr>
     <tr>
       <td><code>WHITELIST</code></td>

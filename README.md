@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="docs/appIcon.svg" width="100px" alt="GitHub Readme Stats" />
+  <img src="docs/appIcon.svg" width="100px" alt="GitHub Stats Extended Logo" />
   <h1>GitHub Stats Extended</h1>
   <p>Dynamically generate GitHub stats for your READMEs.</p>
 <a href="https://github-stats-extended.vercel.app/api?username=anuraghazra"><img src="https://github-stats-extended.vercel.app/api?username=anuraghazra"></a>
