@@ -1,4 +1,12 @@
 /* eslint-disable import-x/no-unresolved */
+import {
+  CACHE_TTL,
+  resolveCacheSeconds,
+  setCacheHeaders,
+  setErrorCacheHeaders,
+} from "../../../../src/common/cache.js";
+import { storeRequest } from "../../../../src/common/database.js";
+
 import { default as authenticate } from "./api-renamed/authenticate.js";
 import { default as deleteUser } from "./api-renamed/delete-user.js";
 import { default as downgrade } from "./api-renamed/downgrade.js";
@@ -12,6 +20,8 @@ import { default as topLangs } from "./api-renamed/top-langs.js";
 import { default as userAccess } from "./api-renamed/user-access.js";
 import { default as wakatimeProxy } from "./api-renamed/wakatime-proxy.js";
 import { default as wakatime } from "./api-renamed/wakatime.js";
+
+// TODO: move out of package
 
 export default async (req, res) => {
   // remaining code expects express.js-like request and response objects
@@ -28,21 +38,103 @@ export default async (req, res) => {
   const url = new URL(req.url, "https://localhost");
   req.query = Object.fromEntries(url.searchParams.entries());
 
+  let result;
+
   switch (url.pathname) {
     case "/api":
-      await api(req, res);
+      result = await api(req.query);
+      if (result.status === "error - temporary") {
+        setErrorCacheHeaders(res);
+      } else {
+        const cacheSeconds = resolveCacheSeconds({
+          requested: parseInt(req.query.cache_seconds, 10),
+          def: CACHE_TTL.STATS_CARD.DEFAULT,
+          min: CACHE_TTL.STATS_CARD.MIN,
+          max: CACHE_TTL.STATS_CARD.MAX,
+        });
+        setCacheHeaders(res, cacheSeconds);
+      }
+      res.setHeader("Content-Type", "image/svg+xml");
+      res.end(result.content);
+      if (result.status !== "error - permanent") {
+        await storeRequest(req);
+      }
       break;
     case "/api/gist":
-      await gist(req, res);
+      result = await gist(req.query);
+      if (result.status === "error - temporary") {
+        setErrorCacheHeaders(res);
+      } else {
+        const cacheSeconds = resolveCacheSeconds({
+          requested: parseInt(req.query.cache_seconds, 10),
+          def: CACHE_TTL.GIST_CARD.DEFAULT,
+          min: CACHE_TTL.GIST_CARD.MIN,
+          max: CACHE_TTL.GIST_CARD.MAX,
+        });
+        setCacheHeaders(res, cacheSeconds);
+      }
+      res.setHeader("Content-Type", "image/svg+xml");
+      res.end(result.content);
+      if (result.status !== "error - permanent") {
+        await storeRequest(req);
+      }
       break;
     case "/api/pin":
-      await pin(req, res);
+      result = await pin(req.query);
+      if (result.status === "error - temporary") {
+        setErrorCacheHeaders(res);
+      } else {
+        const cacheSeconds = resolveCacheSeconds({
+          requested: parseInt(req.query.cache_seconds, 10),
+          def: CACHE_TTL.PIN_CARD.DEFAULT,
+          min: CACHE_TTL.PIN_CARD.MIN,
+          max: CACHE_TTL.PIN_CARD.MAX,
+        });
+        setCacheHeaders(res, cacheSeconds);
+      }
+      res.setHeader("Content-Type", "image/svg+xml");
+      res.end(result.content);
+      if (result.status !== "error - permanent") {
+        await storeRequest(req);
+      }
       break;
     case "/api/top-langs":
-      await topLangs(req, res);
+      result = await topLangs(req.query);
+      if (result.status === "error - temporary") {
+        setErrorCacheHeaders(res);
+      } else {
+        const cacheSeconds = resolveCacheSeconds({
+          requested: parseInt(req.query.cache_seconds, 10),
+          def: CACHE_TTL.TOP_LANGS_CARD.DEFAULT,
+          min: CACHE_TTL.TOP_LANGS_CARD.MIN,
+          max: CACHE_TTL.TOP_LANGS_CARD.MAX,
+        });
+        setCacheHeaders(res, cacheSeconds);
+      }
+      res.setHeader("Content-Type", "image/svg+xml");
+      res.end(result.content);
+      if (result.status !== "error - permanent") {
+        await storeRequest(req);
+      }
       break;
     case "/api/wakatime":
-      await wakatime(req, res);
+      result = await wakatime(req.query);
+      if (result.status === "error - temporary") {
+        setErrorCacheHeaders(res);
+      } else {
+        const cacheSeconds = resolveCacheSeconds({
+          requested: parseInt(req.query.cache_seconds, 10),
+          def: CACHE_TTL.WAKATIME_CARD.DEFAULT,
+          min: CACHE_TTL.WAKATIME_CARD.MIN,
+          max: CACHE_TTL.WAKATIME_CARD.MAX,
+        });
+        setCacheHeaders(res, cacheSeconds);
+      }
+      res.setHeader("Content-Type", "image/svg+xml");
+      res.end(result.content);
+      if (result.status !== "error - permanent") {
+        await storeRequest(req);
+      }
       break;
     case "/api/wakatime-proxy":
       await wakatimeProxy(req, res);

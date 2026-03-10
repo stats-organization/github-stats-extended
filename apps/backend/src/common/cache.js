@@ -2,6 +2,8 @@
 
 import { clampValue } from "./ops.js";
 
+// TODO: move out of package
+
 const MIN = 60;
 const HOUR = 60 * MIN;
 const DAY = 24 * HOUR;
@@ -106,7 +108,7 @@ const disableCaching = (res) => {
  * @param {number} cacheSeconds The cache seconds to set in the headers.
  */
 const setCacheHeaders = (res, cacheSeconds) => {
-  if (cacheSeconds < 1 || process.env.NODE_ENV === "development") {
+  if (cacheSeconds < 1) {
     disableCaching(res);
     return;
   }
@@ -128,10 +130,7 @@ const setErrorCacheHeaders = (res) => {
   const envCacheSeconds = process.env.CACHE_SECONDS
     ? parseInt(process.env.CACHE_SECONDS, 10)
     : NaN;
-  if (
-    (!isNaN(envCacheSeconds) && envCacheSeconds < 1) ||
-    process.env.NODE_ENV === "development"
-  ) {
+  if (!isNaN(envCacheSeconds) && envCacheSeconds < 1) {
     disableCaching(res);
     return;
   }

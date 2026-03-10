@@ -1,6 +1,6 @@
 // @ts-check
 
-import { excludeRepositories } from "../common/envs.js";
+import { getConfig } from "../common/config.js";
 import { CustomError, MissingParamError } from "../common/error.js";
 import { wrapTextMultiline } from "../common/fmt.js";
 import { request } from "../common/http.js";
@@ -101,7 +101,10 @@ const fetchTopLanguages = async (
   let repoNodes = res.data.data.user.repositories.nodes;
   /** @type {Record<string, boolean>} */
   let repoToHide = {};
-  const allExcludedRepos = [...exclude_repo, ...excludeRepositories];
+  const allExcludedRepos = [
+    ...exclude_repo,
+    ...getConfig().excludeRepositories,
+  ];
 
   // populate repoToHide map for quick lookup
   // while filtering out

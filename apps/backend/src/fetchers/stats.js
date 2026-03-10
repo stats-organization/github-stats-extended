@@ -4,7 +4,7 @@ import axios from "axios";
 import githubUsernameRegex from "github-username-regex";
 
 import { calculateRank } from "../calculateRank.js";
-import { excludeRepositories } from "../common/envs.js";
+import { getConfig } from "../common/config.js";
 import { CustomError, MissingParamError } from "../common/error.js";
 import { wrapTextMultiline } from "../common/fmt.js";
 import { request } from "../common/http.js";
@@ -161,8 +161,8 @@ const statsFetcher = async ({
     );
 
     hasNextPage =
-      (process.env.FETCH_MULTI_PAGE_STARS === "true" ||
-        process.env.FETCH_MULTI_PAGE_STARS > fetchedPages) &&
+      (getConfig().fetchMultiPageStars === "true" ||
+        getConfig().fetchMultiPageStars > fetchedPages) &&
       repoNodes.length === repoNodesWithStars.length &&
       res.data.data.user.repositories.pageInfo.hasNextPage;
 
@@ -429,7 +429,10 @@ const fetchStats = async (
   stats.contributedTo = user.repositoriesContributedTo.totalCount;
 
   // Retrieve stars while filtering out repositories to be hidden.
-  const allExcludedRepos = [...exclude_repo, ...excludeRepositories];
+  const allExcludedRepos = [
+    ...exclude_repo,
+    ...getConfig().excludeRepositories,
+  ];
   let repoToHide = new Set(allExcludedRepos);
 
   stats.totalStars = user.repositories.nodes

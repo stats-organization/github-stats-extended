@@ -6,6 +6,8 @@ import repoCard from "./api-renamed/pin.js";
 import langCard from "./api-renamed/top-langs.js";
 import wakatimeCard from "./api-renamed/wakatime.js";
 
+// TODO: adapt to new structure
+
 const app = express();
 const router = express.Router();
 

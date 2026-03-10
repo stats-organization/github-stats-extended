@@ -1,5 +1,6 @@
 // @ts-check
 
+import { getConfig } from "./config.js";
 import { getUserAccessByName } from "./database.js";
 import { CustomError } from "./error.js";
 import { logger } from "./log.js";
@@ -41,10 +42,7 @@ const retryer = async (fetcher, username, variables) => {
   if (userPAT?.token) {
     PATs = [{ name: `USER_${username}`, value: userPAT.token }];
   } else {
-    const patNames = Object.keys(process.env).filter((key) =>
-      /PAT_\d*$/.exec(key),
-    );
-    PATs = patNames.map((name) => ({ name, value: process.env[name] }));
+    PATs = getConfig().pats;
   }
 
   if (!PATs.length) {

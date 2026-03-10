@@ -3,13 +3,6 @@
 import { renderGistCard } from "../src/cards/gist.js";
 import { guardAccess } from "../src/common/access.js";
 import {
-  CACHE_TTL,
-  resolveCacheSeconds,
-  setCacheHeaders,
-  setErrorCacheHeaders,
-} from "../src/common/cache.js";
-import { storeRequest } from "../src/common/database.js";
-import {
   MissingParamError,
   retrieveSecondaryMessage,
 } from "../src/common/error.js";
@@ -19,26 +12,20 @@ import { fetchGist } from "../src/fetchers/gist.js";
 import { isLocaleAvailable } from "../src/translations.js";
 
 // @ts-ignore
-export default async (req, res) => {
-  const {
-    id,
-    title_color,
-    icon_color,
-    text_color,
-    bg_color,
-    theme,
-    cache_seconds,
-    locale,
-    border_radius,
-    border_color,
-    show_owner,
-    hide_border,
-  } = req.query;
-
-  res.setHeader("Content-Type", "image/svg+xml");
-
+export default async ({
+  id,
+  title_color,
+  icon_color,
+  text_color,
+  bg_color,
+  theme,
+  locale,
+  border_radius,
+  border_color,
+  show_owner,
+  hide_border,
+}) => {
   const access = guardAccess({
-    res,
     id,
     type: "gist",
     colors: {
@@ -50,12 +37,13 @@ export default async (req, res) => {
     },
   });
   if (!access.isPassed) {
-    return access.result;
+    return { status: "error - permanent", content: access.result };
   }
 
   if (locale && !isLocaleAvailable(locale)) {
-    return res.send(
-      renderError({
+    return {
+      status: "error - permanent",
+      content: renderError({
         message: "Something went wrong",
         secondaryMessage: "Language not found",
         renderOptions: {
@@ -66,23 +54,15 @@ export default async (req, res) => {
           theme,
         },
       }),
-    );
+    };
   }
 
   try {
-    await storeRequest(req);
     const gistData = await fetchGist(id);
-    const cacheSeconds = resolveCacheSeconds({
-      requested: parseInt(cache_seconds, 10),
-      def: CACHE_TTL.GIST_CARD.DEFAULT,
-      min: CACHE_TTL.GIST_CARD.MIN,
-      max: CACHE_TTL.GIST_CARD.MAX,
-    });
 
-    setCacheHeaders(res, cacheSeconds);
-
-    return res.send(
-      renderGistCard(gistData, {
+    return {
+      status: "success",
+      content: renderGistCard(gistData, {
         title_color,
         icon_color,
         text_color,
@@ -94,12 +74,12 @@ export default async (req, res) => {
         show_owner: parseBoolean(show_owner),
         hide_border: parseBoolean(hide_border),
       }),
-    );
+    };
   } catch (err) {
-    setErrorCacheHeaders(res);
     if (err instanceof Error) {
-      return res.send(
-        renderError({
+      return {
+        status: "error - temporary",
+        content: renderError({
           message: err.message,
           secondaryMessage: retrieveSecondaryMessage(err),
           renderOptions: {
@@ -111,10 +91,11 @@ export default async (req, res) => {
             show_repo_link: !(err instanceof MissingParamError),
           },
         }),
-      );
+      };
     }
-    return res.send(
-      renderError({
+    return {
+      status: "error - temporary",
+      content: renderError({
         message: "An unknown error occurred",
         renderOptions: {
           title_color,
@@ -124,6 +105,6 @@ export default async (req, res) => {
           theme,
         },
       }),
-    );
+    };
   }
 };

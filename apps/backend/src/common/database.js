@@ -4,6 +4,8 @@
  */
 import { Pool } from "pg";
 
+// TODO: move out of package
+
 export const pool = process.env.POSTGRES_URL
   ? new Pool({
       connectionString: process.env.POSTGRES_URL,

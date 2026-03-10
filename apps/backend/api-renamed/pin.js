@@ -3,13 +3,6 @@
 import { renderRepoCard } from "../src/cards/repo.js";
 import { guardAccess } from "../src/common/access.js";
 import {
-  CACHE_TTL,
-  resolveCacheSeconds,
-  setCacheHeaders,
-  setErrorCacheHeaders,
-} from "../src/common/cache.js";
-import { storeRequest } from "../src/common/database.js";
-import {
   MissingParamError,
   retrieveSecondaryMessage,
 } from "../src/common/error.js";
@@ -19,34 +12,28 @@ import { fetchRepo } from "../src/fetchers/repo.js";
 import { isLocaleAvailable } from "../src/translations.js";
 
 // @ts-ignore
-export default async (req, res) => {
-  const {
-    username,
-    repo,
-    hide_border,
-    title_color,
-    icon_color,
-    text_color,
-    bg_color,
-    card_width,
-    theme,
-    show_owner,
-    show,
-    show_icons,
-    number_format,
-    text_bold,
-    line_height,
-    cache_seconds,
-    locale,
-    border_radius,
-    border_color,
-    description_lines_count,
-  } = req.query;
-
-  res.setHeader("Content-Type", "image/svg+xml");
-
+export default async ({
+  username,
+  repo,
+  hide_border,
+  title_color,
+  icon_color,
+  text_color,
+  bg_color,
+  card_width,
+  theme,
+  show_owner,
+  show,
+  show_icons,
+  number_format,
+  text_bold,
+  line_height,
+  locale,
+  border_radius,
+  border_color,
+  description_lines_count,
+}) => {
   const access = guardAccess({
-    res,
     id: username,
     type: "username",
     colors: {
@@ -58,12 +45,13 @@ export default async (req, res) => {
     },
   });
   if (!access.isPassed) {
-    return access.result;
+    return { status: "error - permanent", content: access.result };
   }
 
   if (locale && !isLocaleAvailable(locale)) {
-    return res.send(
-      renderError({
+    return {
+      status: "error - permanent",
+      content: renderError({
         message: "Something went wrong",
         secondaryMessage: "Language not found",
         renderOptions: {
@@ -74,7 +62,7 @@ export default async (req, res) => {
           theme,
         },
       }),
-    );
+    };
   }
 
   const safePattern = /^[-\w/.,]+$/;
@@ -82,8 +70,9 @@ export default async (req, res) => {
     (username && !safePattern.test(username)) ||
     (repo && !safePattern.test(repo))
   ) {
-    return res.send(
-      renderError({
+    return {
+      status: "error - permanent",
+      content: renderError({
         message: "Something went wrong",
         secondaryMessage: "Username or repository contains unsafe characters",
         renderOptions: {
@@ -94,11 +83,10 @@ export default async (req, res) => {
           theme,
         },
       }),
-    );
+    };
   }
 
   try {
-    await storeRequest(req);
     const showStats = parseArray(show);
     const repoData = await fetchRepo(
       username,
@@ -110,17 +98,9 @@ export default async (req, res) => {
       showStats.includes("issues_commented"),
     );
 
-    const cacheSeconds = resolveCacheSeconds({
-      requested: parseInt(cache_seconds, 10),
-      def: CACHE_TTL.PIN_CARD.DEFAULT,
-      min: CACHE_TTL.PIN_CARD.MIN,
-      max: CACHE_TTL.PIN_CARD.MAX,
-    });
-
-    setCacheHeaders(res, cacheSeconds);
-
-    return res.send(
-      renderRepoCard(repoData, {
+    return {
+      status: "success",
+      content: renderRepoCard(repoData, {
         hide_border: parseBoolean(hide_border),
         title_color,
         icon_color,
@@ -140,12 +120,12 @@ export default async (req, res) => {
         locale: locale ? locale.toLowerCase() : null,
         description_lines_count,
       }),
-    );
+    };
   } catch (err) {
-    setErrorCacheHeaders(res);
     if (err instanceof Error) {
-      return res.send(
-        renderError({
+      return {
+        status: "error - temporary",
+        content: renderError({
           message: err.message,
           secondaryMessage: retrieveSecondaryMessage(err),
           renderOptions: {
@@ -157,10 +137,11 @@ export default async (req, res) => {
             show_repo_link: !(err instanceof MissingParamError),
           },
         }),
-      );
+      };
     }
-    return res.send(
-      renderError({
+    return {
+      status: "error - temporary",
+      content: renderError({
         message: "An unknown error occurred",
         renderOptions: {
           title_color,
@@ -170,6 +151,6 @@ export default async (req, res) => {
           theme,
         },
       }),
-    );
+    };
   }
 };
