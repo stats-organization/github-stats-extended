@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import wakatime from "../api-renamed/wakatime.js";
 import { renderWakatimeCard } from "../src/cards/wakatime.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
-import { renderError } from "../src/index.js";
+import { renderError } from "../src/common/render.js";
 
 import "@testing-library/jest-dom/vitest";
 
