@@ -6,6 +6,7 @@ import { calculateRank } from "../src/calculateRank.js";
 import { fetchStats } from "../src/fetchers/stats.js";
 
 import "@testing-library/jest-dom/vitest";
+import { getConfig, loadConfigFromEnv } from "../src/common/config.js";
 
 // Test parameters.
 const data_stats = {
@@ -107,6 +108,7 @@ const mock = new MockAdapter(axios);
 
 beforeEach(() => {
   process.env.FETCH_MULTI_PAGE_STARS = "false"; // Set to `false` to fetch only one page of stars.
+  loadConfigFromEnv();
   mock.onPost("https://api.github.com/graphql").reply((cfg) => {
     let req = JSON.parse(cfg.data);
 
@@ -313,6 +315,7 @@ describe("Test fetchStats", () => {
 
   it("should fetch two pages of stars if 'FETCH_MULTI_PAGE_STARS' env variable is set to `true`", async () => {
     process.env.FETCH_MULTI_PAGE_STARS = true;
+    loadConfigFromEnv();
 
     let stats = await fetchStats("anuraghazra");
     const rank = calculateRank({
@@ -349,6 +352,7 @@ describe("Test fetchStats", () => {
 
   it("should fetch one page of stars if 'FETCH_MULTI_PAGE_STARS' env variable is set to `false`", async () => {
     process.env.FETCH_MULTI_PAGE_STARS = "false";
+    loadConfigFromEnv();
 
     let stats = await fetchStats("anuraghazra");
     const rank = calculateRank({
@@ -385,6 +389,7 @@ describe("Test fetchStats", () => {
 
   it("should fetch one page of stars if 'FETCH_MULTI_PAGE_STARS' env variable is not set", async () => {
     process.env.FETCH_MULTI_PAGE_STARS = undefined;
+    loadConfigFromEnv();
 
     let stats = await fetchStats("anuraghazra");
     const rank = calculateRank({

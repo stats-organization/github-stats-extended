@@ -76,6 +76,7 @@ const fetchRepo = async (
   include_prs_reviewed = false,
   include_issues_authored = false,
   include_issues_commented = false,
+  pat = null,
 ) => {
   let owner = username;
   if (reponame && reponame.includes("/")) {
@@ -100,7 +101,7 @@ const fetchRepo = async (
     throw new MissingParamError(["repo"], urlExample);
   }
 
-  let res = await retryer(fetcher, username, { login: owner, repo: reponame });
+  let res = await retryer(fetcher, { login: owner, repo: reponame }, pat);
 
   const data = res.data.data;
 
@@ -124,6 +125,7 @@ const fetchRepo = async (
       include_prs_reviewed,
       include_issues_authored,
       include_issues_commented,
+      pat,
     );
     return {
       ...repoUserStats,
@@ -148,6 +150,7 @@ const fetchRepo = async (
       include_prs_reviewed,
       include_issues_authored,
       include_issues_commented,
+      pat,
     );
     return {
       ...repoUserStats,

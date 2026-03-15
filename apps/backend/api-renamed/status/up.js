@@ -85,7 +85,7 @@ export default async (req, res) => {
   try {
     let PATsValid = true;
     try {
-      await retryer(uptimeFetcher, null, {});
+      await retryer(uptimeFetcher, {});
     } catch (err) {
       // Resolve eslint no-unused-vars
       err;

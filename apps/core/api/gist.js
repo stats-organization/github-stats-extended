@@ -11,20 +11,22 @@ import { fetchGist } from "../src/fetchers/gist.js";
 import { isLocaleAvailable } from "../src/translations.js";
 
 // @ts-ignore
-export default async ({
-  id,
-  title_color,
-  icon_color,
-  text_color,
-  bg_color,
-  theme,
-  locale,
-  border_radius,
-  border_color,
-  show_owner,
-  hide_border,
-}) => {
-
+export default async (
+  {
+    id,
+    title_color,
+    icon_color,
+    text_color,
+    bg_color,
+    theme,
+    locale,
+    border_radius,
+    border_color,
+    show_owner,
+    hide_border,
+  },
+  pat = null,
+) => {
   if (locale && !isLocaleAvailable(locale)) {
     return {
       status: "error - permanent",
@@ -43,7 +45,7 @@ export default async ({
   }
 
   try {
-    const gistData = await fetchGist(id);
+    const gistData = await fetchGist(id, pat);
 
     return {
       status: "success",

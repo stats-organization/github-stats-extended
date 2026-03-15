@@ -1,7 +1,6 @@
 // @ts-check
 
 import { getConfig } from "./config.js";
-import { getUserAccessByName } from "./database.js";
 import { CustomError } from "./error.js";
 import { logger } from "./log.js";
 
@@ -28,19 +27,14 @@ function getRandomInt(max) {
  * Try to execute the fetcher function until it succeeds or the max number of retries is reached.
  *
  * @param {FetcherFunction} fetcher The fetcher function.
- * @param {string?} username GitHub username of the user whose PAT to use, if available
  * @param {any} variables Object with arguments to pass to the fetcher function.
+ * @param {string | null} pat Optional PAT override.
  * @returns {Promise<any>} The response from the fetcher function.
  */
-const retryer = async (fetcher, username, variables) => {
-  let userPAT;
-  if (username) {
-    userPAT = await getUserAccessByName(username);
-  }
-
+const retryer = async (fetcher, variables, pat = null) => {
   let PATs;
-  if (userPAT?.token) {
-    PATs = [{ name: `USER_${username}`, value: userPAT.token }];
+  if (pat) {
+    PATs = [{ name: "user PAT from database", value: pat }];
   } else {
     PATs = getConfig().pats;
   }

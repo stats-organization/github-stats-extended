@@ -35,8 +35,8 @@ export default async ({
   disable_animations,
   hide_progress,
   stats_format,
+  pat = null,
 }) => {
-
   if (locale && !isLocaleAvailable(locale)) {
     return {
       status: "error - permanent",
@@ -103,6 +103,7 @@ export default async ({
       size_weight,
       count_weight,
       parseArray(role),
+      pat,
     );
 
     return {

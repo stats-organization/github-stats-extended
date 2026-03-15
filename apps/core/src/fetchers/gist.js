@@ -84,13 +84,14 @@ const calculatePrimaryLanguage = (files) => {
  * Fetch GitHub gist information by given username and ID.
  *
  * @param {string} id GitHub gist ID.
+ * @param {string | null} pat Optional PAT override.
  * @returns {Promise<GistData>} Gist data.
  */
-const fetchGist = async (id) => {
+const fetchGist = async (id, pat = null) => {
   if (!id) {
     throw new MissingParamError(["id"], "/api/gist?id=GIST_ID");
   }
-  const res = await retryer(fetcher, null, { gistName: id });
+  const res = await retryer(fetcher, { gistName: id }, pat);
   if (res.data.errors) {
     throw new Error(res.data.errors[0].message);
   }

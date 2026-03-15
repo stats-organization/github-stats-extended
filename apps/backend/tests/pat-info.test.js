@@ -7,6 +7,7 @@ import MockAdapter from "axios-mock-adapter";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 import patInfo, { RATE_LIMIT_SECONDS } from "../api-renamed/status/pat-info.js";
+import { loadConfigFromEnv } from "github-readme-stats-core/src/common/config.js";
 
 const mock = new MockAdapter(axios);
 
@@ -69,6 +70,7 @@ describe("Test /api/status/pat-info", () => {
     process.env.PAT_2 = "testPAT2";
     process.env.PAT_3 = "testPAT3";
     process.env.PAT_4 = "testPAT4";
+    loadConfigFromEnv();
   });
 
   it("should return only 'validPATs' if all PATs are valid", async () => {

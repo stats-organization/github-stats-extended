@@ -35,23 +35,6 @@ const getDefaultEnv = () => {
 };
 
 /**
- * @param {Record<string, string | undefined>} env
- */
-const loadConfigFromEnv = (env = getDefaultEnv()) => {
-  const whitelist = parseCsv(env.WHITELIST);
-  const gistWhitelist = parseCsv(env.GIST_WHITELIST);
-  const excludeRepositories = parseCsv(env.EXCLUDE_REPO) || [];
-
-  return {
-    whitelist,
-    gistWhitelist,
-    excludeRepositories,
-    fetchMultiPageStars: env.FETCH_MULTI_PAGE_STARS,
-    pats: parsePATsFromEnv(env),
-  };
-};
-
-/**
  * @param {Partial<ReturnType<typeof loadConfigFromEnv>>} config
  */
 const normalizeConfig = (config = {}) => {
@@ -64,9 +47,25 @@ const normalizeConfig = (config = {}) => {
   };
 };
 
-let currentConfig = normalizeConfig(loadConfigFromEnv());
+let currentConfig;
 
 /**
- * @returns {ReturnType<typeof normalizeConfig>}
+ * @param {Record<string, string | undefined>} env
  */
+export const loadConfigFromEnv = (env = getDefaultEnv()) => {
+  const whitelist = parseCsv(env.WHITELIST);
+  const gistWhitelist = parseCsv(env.GIST_WHITELIST);
+  const excludeRepositories = parseCsv(env.EXCLUDE_REPO) || [];
+
+  currentConfig = normalizeConfig({
+    whitelist,
+    gistWhitelist,
+    excludeRepositories,
+    fetchMultiPageStars: env.FETCH_MULTI_PAGE_STARS,
+    pats: parsePATsFromEnv(env),
+  });
+};
+
+loadConfigFromEnv();
+
 export const getConfig = () => currentConfig;

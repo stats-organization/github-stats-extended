@@ -42,8 +42,8 @@ export default async ({
   border_color,
   rank_icon,
   show,
+  pat = null,
 }) => {
-
   if (locale && !isLocaleAvailable(locale)) {
     return {
       status: "error - permanent",
@@ -109,6 +109,7 @@ export default async ({
       showStats.includes("issues_authored"),
       showStats.includes("issues_commented"),
       parseArray(role),
+      pat,
     );
 
     return {

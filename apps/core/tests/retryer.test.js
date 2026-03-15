@@ -51,6 +51,11 @@ const fetcherFailWithMessageBasedRateLimitErr = vi.fn(
   },
 );
 
+const customFetcher = vi.fn((variables, token) => {
+  logger.log(variables, token);
+  return Promise.resolve({ data: { token } });
+});
+
 describe("Test Retryer", () => {
   it("retryer should return value and have zero retries on first try", async () => {
     let res = await retryer(fetcher, {});
@@ -81,5 +86,13 @@ describe("Test Retryer", () => {
       // @ts-ignore
       expect(err.message).toBe("Downtime due to GitHub API rate limiting");
     }
+  });
+
+  it("retryer should use injected PATs when provided", async () => {
+    const res = await retryer(customFetcher, {}, "user-pat-token");
+
+    expect(customFetcher).toHaveBeenCalledTimes(1);
+    expect(customFetcher).toHaveBeenCalledWith({}, "user-pat-token", 0);
+    expect(res).toStrictEqual({ data: { token: "user-pat-token" } });
   });
 });

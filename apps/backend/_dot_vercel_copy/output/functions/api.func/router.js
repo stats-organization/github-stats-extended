@@ -1,14 +1,17 @@
 /* eslint-disable import-x/no-unresolved */
 import { api, gist, pin, topLangs, wakatime } from "github-readme-stats-core";
 
+import { guardAccess } from "../../../../src/common/access.js";
 import {
   CACHE_TTL,
   resolveCacheSeconds,
   setCacheHeaders,
   setErrorCacheHeaders,
 } from "../../../../src/common/cache.js";
-import { guardAccess } from "../../../../src/common/access.js";
-import { storeRequest } from "../../../../src/common/database.js";
+import {
+  getUserAccessByName,
+  storeRequest,
+} from "../../../../src/common/database.js";
 
 import { default as authenticate } from "./api-renamed/authenticate.js";
 import { default as deleteUser } from "./api-renamed/delete-user.js";
@@ -42,6 +45,19 @@ const getGuardResult = (query, type, id) => {
   };
 };
 
+const getUserPat = async (username) => {
+  if (!username) {
+    return null;
+  }
+
+  const userAccess = await getUserAccessByName(username);
+  if (!userAccess?.token) {
+    return null;
+  }
+
+  return userAccess.token;
+};
+
 export default async (req, res) => {
   // remaining code expects express.js-like request and response objects
   res.send = function (data) {
@@ -60,10 +76,12 @@ export default async (req, res) => {
   let result;
 
   switch (url.pathname) {
-    case "/api":
-      result =
-        getGuardResult(req.query, "username", req.query.username) ??
-        (await api(req.query));
+    case "/api": {
+      result = getGuardResult(req.query, "username", req.query.username);
+      if (!result) {
+        const userPat = await getUserPat(req.query.username);
+        result = await api(req.query, userPat);
+      }
       if (result.status === "error - temporary") {
         setErrorCacheHeaders(res);
       } else {
@@ -81,6 +99,7 @@ export default async (req, res) => {
         await storeRequest(req);
       }
       break;
+    }
     case "/api/gist":
       result =
         getGuardResult(req.query, "gist", req.query.id) ??
@@ -102,10 +121,12 @@ export default async (req, res) => {
         await storeRequest(req);
       }
       break;
-    case "/api/pin":
-      result =
-        getGuardResult(req.query, "username", req.query.username) ??
-        (await pin(req.query));
+    case "/api/pin": {
+      result = getGuardResult(req.query, "username", req.query.username);
+      if (!result) {
+        const userPat = await getUserPat(req.query.username);
+        result = await pin(req.query, userPat);
+      }
       if (result.status === "error - temporary") {
         setErrorCacheHeaders(res);
       } else {
@@ -123,10 +144,13 @@ export default async (req, res) => {
         await storeRequest(req);
       }
       break;
-    case "/api/top-langs":
-      result =
-        getGuardResult(req.query, "username", req.query.username) ??
-        (await topLangs(req.query));
+    }
+    case "/api/top-langs": {
+      result = getGuardResult(req.query, "username", req.query.username);
+      if (!result) {
+        const userPat = await getUserPat(req.query.username);
+        result = await topLangs(req.query, userPat);
+      }
       if (result.status === "error - temporary") {
         setErrorCacheHeaders(res);
       } else {
@@ -144,6 +168,7 @@ export default async (req, res) => {
         await storeRequest(req);
       }
       break;
+    }
     case "/api/wakatime":
       result =
         getGuardResult(req.query, "wakatime", req.query.username) ??

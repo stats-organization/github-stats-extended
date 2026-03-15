@@ -11,28 +11,30 @@ import { fetchRepo } from "../src/fetchers/repo.js";
 import { isLocaleAvailable } from "../src/translations.js";
 
 // @ts-ignore
-export default async ({
-  username,
-  repo,
-  hide_border,
-  title_color,
-  icon_color,
-  text_color,
-  bg_color,
-  card_width,
-  theme,
-  show_owner,
-  show,
-  show_icons,
-  number_format,
-  text_bold,
-  line_height,
-  locale,
-  border_radius,
-  border_color,
-  description_lines_count,
-}) => {
-
+export default async (
+  {
+    username,
+    repo,
+    hide_border,
+    title_color,
+    icon_color,
+    text_color,
+    bg_color,
+    card_width,
+    theme,
+    show_owner,
+    show,
+    show_icons,
+    number_format,
+    text_bold,
+    line_height,
+    locale,
+    border_radius,
+    border_color,
+    description_lines_count,
+  },
+  pat = null,
+) => {
   if (locale && !isLocaleAvailable(locale)) {
     return {
       status: "error - permanent",
@@ -81,6 +83,7 @@ export default async ({
       showStats.includes("prs_reviewed"),
       showStats.includes("issues_authored"),
       showStats.includes("issues_commented"),
+      pat,
     );
 
     return {

@@ -59,6 +59,7 @@ const fetcher = (variables, token) => {
  * @param {number} size_weight Weightage to be given to size.
  * @param {number} count_weight Weightage to be given to count.
  * @param {string[]} ownerAffiliations The owner affiliations to filter by. Default: OWNER.
+ * @param {string|null} pat Optional PAT override.
  * @returns {Promise<TopLangData>} Top languages data.
  */
 const fetchTopLanguages = async (
@@ -67,16 +68,21 @@ const fetchTopLanguages = async (
   size_weight = 1,
   count_weight = 0,
   ownerAffiliations = [],
+  pat = null,
 ) => {
   if (!username) {
     throw new MissingParamError(["username"]);
   }
   ownerAffiliations = parseOwnerAffiliations(ownerAffiliations);
 
-  const res = await retryer(fetcher, username, {
-    login: username,
-    ownerAffiliations,
-  });
+  const res = await retryer(
+    fetcher,
+    {
+      login: username,
+      ownerAffiliations,
+    },
+    pat,
+  );
 
   if (res.data.errors) {
     logger.error(res.data.errors);

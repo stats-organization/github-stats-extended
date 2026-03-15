@@ -106,7 +106,8 @@ const fetcher = (variables, token) => {
  * @param {boolean} variables.includeDiscussions Include discussions.
  * @param {boolean} variables.includeDiscussionsAnswers Include discussions answers.
  * @param {string|undefined} variables.startTime Time to start the count of total commits.
- * @param {string[]} ownerAffiliations The owner affiliations to filter by. Default: OWNER.
+ * @param {string[]} variables.ownerAffiliations The owner affiliations to filter by. Default: OWNER.
+ * @param {string | null} variables.pat PAT override or null.
  * @returns {Promise<import('axios').AxiosResponse>} Axios response.
  *
  * @description This function supports multi-page fetching if the 'FETCH_MULTI_PAGE_STARS' environment variable is set to true or a limit of fetches.
@@ -118,6 +119,7 @@ const statsFetcher = async ({
   includeDiscussionsAnswers,
   startTime,
   ownerAffiliations,
+  pat,
 }) => {
   let stats;
   let hasNextPage = true;
@@ -134,7 +136,7 @@ const statsFetcher = async ({
       startTime,
       ownerAffiliations,
     };
-    let res = await retryer(fetcher, username, variables);
+    let res = await retryer(fetcher, variables, pat);
     if (res.data.errors) {
       return res;
     }
@@ -207,7 +209,7 @@ const fetchTotalItems = (variables, token) => {
  * @description Done like this because the GitHub API does not provide a way to fetch all the commits. See
  * #92#issuecomment-661026467 and #211 for more information.
  */
-const totalItemsFetcher = async (username, repo, owner, type, filter) => {
+const totalItemsFetcher = async (username, repo, owner, type, filter, pat) => {
   if (!githubUsernameRegex.test(username)) {
     logger.log("Invalid username provided.");
     throw new Error("Invalid username provided.");
@@ -215,13 +217,17 @@ const totalItemsFetcher = async (username, repo, owner, type, filter) => {
 
   let res;
   try {
-    res = await retryer(fetchTotalItems, username, {
-      login: username,
-      repo,
-      owner,
-      type,
-      filter,
-    });
+    res = await retryer(
+      fetchTotalItems,
+      {
+        login: username,
+        repo,
+        owner,
+        type,
+        filter,
+      },
+      pat,
+    );
   } catch (err) {
     logger.log(err);
     throw new Error(err);
@@ -247,6 +253,7 @@ const fetchRepoUserStats = async (
   include_prs_reviewed,
   include_issues_authored,
   include_issues_commented,
+  pat,
 ) => {
   let stats = {};
   if (include_prs_authored) {
@@ -256,6 +263,7 @@ const fetchRepoUserStats = async (
       owner,
       "issues",
       `author:${username}+type:pr`,
+      pat,
     );
   }
   if (include_prs_commented) {
@@ -265,6 +273,7 @@ const fetchRepoUserStats = async (
       owner,
       "issues",
       `commenter:${username}+-author:${username}+type:pr`,
+      pat,
     );
   }
   if (include_prs_reviewed) {
@@ -274,6 +283,7 @@ const fetchRepoUserStats = async (
       owner,
       "issues",
       `reviewed-by:${username}+-author:${username}+type:pr`,
+      pat,
     );
   }
   if (include_issues_authored) {
@@ -283,6 +293,7 @@ const fetchRepoUserStats = async (
       owner,
       "issues",
       `author:${username}+type:issue`,
+      pat,
     );
   }
   if (include_issues_commented) {
@@ -292,6 +303,7 @@ const fetchRepoUserStats = async (
       owner,
       "issues",
       `commenter:${username}+-author:${username}+type:issue`,
+      pat,
     );
   }
   return stats;
@@ -326,6 +338,7 @@ const fetchStats = async (
   include_issues_authored = false,
   include_issues_commented = false,
   ownerAffiliations = [],
+  pat = null,
 ) => {
   if (!username) {
     throw new MissingParamError(["username"]);
@@ -352,14 +365,17 @@ const fetchStats = async (
   };
   ownerAffiliations = parseOwnerAffiliations(ownerAffiliations);
 
-  let res = await statsFetcher({
-    username,
-    includeMergedPullRequests: include_merged_pull_requests,
-    includeDiscussions: include_discussions,
-    includeDiscussionsAnswers: include_discussions_answers,
-    startTime: commits_year ? `${commits_year}-01-01T00:00:00Z` : undefined,
-    ownerAffiliations,
-  });
+  let res = await statsFetcher(
+    {
+      username,
+      includeMergedPullRequests: include_merged_pull_requests,
+      includeDiscussions: include_discussions,
+      includeDiscussionsAnswers: include_discussions_answers,
+      startTime: commits_year ? `${commits_year}-01-01T00:00:00Z` : undefined,
+      ownerAffiliations,
+    },
+    pat,
+  );
 
   // Catch GraphQL errors.
   if (res.data.errors) {
@@ -394,6 +410,7 @@ const fetchStats = async (
       owner,
       "commits",
       `author:${username}`,
+      pat,
     );
   } else {
     stats.totalCommits = user.commits.totalCommitContributions;
@@ -407,6 +424,7 @@ const fetchStats = async (
     include_prs_reviewed,
     include_issues_authored,
     include_issues_commented,
+    pat,
   );
   Object.assign(stats, repoUserStats);
 

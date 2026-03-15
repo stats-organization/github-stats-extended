@@ -82,7 +82,53 @@ importers:
         version: 2.0.3
       github-readme-stats-core:
         specifier: workspace:*
-        version: link:../package
+        version: link:../core
+      github-username-regex:
+        specifier: ^1.0.0
+        version: 1.0.0
+      pg:
+        specifier: ^8.18.0
+        version: 8.18.0
+      word-wrap:
+        specifier: ^1.2.5
+        version: 1.2.5
+    devDependencies:
+      '@testing-library/dom':
+        specifier: ^10.4.1
+        version: 10.4.1
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
+      '@uppercod/css-to-object':
+        specifier: ^1.1.1
+        version: 1.1.1
+      '@vitest/coverage-v8':
+        specifier: catalog:default
+        version: 4.0.18(vitest@4.0.18(@types/node@25.2.3)(happy-dom@20.6.1)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.2))
+      axios-mock-adapter:
+        specifier: ^2.1.0
+        version: 2.1.0(axios@1.13.5)
+      express:
+        specifier: ^5.2.1
+        version: 5.2.1
+      js-yaml:
+        specifier: ^4.1.1
+        version: 4.1.1
+      jsdom:
+        specifier: 28.1.0
+        version: 28.1.0
+      vitest:
+        specifier: catalog:default
+        version: 4.0.18(@types/node@25.2.3)(happy-dom@20.6.1)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.2)
+
+  apps/core:
+    dependencies:
+      axios:
+        specifier: ^1.13.5
+        version: 1.13.5
+      emoji-name-map:
+        specifier: ^2.0.3
+        version: 2.0.3
       github-username-regex:
         specifier: ^1.0.0
         version: 1.0.0
@@ -202,52 +248,6 @@ importers:
       vite-plugin-string-replace:
         specifier: 1.1.5
         version: 1.1.5
-      vitest:
-        specifier: catalog:default
-        version: 4.0.18(@types/node@25.2.3)(happy-dom@20.6.1)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.2)
-
-  apps/package:
-    dependencies:
-      axios:
-        specifier: ^1.13.5
-        version: 1.13.5
-      emoji-name-map:
-        specifier: ^2.0.3
-        version: 2.0.3
-      github-username-regex:
-        specifier: ^1.0.0
-        version: 1.0.0
-      pg:
-        specifier: ^8.18.0
-        version: 8.18.0
-      word-wrap:
-        specifier: ^1.2.5
-        version: 1.2.5
-    devDependencies:
-      '@testing-library/dom':
-        specifier: ^10.4.1
-        version: 10.4.1
-      '@testing-library/jest-dom':
-        specifier: ^6.9.1
-        version: 6.9.1
-      '@uppercod/css-to-object':
-        specifier: ^1.1.1
-        version: 1.1.1
-      '@vitest/coverage-v8':
-        specifier: catalog:default
-        version: 4.0.18(vitest@4.0.18(@types/node@25.2.3)(happy-dom@20.6.1)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.2))
-      axios-mock-adapter:
-        specifier: ^2.1.0
-        version: 2.1.0(axios@1.13.5)
-      express:
-        specifier: ^5.2.1
-        version: 5.2.1
-      js-yaml:
-        specifier: ^4.1.1
-        version: 4.1.1
-      jsdom:
-        specifier: 28.1.0
-        version: 28.1.0
       vitest:
         specifier: catalog:default
         version: 4.0.18(@types/node@25.2.3)(happy-dom@20.6.1)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.2)
