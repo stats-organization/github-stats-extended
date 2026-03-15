@@ -1,44 +1,39 @@
 // @ts-check
 
-import { renderGistCard } from "../src/cards/gist.js";
-import { guardAccess } from "../src/common/access.js";
+import { renderWakatimeCard } from "../src/cards/wakatime.js";
 import {
   MissingParamError,
   retrieveSecondaryMessage,
 } from "../src/common/error.js";
-import { parseBoolean } from "../src/common/ops.js";
+import { parseArray, parseBoolean } from "../src/common/ops.js";
 import { renderError } from "../src/common/render.js";
-import { fetchGist } from "../src/fetchers/gist.js";
+import { fetchWakatimeStats } from "../src/fetchers/wakatime.js";
 import { isLocaleAvailable } from "../src/translations.js";
 
 // @ts-ignore
 export default async ({
-  id,
+  username,
   title_color,
   icon_color,
+  hide_border,
+  card_width,
+  line_height,
   text_color,
   bg_color,
   theme,
+  hide_title,
+  hide_progress,
+  custom_title,
   locale,
+  layout,
+  langs_count,
+  hide,
+  api_domain,
   border_radius,
   border_color,
-  show_owner,
-  hide_border,
+  display_format,
+  disable_animations,
 }) => {
-  const access = guardAccess({
-    id,
-    type: "gist",
-    colors: {
-      title_color,
-      text_color,
-      bg_color,
-      border_color,
-      theme,
-    },
-  });
-  if (!access.isPassed) {
-    return { status: "error - permanent", content: access.result };
-  }
 
   if (locale && !isLocaleAvailable(locale)) {
     return {
@@ -58,21 +53,30 @@ export default async ({
   }
 
   try {
-    const gistData = await fetchGist(id);
+    const stats = await fetchWakatimeStats({ username, api_domain });
 
     return {
       status: "success",
-      content: renderGistCard(gistData, {
+      content: renderWakatimeCard(stats, {
+        custom_title,
+        hide_title: parseBoolean(hide_title),
+        hide_border: parseBoolean(hide_border),
+        card_width: parseInt(card_width, 10),
+        hide: parseArray(hide),
+        line_height,
         title_color,
         icon_color,
         text_color,
         bg_color,
         theme,
+        hide_progress,
         border_radius,
         border_color,
         locale: locale ? locale.toLowerCase() : null,
-        show_owner: parseBoolean(show_owner),
-        hide_border: parseBoolean(hide_border),
+        layout,
+        langs_count,
+        display_format,
+        disable_animations: parseBoolean(disable_animations),
       }),
     };
   } catch (err) {

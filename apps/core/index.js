@@ -2,6 +2,17 @@ export { fetchWakatimeStats } from "./src/fetchers/wakatime.js";
 export { retryer } from "./src/common/retryer.js";
 
 export {
+  renderError,
+/*
+  createLanguageNode,
+  createProgressNode,
+  iconWithLabel,
+  flexLayout,
+  measureText,
+*/
+} from "./src/common/render.js";
+
+export {
   dateDiff,
   clampValue,
   /*
@@ -78,14 +89,6 @@ export {
 export { encodeHTML } from "./src/common/html.js";
 export { I18n } from "./src/common/I18n.js";
 export { icons, rankIcon } from "./src/common/icons.js";
-export {
-  renderError,
-  createLanguageNode,
-  createProgressNode,
-  iconWithLabel,
-  flexLayout,
-  measureText,
-} from "./src/common/render.js";
 export {
   CustomError,
   MissingParamError,

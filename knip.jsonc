@@ -7,7 +7,7 @@
         "_dot_vercel_copy/**/*" // Hopefully by using a npm package this file will be removed
       ]
     },
-    // TODO: add "apps/package"
+    // TODO: add "apps/core"
     "apps/frontend": {
       "entry": ["src/wakatime-override.ts"],
 

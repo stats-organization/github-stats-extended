@@ -7,6 +7,7 @@ import {
   setCacheHeaders,
   setErrorCacheHeaders,
 } from "../../../../src/common/cache.js";
+import { guardAccess } from "../../../../src/common/access.js";
 import { storeRequest } from "../../../../src/common/database.js";
 
 import { default as authenticate } from "./api-renamed/authenticate.js";
@@ -17,6 +18,29 @@ import { default as patInfo } from "./api-renamed/status/pat-info.js";
 import { default as statusUp } from "./api-renamed/status/up.js";
 import { default as userAccess } from "./api-renamed/user-access.js";
 import { default as wakatimeProxy } from "./api-renamed/wakatime-proxy.js";
+
+const getGuardResult = (query, type, id) => {
+  const access = guardAccess({
+    id,
+    type,
+    colors: {
+      title_color: query.title_color,
+      text_color: query.text_color,
+      bg_color: query.bg_color,
+      border_color: query.border_color,
+      theme: query.theme,
+    },
+  });
+
+  if (access.isPassed) {
+    return null;
+  }
+
+  return {
+    status: "error - permanent",
+    content: access.result,
+  };
+};
 
 export default async (req, res) => {
   // remaining code expects express.js-like request and response objects
@@ -37,7 +61,9 @@ export default async (req, res) => {
 
   switch (url.pathname) {
     case "/api":
-      result = await api(req.query);
+      result =
+        getGuardResult(req.query, "username", req.query.username) ??
+        (await api(req.query));
       if (result.status === "error - temporary") {
         setErrorCacheHeaders(res);
       } else {
@@ -56,7 +82,9 @@ export default async (req, res) => {
       }
       break;
     case "/api/gist":
-      result = await gist(req.query);
+      result =
+        getGuardResult(req.query, "gist", req.query.id) ??
+        (await gist(req.query));
       if (result.status === "error - temporary") {
         setErrorCacheHeaders(res);
       } else {
@@ -75,7 +103,9 @@ export default async (req, res) => {
       }
       break;
     case "/api/pin":
-      result = await pin(req.query);
+      result =
+        getGuardResult(req.query, "username", req.query.username) ??
+        (await pin(req.query));
       if (result.status === "error - temporary") {
         setErrorCacheHeaders(res);
       } else {
@@ -94,7 +124,9 @@ export default async (req, res) => {
       }
       break;
     case "/api/top-langs":
-      result = await topLangs(req.query);
+      result =
+        getGuardResult(req.query, "username", req.query.username) ??
+        (await topLangs(req.query));
       if (result.status === "error - temporary") {
         setErrorCacheHeaders(res);
       } else {
@@ -113,7 +145,9 @@ export default async (req, res) => {
       }
       break;
     case "/api/wakatime":
-      result = await wakatime(req.query);
+      result =
+        getGuardResult(req.query, "wakatime", req.query.username) ??
+        (await wakatime(req.query));
       if (result.status === "error - temporary") {
         setErrorCacheHeaders(res);
       } else {

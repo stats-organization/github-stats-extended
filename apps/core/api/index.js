@@ -1,52 +1,48 @@
 // @ts-check
 
-import { renderRepoCard } from "../src/cards/repo.js";
-import { guardAccess } from "../src/common/access.js";
+import { renderStatsCard } from "../src/cards/stats.js";
 import {
   MissingParamError,
   retrieveSecondaryMessage,
 } from "../src/common/error.js";
 import { parseArray, parseBoolean } from "../src/common/ops.js";
 import { renderError } from "../src/common/render.js";
-import { fetchRepo } from "../src/fetchers/repo.js";
+import { fetchStats } from "../src/fetchers/stats.js";
 import { isLocaleAvailable } from "../src/translations.js";
 
 // @ts-ignore
 export default async ({
   username,
   repo,
+  owner,
+  hide,
+  hide_title,
   hide_border,
+  card_width,
+  hide_rank,
+  show_icons,
+  include_all_commits,
+  commits_year,
+  line_height,
   title_color,
+  ring_color,
   icon_color,
   text_color,
-  bg_color,
-  card_width,
-  theme,
-  show_owner,
-  show,
-  show_icons,
-  number_format,
   text_bold,
-  line_height,
+  bg_color,
+  theme,
+  exclude_repo,
+  custom_title,
   locale,
+  disable_animations,
   border_radius,
+  number_format,
+  role,
+  number_precision,
   border_color,
-  description_lines_count,
+  rank_icon,
+  show,
 }) => {
-  const access = guardAccess({
-    id: username,
-    type: "username",
-    colors: {
-      title_color,
-      text_color,
-      bg_color,
-      border_color,
-      theme,
-    },
-  });
-  if (!access.isPassed) {
-    return { status: "error - permanent", content: access.result };
-  }
 
   if (locale && !isLocaleAvailable(locale)) {
     return {
@@ -68,13 +64,15 @@ export default async ({
   const safePattern = /^[-\w/.,]+$/;
   if (
     (username && !safePattern.test(username)) ||
-    (repo && !safePattern.test(repo))
+    (repo && !safePattern.test(repo)) ||
+    (owner && !safePattern.test(owner))
   ) {
     return {
       status: "error - permanent",
       content: renderError({
         message: "Something went wrong",
-        secondaryMessage: "Username or repository contains unsafe characters",
+        secondaryMessage:
+          "Username, repository or owner contains unsafe characters",
         renderOptions: {
           title_color,
           text_color,
@@ -88,38 +86,66 @@ export default async ({
 
   try {
     const showStats = parseArray(show);
-    const repoData = await fetchRepo(
+    const repoOwner = parseArray(owner);
+    let repository = parseArray(repo);
+    repository = repository.map((repo) =>
+      repo.includes("/") ? repo : `${username}/${repo}`,
+    );
+
+    const stats = await fetchStats(
       username,
-      repo,
+      parseBoolean(include_all_commits),
+      parseArray(exclude_repo),
+      showStats.includes("prs_merged") ||
+        showStats.includes("prs_merged_percentage"),
+      showStats.includes("discussions_started"),
+      showStats.includes("discussions_answered"),
+      parseInt(commits_year, 10),
+      repository,
+      repoOwner,
       showStats.includes("prs_authored"),
       showStats.includes("prs_commented"),
       showStats.includes("prs_reviewed"),
       showStats.includes("issues_authored"),
       showStats.includes("issues_commented"),
+      parseArray(role),
     );
 
     return {
       status: "success",
-      content: renderRepoCard(repoData, {
-        hide_border: parseBoolean(hide_border),
-        title_color,
-        icon_color,
-        text_color,
-        bg_color,
-        theme,
-        border_radius,
-        border_color,
-        card_width_input: parseInt(card_width, 10),
-        show_owner: parseBoolean(show_owner),
-        show: showStats,
-        show_icons: parseBoolean(show_icons),
-        number_format,
-        text_bold: parseBoolean(text_bold),
-        line_height,
+      content: renderStatsCard(
+        stats,
+        {
+          hide: parseArray(hide),
+          show_icons: parseBoolean(show_icons),
+          hide_title: parseBoolean(hide_title),
+          hide_border: parseBoolean(hide_border),
+          card_width: parseInt(card_width, 10),
+          hide_rank: parseBoolean(hide_rank),
+          include_all_commits: parseBoolean(include_all_commits),
+          commits_year: parseInt(commits_year, 10),
+          line_height,
+          title_color,
+          ring_color,
+          icon_color,
+          text_color,
+          text_bold: parseBoolean(text_bold),
+          bg_color,
+          theme,
+          custom_title,
+          border_radius,
+          border_color,
+          number_format,
+          number_precision: parseInt(number_precision, 10),
+          locale: locale ? locale.toLowerCase() : null,
+          disable_animations: parseBoolean(disable_animations),
+          rank_icon,
+          show: showStats,
+        },
         username,
-        locale: locale ? locale.toLowerCase() : null,
-        description_lines_count,
-      }),
+        repository,
+        repoOwner,
+      ),
     };
   } catch (err) {
     if (err instanceof Error) {

@@ -1,61 +1,90 @@
 // @ts-check
 
-import { renderWakatimeCard } from "../src/cards/wakatime.js";
-import { guardAccess } from "../src/common/access.js";
+import { renderTopLanguages } from "../src/cards/top-languages.js";
 import {
   MissingParamError,
   retrieveSecondaryMessage,
 } from "../src/common/error.js";
 import { parseArray, parseBoolean } from "../src/common/ops.js";
 import { renderError } from "../src/common/render.js";
-import { fetchWakatimeStats } from "../src/fetchers/wakatime.js";
+import { fetchTopLanguages } from "../src/fetchers/top-languages.js";
 import { isLocaleAvailable } from "../src/translations.js";
 
 // @ts-ignore
 export default async ({
   username,
-  title_color,
-  icon_color,
+  hide,
+  hide_title,
   hide_border,
   card_width,
-  line_height,
+  title_color,
   text_color,
   bg_color,
+  prog_bar_bg_color,
   theme,
-  hide_title,
-  hide_progress,
-  custom_title,
-  locale,
   layout,
   langs_count,
-  hide,
-  api_domain,
+  exclude_repo,
+  size_weight,
+  count_weight,
+  custom_title,
+  locale,
   border_radius,
   border_color,
-  display_format,
+  role,
   disable_animations,
+  hide_progress,
+  stats_format,
 }) => {
-  const access = guardAccess({
-    id: username,
-    type: "wakatime",
-    colors: {
-      title_color,
-      text_color,
-      bg_color,
-      border_color,
-      theme,
-    },
-  });
-  if (!access.isPassed) {
-    return { status: "error - permanent", content: access.result };
-  }
 
   if (locale && !isLocaleAvailable(locale)) {
     return {
       status: "error - permanent",
       content: renderError({
         message: "Something went wrong",
-        secondaryMessage: "Language not found",
+        secondaryMessage: "Locale not found",
+        renderOptions: {
+          title_color,
+          text_color,
+          bg_color,
+          border_color,
+          theme,
+        },
+      }),
+    };
+  }
+
+  if (
+    layout !== undefined &&
+    (typeof layout !== "string" ||
+      !["compact", "normal", "donut", "donut-vertical", "pie"].includes(layout))
+  ) {
+    return {
+      status: "error - permanent",
+      content: renderError({
+        message: "Something went wrong",
+        secondaryMessage: "Incorrect layout input",
+        renderOptions: {
+          title_color,
+          text_color,
+          bg_color,
+          border_color,
+          theme,
+        },
+      }),
+    };
+  }
+
+  if (
+    stats_format !== undefined &&
+    (typeof stats_format !== "string" ||
+      !["bytes", "percentages"].includes(stats_format))
+  ) {
+    return {
+      status: "error - permanent",
+      content: renderError({
+        message: "Something went wrong",
+        secondaryMessage: "Incorrect stats_format input",
         renderOptions: {
           title_color,
           text_color,
@@ -68,30 +97,35 @@ export default async ({
   }
 
   try {
-    const stats = await fetchWakatimeStats({ username, api_domain });
+    const topLangs = await fetchTopLanguages(
+      username,
+      parseArray(exclude_repo),
+      size_weight,
+      count_weight,
+      parseArray(role),
+    );
 
     return {
       status: "success",
-      content: renderWakatimeCard(stats, {
+      content: renderTopLanguages(topLangs, {
         custom_title,
         hide_title: parseBoolean(hide_title),
         hide_border: parseBoolean(hide_border),
         card_width: parseInt(card_width, 10),
         hide: parseArray(hide),
-        line_height,
         title_color,
-        icon_color,
         text_color,
         bg_color,
+        prog_bar_bg_color,
         theme,
-        hide_progress,
+        layout,
+        langs_count,
         border_radius,
         border_color,
         locale: locale ? locale.toLowerCase() : null,
-        layout,
-        langs_count,
-        display_format,
         disable_animations: parseBoolean(disable_animations),
+        hide_progress: parseBoolean(hide_progress),
+        stats_format,
       }),
     };
   } catch (err) {
