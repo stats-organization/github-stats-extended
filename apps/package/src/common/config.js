@@ -11,19 +11,6 @@ const parseCsv = (value) => {
   return value.split(",");
 };
 
-/*
-currently unused:
-
-/!**
- * @param {string | undefined} value
- * @returns {number | undefined}
- *!/
-const parseInteger = (value) => {
-  const parsed = parseInt(value, 10);
-  return Number.isNaN(parsed) ? undefined : parsed;
-};
-*/
-
 /**
  * @param {Record<string, string | undefined>} env
  * @returns {{name: string, value: string}[]}

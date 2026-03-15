@@ -108,4 +108,3 @@ const retryer = async (fetcher, username, variables) => {
 };
 
 export { retryer };
-export default retryer;

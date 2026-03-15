@@ -6,11 +6,7 @@
  *
  * @description This function is currently rate limited to 1 request per 3 minutes.
  */
-
-import { getConfig } from "../../src/common/config.js";
-import { request } from "../../src/common/http.js";
-import { logger } from "../../src/common/log.js";
-import { dateDiff } from "../../src/common/ops.js";
+import { dateDiff, getConfig, logger, request } from "github-readme-stats-core";
 
 export const RATE_LIMIT_SECONDS = 60 * 3; // 1 request per 3 minutes
 

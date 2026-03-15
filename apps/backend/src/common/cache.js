@@ -1,8 +1,6 @@
 // @ts-check
 
-import { clampValue } from "./ops.js";
-
-// TODO: move out of package
+import { clampValue } from "github-readme-stats-core";
 
 const MIN = 60;
 const HOUR = 60 * MIN;

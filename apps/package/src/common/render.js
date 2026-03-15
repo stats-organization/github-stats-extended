@@ -229,7 +229,6 @@ const measureText = (str, fontSize = 10) => {
 };
 
 export {
-  ERROR_CARD_LENGTH,
   renderError,
   createLanguageNode,
   createProgressNode,

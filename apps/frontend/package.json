@@ -1,8 +1,51 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
-  "private": true,
+  "name": "github-readme-stats-frontend",
+  "version": "2.0.0",
   "type": "module",
+  "homepage": "https://github-stats-extended.vercel.app/frontend",
+  "bugs": {
+    "url": "https://github.com/stats-organization/github-stats-extended/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stats-organization/github-stats-extended.git"
+  },
+  "author": {
+    "name": "Anurag Hazra",
+    "url": "https://github.com/anuraghazra/"
+  },
+  "contributors": [
+    {
+      "name": "Rick Staa",
+      "url": "https://github.com/rickstaa"
+    },
+    {
+      "name": "Alexandr Garbuzov",
+      "url": "https://github.com/qwerty541"
+    },
+    {
+      "name": "Abhijit Gupta",
+      "url": "https://github.com/avgupta456"
+    },
+    {
+      "name": "Marco Pasqualetti",
+      "url": "https://github.com/marcalexiei"
+    },
+    {
+      "name": "martin-mfg",
+      "url": "https://github.com/martin-mfg"
+    }
+  ],
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:e2e": "playwright test",
+    "typecheck": "tsc --noEmit"
+  },
   "dependencies": {
     "@reduxjs/toolkit": "2.11.2",
     "@tailwindcss/vite": "4.2.1",
@@ -34,15 +77,6 @@
     "vite-plugin-string-replace": "1.1.5",
     "vitest": "catalog:default"
   },
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "test": "vitest",
-    "test:e2e": "playwright test",
-    "typecheck": "tsc --noEmit"
-  },
-  "homepage": "/frontend",
   "browserslist": {
     "production": [
       ">0.2%",

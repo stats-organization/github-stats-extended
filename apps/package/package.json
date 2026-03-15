@@ -1,5 +1,5 @@
 {
-  "name": "github-readme-stats-backend",
+  "name": "github-readme-stats-core",
   "version": "2.0.0",
   "type": "module",
   "homepage": "https://github-stats-extended.vercel.app/frontend",
@@ -40,12 +40,24 @@
   "engines": {
     "node": "24.x"
   },
-  "private": true,
+  "description": "Dynamically generate stats for your GitHub readme",
+  "keywords": [
+    "github-readme-stats",
+    "readme-stats",
+    "cards",
+    "card-generator",
+    "github-stats",
+    "github-stats-extended",
+    "github-readme-stats-extended"
+  ],
+  "main": "index.js",
   "scripts": {
     "test": "vitest",
     "test:update:snapshot": "vitest -u",
     "test:e2e": "vitest --config vitest.config.e2e.ts",
-    "bench": "vitest bench --run --config vitest.config.bench.ts"
+    "bench": "vitest bench --run --config vitest.config.bench.ts",
+    "theme-readme-gen": "node scripts/generate-theme-doc",
+    "generate-langs-json": "node scripts/generate-langs-json"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.1",
@@ -61,7 +73,6 @@
   "dependencies": {
     "axios": "^1.13.5",
     "emoji-name-map": "^2.0.3",
-    "github-readme-stats-core": "workspace:*",
     "github-username-regex": "^1.0.0",
     "pg": "^8.18.0",
     "word-wrap": "^1.2.5"

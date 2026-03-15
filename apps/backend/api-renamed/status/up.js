@@ -7,9 +7,7 @@
  * @description This function is currently rate limited to 1 request per 3 minutes.
  */
 
-import { request } from "../../src/common/http.js";
-import { logger } from "../../src/common/log.js";
-import { default as retryer } from "../../src/common/retryer.js";
+import { logger, request, retryer } from "github-readme-stats-core";
 
 export const RATE_LIMIT_SECONDS = 60 * 3; // 1 request per 3 minutes
 

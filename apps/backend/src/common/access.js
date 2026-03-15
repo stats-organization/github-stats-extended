@@ -1,8 +1,8 @@
 // @ts-check
 
+import { getConfig, renderError } from "github-readme-stats-core";
+
 import { blacklist } from "./blacklist.js";
-import { getConfig } from "./config.js";
-import { renderError } from "./render.js";
 
 const NOT_WHITELISTED_USERNAME_MESSAGE = "This username is not whitelisted";
 const NOT_WHITELISTED_GIST_MESSAGE = "This gist ID is not whitelisted";

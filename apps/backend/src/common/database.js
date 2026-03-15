@@ -1,10 +1,5 @@
-/**
- * In the browser this has to be mocked to avoid runtime errors
- * @see apps/frontend/vite.config.ts
- */
 import { Pool } from "pg";
-
-// TODO: move out of package
+import {} from "github-readme-stats-core";
 
 export const pool = process.env.POSTGRES_URL
   ? new Pool({
