@@ -34,7 +34,6 @@ export default async ({
   display_format,
   disable_animations,
 }) => {
-
   if (locale && !isLocaleAvailable(locale)) {
     return {
       status: "error - permanent",
