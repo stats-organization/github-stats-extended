@@ -1,161 +1,156 @@
 // @ts-check
 
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import gist from "../api-renamed/gist.js";
-import { renderGistCard } from "../src/cards/gist.js";
+const mocks = vi.hoisted(() => ({
+  gist: vi.fn(),
+  storeRequest: vi.fn(),
+  getUserAccessByName: vi.fn(),
+  config: {},
+}));
+
+vi.mock("github-readme-stats-core", () => ({
+  api: vi.fn(),
+  gist: mocks.gist,
+  pin: vi.fn(),
+  topLangs: vi.fn(),
+  wakatime: vi.fn(),
+  getConfig: () => mocks.config,
+  renderError: ({ message }) => `render-error:${message}`,
+  clampValue: (value, min, max) => Math.min(Math.max(value, min), max),
+}));
+
+vi.mock("../src/common/database.js", () => ({
+  storeRequest: mocks.storeRequest,
+  getUserAccessByName: mocks.getUserAccessByName,
+}));
+
+import router from "../.vercel/output/functions/api.func/router.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
-import { renderError } from "../src/common/render.js";
 
-import { gist_data } from "./test-data/gist-data.js";
-
-import "@testing-library/jest-dom/vitest";
-
-const gist_not_found_data = {
-  data: {
-    viewer: {
-      gist: null,
-    },
-  },
-};
-
-const mock = new MockAdapter(axios);
-
-afterEach(() => {
-  mock.reset();
+const createRequest = (search) => ({
+  headers: {},
+  url: `/api/gist?${search}`,
 });
 
-describe("Test /api/gist", () => {
-  it("should test the request", async () => {
-    const req = {
-      query: {
-        id: "bbfce31e0217a3689c8d961a356cb10d",
-      },
-    };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
-    };
-    mock.onPost("https://api.github.com/graphql").reply(200, gist_data);
+const createResponse = () => ({
+  end: vi.fn(),
+  setHeader: vi.fn(),
+});
 
-    await gist(req, res);
+const defaultCacheHeader =
+  `max-age=${CACHE_TTL.GIST_CARD.DEFAULT}, ` +
+  `s-maxage=${CACHE_TTL.GIST_CARD.DEFAULT}, ` +
+  `stale-while-revalidate=${DURATIONS.ONE_DAY}`;
 
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderGistCard({
-        name: gist_data.data.viewer.gist.files[0].name,
-        nameWithOwner: `${gist_data.data.viewer.gist.owner.login}/${gist_data.data.viewer.gist.files[0].name}`,
-        description: gist_data.data.viewer.gist.description,
-        language: gist_data.data.viewer.gist.files[0].language.name,
-        starsCount: gist_data.data.viewer.gist.stargazerCount,
-        forksCount: gist_data.data.viewer.gist.forks.totalCount,
-      }),
-    );
+const errorCacheHeader =
+  `max-age=${CACHE_TTL.ERROR}, ` +
+  `s-maxage=${CACHE_TTL.ERROR}, ` +
+  `stale-while-revalidate=${DURATIONS.ONE_DAY}`;
+
+beforeEach(() => {
+  mocks.gist.mockReset();
+  mocks.storeRequest.mockReset().mockResolvedValue(undefined);
+  mocks.getUserAccessByName.mockReset().mockResolvedValue(null);
+  mocks.config = {};
+  // CACHE_SECONDS is not set here, just to safeguard against CACHE_SECONDS being set externally
+  delete process.env.CACHE_SECONDS;
+});
+
+describe("Test /api/gist backend routing", () => {
+  it("happy path should forward query params, respond with gist content and persist request", async () => {
+    mocks.gist.mockResolvedValue({
+      status: "success",
+      content: "mock-gist-svg",
+    });
+
+    const req = createRequest("id=bbfce31e0217a3689c8d961a356cb10d&theme=dark");
+    const res = createResponse();
+
+    await router(req, res);
+
+    expect(mocks.gist).toHaveBeenCalledWith({
+      id: "bbfce31e0217a3689c8d961a356cb10d",
+      theme: "dark",
+    });
+    expect(mocks.getUserAccessByName).not.toHaveBeenCalled();
+    expect(req.query).toEqual({
+      id: "bbfce31e0217a3689c8d961a356cb10d",
+      theme: "dark",
+    });
+    expect(res.setHeader.mock.calls).toEqual([
+      ["Cache-Control", defaultCacheHeader],
+      ["Content-Type", "image/svg+xml"],
+    ]);
+    expect(res.end).toHaveBeenCalledExactlyOnceWith("mock-gist-svg");
+    expect(mocks.storeRequest).toHaveBeenCalledExactlyOnceWith(req);
   });
 
-  it("should get the query options", async () => {
-    const req = {
-      query: {
-        id: "bbfce31e0217a3689c8d961a356cb10d",
-        title_color: "fff",
-        icon_color: "fff",
-        text_color: "fff",
-        bg_color: "fff",
-        show_owner: true,
-      },
-    };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
-    };
-    mock.onPost("https://api.github.com/graphql").reply(200, gist_data);
+  it("should use the shorter error cache for temporary gist errors", async () => {
+    mocks.gist.mockResolvedValue({
+      status: "error - temporary",
+      content: "temporary-error-svg",
+    });
 
-    await gist(req, res);
+    const req = createRequest("id=bbfce31e0217a3689c8d961a356cb10d");
+    const res = createResponse();
 
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderGistCard(
-        {
-          name: gist_data.data.viewer.gist.files[0].name,
-          nameWithOwner: `${gist_data.data.viewer.gist.owner.login}/${gist_data.data.viewer.gist.files[0].name}`,
-          description: gist_data.data.viewer.gist.description,
-          language: gist_data.data.viewer.gist.files[0].language.name,
-          starsCount: gist_data.data.viewer.gist.stargazerCount,
-          forksCount: gist_data.data.viewer.gist.forks.totalCount,
-        },
-        { ...req.query },
-      ),
-    );
+    await router(req, res);
+
+    expect(mocks.gist).toHaveBeenCalledWith({
+      id: "bbfce31e0217a3689c8d961a356cb10d",
+    });
+    expect(mocks.getUserAccessByName).not.toHaveBeenCalled();
+    expect(res.setHeader.mock.calls).toEqual([
+      ["Cache-Control", errorCacheHeader],
+      ["Content-Type", "image/svg+xml"],
+    ]);
+    expect(res.end).toHaveBeenCalledExactlyOnceWith("temporary-error-svg");
+    expect(mocks.storeRequest).toHaveBeenCalledExactlyOnceWith(req);
   });
 
-  it("should render error if gist is not found", async () => {
-    const req = {
-      query: {
-        id: "bbfce31e0217a3689c8d961a356cb10d",
-      },
-    };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
-    };
-    mock
-      .onPost("https://api.github.com/graphql")
-      .reply(200, gist_not_found_data);
+  it("should not persist permanent gist errors returned by core", async () => {
+    mocks.gist.mockResolvedValue({
+      status: "error - permanent",
+      content: "permanent-error-svg",
+    });
 
-    await gist(req, res);
+    const req = createRequest("id=bbfce31e0217a3689c8d961a356cb10d");
+    const res = createResponse();
 
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({ message: "Gist not found" }),
-    );
+    await router(req, res);
+
+    expect(mocks.gist).toHaveBeenCalledWith({
+      id: "bbfce31e0217a3689c8d961a356cb10d",
+    });
+    expect(mocks.getUserAccessByName).not.toHaveBeenCalled();
+    expect(res.setHeader.mock.calls).toEqual([
+      ["Cache-Control", defaultCacheHeader],
+      ["Content-Type", "image/svg+xml"],
+    ]);
+    expect(res.end).toHaveBeenCalledExactlyOnceWith("permanent-error-svg");
+    expect(mocks.storeRequest).not.toHaveBeenCalled();
   });
 
-  it("should render error if wrong locale is provided", async () => {
-    const req = {
-      query: {
-        id: "bbfce31e0217a3689c8d961a356cb10d",
-        locale: "asdf",
-      },
+  it("should reject non-whitelisted gist ids before calling core logic", async () => {
+    mocks.config = {
+      gistWhitelist: ["allowed-gist-id"],
     };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
-    };
-    mock.onPost("https://api.github.com/graphql").reply(200, gist_data);
 
-    await gist(req, res);
+    const req = createRequest("id=blocked-gist-id");
+    const res = createResponse();
 
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message: "Something went wrong",
-        secondaryMessage: "Language not found",
-      }),
+    await router(req, res);
+
+    expect(mocks.gist).not.toHaveBeenCalled();
+    expect(mocks.getUserAccessByName).not.toHaveBeenCalled();
+    expect(res.setHeader.mock.calls).toEqual([
+      ["Cache-Control", defaultCacheHeader],
+      ["Content-Type", "image/svg+xml"],
+    ]);
+    expect(res.end).toHaveBeenCalledExactlyOnceWith(
+      "render-error:This gist ID is not whitelisted",
     );
-  });
-
-  it("should have proper cache", async () => {
-    const req = {
-      query: {
-        id: "bbfce31e0217a3689c8d961a356cb10d",
-      },
-    };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
-    };
-    mock.onPost("https://api.github.com/graphql").reply(200, gist_data);
-
-    await gist(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.setHeader).toHaveBeenCalledWith(
-      "Cache-Control",
-      `max-age=${CACHE_TTL.GIST_CARD.DEFAULT}, ` +
-        `s-maxage=${CACHE_TTL.GIST_CARD.DEFAULT}, ` +
-        `stale-while-revalidate=${DURATIONS.ONE_DAY}`,
-    );
+    expect(mocks.storeRequest).not.toHaveBeenCalled();
   });
 });
