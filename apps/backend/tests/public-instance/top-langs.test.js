@@ -2,40 +2,190 @@
 
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import topLangs from "../../api-renamed/top-langs.js";
-import { renderError } from "../../src/common/render.js";
-import { data_langs } from "../test-data/langs-data.js";
+import { normalizeSvg } from "../utils.js";
 
 const mock = new MockAdapter(axios);
 
-afterEach(() => {
-  mock.reset();
+const data_langs = {
+  data: {
+    user: {
+      repositories: {
+        nodes: [
+          {
+            languages: {
+              edges: [{ size: 150, node: { color: "#0f0", name: "HTML" } }],
+            },
+          },
+          {
+            languages: {
+              edges: [{ size: 100, node: { color: "#0f0", name: "HTML" } }],
+            },
+          },
+          {
+            languages: {
+              edges: [
+                { size: 100, node: { color: "#0ff", name: "javascript" } },
+              ],
+            },
+          },
+          {
+            languages: {
+              edges: [
+                { size: 100, node: { color: "#0ff", name: "javascript" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  },
+};
+
+const createResponse = () => ({
+  end: vi.fn(),
+  setHeader: vi.fn(),
 });
 
-describe("Test /api/top-langs", () => {
-  it("should render error card if username in blacklist", async () => {
+beforeEach(() => {
+  vi.stubEnv("CACHE_SECONDS", "");
+  vi.stubEnv("GIST_WHITELIST", "");
+  vi.stubEnv("POSTGRES_URL", "");
+  vi.stubEnv("WHITELIST", "");
+
+  mock.onPost("https://api.github.com/graphql").reply(200, data_langs);
+});
+
+afterEach(() => {
+  mock.reset();
+  vi.unstubAllEnvs();
+  // modules may cache environment variables, so we need to reset them
+  vi.resetModules();
+});
+
+describe("Test /api/top-langs contract", () => {
+  it("should match the public happy-path response snapshot", async () => {
+    const { default: router } =
+      await import("../../.vercel/output/functions/api.func/router.js");
+
     const req = {
-      query: {
-        username: "renovate-bot",
-      },
+      headers: {},
+      url: "/api/top-langs?username=anuraghazra",
     };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
+    const res = createResponse();
+
+    await router(req, res);
+
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
+  });
+
+  it("should match the public missing-username response snapshot", async () => {
+    const { default: router } =
+      await import("../../.vercel/output/functions/api.func/router.js");
+
+    const req = {
+      headers: {},
+      url: "/api/top-langs",
     };
-    mock.onPost("https://api.github.com/graphql").reply(200, data_langs);
+    const res = createResponse();
 
-    await topLangs(req, res);
+    await router(req, res);
 
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message: "This username is blacklisted",
-        secondaryMessage: "Please deploy your own instance",
-        renderOptions: { show_repo_link: false },
-      }),
-    );
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
+  });
+
+  it("should render error card in same theme as requested card", async () => {
+    const { default: router } =
+      await import("../../.vercel/output/functions/api.func/router.js");
+
+    const req = {
+      headers: {},
+      url: "/api/top-langs?theme=merko",
+    };
+    const res = createResponse();
+
+    await router(req, res);
+
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
+  });
+
+  it("should match the public blacklisted-username response snapshot", async () => {
+    const { default: router } =
+      await import("../../.vercel/output/functions/api.func/router.js");
+
+    const req = {
+      headers: {},
+      url: "/api/top-langs?username=renovate-bot",
+    };
+    const res = createResponse();
+
+    await router(req, res);
+
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
+  });
+
+  it("should match the private non-whitelisted username response snapshot", async () => {
+    vi.stubEnv("WHITELIST", "anuraghazra");
+
+    const { default: router } =
+      await import("../../.vercel/output/functions/api.func/router.js");
+
+    const req = {
+      headers: {},
+      url: "/api/top-langs?username=martin-mfg",
+    };
+    const res = createResponse();
+
+    await router(req, res);
+
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
+  });
+
+  it("should match the private missing-username response snapshot", async () => {
+    vi.stubEnv("WHITELIST", "anuraghazra");
+
+    const { default: router } =
+      await import("../../.vercel/output/functions/api.func/router.js");
+
+    const req = {
+      headers: {},
+      url: "/api/top-langs",
+    };
+    const res = createResponse();
+
+    await router(req, res);
+
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
   });
 });

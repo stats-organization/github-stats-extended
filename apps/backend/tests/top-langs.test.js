@@ -1,192 +1,91 @@
 // @ts-check
 
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import topLangs from "../api-renamed/top-langs.js";
-import { renderTopLanguages } from "../src/cards/top-languages.js";
+const mocks = vi.hoisted(() => ({
+  topLangs: vi.fn(),
+  storeRequest: vi.fn(),
+  getUserAccessByName: vi.fn(),
+  config: {},
+}));
+
+vi.mock("github-readme-stats-core", () => ({
+  api: vi.fn(),
+  gist: vi.fn(),
+  pin: vi.fn(),
+  topLangs: mocks.topLangs,
+  wakatime: vi.fn(),
+  getConfig: () => mocks.config,
+  renderError: ({ message }) => `render-error:${message}`,
+  clampValue: (value, min, max) => Math.min(Math.max(value, min), max),
+}));
+
+vi.mock("../src/common/database.js", () => ({
+  storeRequest: mocks.storeRequest,
+  getUserAccessByName: mocks.getUserAccessByName,
+}));
+
+import router from "../.vercel/output/functions/api.func/router.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
-import { renderError } from "../src/common/render.js";
 
-import { data_langs } from "./test-data/langs-data.js";
-
-import "@testing-library/jest-dom/vitest";
-
-const error = {
-  errors: [
-    {
-      type: "NOT_FOUND",
-      path: ["user"],
-      locations: [],
-      message: "Could not fetch user",
-    },
-  ],
-};
-
-const langs = {
-  HTML: {
-    color: "#0f0",
-    name: "HTML",
-    size: 250,
-  },
-  javascript: {
-    color: "#0ff",
-    name: "javascript",
-    size: 200,
-  },
-};
-
-const mock = new MockAdapter(axios);
-
-afterEach(() => {
-  mock.reset();
+const createRequest = (search = "") => ({
+  headers: {},
+  url: `/api/top-langs?${search}`,
 });
 
-describe("Test /api/top-langs", () => {
-  it("should test the request", async () => {
-    const req = {
-      query: {
-        username: "anuraghazra",
-      },
-    };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
-    };
-    mock.onPost("https://api.github.com/graphql").reply(200, data_langs);
+const createResponse = () => ({
+  end: vi.fn(),
+  setHeader: vi.fn(),
+});
 
-    await topLangs(req, res);
+const defaultCacheHeader =
+  `max-age=${CACHE_TTL.TOP_LANGS_CARD.DEFAULT}, ` +
+  `s-maxage=${CACHE_TTL.TOP_LANGS_CARD.DEFAULT}, ` +
+  `stale-while-revalidate=${DURATIONS.ONE_DAY}`;
 
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(renderTopLanguages(langs));
-  });
+beforeEach(() => {
+  mocks.topLangs.mockReset();
+  mocks.storeRequest.mockReset().mockResolvedValue(undefined);
+  mocks.getUserAccessByName.mockReset().mockResolvedValue(null);
+  mocks.config = {};
+  // CACHE_SECONDS is not set here, this is just to safeguard against CACHE_SECONDS being set externally
+  delete process.env.CACHE_SECONDS;
+});
 
-  it("should work with the query options", async () => {
-    const req = {
-      query: {
-        username: "anuraghazra",
-        hide_title: true,
-        card_width: 100,
-        title_color: "fff",
-        icon_color: "fff",
-        text_color: "fff",
-        bg_color: "fff",
-      },
-    };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
-    };
-    mock.onPost("https://api.github.com/graphql").reply(200, data_langs);
+describe("Test /api/top-langs backend routing", () => {
+  it("happy path should pass query params and user PAT, respond with top languages content and persist request", async () => {
+    mocks.getUserAccessByName.mockResolvedValue({ token: "user-pat" });
+    mocks.topLangs.mockResolvedValue({
+      status: "success",
+      content: "mock-top-langs-svg",
+    });
 
-    await topLangs(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderTopLanguages(langs, {
-        hide_title: true,
-        card_width: 100,
-        title_color: "fff",
-        icon_color: "fff",
-        text_color: "fff",
-        bg_color: "fff",
-      }),
+    const req = createRequest(
+      "username=anuraghazra&layout=compact&langs_count=5",
     );
-  });
+    const res = createResponse();
 
-  it("should render error card on user data fetch error", async () => {
-    const req = {
-      query: {
+    await router(req, res);
+
+    expect(mocks.getUserAccessByName).toHaveBeenCalledWith("anuraghazra");
+    expect(mocks.topLangs).toHaveBeenCalledWith(
+      {
         username: "anuraghazra",
+        layout: "compact",
+        langs_count: "5",
       },
-    };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
-    };
-    mock.onPost("https://api.github.com/graphql").reply(200, error);
-
-    await topLangs(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message: error.errors[0].message,
-        secondaryMessage:
-          "Make sure the provided username is not an organization",
-      }),
+      "user-pat",
     );
-  });
-
-  it("should render error card on incorrect layout input", async () => {
-    const req = {
-      query: {
-        username: "anuraghazra",
-        layout: ["pie"],
-      },
-    };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
-    };
-    mock.onPost("https://api.github.com/graphql").reply(200, data_langs);
-
-    await topLangs(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message: "Something went wrong",
-        secondaryMessage: "Incorrect layout input",
-      }),
-    );
-  });
-
-  it("should render error card if wrong locale provided", async () => {
-    const req = {
-      query: {
-        username: "anuraghazra",
-        locale: "asdf",
-      },
-    };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
-    };
-    mock.onPost("https://api.github.com/graphql").reply(200, data_langs);
-
-    await topLangs(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message: "Something went wrong",
-        secondaryMessage: "Locale not found",
-      }),
-    );
-  });
-
-  it("should have proper cache", async () => {
-    const req = {
-      query: {
-        username: "anuraghazra",
-      },
-    };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
-    };
-    mock.onPost("https://api.github.com/graphql").reply(200, data_langs);
-
-    await topLangs(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.setHeader).toHaveBeenCalledWith(
-      "Cache-Control",
-      `max-age=${CACHE_TTL.TOP_LANGS_CARD.DEFAULT}, ` +
-        `s-maxage=${CACHE_TTL.TOP_LANGS_CARD.DEFAULT}, ` +
-        `stale-while-revalidate=${DURATIONS.ONE_DAY}`,
-    );
+    expect(req.query).toEqual({
+      username: "anuraghazra",
+      layout: "compact",
+      langs_count: "5",
+    });
+    expect(res.setHeader.mock.calls).toEqual([
+      ["Cache-Control", defaultCacheHeader],
+      ["Content-Type", "image/svg+xml"],
+    ]);
+    expect(res.end).toHaveBeenCalledExactlyOnceWith("mock-top-langs-svg");
+    expect(mocks.storeRequest).toHaveBeenCalledExactlyOnceWith(req);
   });
 });
