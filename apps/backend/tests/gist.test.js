@@ -53,12 +53,12 @@ beforeEach(() => {
   mocks.storeRequest.mockReset().mockResolvedValue(undefined);
   mocks.getUserAccessByName.mockReset().mockResolvedValue(null);
   mocks.config = {};
-  // CACHE_SECONDS is not set here, just to safeguard against CACHE_SECONDS being set externally
+  // CACHE_SECONDS is not set here, this is just to safeguard against CACHE_SECONDS being set externally
   delete process.env.CACHE_SECONDS;
 });
 
 describe("Test /api/gist backend routing", () => {
-  it("happy path should forward query params, respond with gist content and persist request", async () => {
+  it("happy path should pass query params, respond with gist content and persist request", async () => {
     mocks.gist.mockResolvedValue({
       status: "success",
       content: "mock-gist-svg",

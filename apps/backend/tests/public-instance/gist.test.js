@@ -2,38 +2,122 @@
 
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import gist from "../../api-renamed/gist.js";
-import { renderError } from "../../src/common/render.js";
-import { gist_data } from "../test-data/gist-data.js";
+import { normalizeSvg } from "../utils.js";
 
 const mock = new MockAdapter(axios);
 
-afterEach(() => {
-  mock.reset();
+const happy_path_gist_data = {
+  data: {
+    viewer: {
+      gist: {
+        description:
+          "List of countries and territories in English and Spanish: name, continent, capital, dial code, country codes, TLD, and area in sq km. Lista de países y territorios en Inglés y Español: nombre, continente, capital, código de teléfono, códigos de país, dominio y área en km cuadrados. Updated 2023",
+        owner: {
+          login: "Yizack",
+        },
+        stargazerCount: 33,
+        forks: {
+          totalCount: 11,
+        },
+        files: [
+          {
+            name: "countries.json",
+            language: {
+              name: "JSON",
+            },
+            size: 85858,
+          },
+        ],
+      },
+    },
+  },
+};
+
+const createResponse = () => ({
+  end: vi.fn(),
+  setHeader: vi.fn(),
 });
 
-describe("Test /api/gist", () => {
-  it("should render error if id is not provided", async () => {
+beforeEach(() => {
+  vi.stubEnv("CACHE_SECONDS", "");
+  vi.stubEnv("GIST_WHITELIST", "");
+  vi.stubEnv("POSTGRES_URL", "");
+  vi.stubEnv("WHITELIST", "");
+
+  mock
+    .onPost("https://api.github.com/graphql")
+    .reply(200, happy_path_gist_data);
+});
+
+afterEach(() => {
+  mock.reset();
+  vi.unstubAllEnvs();
+  // modules may cache environment variables, so we need to reset them
+  vi.resetModules();
+});
+
+describe("Test /api/gist contract", () => {
+  it("should match the public happy-path response snapshot", async () => {
+    const { default: router } =
+      await import("../../.vercel/output/functions/api.func/router.js");
+
     const req = {
-      query: {},
+      headers: {},
+      url: "/api/gist?id=happy-gist-id",
     };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
+    const res = createResponse();
+
+    await router(req, res);
+
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
+  });
+
+  it("should match the public missing-id response snapshot", async () => {
+    const { default: router } =
+      await import("../../.vercel/output/functions/api.func/router.js");
+
+    const req = {
+      headers: {},
+      url: "/api/gist",
     };
-    mock.onPost("https://api.github.com/graphql").reply(200, gist_data);
+    const res = createResponse();
 
-    await gist(req, res);
+    await router(req, res);
 
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message: 'Missing params "id" make sure you pass the parameters in URL',
-        secondaryMessage: "/api/gist?id=GIST_ID",
-        renderOptions: { show_repo_link: false },
-      }),
-    );
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
+  });
+
+  it("should match the private missing-id response snapshot", async () => {
+    vi.stubEnv("GIST_WHITELIST", "allowed-gist-id");
+
+    const { default: router } =
+      await import("../../.vercel/output/functions/api.func/router.js");
+
+    const req = {
+      headers: {},
+      url: "/api/gist",
+    };
+    const res = createResponse();
+
+    await router(req, res);
+
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
   });
 });
