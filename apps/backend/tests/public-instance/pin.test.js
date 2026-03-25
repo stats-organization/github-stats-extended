@@ -2,64 +2,179 @@
 
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import pin from "../../api-renamed/pin.js";
-import { renderError } from "../../src/common/render.js";
-import { data_user } from "../test-data/pin-data.js";
+import { normalizeSvg } from "../utils.js";
 
 const mock = new MockAdapter(axios);
 
-afterEach(() => {
-  mock.reset();
+const data_user = {
+  data: {
+    user: {
+      repository: {
+        username: "anuraghazra",
+        name: "convoychat",
+        stargazers: {
+          totalCount: 38000,
+        },
+        description:
+          "Help us take over the world! React + TS + GraphQL Chat App",
+        primaryLanguage: {
+          color: "#2b7489",
+          id: "MDg6TGFuZ3VhZ2UyODc=",
+          name: "TypeScript",
+        },
+        forkCount: 100,
+        isTemplate: false,
+      },
+    },
+    organization: null,
+  },
+};
+
+const createResponse = () => ({
+  end: vi.fn(),
+  setHeader: vi.fn(),
 });
 
-describe("Test /api/pin", () => {
-  it("should render error card if username in blacklist", async () => {
+beforeEach(() => {
+  vi.stubEnv("CACHE_SECONDS", "");
+  vi.stubEnv("GIST_WHITELIST", "");
+  vi.stubEnv("POSTGRES_URL", "");
+  vi.stubEnv("WHITELIST", "");
+
+  mock.onPost("https://api.github.com/graphql").reply(200, data_user);
+});
+
+afterEach(() => {
+  mock.reset();
+  vi.unstubAllEnvs();
+  // modules may cache environment variables, so we need to reset them
+  vi.resetModules();
+});
+
+describe("Test /api/pin contract", () => {
+  it("should match the public happy-path response snapshot", async () => {
+    const { default: router } =
+      await import("../../.vercel/output/functions/api.func/router.js");
+
     const req = {
-      query: {
-        username: "renovate-bot",
-        repo: "convoychat",
-      },
+      headers: {},
+      url: "/api/pin?username=anuraghazra&repo=convoychat",
     };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
-    };
-    mock.onPost("https://api.github.com/graphql").reply(200, data_user);
+    const res = createResponse();
 
-    await pin(req, res);
+    await router(req, res);
 
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message: "This username is blacklisted",
-        secondaryMessage: "Please deploy your own instance",
-        renderOptions: { show_repo_link: false },
-      }),
-    );
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
   });
 
-  it("should render error card if missing required parameters", async () => {
+  it("should match the public missing-params response snapshot", async () => {
+    const { default: router } =
+      await import("../../.vercel/output/functions/api.func/router.js");
+
     const req = {
-      query: {},
+      headers: {},
+      url: "/api/pin",
     };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
+    const res = createResponse();
+
+    await router(req, res);
+
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
+  });
+
+  it("should render error card in same theme as requested card", async () => {
+    const { default: router } =
+      await import("../../.vercel/output/functions/api.func/router.js");
+
+    const req = {
+      headers: {},
+      url: "/api/pin?theme=merko",
     };
-    mock.onPost("https://api.github.com/graphql").reply(200, data_user);
+    const res = createResponse();
 
-    await pin(req, res);
+    await router(req, res);
 
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message:
-          'Missing params "username", "repo" make sure you pass the parameters in URL',
-        secondaryMessage: "/api/pin?username=USERNAME&amp;repo=REPO_NAME",
-        renderOptions: { show_repo_link: false },
-      }),
-    );
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
+  });
+
+  it("should match the public blacklisted-username response snapshot", async () => {
+    const { default: router } =
+      await import("../../.vercel/output/functions/api.func/router.js");
+
+    const req = {
+      headers: {},
+      url: "/api/pin?username=renovate-bot&repo=convoychat",
+    };
+    const res = createResponse();
+
+    await router(req, res);
+
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
+  });
+
+  it("should match the private non-whitelisted username response snapshot", async () => {
+    vi.stubEnv("WHITELIST", "anuraghazra");
+
+    const { default: router } =
+      await import("../../.vercel/output/functions/api.func/router.js");
+
+    const req = {
+      headers: {},
+      url: "/api/pin?username=martin-mfg",
+    };
+    const res = createResponse();
+
+    await router(req, res);
+
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
+  });
+
+  it("should match the private missing-username response snapshot", async () => {
+    vi.stubEnv("WHITELIST", "anuraghazra");
+
+    const { default: router } =
+      await import("../../.vercel/output/functions/api.func/router.js");
+
+    const req = {
+      headers: {},
+      url: "/api/pin",
+    };
+    const res = createResponse();
+
+    await router(req, res);
+
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
   });
 });

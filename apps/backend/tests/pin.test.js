@@ -1,175 +1,89 @@
 // @ts-check
 
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import pin from "../api-renamed/pin.js";
-import { renderRepoCard } from "../src/cards/repo.js";
+const mocks = vi.hoisted(() => ({
+  pin: vi.fn(),
+  storeRequest: vi.fn(),
+  getUserAccessByName: vi.fn(),
+  config: {},
+}));
+
+vi.mock("github-readme-stats-core", () => ({
+  api: vi.fn(),
+  gist: vi.fn(),
+  pin: mocks.pin,
+  topLangs: vi.fn(),
+  wakatime: vi.fn(),
+  getConfig: () => mocks.config,
+  renderError: ({ message }) => `render-error:${message}`,
+  clampValue: (value, min, max) => Math.min(Math.max(value, min), max),
+}));
+
+vi.mock("../src/common/database.js", () => ({
+  storeRequest: mocks.storeRequest,
+  getUserAccessByName: mocks.getUserAccessByName,
+}));
+
+import router from "../.vercel/output/functions/api.func/router.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
-import { renderError } from "../src/common/render.js";
 
-import { data_repo, data_user } from "./test-data/pin-data.js";
-
-import "@testing-library/jest-dom/vitest";
-
-const mock = new MockAdapter(axios);
-
-afterEach(() => {
-  mock.reset();
+const createRequest = (search = "") => ({
+  headers: {},
+  url: `/api/pin?${search}`,
 });
 
-describe("Test /api/pin", () => {
-  it("should test the request", async () => {
-    const req = {
-      query: {
+const createResponse = () => ({
+  end: vi.fn(),
+  setHeader: vi.fn(),
+});
+
+const defaultCacheHeader =
+  `max-age=${CACHE_TTL.PIN_CARD.DEFAULT}, ` +
+  `s-maxage=${CACHE_TTL.PIN_CARD.DEFAULT}, ` +
+  `stale-while-revalidate=${DURATIONS.ONE_DAY}`;
+
+beforeEach(() => {
+  mocks.pin.mockReset();
+  mocks.storeRequest.mockReset().mockResolvedValue(undefined);
+  mocks.getUserAccessByName.mockReset().mockResolvedValue(null);
+  mocks.config = {};
+  // CACHE_SECONDS is not set here, this is just to safeguard against CACHE_SECONDS being set externally
+  delete process.env.CACHE_SECONDS;
+});
+
+describe("Test /api/pin backend routing", () => {
+  it("happy path should pass query params and user PAT, respond with pin content and persist request", async () => {
+    mocks.getUserAccessByName.mockResolvedValue({ token: "user-pat" });
+    mocks.pin.mockResolvedValue({
+      status: "success",
+      content: "mock-pin-svg",
+    });
+
+    const req = createRequest("username=anuraghazra&repo=convoychat&theme=dark");
+    const res = createResponse();
+
+    await router(req, res);
+
+    expect(mocks.getUserAccessByName).toHaveBeenCalledWith("anuraghazra");
+    expect(mocks.pin).toHaveBeenCalledWith(
+      {
         username: "anuraghazra",
         repo: "convoychat",
+        theme: "dark",
       },
-    };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
-    };
-    mock.onPost("https://api.github.com/graphql").reply(200, data_user);
-
-    await pin(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      // @ts-ignore
-      renderRepoCard({
-        ...data_repo.repository,
-        starCount: data_repo.repository.stargazers.totalCount,
-      }),
+      "user-pat",
     );
-  });
-
-  it("should get the query options", async () => {
-    const req = {
-      query: {
-        username: "anuraghazra",
-        repo: "convoychat",
-        title_color: "fff",
-        icon_color: "fff",
-        text_color: "fff",
-        bg_color: "fff",
-        full_name: "1",
-      },
-    };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
-    };
-    mock.onPost("https://api.github.com/graphql").reply(200, data_user);
-
-    await pin(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderRepoCard(
-        // @ts-ignore
-        {
-          ...data_repo.repository,
-          starCount: data_repo.repository.stargazers.totalCount,
-        },
-        { ...req.query },
-      ),
-    );
-  });
-
-  it("should render error card if user repo not found", async () => {
-    const req = {
-      query: {
-        username: "anuraghazra",
-        repo: "convoychat",
-      },
-    };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
-    };
-    mock
-      .onPost("https://api.github.com/graphql")
-      .reply(200, { data: { user: { repository: null }, organization: null } });
-
-    await pin(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({ message: "User Repository Not found" }),
-    );
-  });
-
-  it("should render error card if org repo not found", async () => {
-    const req = {
-      query: {
-        username: "anuraghazra",
-        repo: "convoychat",
-      },
-    };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
-    };
-    mock
-      .onPost("https://api.github.com/graphql")
-      .reply(200, { data: { user: null, organization: { repository: null } } });
-
-    await pin(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({ message: "Organization Repository Not found" }),
-    );
-  });
-
-  it("should render error card if wrong locale provided", async () => {
-    const req = {
-      query: {
-        username: "anuraghazra",
-        repo: "convoychat",
-        locale: "asdf",
-      },
-    };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
-    };
-    mock.onPost("https://api.github.com/graphql").reply(200, data_user);
-
-    await pin(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message: "Something went wrong",
-        secondaryMessage: "Language not found",
-      }),
-    );
-  });
-
-  it("should have proper cache", async () => {
-    const req = {
-      query: {
-        username: "anuraghazra",
-        repo: "convoychat",
-      },
-    };
-    const res = {
-      setHeader: vi.fn(),
-      send: vi.fn(),
-    };
-    mock.onPost("https://api.github.com/graphql").reply(200, data_user);
-
-    await pin(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.setHeader).toHaveBeenCalledWith(
-      "Cache-Control",
-      `max-age=${CACHE_TTL.PIN_CARD.DEFAULT}, ` +
-        `s-maxage=${CACHE_TTL.PIN_CARD.DEFAULT}, ` +
-        `stale-while-revalidate=${DURATIONS.ONE_DAY}`,
-    );
+    expect(req.query).toEqual({
+      username: "anuraghazra",
+      repo: "convoychat",
+      theme: "dark",
+    });
+    expect(res.setHeader.mock.calls).toEqual([
+      ["Cache-Control", defaultCacheHeader],
+      ["Content-Type", "image/svg+xml"],
+    ]);
+    expect(res.end).toHaveBeenCalledExactlyOnceWith("mock-pin-svg");
+    expect(mocks.storeRequest).toHaveBeenCalledExactlyOnceWith(req);
   });
 });
