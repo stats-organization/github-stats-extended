@@ -5,15 +5,11 @@ export default defineConfig({
     coverage: {
       enabled: true,
     },
-    projects: [
-      {
-        test: {
-          environment: "jsdom",
-          dir: "tests",
-          include: ["./*.test.{ts,js}", "./public-instance/*.test.{ts,js}"],
-          setupFiles: ["./tests/_setup.js"],
-        },
-      },
+    environment: "jsdom",
+    include: [
+      "./tests/*.test.{ts,js}",
+      "./tests/public-instance/*.test.{ts,js}",
     ],
+    setupFiles: ["./tests/_setup.js"],
   },
 });

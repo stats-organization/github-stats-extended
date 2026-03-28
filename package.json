@@ -8,6 +8,7 @@
     "@eslint/js": "9.39.3",
     "@playwright/test": "1.58.2",
     "@types/node": "24.10.13",
+    "@vitest/coverage-v8": "catalog:default",
     "eslint": "9.39.2",
     "eslint-import-resolver-typescript": "4.4.4",
     "eslint-plugin-import-x": "4.16.1",
@@ -20,9 +21,12 @@
     "lint-staged": "16.2.7",
     "prettier": "3.8.1",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.56.1"
+    "typescript-eslint": "8.56.1",
+    "vite": "catalog:",
+    "vitest": "catalog:default"
   },
   "scripts": {
+    "test": "vitest",
     "prepare": "husky",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

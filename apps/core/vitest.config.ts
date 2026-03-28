@@ -6,8 +6,7 @@ export default defineConfig({
       enabled: true,
     },
     environment: "jsdom",
-    dir: "tests",
-    include: ["./*.test.{ts,js}"],
+    include: ["./tests/*.test.{ts,js}"],
     setupFiles: ["./tests/_setup.js"],
   },
 });
