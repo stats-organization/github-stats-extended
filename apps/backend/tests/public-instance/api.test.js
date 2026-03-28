@@ -12,25 +12,30 @@ const data_stats = {
   data: {
     user: {
       name: "Anurag Hazra",
-      repositoriesContributedTo: { totalCount: 50 },
+      login: "anuraghazra",
+      repositoriesContributedTo: { totalCount: 51 },
       commits: {
         totalCommitContributions: 200,
       },
       reviews: {
-        totalPullRequestReviewContributions: 50,
+        totalPullRequestReviewContributions: 1234,
       },
-      pullRequests: { totalCount: 400 },
-      mergedPullRequests: { totalCount: 320 },
+      pullRequests: { totalCount: 4000 },
+      mergedPullRequests: { totalCount: 3200 },
       openIssues: { totalCount: 300 },
-      closedIssues: { totalCount: 0 },
-      followers: { totalCount: 0 },
-      repositoryDiscussions: { totalCount: 10 },
+      closedIssues: { totalCount: 40 },
+      followers: { totalCount: 150 },
+      repositoryDiscussions: { totalCount: 222 },
       repositoryDiscussionComments: {
-        totalCount: 40,
+        totalCount: 111,
       },
       repositories: {
-        totalCount: 1,
-        nodes: [{ stargazers: { totalCount: 100 } }],
+        totalCount: 3,
+        nodes: [
+          { name: "repo-keep-1", stargazers: { totalCount: 1500 } },
+          { name: "repo-exclude-me", stargazers: { totalCount: 9999 } },
+          { name: "repo-keep-2", stargazers: { totalCount: 2600 } },
+        ],
         pageInfo: {
           hasNextPage: false,
           endCursor: "cursor",
@@ -77,6 +82,55 @@ describe("Test /api contract", () => {
     expect(res.end).toHaveBeenCalledOnce();
 
     expect({
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
+  });
+
+  it("should match the public many-params response snapshot", async () => {
+    mock.onPost("https://api.github.com/graphql").reply(200, data_stats);
+
+    const { default: router } =
+      await import("../../.vercel/output/functions/api.func/router.js");
+
+    const params = new URLSearchParams({
+      username: "anuraghazra",
+      show_icons: "true",
+      card_width: "540",
+      line_height: "32",
+      title_color: "123456",
+      ring_color: "654321",
+      icon_color: "ff00aa",
+      text_color: "abcdef",
+      text_bold: "false",
+      bg_color: "0f172a",
+      exclude_repo: "repo-exclude-me",
+      custom_title: "a custom title",
+      locale: "hi",
+      disable_animations: "true",
+      border_radius: "12",
+      number_format: "long",
+      number_precision: "1",
+      border_color: "fedcba",
+      rank_icon: "github",
+      commits_year: "2024",
+      hide: "issues",
+      role: "OWNER,COLLABORATOR",
+      show: "reviews,prs_merged,prs_merged_percentage,discussions_started,discussions_answered",
+    });
+
+    const req = {
+      headers: {},
+      url: `/api?${params.toString()}`,
+    };
+    const res = createResponse();
+
+    await router(req, res);
+
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      graphqlRequest: mock.history.post[0].data,
       headers: res.setHeader.mock.calls,
       content: normalizeSvg(res.end.mock.calls[0][0]),
     }).toMatchSnapshot();

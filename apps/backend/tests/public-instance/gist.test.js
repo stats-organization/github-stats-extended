@@ -79,6 +79,38 @@ describe("Test /api/gist contract", () => {
     }).toMatchSnapshot();
   });
 
+  it("should match the public many-params response snapshot", async () => {
+    const { default: router } =
+      await import("../../.vercel/output/functions/api.func/router.js");
+
+    const params = new URLSearchParams({
+      id: "happy-gist-id",
+      title_color: "123456",
+      icon_color: "ff00aa",
+      text_color: "abcdef",
+      bg_color: "0f172a",
+      border_radius: "12",
+      border_color: "fedcba",
+      show_owner: "true",
+    });
+
+    const req = {
+      headers: {},
+      url: `/api/gist?${params.toString()}`,
+    };
+    const res = createResponse();
+
+    await router(req, res);
+
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      graphqlRequest: mock.history.post[0].data,
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
+  });
+
   it("should match the public missing-id response snapshot", async () => {
     const { default: router } =
       await import("../../.vercel/output/functions/api.func/router.js");

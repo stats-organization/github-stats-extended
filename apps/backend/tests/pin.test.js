@@ -60,7 +60,9 @@ describe("Test /api/pin backend routing", () => {
       content: "mock-pin-svg",
     });
 
-    const req = createRequest("username=anuraghazra&repo=convoychat&theme=dark");
+    const req = createRequest(
+      "username=anuraghazra&repo=convoychat&theme=dark",
+    );
     const res = createResponse();
 
     await router(req, res);

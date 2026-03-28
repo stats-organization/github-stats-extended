@@ -14,11 +14,12 @@ const data_user = {
       repository: {
         username: "anuraghazra",
         name: "convoychat",
+        nameWithOwner: "anuraghazra/convoychat",
         stargazers: {
           totalCount: 38000,
         },
         description:
-          "Help us take over the world! React + TS + GraphQL Chat App",
+          "Help us take over the world with a deeply customizable React, TypeScript and GraphQL chat app that has enough text to wrap across multiple lines in the repository card.",
         primaryLanguage: {
           color: "#2b7489",
           id: "MDg6TGFuZ3VhZ2UyODc=",
@@ -26,6 +27,7 @@ const data_user = {
         },
         forkCount: 100,
         isTemplate: false,
+        isArchived: false,
       },
     },
     organization: null,
@@ -69,6 +71,73 @@ describe("Test /api/pin contract", () => {
     expect(res.end).toHaveBeenCalledOnce();
 
     expect({
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
+  });
+
+  it("should match the public many-params response snapshot", async () => {
+    mock.onPost("https://api.github.com/graphql").reply(200, data_user);
+    mock
+      .onGet(
+        "https://api.github.com/search/issues?per_page=1&q=repo:anuraghazra/convoychat+author:anuraghazra+type:pr",
+      )
+      .reply(200, { total_count: 1234 });
+    mock
+      .onGet(
+        "https://api.github.com/search/issues?per_page=1&q=repo:anuraghazra/convoychat+commenter:anuraghazra+-author:anuraghazra+type:pr",
+      )
+      .reply(200, { total_count: 2345 });
+    mock
+      .onGet(
+        "https://api.github.com/search/issues?per_page=1&q=repo:anuraghazra/convoychat+reviewed-by:anuraghazra+-author:anuraghazra+type:pr",
+      )
+      .reply(200, { total_count: 3456 });
+    mock
+      .onGet(
+        "https://api.github.com/search/issues?per_page=1&q=repo:anuraghazra/convoychat+author:anuraghazra+type:issue",
+      )
+      .reply(200, { total_count: 4567 });
+    mock
+      .onGet(
+        "https://api.github.com/search/issues?per_page=1&q=repo:anuraghazra/convoychat+commenter:anuraghazra+-author:anuraghazra+type:issue",
+      )
+      .reply(200, { total_count: 5678 });
+
+    const { default: router } =
+      await import("../../.vercel/output/functions/api.func/router.js");
+
+    const params = new URLSearchParams({
+      username: "anuraghazra",
+      repo: "convoychat",
+      title_color: "123456",
+      icon_color: "ff00aa",
+      text_color: "abcdef",
+      bg_color: "0f172a",
+      card_width: "560",
+      show_owner: "true",
+      show: "prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented",
+      show_icons: "false",
+      number_format: "long",
+      text_bold: "true",
+      line_height: "30",
+      border_radius: "12",
+      border_color: "fedcba",
+      description_lines_count: "1",
+    });
+
+    const req = {
+      headers: {},
+      url: `/api/pin?${params.toString()}`,
+    };
+    const res = createResponse();
+
+    await router(req, res);
+
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      graphqlRequest: mock.history.post[0].data,
       headers: res.setHeader.mock.calls,
       content: normalizeSvg(res.end.mock.calls[0][0]),
     }).toMatchSnapshot();
