@@ -69,7 +69,7 @@ afterEach(() => {
 describe("Test /api contract", () => {
   it("should match the public happy-path response snapshot", async () => {
     const { default: router } =
-      await import("../../.vercel/output/functions/api.func/router.js");
+      await import("../../router.js");
 
     const req = {
       headers: {},
@@ -91,7 +91,7 @@ describe("Test /api contract", () => {
     mock.onPost("https://api.github.com/graphql").reply(200, data_stats);
 
     const { default: router } =
-      await import("../../.vercel/output/functions/api.func/router.js");
+      await import("../../router.js");
 
     const params = new URLSearchParams({
       username: "anuraghazra",
@@ -138,7 +138,7 @@ describe("Test /api contract", () => {
 
   it("should match the public missing-username response snapshot", async () => {
     const { default: router } =
-      await import("../../.vercel/output/functions/api.func/router.js");
+      await import("../../router.js");
 
     const req = {
       headers: {},
@@ -158,7 +158,7 @@ describe("Test /api contract", () => {
 
   it("should render error card in same theme as requested card", async () => {
     const { default: router } =
-      await import("../../.vercel/output/functions/api.func/router.js");
+      await import("../../router.js");
 
     const req = {
       headers: {},
@@ -178,7 +178,7 @@ describe("Test /api contract", () => {
 
   it("should match the public blacklisted-username response snapshot", async () => {
     const { default: router } =
-      await import("../../.vercel/output/functions/api.func/router.js");
+      await import("../../router.js");
 
     const req = {
       headers: {},
@@ -200,7 +200,7 @@ describe("Test /api contract", () => {
     vi.stubEnv("WHITELIST", "anuraghazra");
 
     const { default: router } =
-      await import("../../.vercel/output/functions/api.func/router.js");
+      await import("../../router.js");
 
     const req = {
       headers: {},

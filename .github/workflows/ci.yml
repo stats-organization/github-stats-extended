@@ -49,8 +49,8 @@ jobs:
       - name: Run frontend tests
         run: pnpm --filter frontend run test
 
-      - name: Run backend tests
-        run: pnpm --filter github-readme-stats run test
+      - name: Run backend and core tests
+        run: pnpm run test
 
   frontend-test-e2e:
     name: Frontend E2E test
@@ -69,11 +69,6 @@ jobs:
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies
 
-      - name: Run vercel-preparation.sh
-        run: |
-          chmod +x ./vercel-preparation.sh
-          ./vercel-preparation.sh
-
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
 
@@ -91,16 +86,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
-
-      # Heads up!
-      #
-      # 1. Execution of this script is needed to resolve `.vercel` folder from `apps/frontend/src/components/Card/SVG.js`
-      # 2. This scripts removes `apps/backend/node_modules` breaking ESLint’s module resolution.
-      #    Dependency installation must occur after running ./vercel-preparation.sh.
-      - name: Run vercel-preparation.sh
-        run: |
-          chmod +x ./vercel-preparation.sh
-          ./vercel-preparation.sh
 
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies

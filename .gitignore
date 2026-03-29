@@ -26,7 +26,6 @@ apps/backend/vercel_token
 apps/backend-copy
 
 apps/frontend/.env
-apps/frontend/src/backend
 apps/frontend/build
 
 build-ts

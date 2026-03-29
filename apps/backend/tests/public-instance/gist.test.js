@@ -61,7 +61,7 @@ afterEach(() => {
 describe("Test /api/gist contract", () => {
   it("should match the public happy-path response snapshot", async () => {
     const { default: router } =
-      await import("../../.vercel/output/functions/api.func/router.js");
+      await import("../../router.js");
 
     const req = {
       headers: {},
@@ -81,7 +81,7 @@ describe("Test /api/gist contract", () => {
 
   it("should match the public many-params response snapshot", async () => {
     const { default: router } =
-      await import("../../.vercel/output/functions/api.func/router.js");
+      await import("../../router.js");
 
     const params = new URLSearchParams({
       id: "happy-gist-id",
@@ -113,7 +113,7 @@ describe("Test /api/gist contract", () => {
 
   it("should match the public missing-id response snapshot", async () => {
     const { default: router } =
-      await import("../../.vercel/output/functions/api.func/router.js");
+      await import("../../router.js");
 
     const req = {
       headers: {},
@@ -135,7 +135,7 @@ describe("Test /api/gist contract", () => {
     vi.stubEnv("GIST_WHITELIST", "allowed-gist-id");
 
     const { default: router } =
-      await import("../../.vercel/output/functions/api.func/router.js");
+      await import("../../router.js");
 
     const req = {
       headers: {},

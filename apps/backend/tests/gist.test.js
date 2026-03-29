@@ -25,7 +25,7 @@ vi.mock("../src/common/database.js", () => ({
   getUserAccessByName: mocks.getUserAccessByName,
 }));
 
-import router from "../.vercel/output/functions/api.func/router.js";
+import router from "../router.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
 
 const createRequest = (search) => ({

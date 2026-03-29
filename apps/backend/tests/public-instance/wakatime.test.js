@@ -154,7 +154,7 @@ afterEach(() => {
 describe("Test /api/wakatime contract", () => {
   it("should match the public happy-path response snapshot", async () => {
     const { default: router } =
-      await import("../../.vercel/output/functions/api.func/router.js");
+      await import("../../router.js");
 
     const req = {
       headers: {},
@@ -181,7 +181,7 @@ describe("Test /api/wakatime contract", () => {
       .reply(200, wakaTimeData);
 
     const { default: router } =
-      await import("../../.vercel/output/functions/api.func/router.js");
+      await import("../../router.js");
 
     const params = new URLSearchParams({
       username: "anuraghazra",
@@ -218,7 +218,7 @@ describe("Test /api/wakatime contract", () => {
 
   it("should match the public missing-username response snapshot", async () => {
     const { default: router } =
-      await import("../../.vercel/output/functions/api.func/router.js");
+      await import("../../router.js");
 
     const req = {
       headers: {},
@@ -238,7 +238,7 @@ describe("Test /api/wakatime contract", () => {
 
   it("should render error card in same theme as requested card", async () => {
     const { default: router } =
-      await import("../../.vercel/output/functions/api.func/router.js");
+      await import("../../router.js");
 
     const req = {
       headers: {},
@@ -265,7 +265,7 @@ describe("Test /api/wakatime contract", () => {
       .reply(200, wakaTimeProfileNotPublicData);
 
     const { default: router } =
-      await import("../../.vercel/output/functions/api.func/router.js");
+      await import("../../router.js");
 
     const req = {
       headers: {},
@@ -287,7 +287,7 @@ describe("Test /api/wakatime contract", () => {
     vi.stubEnv("WHITELIST", "anuraghazra");
 
     const { default: router } =
-      await import("../../.vercel/output/functions/api.func/router.js");
+      await import("../../router.js");
 
     const req = {
       headers: {},
@@ -309,7 +309,7 @@ describe("Test /api/wakatime contract", () => {
     vi.stubEnv("WHITELIST", "anuraghazra");
 
     const { default: router } =
-      await import("../../.vercel/output/functions/api.func/router.js");
+      await import("../../router.js");
 
     const req = {
       headers: {},
