@@ -37,9 +37,9 @@ export { default as wakatime } from "./api/wakatime.js";
 
 export { getConfig } from "./src/common/config.js";
 
-/*
-
 export { themes } from "./themes/index.js";
+
+/*
 
 export { calculateRank } from "./src/calculateRank.js";
 export {

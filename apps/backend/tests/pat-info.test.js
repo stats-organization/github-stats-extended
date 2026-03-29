@@ -4,10 +4,10 @@
 
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { loadConfigFromEnv } from "github-readme-stats-core/src/common/config.js";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 import patInfo, { RATE_LIMIT_SECONDS } from "../api-renamed/status/pat-info.js";
-import { loadConfigFromEnv } from "github-readme-stats-core/src/common/config.js";
 
 const mock = new MockAdapter(axios);
 

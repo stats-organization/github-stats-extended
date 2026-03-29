@@ -1,17 +1,4 @@
-/* eslint-disable import-x/no-unresolved */
 import { api, gist, pin, topLangs, wakatime } from "github-readme-stats-core";
-
-import { guardAccess } from "../../../../src/common/access.js";
-import {
-  CACHE_TTL,
-  resolveCacheSeconds,
-  setCacheHeaders,
-  setErrorCacheHeaders,
-} from "../../../../src/common/cache.js";
-import {
-  getUserAccessByName,
-  storeRequest,
-} from "../../../../src/common/database.js";
 
 import { default as authenticate } from "./api-renamed/authenticate.js";
 import { default as deleteUser } from "./api-renamed/delete-user.js";
@@ -21,6 +8,14 @@ import { default as patInfo } from "./api-renamed/status/pat-info.js";
 import { default as statusUp } from "./api-renamed/status/up.js";
 import { default as userAccess } from "./api-renamed/user-access.js";
 import { default as wakatimeProxy } from "./api-renamed/wakatime-proxy.js";
+import { guardAccess } from "./src/common/access.js";
+import {
+  CACHE_TTL,
+  resolveCacheSeconds,
+  setCacheHeaders,
+  setErrorCacheHeaders,
+} from "./src/common/cache.js";
+import { getUserAccessByName, storeRequest } from "./src/common/database.js";
 
 const getGuardResult = (query, type, id) => {
   const access = guardAccess({

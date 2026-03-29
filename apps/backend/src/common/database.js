@@ -1,11 +1,12 @@
-import { Pool } from "pg";
 import {} from "github-readme-stats-core";
 
-export const pool = process.env.POSTGRES_URL
-  ? new Pool({
-      connectionString: process.env.POSTGRES_URL,
-    })
-  : null;
+export let pool = null;
+if (process.env.POSTGRES_URL) {
+  const { Pool } = await import("pg");
+  pool = new Pool({
+    connectionString: process.env.POSTGRES_URL,
+  });
+}
 
 /**
  * Creates all required tables if they do not exist.

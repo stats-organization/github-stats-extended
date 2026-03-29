@@ -90,7 +90,7 @@ importers:
         specifier: ^2.0.3
         version: 2.0.3
       github-readme-stats-core:
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../core
       github-username-regex:
         specifier: ^1.0.0
@@ -196,6 +196,12 @@ importers:
       emoji-name-map:
         specifier: ^2.0.3
         version: 2.0.3
+      github-readme-stats-backend:
+        specifier: workspace:^
+        version: link:../backend
+      github-readme-stats-core:
+        specifier: workspace:^
+        version: link:../core
       github-username-regex:
         specifier: ^1.0.0
         version: 1.0.0

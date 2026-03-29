@@ -1,7 +1,7 @@
+// @ts-expect-error type info should be added later
+import { themes } from "github-readme-stats-core";
 import type { JSX } from "react";
 
-// @ts-expect-error this will be provided by the npm package
-import { themes } from "../../../backend/themes/index";
 import { Card } from "../../../components/Card/Card";
 
 // to be removed once npm package has been created
