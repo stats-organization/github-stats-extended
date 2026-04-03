@@ -4,66 +4,9 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { normalizeSvg } from "../utils.js";
+import { data_langs, normalizeSvg } from "../utils.js";
 
 const mock = new MockAdapter(axios);
-
-const data_langs = {
-  data: {
-    user: {
-      repositories: {
-        nodes: [
-          {
-            name: "repo-html",
-            languages: {
-              edges: [{ size: 180, node: { color: "#0f0", name: "HTML" } }],
-            },
-          },
-          {
-            name: "repo-javascript",
-            languages: {
-              edges: [
-                { size: 120, node: { color: "#0ff", name: "JavaScript" } },
-              ],
-            },
-          },
-          {
-            name: "repo-ts-1",
-            languages: {
-              edges: [
-                { size: 45, node: { color: "#3178c6", name: "TypeScript" } },
-              ],
-            },
-          },
-          {
-            name: "repo-ts-2",
-            languages: {
-              edges: [
-                { size: 45, node: { color: "#3178c6", name: "TypeScript" } },
-              ],
-            },
-          },
-          {
-            name: "repo-other-langs",
-            languages: {
-              edges: [
-                { size: 20, node: { color: "#f00", name: "Java" } },
-                { size: 10, node: { color: "#0f0", name: "Cobol" } },
-                { size: 15, node: { color: "#00f", name: "Python" } },
-              ],
-            },
-          },
-          {
-            name: "repo-hidden",
-            languages: {
-              edges: [{ size: 1000, node: { color: "#dea584", name: "Rust" } }],
-            },
-          },
-        ],
-      },
-    },
-  },
-};
 
 const createResponse = () => ({
   end: vi.fn(),
@@ -88,8 +31,7 @@ afterEach(() => {
 
 describe("Test /api/top-langs contract", () => {
   it("should match the public happy-path response snapshot", async () => {
-    const { default: router } =
-      await import("../../router.js");
+    const { default: router } = await import("../../router.js");
 
     const req = {
       headers: {},
@@ -110,8 +52,7 @@ describe("Test /api/top-langs contract", () => {
   it("should match the public many-params response snapshot", async () => {
     mock.onPost("https://api.github.com/graphql").reply(200, data_langs);
 
-    const { default: router } =
-      await import("../../router.js");
+    const { default: router } = await import("../../router.js");
 
     const params = new URLSearchParams({
       username: "anuraghazra",
@@ -150,8 +91,7 @@ describe("Test /api/top-langs contract", () => {
   });
 
   it("should match the public missing-username response snapshot", async () => {
-    const { default: router } =
-      await import("../../router.js");
+    const { default: router } = await import("../../router.js");
 
     const req = {
       headers: {},
@@ -170,8 +110,7 @@ describe("Test /api/top-langs contract", () => {
   });
 
   it("should render error card in same theme as requested card", async () => {
-    const { default: router } =
-      await import("../../router.js");
+    const { default: router } = await import("../../router.js");
 
     const req = {
       headers: {},
@@ -190,8 +129,7 @@ describe("Test /api/top-langs contract", () => {
   });
 
   it("should match the public blacklisted-username response snapshot", async () => {
-    const { default: router } =
-      await import("../../router.js");
+    const { default: router } = await import("../../router.js");
 
     const req = {
       headers: {},
@@ -212,8 +150,7 @@ describe("Test /api/top-langs contract", () => {
   it("should match the private non-whitelisted username response snapshot", async () => {
     vi.stubEnv("WHITELIST", "anuraghazra");
 
-    const { default: router } =
-      await import("../../router.js");
+    const { default: router } = await import("../../router.js");
 
     const req = {
       headers: {},
@@ -234,8 +171,7 @@ describe("Test /api/top-langs contract", () => {
   it("should match the private missing-username response snapshot", async () => {
     vi.stubEnv("WHITELIST", "anuraghazra");
 
-    const { default: router } =
-      await import("../../router.js");
+    const { default: router } = await import("../../router.js");
 
     const req = {
       headers: {},

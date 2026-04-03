@@ -4,46 +4,9 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { normalizeSvg } from "../utils.js";
+import { data_stats, normalizeSvg } from "../utils.js";
 
 const mock = new MockAdapter(axios);
-
-const data_stats = {
-  data: {
-    user: {
-      name: "Anurag Hazra",
-      login: "anuraghazra",
-      repositoriesContributedTo: { totalCount: 51 },
-      commits: {
-        totalCommitContributions: 200,
-      },
-      reviews: {
-        totalPullRequestReviewContributions: 1234,
-      },
-      pullRequests: { totalCount: 4000 },
-      mergedPullRequests: { totalCount: 3200 },
-      openIssues: { totalCount: 300 },
-      closedIssues: { totalCount: 40 },
-      followers: { totalCount: 150 },
-      repositoryDiscussions: { totalCount: 222 },
-      repositoryDiscussionComments: {
-        totalCount: 111,
-      },
-      repositories: {
-        totalCount: 3,
-        nodes: [
-          { name: "repo-keep-1", stargazers: { totalCount: 1500 } },
-          { name: "repo-exclude-me", stargazers: { totalCount: 9999 } },
-          { name: "repo-keep-2", stargazers: { totalCount: 2600 } },
-        ],
-        pageInfo: {
-          hasNextPage: false,
-          endCursor: "cursor",
-        },
-      },
-    },
-  },
-};
 
 const createResponse = () => ({
   end: vi.fn(),
@@ -68,8 +31,7 @@ afterEach(() => {
 
 describe("Test /api contract", () => {
   it("should match the public happy-path response snapshot", async () => {
-    const { default: router } =
-      await import("../../router.js");
+    const { default: router } = await import("../../router.js");
 
     const req = {
       headers: {},
@@ -90,8 +52,7 @@ describe("Test /api contract", () => {
   it("should match the public many-params response snapshot", async () => {
     mock.onPost("https://api.github.com/graphql").reply(200, data_stats);
 
-    const { default: router } =
-      await import("../../router.js");
+    const { default: router } = await import("../../router.js");
 
     const params = new URLSearchParams({
       username: "anuraghazra",
@@ -137,8 +98,7 @@ describe("Test /api contract", () => {
   });
 
   it("should match the public missing-username response snapshot", async () => {
-    const { default: router } =
-      await import("../../router.js");
+    const { default: router } = await import("../../router.js");
 
     const req = {
       headers: {},
@@ -157,8 +117,7 @@ describe("Test /api contract", () => {
   });
 
   it("should render error card in same theme as requested card", async () => {
-    const { default: router } =
-      await import("../../router.js");
+    const { default: router } = await import("../../router.js");
 
     const req = {
       headers: {},
@@ -177,8 +136,7 @@ describe("Test /api contract", () => {
   });
 
   it("should match the public blacklisted-username response snapshot", async () => {
-    const { default: router } =
-      await import("../../router.js");
+    const { default: router } = await import("../../router.js");
 
     const req = {
       headers: {},
@@ -199,8 +157,7 @@ describe("Test /api contract", () => {
   it("should match the private missing-username response snapshot", async () => {
     vi.stubEnv("WHITELIST", "anuraghazra");
 
-    const { default: router } =
-      await import("../../router.js");
+    const { default: router } = await import("../../router.js");
 
     const req = {
       headers: {},

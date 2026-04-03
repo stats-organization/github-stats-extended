@@ -1,11 +1,17 @@
 {
-  "files": [],
+  "include": ["vitest.config.ts"],
   "references": [
     {
       "path": "./apps/backend"
     },
     {
+      "path": "./apps/core"
+    },
+    {
       "path": "./apps/frontend"
     }
-  ]
+  ],
+  "compilerOptions": {
+    "strictNullChecks": true
+  }
 }

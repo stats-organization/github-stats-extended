@@ -1,4 +1,5 @@
 import axios from "axios";
+// @ts-expect-error type info should be added later
 import { router } from "github-readme-stats-backend";
 import { useEffect, useRef, useState } from "react";
 import type { JSX } from "react";

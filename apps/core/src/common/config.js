@@ -1,8 +1,8 @@
 // @ts-check
 
 /**
- * @param {string | undefined} value
- * @returns {string[] | undefined}
+ * @param {string | undefined} value Comma-separated string.
+ * @returns {string[] | undefined} Parsed string values.
  */
 const parseCsv = (value) => {
   if (!value) {
@@ -12,8 +12,8 @@ const parseCsv = (value) => {
 };
 
 /**
- * @param {Record<string, string | undefined>} env
- * @returns {{name: string, value: string}[]}
+ * @param {Record<string, string | undefined>} env Environment variables to inspect.
+ * @returns {{name: string, value: string}[]} Personal access tokens found in the environment.
  */
 const parsePATsFromEnv = (env) => {
   return Object.keys(env)
@@ -25,7 +25,7 @@ const parsePATsFromEnv = (env) => {
 };
 
 /**
- * @returns {Record<string, string | undefined>}
+ * @returns {Record<string, string | undefined>} `process.env` if available, otherwise `{}`.
  */
 const getDefaultEnv = () => {
   if (typeof process !== "undefined" && process?.env) {
@@ -35,7 +35,14 @@ const getDefaultEnv = () => {
 };
 
 /**
- * @param {Partial<ReturnType<typeof loadConfigFromEnv>>} config
+ * @param {Partial<ReturnType<typeof loadConfigFromEnv>>} config (Partial) config values to normalize.
+ * @returns {{
+ *   whitelist: string[] | undefined,
+ *   gistWhitelist: string[] | undefined,
+ *   excludeRepositories: string[],
+ *   fetchMultiPageStars: string | undefined,
+ *   pats: {name: string, value: string}[],
+ * }} Normalized config object with defaults applied.
  */
 const normalizeConfig = (config = {}) => {
   return {
@@ -50,7 +57,7 @@ const normalizeConfig = (config = {}) => {
 let currentConfig;
 
 /**
- * @param {Record<string, string | undefined>} env
+ * @param {Record<string, string | undefined>} env Environment variables used to build the runtime config.
  */
 export const loadConfigFromEnv = (env = getDefaultEnv()) => {
   const whitelist = parseCsv(env.WHITELIST);

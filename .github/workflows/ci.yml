@@ -44,10 +44,10 @@ jobs:
           node-version: ${{ matrix.node }}
 
       - name: Build frontend
-        run: pnpm --filter frontend run build
+        run: pnpm --filter ./apps/frontend/ run build
 
       - name: Run frontend tests
-        run: pnpm --filter frontend run test
+        run: pnpm --filter ./apps/frontend/ run test
 
       - name: Run backend and core tests
         run: pnpm run test
@@ -73,7 +73,27 @@ jobs:
         run: pnpm exec playwright install --with-deps
 
       - name: Run Playwright tests
-        run: pnpm --filter frontend run test:e2e
+        run: pnpm --filter ./apps/frontend/ run test:e2e
+
+  backend-test-e2e:
+    name: end-to-end backend test
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    continue-on-error: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Install Dependencies
+        uses: ./.github/actions/install-dependencies
+
+      - name: Run backend end-to-end tests
+        run: pnpm --filter ./apps/backend/ run test:e2e
 
   code-checks:
     name: Code checks

@@ -17,8 +17,6 @@
     "axios": "^1",
     "axios-cache-interceptor": "^1",
     "daisyui": "5.5.19",
-    "emoji-name-map": "^2.0.3",
-    "github-username-regex": "^1.0.0",
     "github-readme-stats-backend": "workspace:^",
     "github-readme-stats-core": "workspace:^",
     "react": "18.3.1",
@@ -30,8 +28,7 @@
     "react-toastify": "11.0.5",
     "redux": "5.0.1",
     "save-svg-as-png": "^1.4.17",
-    "uuid": "13.0.0",
-    "word-wrap": "^1.2.5"
+    "uuid": "13.0.0"
   },
   "devDependencies": {
     "@types/react": "18.3.27",
@@ -40,8 +37,6 @@
     "clsx": "2.1.1",
     "tailwindcss": "4.2.1",
     "vite": "catalog:default",
-    "vite-plugin-node-polyfills": "0.25.0",
-    "vite-plugin-string-replace": "1.1.5",
     "vitest": "catalog:default"
   },
   "browserslist": {

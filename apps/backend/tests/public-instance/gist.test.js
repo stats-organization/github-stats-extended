@@ -4,36 +4,9 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { normalizeSvg } from "../utils.js";
+import { happy_path_gist_data, normalizeSvg } from "../utils.js";
 
 const mock = new MockAdapter(axios);
-
-const happy_path_gist_data = {
-  data: {
-    viewer: {
-      gist: {
-        description:
-          "List of countries and territories in English and Spanish: name, continent, capital, dial code, country codes, TLD, and area in sq km. Lista de países y territorios en Inglés y Español: nombre, continente, capital, código de teléfono, códigos de país, dominio y área en km cuadrados. Updated 2023",
-        owner: {
-          login: "Yizack",
-        },
-        stargazerCount: 33,
-        forks: {
-          totalCount: 11,
-        },
-        files: [
-          {
-            name: "countries.json",
-            language: {
-              name: "JSON",
-            },
-            size: 85858,
-          },
-        ],
-      },
-    },
-  },
-};
 
 const createResponse = () => ({
   end: vi.fn(),
@@ -60,8 +33,7 @@ afterEach(() => {
 
 describe("Test /api/gist contract", () => {
   it("should match the public happy-path response snapshot", async () => {
-    const { default: router } =
-      await import("../../router.js");
+    const { default: router } = await import("../../router.js");
 
     const req = {
       headers: {},
@@ -80,8 +52,7 @@ describe("Test /api/gist contract", () => {
   });
 
   it("should match the public many-params response snapshot", async () => {
-    const { default: router } =
-      await import("../../router.js");
+    const { default: router } = await import("../../router.js");
 
     const params = new URLSearchParams({
       id: "happy-gist-id",
@@ -112,8 +83,7 @@ describe("Test /api/gist contract", () => {
   });
 
   it("should match the public missing-id response snapshot", async () => {
-    const { default: router } =
-      await import("../../router.js");
+    const { default: router } = await import("../../router.js");
 
     const req = {
       headers: {},
@@ -134,8 +104,7 @@ describe("Test /api/gist contract", () => {
   it("should match the private missing-id response snapshot", async () => {
     vi.stubEnv("GIST_WHITELIST", "allowed-gist-id");
 
-    const { default: router } =
-      await import("../../router.js");
+    const { default: router } = await import("../../router.js");
 
     const req = {
       headers: {},

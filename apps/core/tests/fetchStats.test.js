@@ -3,10 +3,10 @@ import MockAdapter from "axios-mock-adapter";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { calculateRank } from "../src/calculateRank.js";
+import { loadConfigFromEnv } from "../src/common/config.js";
 import { fetchStats } from "../src/fetchers/stats.js";
 
 import "@testing-library/jest-dom/vitest";
-import { getConfig, loadConfigFromEnv } from "../src/common/config.js";
 
 // Test parameters.
 const data_stats = {

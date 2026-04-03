@@ -54,19 +54,21 @@ const getUserPat = async (username) => {
 };
 
 export default async (req, res) => {
-  // remaining code expects express.js-like request and response objects
-  res.send = function (data) {
-    if (typeof data === "object") {
-      res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify(data));
-    } else if (typeof data === "string") {
-      res.end(data);
-    } else {
-      res.end(String(data));
-    }
-  };
   const url = new URL(req.url, "https://localhost");
-  req.query = Object.fromEntries(url.searchParams.entries());
+  if (res.send === undefined) {
+    // remaining code expects express.js-like request and response objects
+    res.send = function (data) {
+      if (typeof data === "object") {
+        res.setHeader("Content-Type", "application/json");
+        res.end(JSON.stringify(data));
+      } else if (typeof data === "string") {
+        res.end(data);
+      } else {
+        res.end(String(data));
+      }
+    };
+    req.query = Object.fromEntries(url.searchParams.entries());
+  }
 
   let result;
 
