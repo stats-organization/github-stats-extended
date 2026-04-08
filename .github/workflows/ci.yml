@@ -43,14 +43,20 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
+      - name: Run backend and core tests
+        run: pnpm run test
+
       - name: Build frontend
         run: pnpm --filter ./apps/frontend/ run build
 
       - name: Run frontend tests
         run: pnpm --filter ./apps/frontend/ run test
 
-      - name: Run backend and core tests
-        run: pnpm run test
+      - name: Run action tests
+        run: pnpm --filter ./apps/action/ run test
+        env:
+          PAT_1: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY_OWNER: "rickstaa"
 
   frontend-test-e2e:
     name: Frontend E2E test

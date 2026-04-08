@@ -1,0 +1,15 @@
+name: Update version tags
+on:
+  push:
+    branches-ignore:
+      - "**"
+    tags:
+      - "v*.*.*"
+permissions:
+  contents: write
+jobs:
+  update-semver:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: haya14busa/action-update-semver@7d2c558640ea49e798d46539536190aff8c18715 # v1.5.1

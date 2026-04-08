@@ -1,6 +1,6 @@
 {
   "extends": ["../../tsconfig.base.json"],
-  "include": ["src", "vitest.config.ts"],
+  "include": ["index.js", "vitest.config.ts"],
   "compilerOptions": {
     "composite": true,
     "module": "nodenext",
