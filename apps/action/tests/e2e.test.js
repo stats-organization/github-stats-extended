@@ -10,8 +10,7 @@ const rootDir = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
-const repoOwner = process.env.GITHUB_REPOSITORY_OWNER ?? "rickstaa";
-console.log("Using repository owner:", repoOwner);
+const repoOwner = "rickstaa";
 let buildDir;
 
 const runCard = (card, options, output) =>
