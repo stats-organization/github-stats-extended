@@ -73,6 +73,9 @@ const cardHandlers = {
  * @throws {Error} If required options are missing.
  */
 const validateCardOptions = (card, query, repoOwner) => {
+
+  console.log("query:", query);
+
   if (!query.username && repoOwner) {
     query.username = repoOwner;
     warning("username not provided; defaulting to repository owner.");
@@ -118,6 +121,8 @@ const run = async () => {
     outputPathInput || path.join("profile", `${card}.svg`);
   const outputPath = path.resolve(process.cwd(), outputPathValue);
   await mkdir(path.dirname(outputPath), { recursive: true });
+
+  console.log("result: ", await handler(query));
 
   const svg = await handler(query).content;
   if (!svg) {
