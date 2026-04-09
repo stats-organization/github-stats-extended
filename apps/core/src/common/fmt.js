@@ -66,7 +66,7 @@ const wrapTextMultiline = (text, width = 59, maxLines = 3) => {
   const encoded = encodeHTML(text);
   const isChinese = encoded.includes(fullWidthComma);
 
-  let wrapped = [];
+  let wrapped;
 
   if (isChinese) {
     wrapped = encoded.split(fullWidthComma); // Chinese full punctuation

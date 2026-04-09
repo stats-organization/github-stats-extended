@@ -305,7 +305,7 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
     textColor,
   });
 
-  let finalLayout = "";
+  let finalLayout;
 
   // RENDER COMPACT LAYOUT
   if (layout === "compact") {

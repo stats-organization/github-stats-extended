@@ -647,7 +647,7 @@ const renderPieLayout = (langs, totalLanguageSize, statsFormat) => {
 const createDonutPaths = (cx, cy, radius, percentages) => {
   const paths = [];
   let startAngle = 0;
-  let endAngle = 0;
+  let endAngle;
 
   const totalPercent = percentages.reduce((acc, curr) => acc + curr, 0);
   for (let i = 0; i < percentages.length; i++) {
@@ -840,7 +840,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
     theme,
   });
 
-  let finalLayout = "";
+  let finalLayout;
   if (langs.length === 0) {
     height = COMPACT_LAYOUT_BASE_HEIGHT;
     finalLayout = noLanguagesDataNode({

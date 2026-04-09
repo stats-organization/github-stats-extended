@@ -48,7 +48,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
   const dispatch = useDispatch();
 
   // for stage two
-  const [selectedUserId, setSelectedUserId] = useState<string>(userId);
+  const [selectedUserId, setSelectedUserId] = useState(userId);
   const [repo, setRepo] = useState(DEMO_REPO);
   const [gist, setGist] = useState(DEMO_GIST);
   const [wakatimeUser, setWakatimeUser] = useState(DEMO_WAKATIME_USER);

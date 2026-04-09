@@ -230,7 +230,7 @@ const totalItemsFetcher = async (username, repo, owner, type, filter, pat) => {
     );
   } catch (err) {
     logger.log(err);
-    throw new Error(err);
+    throw err;
   }
 
   const totalCount = res.data.total_count;
