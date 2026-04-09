@@ -11,6 +11,7 @@ const rootDir = path.resolve(
   "..",
 );
 const repoOwner = process.env.GITHUB_REPOSITORY_OWNER ?? "rickstaa";
+console.log("Using repository owner:", repoOwner);
 let buildDir;
 
 const runCard = (card, options, output) =>

@@ -46,6 +46,9 @@ export default async (
   },
   pat = null,
 ) => {
+
+  console.log("got request for: ", username);
+
   if (locale && !isLocaleAvailable(locale)) {
     return {
       status: "error - permanent",
