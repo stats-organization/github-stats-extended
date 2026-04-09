@@ -1,5 +1,5 @@
 {
-  "name": "github-readme-stats-action",
+  "name": "@stats-organization/github-readme-stats-action",
   "type": "module",
   "license": "MIT",
   "private": true,
@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@actions/core": "^2.0.1",
-    "github-readme-stats-core": "workspace:^"
+    "@stats-organization/github-readme-stats-core": "workspace:^"
   },
   "devDependencies": {
     "jsdom": "28.1.0"

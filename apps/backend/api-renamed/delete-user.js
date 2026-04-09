@@ -1,4 +1,4 @@
-import { logger } from "github-readme-stats-core";
+import { logger } from "@stats-organization/github-readme-stats-core";
 
 import { deleteUser } from "../src/common/database.js";
 

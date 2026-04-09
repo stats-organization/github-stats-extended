@@ -1,4 +1,7 @@
-import { fetchWakatimeStats, logger } from "github-readme-stats-core";
+import {
+  fetchWakatimeStats,
+  logger,
+} from "@stats-organization/github-readme-stats-core";
 
 /**
  * @param {any} req The request.

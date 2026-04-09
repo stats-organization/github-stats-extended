@@ -1,6 +1,6 @@
-import axios from "axios";
 // @ts-expect-error type info should be added later
-import { router } from "github-readme-stats-backend";
+import { router } from "@stats-organization/github-readme-stats-backend";
+import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import type { JSX } from "react";
 import Skeleton from "react-loading-skeleton";

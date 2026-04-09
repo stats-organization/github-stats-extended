@@ -4,7 +4,7 @@ on:
     branches:
       - master
     paths:
-      - "apps/core/themes/index.js"
+      - "packages/core/themes/index.js"
   workflow_dispatch:
 
 permissions: {}
@@ -37,7 +37,7 @@ jobs:
 
       - name: Generate readme
         run: |
-          pnpm --filter ./apps/core/ run theme-readme-gen
+          pnpm --filter ./packages/core/ run theme-readme-gen
 
       - name: Create Pull Request if themes README has changed
         uses: peter-evans/create-pull-request@v8

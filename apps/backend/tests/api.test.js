@@ -9,7 +9,7 @@ const mocks = vi.hoisted(() => ({
   config: {},
 }));
 
-vi.mock("github-readme-stats-core", () => ({
+vi.mock("@stats-organization/github-readme-stats-core", () => ({
   api: mocks.api,
   gist: vi.fn(),
   pin: vi.fn(),

@@ -1,5 +1,5 @@
 // @ts-expect-error type info should be added later
-import { themes } from "github-readme-stats-core";
+import { themes } from "@stats-organization/github-readme-stats-core";
 import type { JSX } from "react";
 
 import { Card } from "../../../components/Card/Card";

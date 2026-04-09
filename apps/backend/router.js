@@ -1,4 +1,10 @@
-import { api, gist, pin, topLangs, wakatime } from "github-readme-stats-core";
+import {
+  api,
+  gist,
+  pin,
+  topLangs,
+  wakatime,
+} from "@stats-organization/github-readme-stats-core";
 
 import { default as authenticate } from "./api-renamed/authenticate.js";
 import { default as deleteUser } from "./api-renamed/delete-user.js";

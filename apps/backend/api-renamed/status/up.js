@@ -7,7 +7,11 @@
  * @description This function is currently rate limited to 1 request per 3 minutes.
  */
 
-import { logger, request, retryer } from "github-readme-stats-core";
+import {
+  logger,
+  request,
+  retryer,
+} from "@stats-organization/github-readme-stats-core";
 
 export const RATE_LIMIT_SECONDS = 60 * 3; // 1 request per 3 minutes
 

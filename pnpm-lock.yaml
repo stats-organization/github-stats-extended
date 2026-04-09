@@ -8,13 +8,13 @@ catalogs:
   default:
     '@vitest/coverage-v8':
       specifier: 4.1.2
-      version: 4.0.18
+      version: 4.1.2
     vite:
       specifier: 7.3.1
       version: 7.3.1
     vitest:
       specifier: 4.1.2
-      version: 4.0.18
+      version: 4.1.2
 
 importers:
 
@@ -83,9 +83,9 @@ importers:
       '@actions/core':
         specifier: ^2.0.1
         version: 2.0.3
-      github-readme-stats-core:
+      '@stats-organization/github-readme-stats-core':
         specifier: workspace:^
-        version: link:../core
+        version: link:../../packages/core
     devDependencies:
       jsdom:
         specifier: 28.1.0
@@ -93,12 +93,12 @@ importers:
 
   apps/backend:
     dependencies:
+      '@stats-organization/github-readme-stats-core':
+        specifier: workspace:^
+        version: link:../../packages/core
       axios:
         specifier: ^1.13.5
         version: 1.13.5
-      github-readme-stats-core:
-        specifier: workspace:^
-        version: link:../core
       pg:
         specifier: ^8.18.0
         version: 8.18.0
@@ -119,51 +119,17 @@ importers:
         specifier: catalog:default
         version: 4.0.18(@types/node@25.5.0)(happy-dom@20.6.1)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3)
 
-  apps/core:
-    dependencies:
-      axios:
-        specifier: ^1.13.5
-        version: 1.13.5
-      emoji-name-map:
-        specifier: ^2.0.3
-        version: 2.0.3
-      github-username-regex:
-        specifier: ^1.0.0
-        version: 1.0.0
-      word-wrap:
-        specifier: ^1.2.5
-        version: 1.2.5
-    devDependencies:
-      '@testing-library/dom':
-        specifier: ^10.4.1
-        version: 10.4.1
-      '@testing-library/jest-dom':
-        specifier: ^6.9.1
-        version: 6.9.1
-      '@uppercod/css-to-object':
-        specifier: ^1.1.1
-        version: 1.1.1
-      '@vitest/coverage-v8':
-        specifier: catalog:default
-        version: 4.0.18(vitest@4.0.18(@types/node@25.5.0)(happy-dom@20.6.1)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3))
-      axios-mock-adapter:
-        specifier: ^2.1.0
-        version: 2.1.0(axios@1.13.5)
-      js-yaml:
-        specifier: ^4.1.1
-        version: 4.1.1
-      jsdom:
-        specifier: 28.1.0
-        version: 28.1.0
-      vitest:
-        specifier: catalog:default
-        version: 4.0.18(@types/node@25.5.0)(happy-dom@20.6.1)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3)
-
   apps/frontend:
     dependencies:
       '@reduxjs/toolkit':
         specifier: 2.11.2
         version: 2.11.2(react-redux@9.2.0(@types/react@18.3.27)(react@18.3.1)(redux@5.0.1))(react@18.3.1)
+      '@stats-organization/github-readme-stats-backend':
+        specifier: workspace:^
+        version: link:../backend
+      '@stats-organization/github-readme-stats-core':
+        specifier: workspace:^
+        version: link:../../packages/core
       '@tailwindcss/vite':
         specifier: 4.2.1
         version: 4.2.1(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3))
@@ -176,12 +142,6 @@ importers:
       daisyui:
         specifier: 5.5.19
         version: 5.5.19
-      github-readme-stats-backend:
-        specifier: workspace:^
-        version: link:../backend
-      github-readme-stats-core:
-        specifier: workspace:^
-        version: link:../core
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -234,6 +194,46 @@ importers:
       vitest:
         specifier: catalog:default
         version: 4.0.18(@types/node@25.5.0)(happy-dom@20.6.1)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3)
+
+  packages/core:
+    dependencies:
+      axios:
+        specifier: ^1.13.5
+        version: 1.13.5
+      emoji-name-map:
+        specifier: ^2.0.3
+        version: 2.0.3
+      github-username-regex:
+        specifier: ^1.0.0
+        version: 1.0.0
+      word-wrap:
+        specifier: ^1.2.5
+        version: 1.2.5
+    devDependencies:
+      '@testing-library/dom':
+        specifier: ^10.4.1
+        version: 10.4.1
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
+      '@uppercod/css-to-object':
+        specifier: ^1.1.1
+        version: 1.1.1
+      '@vitest/coverage-v8':
+        specifier: catalog:default
+        version: 4.1.2(vitest@4.1.2(@types/node@25.5.0)(happy-dom@20.6.1)(jsdom@28.1.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3)))
+      axios-mock-adapter:
+        specifier: ^2.1.0
+        version: 2.1.0(axios@1.13.5)
+      js-yaml:
+        specifier: ^4.1.1
+        version: 4.1.1
+      jsdom:
+        specifier: 28.1.0
+        version: 28.1.0
+      vitest:
+        specifier: catalog:default
+        version: 4.1.2(@types/node@25.5.0)(happy-dom@20.6.1)(jsdom@28.1.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3))
 
 packages:
 
@@ -314,11 +314,6 @@ packages:
   '@babel/helpers@7.29.2':
     resolution: {integrity: sha512-HoGuUs4sCZNezVEKdVcwqmZN8GoHirLUcLaYVNBK2J0DadGtdcqgr3BCbvH8+XUo4NGjNl3VOtSjEKNzqfFgKw==}
     engines: {node: '>=6.9.0'}
-
-  '@babel/parser@7.29.0':
-    resolution: {integrity: sha512-IyDgFV5GeDUVX4YdF/3CPULtVGSXXMLh1xVIgdCgxApktqnQV0r7/8Nqthg+8YLGaAtdyIlo2qIdZrbCv4+7ww==}
-    engines: {node: '>=6.0.0'}
-    hasBin: true
 
   '@babel/parser@7.29.2':
     resolution: {integrity: sha512-4GgRzy/+fsBa72/RZVJmGKPmZu9Byn8o4MoLpmNe1m8ZfYnz5emHLQz3U4gLud6Zwl0RZIcgiLD7Uq7ySFuDLA==}
@@ -3755,10 +3750,6 @@ snapshots:
       '@babel/template': 7.28.6
       '@babel/types': 7.29.0
 
-  '@babel/parser@7.29.0':
-    dependencies:
-      '@babel/types': 7.29.0
-
   '@babel/parser@7.29.2':
     dependencies:
       '@babel/types': 7.29.0
@@ -4635,6 +4626,20 @@ snapshots:
       tinyrainbow: 3.1.0
       vitest: 4.1.2(@types/node@24.12.0)(happy-dom@20.6.1)(jsdom@28.1.0)(vite@7.3.1(@types/node@24.12.0)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3))
 
+  '@vitest/coverage-v8@4.1.2(vitest@4.1.2(@types/node@25.5.0)(happy-dom@20.6.1)(jsdom@28.1.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3)))':
+    dependencies:
+      '@bcoe/v8-coverage': 1.0.2
+      '@vitest/utils': 4.1.2
+      ast-v8-to-istanbul: 1.0.0
+      istanbul-lib-coverage: 3.2.2
+      istanbul-lib-report: 3.0.1
+      istanbul-reports: 3.2.0
+      magicast: 0.5.2
+      obug: 2.1.1
+      std-env: 4.0.0
+      tinyrainbow: 3.1.0
+      vitest: 4.1.2(@types/node@25.5.0)(happy-dom@20.6.1)(jsdom@28.1.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3))
+
   '@vitest/expect@4.0.18':
     dependencies:
       '@standard-schema/spec': 1.1.0
@@ -4642,7 +4647,7 @@ snapshots:
       '@vitest/spy': 4.0.18
       '@vitest/utils': 4.0.18
       chai: 6.2.2
-      tinyrainbow: 3.0.3
+      tinyrainbow: 3.1.0
 
   '@vitest/expect@4.1.2':
     dependencies:
@@ -4669,9 +4674,17 @@ snapshots:
     optionalDependencies:
       vite: 7.3.1(@types/node@24.12.0)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3)
 
+  '@vitest/mocker@4.1.2(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3))':
+    dependencies:
+      '@vitest/spy': 4.1.2
+      estree-walker: 3.0.3
+      magic-string: 0.30.21
+    optionalDependencies:
+      vite: 7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3)
+
   '@vitest/pretty-format@4.0.18':
     dependencies:
-      tinyrainbow: 3.0.3
+      tinyrainbow: 3.1.0
 
   '@vitest/pretty-format@4.1.2':
     dependencies:
@@ -4707,7 +4720,7 @@ snapshots:
   '@vitest/utils@4.0.18':
     dependencies:
       '@vitest/pretty-format': 4.0.18
-      tinyrainbow: 3.0.3
+      tinyrainbow: 3.1.0
 
   '@vitest/utils@4.1.2':
     dependencies:
@@ -6008,7 +6021,7 @@ snapshots:
 
   magicast@0.5.2:
     dependencies:
-      '@babel/parser': 7.29.0
+      '@babel/parser': 7.29.2
       '@babel/types': 7.29.0
       source-map-js: 1.2.1
 
@@ -7004,6 +7017,35 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 24.12.0
+      happy-dom: 20.6.1
+      jsdom: 28.1.0
+    transitivePeerDependencies:
+      - msw
+
+  vitest@4.1.2(@types/node@25.5.0)(happy-dom@20.6.1)(jsdom@28.1.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3)):
+    dependencies:
+      '@vitest/expect': 4.1.2
+      '@vitest/mocker': 4.1.2(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3))
+      '@vitest/pretty-format': 4.1.2
+      '@vitest/runner': 4.1.2
+      '@vitest/snapshot': 4.1.2
+      '@vitest/spy': 4.1.2
+      '@vitest/utils': 4.1.2
+      es-module-lexer: 2.0.0
+      expect-type: 1.3.0
+      magic-string: 0.30.21
+      obug: 2.1.1
+      pathe: 2.0.3
+      picomatch: 4.0.4
+      std-env: 4.0.0
+      tinybench: 2.9.0
+      tinyexec: 1.0.4
+      tinyglobby: 0.2.15
+      tinyrainbow: 3.1.0
+      vite: 7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3)
+      why-is-node-running: 2.3.0
+    optionalDependencies:
+      '@types/node': 25.5.0
       happy-dom: 20.6.1
       jsdom: 28.1.0
     transitivePeerDependencies:

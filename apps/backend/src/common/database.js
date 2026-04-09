@@ -1,4 +1,4 @@
-import {} from "github-readme-stats-core";
+import {} from "@stats-organization/github-readme-stats-core";
 
 export let pool = null;
 if (process.env.POSTGRES_URL) {

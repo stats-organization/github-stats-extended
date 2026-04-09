@@ -1,6 +1,9 @@
 // @ts-check
 
-import { getConfig, renderError } from "github-readme-stats-core";
+import {
+  getConfig,
+  renderError,
+} from "@stats-organization/github-readme-stats-core";
 
 import { blacklist } from "./blacklist.js";
 

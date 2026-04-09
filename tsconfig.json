@@ -8,7 +8,7 @@
       "path": "./apps/backend"
     },
     {
-      "path": "./apps/core"
+      "path": "./packages/core"
     },
     {
       "path": "./apps/frontend"

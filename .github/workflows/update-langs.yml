@@ -44,7 +44,7 @@ jobs:
         uses: ./.github/actions/install-dependencies
 
       - name: Run update-languages-json.js script
-        run: pnpm --filter ./apps/core/ run generate-langs-json
+        run: pnpm --filter ./packages/core/ run generate-langs-json
 
       - name: Create Pull Request if upstream language file is changed
         uses: peter-evans/create-pull-request@v8

@@ -1,5 +1,5 @@
+import { logger } from "@stats-organization/github-readme-stats-core";
 import axios from "axios";
-import { logger } from "github-readme-stats-core";
 
 import { deleteUser, getUserAccessByKey } from "../src/common/database.js";
 

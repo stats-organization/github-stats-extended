@@ -2,7 +2,13 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { getInput, info, setFailed, setOutput, warning } from "@actions/core";
-import { api, gist, pin, topLangs, wakatime } from "github-readme-stats-core";
+import {
+  api,
+  gist,
+  pin,
+  topLangs,
+  wakatime,
+} from "@stats-organization/github-readme-stats-core";
 
 /**
  * Normalize option values to strings.

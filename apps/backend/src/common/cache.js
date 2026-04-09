@@ -1,6 +1,6 @@
 // @ts-check
 
-import { clampValue } from "github-readme-stats-core";
+import { clampValue } from "@stats-organization/github-readme-stats-core";
 
 const MIN = 60;
 const HOUR = 60 * MIN;
