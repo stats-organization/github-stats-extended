@@ -119,9 +119,7 @@ const run = async () => {
   const outputPath = path.resolve(process.cwd(), outputPathValue);
   await mkdir(path.dirname(outputPath), { recursive: true });
 
-  console.log("result: ", await handler(query));
-
-  const svg = await handler(query).content;
+  const svg = (await handler(query)).content;
   console.log("result: ", svg);
   if (!svg) {
     throw new Error("Card renderer returned empty output.");
