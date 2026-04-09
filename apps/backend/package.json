@@ -36,7 +36,7 @@
     "axios-mock-adapter": "^2.1.0",
     "express": "^5.2.1",
     "js-yaml": "^4.1.1",
-    "jsdom": "28.1.0",
+    "jsdom": "29.0.1",
     "vitest": "catalog:default"
   },
   "dependencies": {
