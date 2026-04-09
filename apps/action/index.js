@@ -73,9 +73,6 @@ const cardHandlers = {
  * @throws {Error} If required options are missing.
  */
 const validateCardOptions = (card, query, repoOwner) => {
-
-  console.log("query:", query);
-
   if (!query.username && repoOwner) {
     query.username = repoOwner;
     warning("username not provided; defaulting to repository owner.");
@@ -125,6 +122,7 @@ const run = async () => {
   console.log("result: ", await handler(query));
 
   const svg = await handler(query).content;
+  console.log("result: ", svg);
   if (!svg) {
     throw new Error("Card renderer returned empty output.");
   }
