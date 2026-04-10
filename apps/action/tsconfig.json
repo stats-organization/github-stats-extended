@@ -1,9 +1,0 @@
-{
-  "extends": ["../../tsconfig.base.json"],
-  "include": ["index.js", "vitest.config.ts"],
-  "compilerOptions": {
-    "composite": true,
-    "module": "nodenext",
-    "moduleResolution": "nodenext"
-  }
-}

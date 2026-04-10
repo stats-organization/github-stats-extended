@@ -2,9 +2,6 @@
   "include": ["vitest.config.ts"],
   "references": [
     {
-      "path": "./apps/action"
-    },
-    {
       "path": "./apps/backend"
     },
     {
