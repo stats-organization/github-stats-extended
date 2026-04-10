@@ -1,37 +1,41 @@
 // @ts-check
 
-import { renderRepoCard } from "../src/cards/repo.js";
+import { renderTopLanguages } from "../cards/top-languages.js";
 import {
   MissingParamError,
   retrieveSecondaryMessage,
-} from "../src/common/error.js";
-import { parseArray, parseBoolean } from "../src/common/ops.js";
-import { renderError } from "../src/common/render.js";
-import { fetchRepo } from "../src/fetchers/repo.js";
-import { isLocaleAvailable } from "../src/translations.js";
+} from "../common/error.js";
+import { parseArray, parseBoolean } from "../common/ops.js";
+import { renderError } from "../common/render.js";
+import { fetchTopLanguages } from "../fetchers/top-languages.js";
+import { isLocaleAvailable } from "../translations.js";
 
 // @ts-ignore
 export default async (
   {
     username,
-    repo,
+    hide,
+    hide_title,
     hide_border,
+    card_width,
     title_color,
-    icon_color,
     text_color,
     bg_color,
-    card_width,
+    prog_bar_bg_color,
     theme,
-    show_owner,
-    show,
-    show_icons,
-    number_format,
-    text_bold,
-    line_height,
+    layout,
+    langs_count,
+    exclude_repo,
+    size_weight,
+    count_weight,
+    custom_title,
     locale,
     border_radius,
     border_color,
-    description_lines_count,
+    role,
+    disable_animations,
+    hide_progress,
+    stats_format,
   },
   pat = null,
 ) => {
@@ -40,7 +44,7 @@ export default async (
       status: "error - permanent",
       content: renderError({
         message: "Something went wrong",
-        secondaryMessage: "Language not found",
+        secondaryMessage: "Locale not found",
         renderOptions: {
           title_color,
           text_color,
@@ -52,16 +56,37 @@ export default async (
     };
   }
 
-  const safePattern = /^[-\w/.,]+$/;
   if (
-    (username && !safePattern.test(username)) ||
-    (repo && !safePattern.test(repo))
+    layout !== undefined &&
+    (typeof layout !== "string" ||
+      !["compact", "normal", "donut", "donut-vertical", "pie"].includes(layout))
   ) {
     return {
       status: "error - permanent",
       content: renderError({
         message: "Something went wrong",
-        secondaryMessage: "Username or repository contains unsafe characters",
+        secondaryMessage: "Incorrect layout input",
+        renderOptions: {
+          title_color,
+          text_color,
+          bg_color,
+          border_color,
+          theme,
+        },
+      }),
+    };
+  }
+
+  if (
+    stats_format !== undefined &&
+    (typeof stats_format !== "string" ||
+      !["bytes", "percentages"].includes(stats_format))
+  ) {
+    return {
+      status: "error - permanent",
+      content: renderError({
+        message: "Something went wrong",
+        secondaryMessage: "Incorrect stats_format input",
         renderOptions: {
           title_color,
           text_color,
@@ -74,39 +99,36 @@ export default async (
   }
 
   try {
-    const showStats = parseArray(show);
-    const repoData = await fetchRepo(
+    const topLangs = await fetchTopLanguages(
       username,
-      repo,
-      showStats.includes("prs_authored"),
-      showStats.includes("prs_commented"),
-      showStats.includes("prs_reviewed"),
-      showStats.includes("issues_authored"),
-      showStats.includes("issues_commented"),
+      parseArray(exclude_repo),
+      size_weight,
+      count_weight,
+      parseArray(role),
       pat,
     );
 
     return {
       status: "success",
-      content: renderRepoCard(repoData, {
+      content: renderTopLanguages(topLangs, {
+        custom_title,
+        hide_title: parseBoolean(hide_title),
         hide_border: parseBoolean(hide_border),
+        card_width: parseInt(card_width, 10),
+        hide: parseArray(hide),
         title_color,
-        icon_color,
         text_color,
         bg_color,
+        prog_bar_bg_color,
         theme,
+        layout,
+        langs_count,
         border_radius,
         border_color,
-        card_width_input: parseInt(card_width, 10),
-        show_owner: parseBoolean(show_owner),
-        show: showStats,
-        show_icons: parseBoolean(show_icons),
-        number_format,
-        text_bold: parseBoolean(text_bold),
-        line_height,
-        username,
         locale: locale ? locale.toLowerCase() : null,
-        description_lines_count,
+        disable_animations: parseBoolean(disable_animations),
+        hide_progress: parseBoolean(hide_progress),
+        stats_format,
       }),
     };
   } catch (err) {

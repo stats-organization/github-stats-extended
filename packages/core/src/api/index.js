@@ -1,14 +1,14 @@
 // @ts-check
 
-import { renderStatsCard } from "../src/cards/stats.js";
+import { renderStatsCard } from "../cards/stats.js";
 import {
   MissingParamError,
   retrieveSecondaryMessage,
-} from "../src/common/error.js";
-import { parseArray, parseBoolean } from "../src/common/ops.js";
-import { renderError } from "../src/common/render.js";
-import { fetchStats } from "../src/fetchers/stats.js";
-import { isLocaleAvailable } from "../src/translations.js";
+} from "../common/error.js";
+import { parseArray, parseBoolean } from "../common/ops.js";
+import { renderError } from "../common/render.js";
+import { fetchStats } from "../fetchers/stats.js";
+import { isLocaleAvailable } from "../translations.js";
 
 // @ts-ignore
 export default async (

@@ -8,11 +8,11 @@ export { dateDiff, clampValue } from "./src/common/ops.js";
 export { logger } from "./src/common/log.js";
 export { request } from "./src/common/http.js";
 
-export { default as gist } from "./api/gist.js";
-export { default as api } from "./api/index.js";
-export { default as pin } from "./api/pin.js";
-export { default as topLangs } from "./api/top-langs.js";
-export { default as wakatime } from "./api/wakatime.js";
+export { default as gist } from "./src/api/gist.js";
+export { default as api } from "./src/api/index.js";
+export { default as pin } from "./src/api/pin.js";
+export { default as topLangs } from "./src/api/top-langs.js";
+export { default as wakatime } from "./src/api/wakatime.js";
 
 export { getConfig } from "./src/common/config.js";
 

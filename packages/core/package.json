@@ -51,6 +51,9 @@
     "github-readme-stats-extended"
   ],
   "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
   "scripts": {
     "test": "vitest",
     "test:update:snapshot": "vitest -u",
