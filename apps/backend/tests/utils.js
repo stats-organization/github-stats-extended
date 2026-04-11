@@ -258,6 +258,26 @@ export const wakaTimeData = {
 };
 
 /**
+ * Creates a mock module for @stats-organization/github-readme-stats-core.
+ * @param {any} mocks Mocked functions of the core module.
+ * @returns {any} Mocked core module.
+ */
+export function mockCore(mocks) {
+  const noop = () => undefined;
+
+  return {
+    api: mocks.api ?? noop,
+    gist: mocks.gist ?? noop,
+    pin: mocks.pin ?? noop,
+    topLangs: mocks.topLangs ?? noop,
+    wakatime: mocks.wakatime ?? noop,
+    getConfig: mocks.getConfig ?? (() => mocks.config ?? {}),
+    renderError: ({ message }) => `render-error:${message}`,
+    clampValue: (value, min, max) => Math.min(Math.max(value, min), max),
+  };
+}
+
+/**
  * Normalizes SVG code for stable test comparisons.
  * @param {string} svg SVG code to normalize.
  * @returns {string} Normalized SVG code.

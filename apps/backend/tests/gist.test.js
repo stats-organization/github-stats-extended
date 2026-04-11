@@ -9,16 +9,10 @@ const mocks = vi.hoisted(() => ({
   config: {},
 }));
 
-vi.mock("@stats-organization/github-readme-stats-core", () => ({
-  api: vi.fn(),
-  gist: mocks.gist,
-  pin: vi.fn(),
-  topLangs: vi.fn(),
-  wakatime: vi.fn(),
-  getConfig: () => mocks.config,
-  renderError: ({ message }) => `render-error:${message}`,
-  clampValue: (value, min, max) => Math.min(Math.max(value, min), max),
-}));
+vi.mock("@stats-organization/github-readme-stats-core", async () => {
+  const { mockCore } = await import("./utils.js");
+  return mockCore({ gist: mocks.gist, getConfig: () => mocks.config });
+});
 
 vi.mock("../src/common/database.js", () => ({
   storeRequest: mocks.storeRequest,

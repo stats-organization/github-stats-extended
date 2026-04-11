@@ -1,5 +1,3 @@
-import {} from "@stats-organization/github-readme-stats-core";
-
 export let pool = null;
 if (process.env.POSTGRES_URL) {
   const { Pool } = await import("pg");

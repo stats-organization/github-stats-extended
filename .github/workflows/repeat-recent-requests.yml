@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Make Request
         id: myRequest
-        uses: fjogeleit/http-request-action@v2
+        uses: fjogeleit/http-request-action@551353b829c3646756b2ec2b3694f819d7957495 # v2
         with:
           url: "https://github-stats-extended.vercel.app/api/repeat-recent"
           method: "POST"

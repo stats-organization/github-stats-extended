@@ -8,7 +8,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/stats-organization/github-stats-extended.git"
+    "url": "https://github.com/stats-organization/github-stats-extended.git",
+    "directory": "packages/core"
   },
   "author": {
     "name": "Anurag Hazra",
@@ -50,9 +51,12 @@
     "github-stats-extended",
     "github-readme-stats-extended"
   ],
-  "main": "index.js",
+  "main": "src/index.js",
   "exports": {
-    ".": "./index.js"
+    ".": "./src/index.js"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "test": "vitest",

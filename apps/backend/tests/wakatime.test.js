@@ -6,19 +6,12 @@ const mocks = vi.hoisted(() => ({
   wakatime: vi.fn(),
   storeRequest: vi.fn(),
   getUserAccessByName: vi.fn(),
-  config: {},
 }));
 
-vi.mock("@stats-organization/github-readme-stats-core", () => ({
-  api: vi.fn(),
-  gist: vi.fn(),
-  pin: vi.fn(),
-  topLangs: vi.fn(),
-  wakatime: mocks.wakatime,
-  getConfig: () => mocks.config,
-  renderError: ({ message }) => `render-error:${message}`,
-  clampValue: (value, min, max) => Math.min(Math.max(value, min), max),
-}));
+vi.mock("@stats-organization/github-readme-stats-core", async () => {
+  const { mockCore } = await import("./utils.js");
+  return mockCore({ wakatime: mocks.wakatime });
+});
 
 vi.mock("../src/common/database.js", () => ({
   storeRequest: mocks.storeRequest,
@@ -47,7 +40,6 @@ beforeEach(() => {
   mocks.wakatime.mockReset();
   mocks.storeRequest.mockReset().mockResolvedValue(undefined);
   mocks.getUserAccessByName.mockReset().mockResolvedValue(null);
-  mocks.config = {};
   // CACHE_SECONDS is not set here, this is just to safeguard against CACHE_SECONDS being set externally
   delete process.env.CACHE_SECONDS;
 });
