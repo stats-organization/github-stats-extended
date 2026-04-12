@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import { includeIgnoreFile } from "@eslint/compat";
 import js from "@eslint/js";
 import { defineConfig } from "eslint/config";
+import { createTypeScriptImportResolver } from "eslint-import-resolver-typescript";
 import { importX } from "eslint-plugin-import-x";
 import { default as jsdoc } from "eslint-plugin-jsdoc";
 import react from "eslint-plugin-react";
@@ -18,6 +19,25 @@ export default defineConfig(
 
   {
     extends: [importX.flatConfigs.recommended, importX.flatConfigs.typescript],
+    settings: {
+      "import-x/resolver-next": [
+        createTypeScriptImportResolver({
+          conditionNames: [
+            /** Keep in sync with `tsconfig.base.json#customConditions` */
+            "@stats/source",
+
+            "types",
+            "import",
+
+            "require",
+            "node",
+            "node-addons",
+            "browser",
+            "default",
+          ],
+        }),
+      ],
+    },
     rules: {
       "import-x/consistent-type-specifier-style": ["error", "prefer-top-level"],
       "import-x/order": [
@@ -138,9 +158,7 @@ export default defineConfig(
     },
     languageOptions: {
       parserOptions: {
-        projectService: {
-          allowDefaultProject: ["vitest.config.ts"],
-        },
+        projectService: true,
       },
     },
   },

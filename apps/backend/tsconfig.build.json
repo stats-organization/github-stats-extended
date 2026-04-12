@@ -1,9 +1,6 @@
 {
   "extends": ["./tsconfig.json"],
-  "include": ["src"],
   "compilerOptions": {
-    "declaration": true,
-    "declarationMap": true,
     "customConditions": []
   }
 }

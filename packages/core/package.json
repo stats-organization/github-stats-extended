@@ -55,23 +55,23 @@
   "exports": {
     ".": {
       "@stats/source": "./src/index.ts",
-      "default": "./dist/index.js"
+      "default": "./build/index.js"
     }
   },
   "files": [
-    "dist"
+    "build"
   ],
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "dev": "tsc -p tsconfig.build.json --watch",
     "test": "vitest",
     "test:update:snapshot": "vitest -u",
     "test:e2e": "vitest --config vitest.config.e2e.ts",
     "bench": "vitest bench --run --config vitest.config.bench.ts",
     "lint": "eslint",
+    "typecheck": "echo 'to be implemented' && exit 0",
     "theme-readme-gen": "node scripts/generate-theme-doc",
     "generate-langs-json": "node scripts/generate-langs-json"
   },

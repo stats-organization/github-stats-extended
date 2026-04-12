@@ -12,7 +12,8 @@
     "test:update:snapshot": "vitest -u",
     "test:e2e": "vitest --config vitest.config.e2e.ts",
     "bench": "vitest bench --run --config vitest.config.bench.ts",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "catalog:default",

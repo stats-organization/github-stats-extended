@@ -8,7 +8,7 @@ To set up the project GitHub-Stats-Extended locally, run the following commands:
 ./vercel-preparation.sh
 pnpm install
 pnpm run build:packages
-pnpm --filter ./apps/frontend/ run build
+pnpm run dev:frontend
 ```
 
 The easiest way to run and test the project is to deploy it to Vercel as described in the [deployment guide](../docs/deploy.md).

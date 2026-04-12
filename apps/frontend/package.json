@@ -10,7 +10,7 @@
     "test": "vitest",
     "test:e2e": "playwright test",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc -p tsconfig.build.json --noEmit"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",
