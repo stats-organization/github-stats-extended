@@ -15,8 +15,8 @@
   },
   "devDependencies": {
     "@vitest/coverage-v8": "catalog:default",
-    "axios-mock-adapter": "^2.1.0",
-    "express": "^5.2.1",
+    "axios-mock-adapter": "2.1.0",
+    "express": "5.2.1",
     "jsdom": "28.1.0",
     "vitest": "catalog:default"
   },
