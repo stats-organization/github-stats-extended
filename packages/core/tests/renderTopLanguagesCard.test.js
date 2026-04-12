@@ -24,8 +24,6 @@ import { themes } from "../themes/index.js";
 
 import { approxNumber } from "./utils.js";
 
-import "@testing-library/jest-dom/vitest";
-
 const langs = {
   HTML: {
     color: "#0f0",

@@ -4,8 +4,6 @@ import { calculateRank } from "../src/calculateRank.js";
 
 import { approxNumber } from "./utils.js";
 
-import "@testing-library/jest-dom/vitest";
-
 describe("Test calculateRank", () => {
   it("new user gets C rank", () => {
     expect(

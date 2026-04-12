@@ -10,8 +10,6 @@ import { renderStatsCard } from "../src/cards/stats.js";
 import { CustomError } from "../src/common/error.js";
 import { themes } from "../themes/index.js";
 
-import "@testing-library/jest-dom/vitest";
-
 const stats = {
   name: "Anurag Hazra",
   totalStars: 100,

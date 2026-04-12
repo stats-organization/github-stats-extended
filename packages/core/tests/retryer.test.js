@@ -2,8 +2,6 @@
 
 import { describe, expect, it, vi } from "vitest";
 
-import "@testing-library/jest-dom/vitest";
-
 import { logger } from "../src/common/log.js";
 import { retryer } from "../src/common/retryer.js";
 

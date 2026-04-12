@@ -5,8 +5,6 @@ import { describe, expect, it } from "vitest";
 import { renderRepoCard } from "../src/cards/repo.js";
 import { themes } from "../themes/index.js";
 
-import "@testing-library/jest-dom/vitest";
-
 const data_repo = {
   repository: {
     nameWithOwner: "anuraghazra/convoychat",

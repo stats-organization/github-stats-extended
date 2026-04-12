@@ -52,6 +52,9 @@ jobs:
       - name: Run frontend tests
         run: pnpm --filter ./apps/frontend/ run test
 
+      - name: Run only core tests
+        run: pnpm --filter ./packages/core/ run test
+
   frontend-test-e2e:
     name: Frontend E2E test
 

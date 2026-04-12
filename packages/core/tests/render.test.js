@@ -5,8 +5,6 @@ import { describe, expect, it } from "vitest";
 
 import { renderError } from "../src/common/render.js";
 
-import "@testing-library/jest-dom/vitest";
-
 describe("Test render.js", () => {
   it("should test renderError", () => {
     document.body.innerHTML = renderError({ message: "Something went wrong" });

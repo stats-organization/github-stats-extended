@@ -5,8 +5,6 @@ import { renderWakatimeCard } from "../src/cards/wakatime.js";
 
 import { wakaTimeData } from "./fetchWakatime.test.js";
 
-import "@testing-library/jest-dom/vitest";
-
 describe("Test Render WakaTime Card", () => {
   it("should render correctly", () => {
     const card = renderWakatimeCard(wakaTimeData.data);

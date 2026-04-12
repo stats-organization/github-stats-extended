@@ -4,8 +4,6 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import { fetchWakatimeStats } from "../src/fetchers/wakatime.js";
 
-import "@testing-library/jest-dom/vitest";
-
 const mock = new MockAdapter(axios);
 
 afterEach(() => {

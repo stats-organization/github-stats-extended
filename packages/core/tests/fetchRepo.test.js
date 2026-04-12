@@ -4,8 +4,6 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import { fetchRepo } from "../src/fetchers/repo.js";
 
-import "@testing-library/jest-dom/vitest";
-
 const data_repo = {
   repository: {
     name: "convoychat",
