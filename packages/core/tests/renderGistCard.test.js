@@ -3,7 +3,7 @@ import { cssToObject } from "@uppercod/css-to-object";
 import { describe, expect, it } from "vitest";
 
 import { renderGistCard } from "../src/cards/gist.js";
-import { themes } from "../themes/index.js";
+import { themes } from "../src/themes/index.js";
 
 /**
  * @type {import("../src/fetchers/gist").GistData}

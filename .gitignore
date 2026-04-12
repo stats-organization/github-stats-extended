@@ -18,6 +18,8 @@ apps/backend-copy
 apps/frontend/.env
 apps/frontend/build
 
+.turbo
+dist
 build-ts
 tsconfig.tsbuildinfo
 

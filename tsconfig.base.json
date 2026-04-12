@@ -18,6 +18,13 @@
     "types": [],
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
+    // "customConditions": [
+    //   /**
+    //    * Custom condition that resolved to original typescript source
+    //    It allows realtime typechecking between packages without the need to rebuild them
+    //    */
+    //   "@stats/source"
+    // ],
 
     // Interop Constraints
     "verbatimModuleSyntax": true,

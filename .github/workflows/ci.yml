@@ -43,6 +43,9 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
+      - name: Build packages
+        run: pnpm run build:packages
+
       - name: Run backend and core tests
         run: pnpm run test
 
@@ -72,6 +75,9 @@ jobs:
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies
 
+      - name: Build packages
+        run: pnpm run build:packages
+
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
 
@@ -94,6 +100,9 @@ jobs:
 
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies
+
+      - name: Build packages
+        run: pnpm run build:packages
 
       - name: Run backend end-to-end tests
         run: pnpm --filter ./apps/backend/ run test:e2e

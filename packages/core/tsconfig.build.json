@@ -1,0 +1,15 @@
+{
+  "extends": ["../../tsconfig.base.json"],
+  "include": ["src"],
+  "compilerOptions": {
+    "noCheck": true,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "dist",
+    "checkJs": true,
+    "composite": false,
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "customConditions": []
+  }
+}

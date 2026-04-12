@@ -1,5 +1,6 @@
 {
-  "include": ["vitest.config.ts"],
+  "files": [],
+  "exclude": ["**/dist/**"],
   "references": [
     {
       "path": "./apps/backend"
