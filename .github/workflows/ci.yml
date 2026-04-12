@@ -47,17 +47,8 @@ jobs:
       - name: Build packages
         run: pnpm run build:packages
 
-      - name: Run backend and core tests
-        run: pnpm run test
-
-      - name: Build frontend
-        run: pnpm --filter ./apps/frontend/ run build
-
-      - name: Run frontend tests
-        run: pnpm --filter ./apps/frontend/ run test
-
-      - name: Run only core tests
-        run: pnpm --filter ./packages/core/ run test
+      - name: Run tests
+        run: pnpm run test --silent
 
   frontend-test-e2e:
     name: Frontend E2E test
@@ -86,7 +77,7 @@ jobs:
         run: pnpm --filter ./apps/frontend/ run test:e2e
 
   backend-test-e2e:
-    name: end-to-end backend test
+    name: Backend E2E test
 
     runs-on: ubuntu-latest
 
