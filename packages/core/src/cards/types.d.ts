@@ -1,7 +1,7 @@
 type ThemeNames = keyof typeof import("../../themes/index.js");
 type RankIcon = "default" | "github" | "percentile";
 
-type CommonOptions = {
+interface CommonOptions {
   title_color: string;
   icon_color: string;
   text_color: string;
@@ -11,10 +11,10 @@ type CommonOptions = {
   border_color: string;
   locale: string;
   hide_border: boolean;
-};
+}
 
 export type StatCardOptions = CommonOptions & {
-  hide: string[];
+  hide: Array<string>;
   show_icons: boolean;
   hide_title: boolean;
   card_width: number;
@@ -29,14 +29,14 @@ export type StatCardOptions = CommonOptions & {
   ring_color: string;
   text_bold: boolean;
   rank_icon: RankIcon;
-  show: string[];
+  show: Array<string>;
 };
 
 export type RepoCardOptions = CommonOptions & {
   show_owner: boolean;
   description_lines_count: number;
   card_width_input;
-  show: string[];
+  show: Array<string>;
   show_icons: boolean;
   number_format: string;
   text_bold: boolean;
@@ -47,7 +47,7 @@ export type RepoCardOptions = CommonOptions & {
 export type TopLangOptions = CommonOptions & {
   hide_title: boolean;
   card_width: number;
-  hide: string[];
+  hide: Array<string>;
   layout: "compact" | "normal" | "donut" | "donut-vertical" | "pie";
   custom_title: string;
   langs_count: number;
@@ -59,7 +59,7 @@ export type TopLangOptions = CommonOptions & {
 
 export type WakaTimeOptions = CommonOptions & {
   hide_title: boolean;
-  hide: string[];
+  hide: Array<string>;
   card_width: number;
   line_height: string;
   hide_progress: boolean;
