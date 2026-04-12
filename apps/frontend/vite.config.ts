@@ -27,7 +27,7 @@ export default defineConfig({
     ],
   },
   test: {
-    dir: "./src",
+    dir: path.join(import.meta.dirname, "./src"),
     exclude: ["**/backend/**"],
   },
 });
