@@ -6,8 +6,6 @@ import { calculateRank } from "../src/calculateRank.js";
 import { loadConfigFromEnv } from "../src/common/config.js";
 import { fetchStats } from "../src/fetchers/stats.js";
 
-import "@testing-library/jest-dom/vitest";
-
 // Test parameters.
 const data_stats = {
   data: {

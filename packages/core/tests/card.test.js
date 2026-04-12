@@ -6,8 +6,6 @@ import { Card } from "../src/common/Card.js";
 import { getCardColors } from "../src/common/color.js";
 import { icons } from "../src/common/icons.js";
 
-import "@testing-library/jest-dom/vitest";
-
 describe("Card", () => {
   it("should hide border", () => {
     const card = new Card({});
