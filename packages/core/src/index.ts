@@ -1,6 +1,9 @@
-// We need this file to be in ts to allow custom conditions to work
-// At the moment we only
-
+/**
+ * We need this file to be in ts to allow custom conditions to work
+ * The disable comments are a temporary solution
+ *
+ * @see https://github.com/stats-organization/github-stats-extended/issues/140
+ */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 // @ts-expect-error
