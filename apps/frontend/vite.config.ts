@@ -2,10 +2,10 @@ import path from "node:path";
 
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react-swc";
-import { defineConfig } from "vitest/config";
+import { defineProject } from "vitest/config";
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineProject({
   base: "/frontend/",
   plugins: [react(), tailwindcss()],
   build: {
