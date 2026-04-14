@@ -1,5 +1,7 @@
 // @ts-check
 
+import { vi } from "vitest";
+
 export const data_stats = {
   data: {
     user: {
@@ -257,23 +259,33 @@ export const wakaTimeData = {
   },
 };
 
+/** @typedef {import('@stats-organization/github-readme-stats-core')} CoreModule */
+
 /**
  * Creates a mock module for @stats-organization/github-readme-stats-core.
- * @param {any} mocks Mocked functions of the core module.
- * @returns {any} Mocked core module.
+ * @param {Partial<Pick<CoreModule, 'api' | 'gist' | 'pin' | 'topLangs' | 'wakatime' | 'getConfig'>>} mocks Mocked functions of the core module.
+ * @returns {CoreModule} Mocked core module.
  */
 export function mockCore(mocks) {
-  const noop = () => undefined;
-
   return {
-    api: mocks.api ?? noop,
-    gist: mocks.gist ?? noop,
-    pin: mocks.pin ?? noop,
-    topLangs: mocks.topLangs ?? noop,
-    wakatime: mocks.wakatime ?? noop,
-    getConfig: mocks.getConfig ?? (() => mocks.config ?? {}),
+    // @ts-expect-error no need to mock themes at the moment
+    themes: {},
+    request: vi.fn(),
+    fetchWakatimeStats: vi.fn(),
+    retryer: vi.fn(),
+    dateDiff: vi.fn(),
+    api: mocks.api ?? vi.fn(),
+    gist: mocks.gist ?? vi.fn(),
+    pin: mocks.pin ?? vi.fn(),
+    topLangs: mocks.topLangs ?? vi.fn(),
+    wakatime: mocks.wakatime ?? vi.fn(),
+    getConfig: mocks.getConfig ?? vi.fn().mockReturnValue({}),
     renderError: ({ message }) => `render-error:${message}`,
     clampValue: (value, min, max) => Math.min(Math.max(value, min), max),
+    logger: {
+      log: vi.fn(),
+      error: vi.fn(),
+    },
   };
 }
 

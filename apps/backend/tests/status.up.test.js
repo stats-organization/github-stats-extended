@@ -2,9 +2,18 @@
  * @file Tests for the status/up cloud function.
  */
 
+import { logger } from "@stats-organization/github-readme-stats-core";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
 
 import up, { RATE_LIMIT_SECONDS } from "../api-renamed/status/up.js";
 
@@ -55,8 +64,17 @@ const shields_down = {
   color: "red",
 };
 
+beforeAll(() => {
+  vi.spyOn(logger, "log").mockImplementation(() => {});
+  vi.spyOn(logger, "error").mockImplementation(() => {});
+});
+
 afterEach(() => {
   mock.reset();
+});
+
+afterAll(() => {
+  vi.restoreAllMocks();
 });
 
 describe("Test /api/status/up", () => {
