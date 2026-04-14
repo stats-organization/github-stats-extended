@@ -1,15 +1,25 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { fetchTopLanguages } from "../src/fetchers/top-languages.js";
 
 import { approxNumber } from "./utils.js";
 
+vi.mock(import("../src/common/log.js"), async () => {
+  const { createLoggerMock } = await import("./utils.js");
+  return createLoggerMock();
+});
+
+const { logger } = await import("../src/index.js");
+
+const loggerErrorSpy = vi.mocked(logger.error);
+
 const mock = new MockAdapter(axios);
 
 afterEach(() => {
   mock.reset();
+  loggerErrorSpy.mockClear();
 });
 
 const data_langs = {
@@ -149,6 +159,8 @@ describe("FetchTopLanguages", () => {
     await expect(fetchTopLanguages("anuraghazra")).rejects.toThrow(
       "Could not resolve to a User with the login of 'noname'.",
     );
+
+    expect(loggerErrorSpy).toHaveBeenCalledOnce();
   });
 
   it("should throw other errors with their message", async () => {
@@ -159,6 +171,8 @@ describe("FetchTopLanguages", () => {
     await expect(fetchTopLanguages("anuraghazra")).rejects.toThrow(
       "Some test GraphQL error",
     );
+
+    expect(loggerErrorSpy).toHaveBeenCalledOnce();
   });
 
   it("should throw error with specific message when error does not contain message property", async () => {
@@ -169,5 +183,7 @@ describe("FetchTopLanguages", () => {
     await expect(fetchTopLanguages("anuraghazra")).rejects.toThrow(
       "Something went wrong while trying to retrieve the language data using the GraphQL API.",
     );
+
+    expect(loggerErrorSpy).toHaveBeenCalledOnce();
   });
 });
