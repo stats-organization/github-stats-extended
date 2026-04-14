@@ -6,9 +6,6 @@
       "dependsOn": ["^build"],
       "outputs": ["build/**"]
     },
-    "dev": {
-      "persistent": true
-    },
     "lint": {
       "dependsOn": ["^build"]
     },

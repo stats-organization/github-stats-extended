@@ -29,7 +29,7 @@
     "prepare": "husky",
     "build:packages": "turbo run build --filter=./packages/*",
     "build:frontend": "turbo run build --filter=./apps/frontend",
-    "dev:frontend": "turbo dev --filter=./apps/frontend",
+    "dev:frontend": "pnpm run --filter=./apps/frontend dev",
     "test": "vitest",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

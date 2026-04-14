@@ -16,6 +16,7 @@ export default defineProject({
     chunkSizeWarningLimit: 800,
   },
   resolve: {
+    conditions: ["@stats/source"],
     alias: [
       {
         find: "../src/fetchers/wakatime.js",
