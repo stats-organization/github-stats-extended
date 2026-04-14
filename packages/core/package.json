@@ -51,7 +51,7 @@
     "github-stats-extended",
     "github-readme-stats-extended"
   ],
-  "main": "src/index.js",
+  "main": "src/build/index.js",
   "exports": {
     ".": {
       "@stats/source": "./src/index.ts",
@@ -79,7 +79,6 @@
     "@testing-library/dom": "10.4.1",
     "@testing-library/jest-dom": "6.9.1",
     "@uppercod/css-to-object": "1.1.1",
-    "@vitest/coverage-v8": "catalog:default",
     "axios-mock-adapter": "2.1.0",
     "js-yaml": "4.1.1",
     "jsdom": "28.1.0",

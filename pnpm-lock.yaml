@@ -93,9 +93,6 @@ importers:
         specifier: ^8.18.0
         version: 8.18.0
     devDependencies:
-      '@vitest/coverage-v8':
-        specifier: catalog:default
-        version: 4.1.2(vitest@4.1.2(@types/node@25.5.0)(happy-dom@20.6.1)(jsdom@28.1.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3)))
       axios-mock-adapter:
         specifier: 2.1.0
         version: 2.1.0(axios@1.13.5)
@@ -209,9 +206,6 @@ importers:
       '@uppercod/css-to-object':
         specifier: 1.1.1
         version: 1.1.1
-      '@vitest/coverage-v8':
-        specifier: catalog:default
-        version: 4.1.2(vitest@4.1.2(@types/node@25.5.0)(happy-dom@20.6.1)(jsdom@28.1.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3)))
       axios-mock-adapter:
         specifier: 2.1.0
         version: 2.1.0(axios@1.13.5)
@@ -4524,20 +4518,6 @@ snapshots:
       std-env: 4.0.0
       tinyrainbow: 3.1.0
       vitest: 4.1.2(@types/node@24.12.0)(happy-dom@20.6.1)(jsdom@28.1.0)(vite@7.3.1(@types/node@24.12.0)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3))
-
-  '@vitest/coverage-v8@4.1.2(vitest@4.1.2(@types/node@25.5.0)(happy-dom@20.6.1)(jsdom@28.1.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3)))':
-    dependencies:
-      '@bcoe/v8-coverage': 1.0.2
-      '@vitest/utils': 4.1.2
-      ast-v8-to-istanbul: 1.0.0
-      istanbul-lib-coverage: 3.2.2
-      istanbul-lib-report: 3.0.1
-      istanbul-reports: 3.2.0
-      magicast: 0.5.2
-      obug: 2.1.1
-      std-env: 4.0.0
-      tinyrainbow: 3.1.0
-      vitest: 4.1.2(@types/node@25.5.0)(happy-dom@20.6.1)(jsdom@28.1.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.44.1)(yaml@2.8.3))
 
   '@vitest/expect@4.1.2':
     dependencies:
