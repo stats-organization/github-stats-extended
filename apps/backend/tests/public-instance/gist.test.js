@@ -1,8 +1,18 @@
 // @ts-check
 
+import { logger } from "@stats-organization/github-readme-stats-core";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
 
 import { happy_path_gist_data, normalizeSvg } from "../utils.js";
 
@@ -24,11 +34,20 @@ beforeEach(() => {
     .reply(200, happy_path_gist_data);
 });
 
+beforeAll(() => {
+  vi.spyOn(logger, "log").mockImplementation(() => {});
+  vi.spyOn(logger, "error").mockImplementation(() => {});
+});
+
 afterEach(() => {
   mock.reset();
   vi.unstubAllEnvs();
   // modules may cache environment variables, so we need to reset them
   vi.resetModules();
+});
+
+afterAll(() => {
+  vi.restoreAllMocks();
 });
 
 describe("Test /api/gist contract", () => {
