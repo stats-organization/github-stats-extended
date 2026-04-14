@@ -235,6 +235,7 @@ describe("Test /api/status/pat-info", () => {
   });
 
   it("should have proper cache when no error is thrown", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
     mock.onPost("https://api.github.com/graphql").reply(200, successData);
 
     const { req, res } = faker({}, {});
