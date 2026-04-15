@@ -1,25 +1,26 @@
 // @ts-check
 
+import { wakatime } from "@stats-organization/github-readme-stats-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const mocks = vi.hoisted(() => ({
-  wakatime: vi.fn(),
+import router from "../router.js";
+import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
+import { getUserAccessByName, storeRequest } from "../src/common/database.js";
+
+vi.mock(import("@stats-organization/github-readme-stats-core"), async () => {
+  const { mockCore } = await import("./utils.js");
+  return mockCore();
+});
+
+vi.mock(import("../src/common/database.js"), async (importOriginal) => ({
+  ...(await importOriginal()),
   storeRequest: vi.fn(),
   getUserAccessByName: vi.fn(),
 }));
 
-vi.mock("@stats-organization/github-readme-stats-core", async () => {
-  const { mockCore } = await import("./utils.js");
-  return mockCore({ wakatime: mocks.wakatime });
-});
-
-vi.mock("../src/common/database.js", () => ({
-  storeRequest: mocks.storeRequest,
-  getUserAccessByName: mocks.getUserAccessByName,
-}));
-
-import router from "../router.js";
-import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
+const wakatimeMock = vi.mocked(wakatime);
+const storeRequestMock = vi.mocked(storeRequest);
+const getUserAccessByNameMock = vi.mocked(getUserAccessByName);
 
 const createRequest = (search = "") => ({
   headers: {},
@@ -37,16 +38,16 @@ const defaultCacheHeader =
   `stale-while-revalidate=${DURATIONS.ONE_DAY}`;
 
 beforeEach(() => {
-  mocks.wakatime.mockReset();
-  mocks.storeRequest.mockReset().mockResolvedValue(undefined);
-  mocks.getUserAccessByName.mockReset().mockResolvedValue(null);
+  wakatimeMock.mockReset();
+  storeRequestMock.mockReset().mockResolvedValue(undefined);
+  getUserAccessByNameMock.mockReset().mockResolvedValue(null);
   // CACHE_SECONDS is not set here, this is just to safeguard against CACHE_SECONDS being set externally
   delete process.env.CACHE_SECONDS;
 });
 
 describe("Test /api/wakatime backend routing", () => {
   it("happy path should pass query params, respond with wakatime content and persist request", async () => {
-    mocks.wakatime.mockResolvedValue({
+    wakatimeMock.mockResolvedValue({
       status: "success",
       content: "mock-wakatime-svg",
     });
@@ -56,12 +57,12 @@ describe("Test /api/wakatime backend routing", () => {
 
     await router(req, res);
 
-    expect(mocks.wakatime).toHaveBeenCalledWith({
+    expect(wakatimeMock).toHaveBeenCalledWith({
       username: "anuraghazra",
       theme: "dark",
       layout: "compact",
     });
-    expect(mocks.getUserAccessByName).not.toHaveBeenCalled();
+    expect(getUserAccessByNameMock).not.toHaveBeenCalled();
     expect(req.query).toEqual({
       username: "anuraghazra",
       theme: "dark",
@@ -72,6 +73,6 @@ describe("Test /api/wakatime backend routing", () => {
       ["Content-Type", "image/svg+xml"],
     ]);
     expect(res.end).toHaveBeenCalledExactlyOnceWith("mock-wakatime-svg");
-    expect(mocks.storeRequest).toHaveBeenCalledExactlyOnceWith(req);
+    expect(storeRequestMock).toHaveBeenCalledExactlyOnceWith(req);
   });
 });

@@ -1,25 +1,26 @@
 // @ts-check
 
+import { topLangs } from "@stats-organization/github-readme-stats-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const mocks = vi.hoisted(() => ({
-  topLangs: vi.fn(),
+import router from "../router.js";
+import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
+import { getUserAccessByName, storeRequest } from "../src/common/database.js";
+
+vi.mock(import("@stats-organization/github-readme-stats-core"), async () => {
+  const { mockCore } = await import("./utils.js");
+  return mockCore();
+});
+
+vi.mock(import("../src/common/database.js"), async (importOriginal) => ({
+  ...(await importOriginal()),
   storeRequest: vi.fn(),
   getUserAccessByName: vi.fn(),
 }));
 
-vi.mock("@stats-organization/github-readme-stats-core", async () => {
-  const { mockCore } = await import("./utils.js");
-  return mockCore({ topLangs: mocks.topLangs });
-});
-
-vi.mock("../src/common/database.js", () => ({
-  storeRequest: mocks.storeRequest,
-  getUserAccessByName: mocks.getUserAccessByName,
-}));
-
-import router from "../router.js";
-import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
+const topLangsMock = vi.mocked(topLangs);
+const storeRequestMock = vi.mocked(storeRequest);
+const getUserAccessByNameMock = vi.mocked(getUserAccessByName);
 
 const createRequest = (search = "") => ({
   headers: {},
@@ -37,17 +38,17 @@ const defaultCacheHeader =
   `stale-while-revalidate=${DURATIONS.ONE_DAY}`;
 
 beforeEach(() => {
-  mocks.topLangs.mockReset();
-  mocks.storeRequest.mockReset().mockResolvedValue(undefined);
-  mocks.getUserAccessByName.mockReset().mockResolvedValue(null);
+  topLangsMock.mockReset();
+  storeRequestMock.mockReset().mockResolvedValue(undefined);
+  getUserAccessByNameMock.mockReset().mockResolvedValue(null);
   // CACHE_SECONDS is not set here, this is just to safeguard against CACHE_SECONDS being set externally
   delete process.env.CACHE_SECONDS;
 });
 
 describe("Test /api/top-langs backend routing", () => {
   it("happy path should pass query params and user PAT, respond with top languages content and persist request", async () => {
-    mocks.getUserAccessByName.mockResolvedValue({ token: "user-pat" });
-    mocks.topLangs.mockResolvedValue({
+    getUserAccessByNameMock.mockResolvedValue({ token: "user-pat" });
+    topLangsMock.mockResolvedValue({
       status: "success",
       content: "mock-top-langs-svg",
     });
@@ -59,8 +60,8 @@ describe("Test /api/top-langs backend routing", () => {
 
     await router(req, res);
 
-    expect(mocks.getUserAccessByName).toHaveBeenCalledWith("anuraghazra");
-    expect(mocks.topLangs).toHaveBeenCalledWith(
+    expect(getUserAccessByNameMock).toHaveBeenCalledWith("anuraghazra");
+    expect(topLangsMock).toHaveBeenCalledWith(
       {
         username: "anuraghazra",
         layout: "compact",
@@ -78,6 +79,6 @@ describe("Test /api/top-langs backend routing", () => {
       ["Content-Type", "image/svg+xml"],
     ]);
     expect(res.end).toHaveBeenCalledExactlyOnceWith("mock-top-langs-svg");
-    expect(mocks.storeRequest).toHaveBeenCalledExactlyOnceWith(req);
+    expect(storeRequestMock).toHaveBeenCalledExactlyOnceWith(req);
   });
 });

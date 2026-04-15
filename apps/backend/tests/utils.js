@@ -263,10 +263,9 @@ export const wakaTimeData = {
 
 /**
  * Creates a mock module for @stats-organization/github-readme-stats-core.
- * @param {Partial<Pick<CoreModule, 'api' | 'gist' | 'pin' | 'topLangs' | 'wakatime' | 'getConfig'>>} mocks Mocked functions of the core module.
  * @returns {CoreModule} Mocked core module.
  */
-export function mockCore(mocks) {
+export function mockCore() {
   return {
     // @ts-expect-error no need to mock themes at the moment
     themes: {},
@@ -274,12 +273,12 @@ export function mockCore(mocks) {
     fetchWakatimeStats: vi.fn(),
     retryer: vi.fn(),
     dateDiff: vi.fn(),
-    api: mocks.api ?? vi.fn(),
-    gist: mocks.gist ?? vi.fn(),
-    pin: mocks.pin ?? vi.fn(),
-    topLangs: mocks.topLangs ?? vi.fn(),
-    wakatime: mocks.wakatime ?? vi.fn(),
-    getConfig: mocks.getConfig ?? vi.fn().mockReturnValue({}),
+    api: vi.fn(),
+    gist: vi.fn(),
+    pin: vi.fn(),
+    topLangs: vi.fn(),
+    wakatime: vi.fn(),
+    getConfig: vi.fn().mockReturnValue({}),
     renderError: ({ message }) => `render-error:${message}`,
     clampValue: (value, min, max) => Math.min(Math.max(value, min), max),
     logger: {
