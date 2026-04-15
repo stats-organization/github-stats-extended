@@ -51,7 +51,7 @@
     "github-stats-extended",
     "github-readme-stats-extended"
   ],
-  "main": "src/build/index.js",
+  "main": "./build/index.js",
   "exports": {
     ".": {
       "@stats/source": "./src/index.ts",
