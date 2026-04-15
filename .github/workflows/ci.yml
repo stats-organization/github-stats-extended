@@ -47,6 +47,9 @@ jobs:
       - name: Build packages
         run: pnpm run build:packages
 
+      - name: Build frontend
+        run: pnpm run build:frontend
+
       - name: Run tests
         run: pnpm run test --silent
 
