@@ -59,7 +59,8 @@
     }
   },
   "files": [
-    "build"
+    "build",
+    "src"
   ],
   "publishConfig": {
     "access": "public"
