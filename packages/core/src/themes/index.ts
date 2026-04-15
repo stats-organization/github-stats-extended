@@ -1,83 +1,3 @@
-/**
- * All theme keys.
- */
-type ThemeName =
-  | "default"
-  | "default_repocard"
-  | "transparent"
-  | "shadow_red"
-  | "shadow_green"
-  | "shadow_blue"
-  | "dark"
-  | "radical"
-  | "merko"
-  | "gruvbox"
-  | "gruvbox_light"
-  | "tokyonight"
-  | "onedark"
-  | "cobalt"
-  | "synthwave"
-  | "highcontrast"
-  | "dracula"
-  | "prussian"
-  | "monokai"
-  | "vue"
-  | "vue-dark"
-  | "shades-of-purple"
-  | "nightowl"
-  | "buefy"
-  | "blue-green"
-  | "algolia"
-  | "great-gatsby"
-  | "darcula"
-  | "bear"
-  | "solarized-dark"
-  | "solarized-light"
-  | "chartreuse-dark"
-  | "nord"
-  | "gotham"
-  | "material-palenight"
-  | "graywhite"
-  | "vision-friendly-dark"
-  | "ayu-mirage"
-  | "midnight-purple"
-  | "calm"
-  | "flag-india"
-  | "omni"
-  | "react"
-  | "jolly"
-  | "maroongold"
-  | "yeblu"
-  | "blueberry"
-  | "slateorange"
-  | "kacho_ga"
-  | "outrun"
-  | "ocean_dark"
-  | "city_lights"
-  | "github_dark"
-  | "github_dark_dimmed"
-  | "discord_old_blurple"
-  | "aura_dark"
-  | "panda"
-  | "noctis_minimus"
-  | "cobalt2"
-  | "swift"
-  | "aura"
-  | "apprentice"
-  | "moltack"
-  | "codeSTACKr"
-  | "rose_pine"
-  | "catppuccin_latte"
-  | "catppuccin_mocha"
-  | "date_night"
-  | "one_dark_pro"
-  | "rose"
-  | "holi"
-  | "neon"
-  | "blue_navy"
-  | "calm_pink"
-  | "ambient_gradient";
-
 interface Theme {
   title_color: string;
   icon_color: string;
@@ -89,7 +9,7 @@ interface Theme {
 /**
  * Collection of available themes.
  */
-export const themes: Record<ThemeName, Theme> = {
+export const themes = {
   default: {
     title_color: "2f80ed",
     icon_color: "4c71f2",
@@ -553,4 +473,9 @@ export const themes: Record<ThemeName, Theme> = {
     icon_color: "ffffff",
     bg_color: "35,4158d0,c850c0,ffcc70",
   },
-};
+} as const satisfies Record<string, Theme>;
+
+/**
+ * All theme keys.
+ */
+export type ThemeName = keyof typeof themes;
