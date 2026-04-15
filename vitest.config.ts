@@ -5,6 +5,10 @@ export default defineConfig({
     coverage: {
       enabled: true,
     },
-    projects: ["packages/*", "apps/*"],
+    projects: [
+      "packages/core/vitest.config.ts",
+      "apps/backend/vitest.config.ts",
+      "apps/frontend/vite.config.ts",
+    ],
   },
 });
