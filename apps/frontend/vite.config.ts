@@ -2,10 +2,10 @@ import path from "node:path";
 
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react-swc";
-import { defineConfig } from "vitest/config";
+import { defineProject } from "vitest/config";
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineProject({
   base: "/frontend/",
   plugins: [react(), tailwindcss()],
   build: {
@@ -16,6 +16,7 @@ export default defineConfig({
     chunkSizeWarningLimit: 800,
   },
   resolve: {
+    conditions: ["@stats/source"],
     alias: [
       {
         find: "../src/fetchers/wakatime.js",
@@ -27,7 +28,7 @@ export default defineConfig({
     ],
   },
   test: {
-    dir: "./src",
+    dir: path.join(import.meta.dirname, "./src"),
     exclude: ["**/backend/**"],
   },
 });

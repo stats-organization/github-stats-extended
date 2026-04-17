@@ -1,10 +1,10 @@
-import { defineConfig } from "vitest/config";
+import { defineProject } from "vitest/config";
 
-export default defineConfig({
+export default defineProject({
+  resolve: {
+    conditions: ["@stats/source"],
+  },
   test: {
-    coverage: {
-      enabled: true,
-    },
     environment: "jsdom",
     include: [
       "./tests/*.test.{ts,js}",

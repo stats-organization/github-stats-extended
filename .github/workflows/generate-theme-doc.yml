@@ -4,7 +4,7 @@ on:
     branches:
       - master
     paths:
-      - "packages/core/themes/index.js"
+      - "packages/core/src/themes/index.js"
   workflow_dispatch:
 
 permissions: {}

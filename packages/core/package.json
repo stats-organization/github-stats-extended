@@ -51,18 +51,28 @@
     "github-stats-extended",
     "github-readme-stats-extended"
   ],
-  "main": "src/index.js",
+  "main": "./build/index.js",
   "exports": {
-    ".": "./src/index.js"
+    ".": {
+      "@stats/source": "./src/index.ts",
+      "default": "./build/index.js"
+    }
   },
+  "files": [
+    "build",
+    "src"
+  ],
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
+    "build": "tsc -p tsconfig.build.json",
     "test": "vitest",
     "test:update:snapshot": "vitest -u",
     "test:e2e": "vitest --config vitest.config.e2e.ts",
     "bench": "vitest bench --run --config vitest.config.bench.ts",
+    "lint": "eslint",
+    "typecheck": "tsc -p tsconfig.typecheck.json",
     "theme-readme-gen": "node scripts/generate-theme-doc",
     "generate-langs-json": "node scripts/generate-langs-json"
   },
@@ -70,7 +80,6 @@
     "@testing-library/dom": "10.4.1",
     "@testing-library/jest-dom": "6.9.1",
     "@uppercod/css-to-object": "1.1.1",
-    "@vitest/coverage-v8": "catalog:default",
     "axios-mock-adapter": "2.1.0",
     "js-yaml": "4.1.1",
     "jsdom": "28.1.0",

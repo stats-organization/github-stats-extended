@@ -1,8 +1,8 @@
 import fs from "fs";
 
-import { themes } from "../themes/index.js";
+import { themes } from "../src/themes/index.js";
 
-const TARGET_FILE = "./themes/README.md";
+const TARGET_FILE = "./src/themes/README.md";
 const REPO_CARD_LINKS_FLAG = "<!-- REPO_CARD_LINKS -->";
 const STAT_CARD_LINKS_FLAG = "<!-- STATS_CARD_LINKS -->";
 

@@ -8,6 +8,7 @@ on:
   pull_request:
     branches:
       - master
+      - npm-package
 
 concurrency:
   group: "${{ github.workflow }}-${{ github.head_ref }}"
@@ -43,17 +44,14 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
-      - name: Run backend and core tests
-        run: pnpm run test
+      - name: Build packages
+        run: pnpm run build:packages
 
       - name: Build frontend
-        run: pnpm --filter ./apps/frontend/ run build
+        run: pnpm run build:frontend
 
-      - name: Run frontend tests
-        run: pnpm --filter ./apps/frontend/ run test
-
-      - name: Run only core tests
-        run: pnpm --filter ./packages/core/ run test
+      - name: Run tests
+        run: pnpm run test --silent
 
   frontend-test-e2e:
     name: Frontend E2E test
@@ -72,6 +70,9 @@ jobs:
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies
 
+      - name: Build packages
+        run: pnpm run build:packages
+
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
 
@@ -79,7 +80,7 @@ jobs:
         run: pnpm --filter ./apps/frontend/ run test:e2e
 
   backend-test-e2e:
-    name: end-to-end backend test
+    name: Backend E2E test
 
     runs-on: ubuntu-latest
 
@@ -94,6 +95,9 @@ jobs:
 
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies
+
+      - name: Build packages
+        run: pnpm run build:packages
 
       - name: Run backend end-to-end tests
         run: pnpm --filter ./apps/backend/ run test:e2e

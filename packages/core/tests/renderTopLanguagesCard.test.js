@@ -20,7 +20,7 @@ import {
   renderTopLanguages,
   trimTopLanguages,
 } from "../src/cards/top-languages.js";
-import { themes } from "../themes/index.js";
+import { themes } from "../src/themes/index.js";
 
 import { approxNumber } from "./utils.js";
 

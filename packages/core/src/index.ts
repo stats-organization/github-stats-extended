@@ -1,3 +1,9 @@
+/**
+ * We need this file to be in ts to allow custom conditions to work
+ * The package will be converted
+ *
+ * @todo https://github.com/stats-organization/github-stats-extended/issues/140
+ */
 export { fetchWakatimeStats } from "./fetchers/wakatime.js";
 export { retryer } from "./common/retryer.js";
 
@@ -16,4 +22,4 @@ export { default as wakatime } from "./api/wakatime.js";
 
 export { getConfig } from "./common/config.js";
 
-export { themes } from "./../themes/index.js";
+export { themes } from "./themes/index.js";

@@ -1,3 +1,14 @@
+interface Theme {
+  title_color: string;
+  icon_color: string;
+  text_color: string;
+  bg_color: string;
+  border_color?: string;
+}
+
+/**
+ * Collection of available themes.
+ */
 export const themes = {
   default: {
     title_color: "2f80ed",
@@ -462,4 +473,4 @@ export const themes = {
     icon_color: "ffffff",
     bg_color: "35,4158d0,c850c0,ffcc70",
   },
-};
+} as const satisfies Record<string, Theme>;

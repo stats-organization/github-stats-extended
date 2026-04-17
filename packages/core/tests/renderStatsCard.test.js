@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 
 import { renderStatsCard } from "../src/cards/stats.js";
 import { CustomError } from "../src/common/error.js";
-import { themes } from "../themes/index.js";
+import { themes } from "../src/themes/index.js";
 
 const stats = {
   name: "Anurag Hazra",

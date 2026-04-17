@@ -16,10 +16,12 @@ apps/backend/vercel_token
 apps/backend-copy
 
 apps/frontend/.env
-apps/frontend/build
 
+
+.turbo
+build
 build-ts
-tsconfig.tsbuildinfo
+*.tsbuildinfo
 
 # IDE
 .idea/

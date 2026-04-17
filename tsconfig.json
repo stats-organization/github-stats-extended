@@ -1,17 +1,4 @@
 {
-  "include": ["vitest.config.ts"],
-  "references": [
-    {
-      "path": "./apps/backend"
-    },
-    {
-      "path": "./packages/core"
-    },
-    {
-      "path": "./apps/frontend"
-    }
-  ],
-  "compilerOptions": {
-    "strictNullChecks": true
-  }
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "extends": "./tsconfig.base.json"
 }

@@ -1,6 +1,6 @@
 // @ts-check
 
-import { themes } from "../../themes/index.js";
+import { themes } from "../themes/index.js";
 
 /**
  * Checks if a string is a valid hex color.
