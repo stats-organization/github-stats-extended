@@ -31,6 +31,7 @@
     "build:frontend": "turbo run build --filter=./apps/frontend",
     "dev:frontend": "pnpm run --filter=./apps/frontend dev",
     "test": "vitest",
+    "test:coverage": "vitest --config vitest.config.coverage.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "turbo run lint",
