@@ -1,16 +1,13 @@
 // @ts-check
 
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import { logger } from "../src/common/log.js";
 import { retryer } from "../src/common/retryer.js";
 
 vi.mock(import("../src/common/log.js"), async () => {
   const { createLoggerMock } = await import("./utils.js");
   return createLoggerMock();
 });
-
-const logSpy = vi.mocked(logger.log);
 
 const fetcher = vi.fn().mockResolvedValue({ data: "ok" });
 
@@ -45,10 +42,6 @@ const fetcherFailWithMessageBasedRateLimitErr = vi.fn(
 
 const customFetcher = vi.fn((variables, token) => {
   return Promise.resolve({ data: { token } });
-});
-
-afterEach(() => {
-  logSpy.mockClear();
 });
 
 describe("Test Retryer", () => {
