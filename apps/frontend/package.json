@@ -22,7 +22,7 @@
     "@stats-organization/github-readme-stats-core": "workspace:^",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-icons": "^5.5.0",
+    "react-icons": "^5.6.0",
     "react-loading-skeleton": "^3.3.1",
     "react-redux": "^9.2.0",
     "react-spinners": "^0.17.0",
