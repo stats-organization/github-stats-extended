@@ -19,7 +19,7 @@ export default defineProject({
     conditions: ["@stats/source"],
     alias: [
       {
-        find: "../src/fetchers/wakatime.js",
+        find: "../fetchers/wakatime.js",
         replacement: path.resolve(
           import.meta.dirname,
           "src/wakatime-override.ts",
@@ -29,6 +29,5 @@ export default defineProject({
   },
   test: {
     dir: path.join(import.meta.dirname, "./src"),
-    exclude: ["**/backend/**"],
   },
 });

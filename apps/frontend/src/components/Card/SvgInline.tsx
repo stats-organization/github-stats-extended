@@ -13,6 +13,8 @@ import {
   useUserToken,
 } from "../../redux/selectors/userSelectors.js";
 
+import "../../constants.js"; // set process.env before the core package uses it
+
 interface SvgInlineProps {
   url: string;
   stage: number;
