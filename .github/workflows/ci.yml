@@ -50,7 +50,7 @@ jobs:
         run: pnpm run build:frontend
 
       - name: Run tests
-        run: pnpm run test --silent
+        run: pnpm run test
 
   frontend-test-e2e:
     name: Frontend E2E test

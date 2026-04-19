@@ -2,55 +2,45 @@
 
 import { describe, expect, it, vi } from "vitest";
 
-import { logger } from "../src/common/log.js";
 import { retryer } from "../src/common/retryer.js";
 
-const fetcher = vi.fn((variables, token) => {
-  logger.log(variables, token);
-  return new Promise((res) => res({ data: "ok" }));
+vi.mock(import("../src/common/log.js"), async () => {
+  const { createLoggerMock } = await import("./utils.js");
+  return createLoggerMock();
 });
 
-const fetcherFail = vi.fn(() => {
-  return new Promise((res) =>
-    res({ data: { errors: [{ type: "RATE_LIMITED" }] } }),
-  );
+const fetcher = vi.fn().mockResolvedValue({ data: "ok" });
+
+const fetcherFail = vi.fn().mockResolvedValue({
+  data: { errors: [{ type: "RATE_LIMITED" }] },
 });
 
 const fetcherFailOnSecondTry = vi.fn((_vars, _token, retries) => {
-  return new Promise((res) => {
-    // faking rate limit
-    // @ts-ignore
-    if (retries < 1) {
-      return res({ data: { errors: [{ type: "RATE_LIMITED" }] } });
-    }
-    return res({ data: "ok" });
-  });
+  if (retries < 1) {
+    return Promise.resolve({ data: { errors: [{ type: "RATE_LIMITED" }] } });
+  }
+  return Promise.resolve({ data: "ok" });
 });
 
 const fetcherFailWithMessageBasedRateLimitErr = vi.fn(
   (_vars, _token, retries) => {
-    return new Promise((res) => {
-      // faking rate limit
-      // @ts-ignore
-      if (retries < 1) {
-        return res({
-          data: {
-            errors: [
-              {
-                type: "ASDF",
-                message: "API rate limit already exceeded for user ID 11111111",
-              },
-            ],
-          },
-        });
-      }
-      return res({ data: "ok" });
-    });
+    if (retries < 1) {
+      return Promise.resolve({
+        data: {
+          errors: [
+            {
+              type: "ASDF",
+              message: "API rate limit already exceeded for user ID 11111111",
+            },
+          ],
+        },
+      });
+    }
+    return Promise.resolve({ data: "ok" });
   },
 );
 
 const customFetcher = vi.fn((variables, token) => {
-  logger.log(variables, token);
   return Promise.resolve({ data: { token } });
 });
 
@@ -77,20 +67,21 @@ describe("Test Retryer", () => {
   });
 
   it("retryer should throw specific error if maximum retries reached", async () => {
-    try {
-      await retryer(fetcherFail, {});
-    } catch (err) {
-      expect(fetcherFail).toHaveBeenCalledTimes(2);
-      // @ts-ignore
-      expect(err.message).toBe("Downtime due to GitHub API rate limiting");
-    }
+    await expect(retryer(fetcherFail, {})).rejects.toThrow(
+      "Downtime due to GitHub API rate limiting",
+    );
+
+    expect(fetcherFail).toHaveBeenCalledTimes(2);
   });
 
   it("retryer should use injected PATs when provided", async () => {
     const res = await retryer(customFetcher, {}, "user-pat-token");
 
-    expect(customFetcher).toHaveBeenCalledTimes(1);
-    expect(customFetcher).toHaveBeenCalledWith({}, "user-pat-token", 0);
+    expect(customFetcher).toHaveBeenCalledExactlyOnceWith(
+      {},
+      "user-pat-token",
+      0,
+    );
     expect(res).toStrictEqual({ data: { token: "user-pat-token" } });
   });
 });

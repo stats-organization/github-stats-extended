@@ -4,7 +4,15 @@
 
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
 
 const mock = new MockAdapter(axios);
 
@@ -63,6 +71,11 @@ beforeAll(async () => {
   vi.stubEnv("PAT_3", "testPAT3");
   vi.stubEnv("PAT_4", "testPAT4");
 
+  const { logger } =
+    await import("@stats-organization/github-readme-stats-core");
+  vi.spyOn(logger, "log").mockImplementation(() => {});
+  vi.spyOn(logger, "error").mockImplementation(() => {});
+
   ({ RATE_LIMIT_SECONDS, default: patInfo } =
     await import("../api-renamed/status/pat-info.js"));
 });
@@ -72,6 +85,10 @@ afterEach(() => {
   vi.unstubAllEnvs();
   // modules may cache environment variables, so we need to reset them
   vi.resetModules();
+});
+
+afterAll(() => {
+  vi.restoreAllMocks();
 });
 
 describe("Test /api/status/pat-info", () => {

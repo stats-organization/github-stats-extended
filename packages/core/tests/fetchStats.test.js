@@ -1,10 +1,15 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { calculateRank } from "../src/calculateRank.js";
 import { loadConfigFromEnv } from "../src/common/config.js";
 import { fetchStats } from "../src/fetchers/stats.js";
+
+vi.mock(import("../src/common/log.js"), async () => {
+  const { createLoggerMock } = await import("./utils.js");
+  return createLoggerMock();
+});
 
 // Test parameters.
 const data_stats = {
@@ -534,7 +539,6 @@ describe("Test fetchStats", () => {
   });
 
   it("should return correct data when user don't have any pull requests", async () => {
-    mock.reset();
     mock
       .onPost("https://api.github.com/graphql")
       .reply(200, data_without_pull_requests);
