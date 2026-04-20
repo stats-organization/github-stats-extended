@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",
-    "@tailwindcss/vite": "^4.2.1",
+    "@tailwindcss/vite": "^4.2.2",
     "axios": "^1",
     "axios-cache-interceptor": "^1",
     "daisyui": "^5.5.19",
