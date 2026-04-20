@@ -2,6 +2,7 @@
   "extends": ["./tsconfig.json"],
   "include": ["src"],
   "compilerOptions": {
+    "rootDir": "./src",
     "declaration": true,
     "declarationMap": true,
     "customConditions": []
