@@ -22,7 +22,7 @@
     "prettier": "3.8.2",
     "turbo": "2.9.6",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.58.0",
+    "typescript-eslint": "8.58.1",
     "vitest": "catalog:default"
   },
   "scripts": {
