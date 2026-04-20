@@ -82,7 +82,7 @@
     "@uppercod/css-to-object": "1.1.1",
     "axios-mock-adapter": "2.1.0",
     "js-yaml": "4.1.1",
-    "jsdom": "28.1.0",
+    "jsdom": "29.0.2",
     "vitest": "catalog:default"
   },
   "dependencies": {
