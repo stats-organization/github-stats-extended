@@ -34,7 +34,7 @@
   "devDependencies": {
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "@vitejs/plugin-react-swc": "4.3.0",
+    "@vitejs/plugin-react": "4.3.0",
     "clsx": "2.1.1",
     "tailwindcss": "4.2.2",
     "vite": "catalog:default",
