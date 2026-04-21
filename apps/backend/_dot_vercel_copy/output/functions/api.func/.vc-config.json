@@ -1,5 +1,4 @@
 {
-  "runtime": "nodejs22.x",
   "handler": "router.js",
   "launcherType": "Nodejs"
 }
