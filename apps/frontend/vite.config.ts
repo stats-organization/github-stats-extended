@@ -14,6 +14,10 @@ export default defineProject({
 
     /** @todo use chunks to split bundle? */
     chunkSizeWarningLimit: 800,
+
+    rolldownOptions: {
+      external: ["pg"],
+    },
   },
   resolve: {
     conditions: ["@stats/source"],
