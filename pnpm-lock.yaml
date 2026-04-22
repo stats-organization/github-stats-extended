@@ -78,7 +78,7 @@ importers:
         specifier: 8.58.2
         version: 8.58.2(eslint@10.2.0(jiti@2.6.1))(typescript@6.0.2)
       vitest:
-        specifier: 4.1.4
+        specifier: catalog:default
         version: 4.1.4(@types/node@24.12.2)(@vitest/coverage-v8@4.1.4)(happy-dom@20.6.1)(jsdom@29.0.2)(vite@8.0.8(@types/node@24.12.2)(esbuild@0.27.3)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.3))
 
   apps/backend:
