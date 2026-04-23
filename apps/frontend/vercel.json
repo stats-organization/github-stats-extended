@@ -1,4 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "outputDirectory": "build"
+  "installCommand": "echo $VERCEL_RELATED_PROJECTS && pnpm install",
+  "outputDirectory": "build",
+  "relatedProjects": ["prj_ubTjOvYDA9zS24cT9hMARICRm9Vm"]
 }
