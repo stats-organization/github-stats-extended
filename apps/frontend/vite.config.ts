@@ -11,6 +11,7 @@ export default defineProject({
   build: {
     outDir: "build",
     sourcemap: true,
+    minify: false,
 
     /** @todo use chunks to split bundle? */
     chunkSizeWarningLimit: 800,
