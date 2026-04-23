@@ -1,4 +1,5 @@
 {
+  "runtime": "nodejs",
   "handler": "router.js",
   "launcherType": "Nodejs"
 }
