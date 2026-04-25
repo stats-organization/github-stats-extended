@@ -35,6 +35,7 @@ export default async (
     role,
     disable_animations,
     hide_progress,
+    hide_values,
     stats_format,
   },
   pat = null,
@@ -128,6 +129,7 @@ export default async (
         locale: locale ? locale.toLowerCase() : null,
         disable_animations: parseBoolean(disable_animations),
         hide_progress: parseBoolean(hide_progress),
+        hide_values: parseBoolean(hide_values),
         stats_format,
       }),
     };

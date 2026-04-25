@@ -909,4 +909,89 @@ describe("Test renderTopLanguages", () => {
       "css 100.0 B",
     );
   });
+
+  it("should hide stats values when hide_values is true (compact layout)", () => {
+    document.body.innerHTML = renderTopLanguages(langs, {
+      layout: "compact",
+      hide_values: true,
+    });
+
+    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
+      "HTML",
+    );
+
+    expect(queryAllByTestId(document.body, "lang-name")[1]).toHaveTextContent(
+      "javascript",
+    );
+  });
+
+  it("should hide stats values when hide_values is true (normal layout)", () => {
+    document.body.innerHTML = renderTopLanguages(langs, {
+      hide_values: true,
+    });
+
+    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
+      "HTML",
+    );
+
+    expect(queryAllByTestId(document.body, "lang-name").length).toBe(3);
+  });
+
+  it("should hide stats values when hide_values is true (donut layout)", () => {
+    document.body.innerHTML = renderTopLanguages(langs, {
+      layout: "donut",
+      hide_values: true,
+    });
+
+    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
+      "HTML",
+    );
+    expect(queryAllByTestId(document.body, "lang-name")[1]).toHaveTextContent(
+      "javascript",
+    );
+    expect(queryAllByTestId(document.body, "lang-name")[2]).toHaveTextContent(
+      "css",
+    );
+  });
+
+  it("should hide stats values when hide_values is true (pie layout)", () => {
+    document.body.innerHTML = renderTopLanguages(langs, {
+      layout: "pie",
+      hide_values: true,
+    });
+
+    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
+      "HTML",
+    );
+    expect(queryAllByTestId(document.body, "lang-name")[1]).toHaveTextContent(
+      "javascript",
+    );
+    expect(queryAllByTestId(document.body, "lang-name")[2]).toHaveTextContent(
+      "css",
+    );
+    expect(queryAllByTestId(document.body, "lang-pie")[0]).toHaveAttribute(
+      "size",
+      "40",
+    );
+
+    document.body.innerHTML = renderTopLanguages(
+      { HTML: langs.HTML },
+      {
+        layout: "pie",
+        hide_values: true,
+      },
+    );
+
+    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
+      "HTML",
+    );
+    expect(queryAllByTestId(document.body, "lang-pie")).toHaveLength(1);
+    expect(queryAllByTestId(document.body, "lang-pie")[0]).toHaveAttribute(
+      "size",
+      "100",
+    );
+    expect(queryAllByTestId(document.body, "lang-pie")[0].tagName).toBe(
+      "circle",
+    );
+  });
 });

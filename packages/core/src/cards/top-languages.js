@@ -221,6 +221,7 @@ const getDisplayValue = (size, percentages, format) => {
  * @param {number} props.size Size of the programming language.
  * @param {number} props.totalSize Total size of all languages.
  * @param {string} props.statsFormat Stats format.
+ * @param {boolean=} props.hideValues Whether to hide stats values.
  * @param {number} props.index Index of the programming language.
  * @returns {string} Programming language SVG node.
  */
@@ -232,6 +233,7 @@ const createProgressTextNode = ({
   size,
   totalSize,
   statsFormat,
+  hideValues,
   index,
 }) => {
   const staggerDelay = (index + 3) * 150;
@@ -245,7 +247,7 @@ const createProgressTextNode = ({
   return `
     <g class="stagger" style="animation-delay: ${staggerDelay}ms">
       <text data-testid="lang-name" x="2" y="15" class="lang-name">${name}</text>
-      <text x="${progressTextX}" y="34" class="lang-name">${displayValue}</text>
+      ${hideValues ? "" : `<text x="${progressTextX}" y="34" class="lang-name">${displayValue}</text>`}
       ${createProgressNode({
         x: 0,
         y: 25,
@@ -266,6 +268,7 @@ const createProgressTextNode = ({
  * @param {Lang} props.lang Programming language object.
  * @param {number} props.totalSize Total size of all languages.
  * @param {boolean=} props.hideProgress Whether to hide percentage.
+ * @param {boolean=} props.hideValues Whether to hide stats values (percentages/bytes).
  * @param {string=} props.statsFormat Stats format
  * @param {number} props.index Index of the programming language.
  * @returns {string} Compact layout programming language SVG node.
@@ -274,6 +277,7 @@ const createCompactLangNode = ({
   lang,
   totalSize,
   hideProgress,
+  hideValues,
   statsFormat = "percentages",
   index,
 }) => {
@@ -287,7 +291,7 @@ const createCompactLangNode = ({
     <g class="stagger" style="animation-delay: ${staggerDelay}ms">
       <circle cx="5" cy="6" r="5" fill="${color}" />
       <text data-testid="lang-name" x="15" y="10" class='lang-name'>
-        ${lang.name} ${hideProgress ? "" : displayValue}
+        ${lang.name} ${hideProgress || hideValues ? "" : displayValue}
       </text>
     </g>
   `;
@@ -300,6 +304,7 @@ const createCompactLangNode = ({
  * @param {Lang[]} props.langs Array of programming languages.
  * @param {number} props.totalSize Total size of all languages.
  * @param {boolean=} props.hideProgress Whether to hide percentage.
+ * @param {boolean=} props.hideValues Whether to hide stats values.
  * @param {string=} props.statsFormat Stats format
  * @returns {string} Programming languages SVG node.
  */
@@ -307,6 +312,7 @@ const createLanguageTextNode = ({
   langs,
   totalSize,
   hideProgress,
+  hideValues,
   statsFormat,
 }) => {
   const longestLang = getLongestLang(langs);
@@ -318,6 +324,7 @@ const createLanguageTextNode = ({
         lang,
         totalSize,
         hideProgress,
+        hideValues,
         statsFormat,
         index,
       }),
@@ -344,16 +351,23 @@ const createLanguageTextNode = ({
  * @param {object} props Function properties.
  * @param {Lang[]} props.langs Array of programming languages.
  * @param {number} props.totalSize Total size of all languages.
+ * @param {boolean=} props.hideValues Whether to hide stats values.
  * @param {string} props.statsFormat Stats format
  * @returns {string} Donut layout programming language SVG node.
  */
-const createDonutLanguagesNode = ({ langs, totalSize, statsFormat }) => {
+const createDonutLanguagesNode = ({
+  langs,
+  totalSize,
+  hideValues,
+  statsFormat,
+}) => {
   return flexLayout({
     items: langs.map((lang, index) => {
       return createCompactLangNode({
         lang,
         totalSize,
         hideProgress: false,
+        hideValues,
         statsFormat,
         index,
       });
@@ -371,6 +385,7 @@ const createDonutLanguagesNode = ({ langs, totalSize, statsFormat }) => {
  * @param {number} totalLanguageSize Total size of all languages.
  * @param progBarBgColor Color of the background of progress bar.
  * @param {string} statsFormat Stats format.
+ * @param {boolean=} hideValues Whether to hide stats values.
  * @returns {string} Normal layout card SVG object.
  */
 const renderNormalLayout = (
@@ -379,6 +394,7 @@ const renderNormalLayout = (
   totalLanguageSize,
   progBarBgColor,
   statsFormat,
+  hideValues,
 ) => {
   return flexLayout({
     items: langs.map((lang, index) => {
@@ -389,6 +405,7 @@ const renderNormalLayout = (
         size: lang.size,
         totalSize: totalLanguageSize,
         statsFormat,
+        hideValues,
         index,
         progBarBgColor,
       });
@@ -406,6 +423,7 @@ const renderNormalLayout = (
  * @param {number} totalLanguageSize Total size of all languages.
  * @param {boolean=} hideProgress Whether to hide progress bar.
  * @param {string} statsFormat Stats format.
+ * @param {boolean=} hideValues Whether to hide stats values.
  * @returns {string} Compact layout card SVG object.
  */
 const renderCompactLayout = (
@@ -414,6 +432,7 @@ const renderCompactLayout = (
   totalLanguageSize,
   hideProgress,
   statsFormat = "percentages",
+  hideValues,
 ) => {
   const paddingRight = 50;
   const offsetWidth = width - paddingRight;
@@ -461,6 +480,7 @@ const renderCompactLayout = (
         totalSize: totalLanguageSize,
         hideProgress,
         statsFormat,
+        hideValues,
       })}
     </g>
   `;
@@ -472,9 +492,15 @@ const renderCompactLayout = (
  * @param {Lang[]} langs Array of programming languages.
  * @param {number} totalLanguageSize Total size of all languages.
  * @param {string} statsFormat Stats format.
+ * @param {boolean=} hideValues Whether to hide stats values.
  * @returns {string} Compact layout card SVG object.
  */
-const renderDonutVerticalLayout = (langs, totalLanguageSize, statsFormat) => {
+const renderDonutVerticalLayout = (
+  langs,
+  totalLanguageSize,
+  statsFormat,
+  hideValues,
+) => {
   // Donut vertical chart radius and total length
   const radius = 80;
   const totalCircleLength = getCircleLength(radius);
@@ -531,6 +557,7 @@ const renderDonutVerticalLayout = (langs, totalLanguageSize, statsFormat) => {
             totalSize: totalLanguageSize,
             hideProgress: false,
             statsFormat,
+            hideValues,
           })}
         </svg>
       </g>
@@ -544,9 +571,10 @@ const renderDonutVerticalLayout = (langs, totalLanguageSize, statsFormat) => {
  * @param {Lang[]} langs Array of programming languages.
  * @param {number} totalLanguageSize Total size of all languages.
  * @param {string} statsFormat Stats format.
+ * @param {boolean=} hideValues Whether to hide stats values.
  * @returns {string} Compact layout card SVG object.
  */
-const renderPieLayout = (langs, totalLanguageSize, statsFormat) => {
+const renderPieLayout = (langs, totalLanguageSize, statsFormat, hideValues) => {
   // Pie chart radius and center coordinates
   const radius = 90;
   const centerX = 150;
@@ -628,6 +656,7 @@ const renderPieLayout = (langs, totalLanguageSize, statsFormat) => {
             totalSize: totalLanguageSize,
             hideProgress: false,
             statsFormat,
+            hideValues,
           })}
         </svg>
       </g>
@@ -679,9 +708,16 @@ const createDonutPaths = (cx, cy, radius, percentages) => {
  * @param {number} width Card width.
  * @param {number} totalLanguageSize Total size of all languages.
  * @param {string} statsFormat Stats format.
+ * @param {boolean=} hideValues Whether to hide stats values.
  * @returns {string} Donut layout card SVG object.
  */
-const renderDonutLayout = (langs, width, totalLanguageSize, statsFormat) => {
+const renderDonutLayout = (
+  langs,
+  width,
+  totalLanguageSize,
+  statsFormat,
+  hideValues,
+) => {
   const centerX = width / 3;
   const centerY = width / 3;
   const radius = centerX - 60;
@@ -724,7 +760,7 @@ const renderDonutLayout = (langs, width, totalLanguageSize, statsFormat) => {
   return `
     <g transform="translate(0, 0)">
       <g transform="translate(0, 0)">
-        ${createDonutLanguagesNode({ langs, totalSize: totalLanguageSize, statsFormat })}
+        ${createDonutLanguagesNode({ langs, totalSize: totalLanguageSize, hideValues, statsFormat })}
       </g>
 
       <g transform="translate(125, ${donutCenterTranslation(langs.length)})">
@@ -800,6 +836,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
     prog_bar_bg_color,
     hide,
     hide_progress,
+    hide_values,
     theme,
     layout,
     custom_title,
@@ -850,13 +887,19 @@ const renderTopLanguages = (topLangs, options = {}) => {
     });
   } else if (layout === "pie") {
     height = calculatePieLayoutHeight(langs.length);
-    finalLayout = renderPieLayout(langs, totalLanguageSize, stats_format);
+    finalLayout = renderPieLayout(
+      langs,
+      totalLanguageSize,
+      stats_format,
+      hide_values,
+    );
   } else if (layout === "donut-vertical") {
     height = calculateDonutVerticalLayoutHeight(langs.length);
     finalLayout = renderDonutVerticalLayout(
       langs,
       totalLanguageSize,
       stats_format,
+      hide_values,
     );
   } else if (layout === "compact" || hide_progress == true) {
     height =
@@ -868,6 +911,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
       totalLanguageSize,
       hide_progress,
       stats_format,
+      hide_values,
     );
   } else if (layout === "donut") {
     height = calculateDonutLayoutHeight(langs.length);
@@ -877,6 +921,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
       width,
       totalLanguageSize,
       stats_format,
+      hide_values,
     );
   } else {
     finalLayout = renderNormalLayout(
@@ -885,6 +930,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
       totalLanguageSize,
       fallbackColor(prog_bar_bg_color, "#ddd"),
       stats_format,
+      hide_values,
     );
   }
 
