@@ -237,7 +237,7 @@ const createProgressTextNode = ({
   index,
 }) => {
   const staggerDelay = (index + 3) * 150;
-  const paddingRight = 95;
+  const paddingRight = hideValues ? CARD_PADDING * 2 : 95;
   const progressTextX = width - paddingRight + 10;
   const progressWidth = width - paddingRight;
 

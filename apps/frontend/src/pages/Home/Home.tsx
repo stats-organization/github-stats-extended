@@ -76,6 +76,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
   >();
   const [customTitle, setCustomTitle] = useState("");
   const [langsCount, setLangsCount] = useState<number | undefined>();
+  const [hideValues, setHideValues] = useState(false);
   const [showAllStats, setShowAllStats] = useState(false);
   const [showIcons, setShowIcons] = useState(false);
   const [includeAllCommits, setIncludeAllCommits] = useState(true);
@@ -121,6 +122,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
     descriptionLines,
     customTitle,
     langsCount,
+    hideValues,
     showAllStats,
     showIcons,
     includeAllCommits,
@@ -306,6 +308,8 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
               setCustomTitle={setCustomTitle}
               langsCount={langsCount}
               setLangsCount={setLangsCount}
+              hideValues={hideValues}
+              setHideValues={setHideValues}
               showAllStats={showAllStats}
               setShowAllStats={setShowAllStats}
               showIcons={showIcons}

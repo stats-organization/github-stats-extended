@@ -417,7 +417,7 @@ You can customize the appearance and behavior of the top languages card using th
 | `disable_animations` | Disables all animations in the card. | boolean | `false` |
 | `prog_bar_bg_color` | Background color of the bars. (Applies only to `normal` layout.) | string (hex color) | `#ddd` |
 | `hide_progress` | Uses the compact layout option, hides percentages, and removes the bars. | boolean | `false` |
-| `hide_values` | Hides the stats values (percentages or bytes) while keeping the progress bars or chart. | boolean | `false` |
+| `hide_values` | Hides language percentages or bytes while keeping the progress bars or chart. | boolean | `false` |
 | `size_weight` | Configures language stats algorithm (see [Language stats algorithm](#language-stats-algorithm)). | integer | `1` |
 | `count_weight` | Configures language stats algorithm (see [Language stats algorithm](#language-stats-algorithm)). | integer | `0` |
 | `stats_format` | Switches between two available formats for language's stats `percentages` and `bytes`. | enum | `percentages` |
