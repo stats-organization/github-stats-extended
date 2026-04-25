@@ -15,4 +15,4 @@ cp -RP apps/backend/.vercel/output/functions/api.func/_dot_vercel_copy/output ap
 rm -rf apps/deployment
 pnpm install
 pnpm build:frontend
-cp -RP apps/frontend/build/. apps/backend/.vercel/output/static/
+cp -RP apps/frontend/build/. apps/backend/.vercel/output/static/frontend/
