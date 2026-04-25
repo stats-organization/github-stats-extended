@@ -1,12 +1,8 @@
-const PROD = false as boolean;
-
 export const USE_LOGGER = true as boolean;
 
 export const CLIENT_ID = "Ov23lilAc5biyyRY0K1u";
 
-export const HOST = PROD
-  ? "github-stats-extended.vercel.app"
-  : "github-stats-extended-preview.vercel.app";
+export const HOST = window.location.host;
 
 const REDIRECT_URI = `https://${HOST}/frontend`;
 

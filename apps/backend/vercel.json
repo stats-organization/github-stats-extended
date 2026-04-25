@@ -8,11 +8,5 @@
       "source": "/",
       "destination": "https://github.com/stats-organization/github-stats-extended"
     }
-  ],
-  "rewrites": [
-    {
-      "source": "/frontend/:match*",
-      "destination": "https://gse-frontend-preview.vercel.app/:match*"
-    }
   ]
 }
