@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { JSX } from "react";
 import { useDispatch } from "react-redux";
-import BounceLoader from "react-spinners/BounceLoader";
+import { BounceLoader } from "react-spinners";
 import { v4 as uuidv4 } from "uuid";
 
 import { authenticate } from "../../api/user";
