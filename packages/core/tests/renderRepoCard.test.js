@@ -62,22 +62,23 @@ describe("Test renderRepoCard", () => {
     );
   });
 
-  it("should trim description", () => {
+  it("should clamp long descriptions to descriptionLinesCount lines", () => {
     document.body.innerHTML = renderRepoCard({
       ...data_repo.repository,
       description:
         "The quick brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet",
     });
 
-    expect(
-      document.getElementsByClassName("description")[0].children[0].textContent,
-    ).toBe("The quick brown fox jumps over the lazy dog is an");
+    // Browser-side wrapping inside the foreignObject keeps the full text in
+    // the DOM; the CSS line-clamp truncates whatever exceeds the line budget
+    // at render time.
+    const description = document.getElementsByClassName("description")[0];
+    expect(description).toHaveTextContent(
+      "The quick brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet",
+    );
+    expect(description.style.getPropertyValue("--lines")).toBe("3");
 
-    expect(
-      document.getElementsByClassName("description")[0].children[1].textContent,
-    ).toBe("English-language pangram—a sentence that contains all");
-
-    // Should not trim
+    // Short descriptions should leave the full text visible without clamping.
     document.body.innerHTML = renderRepoCard({
       ...data_repo.repository,
       description: "Small text should not trim",
@@ -135,7 +136,7 @@ describe("Test renderRepoCard", () => {
     const iconClassStyles = stylesObject[":host"][".icon "];
 
     expect(headerClassStyles.fill.trim()).toBe("#2f80ed");
-    expect(descClassStyles.fill.trim()).toBe("#434d58");
+    expect(descClassStyles.color.trim()).toBe("#434d58");
     expect(iconClassStyles.fill.trim()).toBe("#586069");
     expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
       "fill",
@@ -163,7 +164,7 @@ describe("Test renderRepoCard", () => {
     const iconClassStyles = stylesObject[":host"][".icon "];
 
     expect(headerClassStyles.fill.trim()).toBe(`#${customColors.title_color}`);
-    expect(descClassStyles.fill.trim()).toBe(`#${customColors.text_color}`);
+    expect(descClassStyles.color.trim()).toBe(`#${customColors.text_color}`);
     expect(iconClassStyles.fill.trim()).toBe(`#${customColors.icon_color}`);
     expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
       "fill",
@@ -187,7 +188,7 @@ describe("Test renderRepoCard", () => {
       expect(headerClassStyles.fill.trim()).toBe(
         `#${themes[name].title_color}`,
       );
-      expect(descClassStyles.fill.trim()).toBe(`#${themes[name].text_color}`);
+      expect(descClassStyles.color.trim()).toBe(`#${themes[name].text_color}`);
       expect(iconClassStyles.fill.trim()).toBe(`#${themes[name].icon_color}`);
       const backgroundElement = queryByTestId(document.body, "card-bg");
       const backgroundElementFill = backgroundElement.getAttribute("fill");
@@ -211,7 +212,7 @@ describe("Test renderRepoCard", () => {
     const iconClassStyles = stylesObject[":host"][".icon "];
 
     expect(headerClassStyles.fill.trim()).toBe("#5a0");
-    expect(descClassStyles.fill.trim()).toBe(`#${themes.radical.text_color}`);
+    expect(descClassStyles.color.trim()).toBe(`#${themes.radical.text_color}`);
     expect(iconClassStyles.fill.trim()).toBe(`#${themes.radical.icon_color}`);
     expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
       "fill",
@@ -236,7 +237,7 @@ describe("Test renderRepoCard", () => {
     expect(headerClassStyles.fill.trim()).toBe(
       `#${themes.default.title_color}`,
     );
-    expect(descClassStyles.fill.trim()).toBe(`#${themes.default.text_color}`);
+    expect(descClassStyles.color.trim()).toBe(`#${themes.default.text_color}`);
     expect(iconClassStyles.fill.trim()).toBe(`#${themes.radical.icon_color}`);
     expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
       "fill",

@@ -87,6 +87,65 @@ const createProgressNode = ({
 };
 
 /**
+ * Renders multi-line text via a `foreignObject` so the browser performs
+ * native, font-aware wrapping. Content overflowing `lineCount` lines is
+ * clipped (with an ellipsis on the last visible line) by CSS line-clamp.
+ *
+ * @param {object} props Function properties.
+ * @param {string} props.text Text to render (will be HTML-encoded).
+ * @param {number} props.x X position of the foreignObject.
+ * @param {number} props.y Y position of the foreignObject.
+ * @param {number} props.width Width of the wrap box.
+ * @param {number} props.height Height of the wrap box.
+ * @param {number} props.lineCount Maximum number of lines to display.
+ * @param {string} props.className CSS class applied to the inner element.
+ * @param {string=} props.testId Optional test id for the inner element.
+ * @returns {string} foreignObject SVG node.
+ */
+const wrappedTextNode = ({
+  text,
+  x,
+  y,
+  width,
+  height,
+  lineCount,
+  className,
+  testId,
+}) => {
+  const testIdAttr = testId ? ` data-testid="${testId}"` : "";
+  return `
+    <foreignObject x="${x}" y="${y}" width="${width}" height="${height}">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="${className}" style="--lines: ${lineCount};"${testIdAttr}>${encodeHTML(
+        text,
+      )}</div>
+    </foreignObject>
+  `;
+};
+
+/**
+ * CSS rules used to render multi-line text inside a `foreignObject`. Apply this
+ * to a CSS class (e.g. `.description`) shared with `wrappedTextNode` so the
+ * browser handles wrapping and the line count is taken from the `--lines`
+ * custom property set on the element.
+ *
+ * @param {string} color Text color (CSS `color` property).
+ * @returns {string} CSS rules block (without the surrounding selector).
+ */
+const wrappedTextStyles = (color) => `
+    color: ${color};
+    margin: 0;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--lines);
+    line-clamp: var(--lines);
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
+
+/**
  * Creates an icon with label to display repository/gist stats like forks, stars, etc.
  *
  * @param {string} icon The icon to display.
@@ -228,6 +287,101 @@ const measureText = (str, fontSize = 10) => {
   );
 };
 
+/**
+ * Estimate how many lines a string will wrap to when laid out greedily at the
+ * given font size inside a box of width `maxWidth`. Uses `measureText` so the
+ * estimate reflects actual font metrics rather than a fixed character count.
+ * The browser still does the real wrap inside the foreignObject; this is only
+ * used to size the SVG.
+ *
+ * @param {string} text Text to estimate.
+ * @param {number} fontSize Font size in px (matches `measureText`).
+ * @param {number} maxWidth Available wrap width in px.
+ * @param {number} maxLines Cap on the returned line count.
+ * @returns {number} Estimated line count, at least 1, at most `maxLines`.
+ */
+const countWrappedLines = (text, fontSize, maxWidth, maxLines) => {
+  if (!text) {
+    return 1;
+  }
+
+  // Tokenize the text into atoms representing line-break opportunities:
+  //   - whitespace runs (collapsed/dropped at line edges per CSS rules);
+  //   - a single CJK codepoint (browsers break between any two CJK chars,
+  //     punctuation or not, so each one is its own atom and ~1 em wide);
+  //   - a run of non-whitespace non-CJK characters (a "word" that can only
+  //     break at its boundaries, like Latin script).
+  // Korean Hangul (U+AC00–U+D7AF) is intentionally NOT in the CJK range
+  // because Korean wraps at word boundaries by default in HTML.
+  // CJK character range: U+3000–U+9FFF (CJK Symbols/Punctuation, Hiragana,
+  // Katakana, CJK Unified Ideographs incl. Extension A) plus U+FF00–U+FFEF
+  // (Halfwidth/Fullwidth Forms — fullwidth ASCII, fullwidth punctuation).
+  const cjkRange = /[\u3000-\u9FFF\uFF00-\uFFEF]/;
+  const tokens = text.match(
+    /\s+|[\u3000-\u9FFF\uFF00-\uFFEF]|[^\s\u3000-\u9FFF\uFF00-\uFFEF]+/g,
+  );
+  if (!tokens) {
+    return 1;
+  }
+
+  const whitespaceWidth = (run) => {
+    const collapsed = run.replace(/[\t\n\r ]+/g, " ");
+    let width = 0;
+    for (const ch of collapsed) {
+      // U+3000 IDEOGRAPHIC SPACE is one em wide; measureText's ASCII-only
+      // table would otherwise fall back to the average and under-estimate it.
+      width += ch === "\u3000" ? fontSize : measureText(ch, fontSize);
+    }
+    return width;
+  };
+
+  const atomWidth = (atom) => {
+    // CJK glyphs are full-width by default; measureText's ASCII-only table
+    // would otherwise fall back to the average and under-estimate them.
+    if (atom.length === 1 && cjkRange.test(atom)) {
+      return fontSize;
+    }
+    return measureText(atom, fontSize);
+  };
+
+  let lines = 1;
+  let currentWidth = 0;
+
+  for (const token of tokens) {
+    if (/^\s+$/.test(token)) {
+      // Whitespace at the start of a line is dropped by browsers.
+      if (currentWidth === 0) {
+        continue;
+      }
+      currentWidth += whitespaceWidth(token);
+      continue;
+    }
+
+    const w = atomWidth(token);
+
+    if (currentWidth === 0) {
+      currentWidth = w;
+    } else if (currentWidth + w <= maxWidth) {
+      currentWidth += w;
+    } else {
+      lines += 1;
+      currentWidth = w;
+    }
+
+    // An atom wider than the box wraps mid-glyph (overflow-wrap: anywhere).
+    while (currentWidth > maxWidth) {
+      lines += 1;
+      currentWidth -= maxWidth;
+    }
+
+    if (lines >= maxLines) {
+      return maxLines;
+    }
+  }
+
+  return Math.min(lines, maxLines);
+};
+
 export {
   renderError,
   createLanguageNode,
@@ -235,4 +389,7 @@ export {
   iconWithLabel,
   flexLayout,
   measureText,
+  countWrappedLines,
+  wrappedTextNode,
+  wrappedTextStyles,
 };
