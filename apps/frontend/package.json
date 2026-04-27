@@ -26,7 +26,7 @@
     "react-loading-skeleton": "^3.3.1",
     "react-redux": "^9.2.0",
     "react-spinners": "^0.17.0",
-    "react-toastify": "^11.0.5",
+    "react-toastify": "^11.1.0",
     "redux": "^5.0.1",
     "save-svg-as-png": "^1.4.17",
     "uuid": "^14.0.0"
