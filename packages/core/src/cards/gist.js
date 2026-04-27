@@ -16,6 +16,7 @@ import {
 
 const ICON_SIZE = 16;
 const CARD_DEFAULT_WIDTH = 400;
+const X_OFFSET = 25;
 const HEADER_MAX_LENGTH = 35;
 
 /**
@@ -62,7 +63,9 @@ const renderGistCard = (gistData, options = {}) => {
   const multiLineDescription = wrapTextMultiline(desc, lineWidth, linesLimit);
   const descriptionLines = multiLineDescription.length;
   const descriptionSvg = multiLineDescription
-    .map((line) => `<tspan dy="1.2em" x="25">${encodeHTML(line)}</tspan>`)
+    .map(
+      (line) => `<tspan dy="1.2em" x="${X_OFFSET}">${encodeHTML(line)}</tspan>`,
+    )
     .join("");
 
   const lineHeight = descriptionLines > 3 ? 12 : 10;
@@ -128,7 +131,7 @@ const renderGistCard = (gistData, options = {}) => {
   card.setHideBorder(hide_border);
 
   return card.render(`
-    <text class="description" x="25" y="-5">
+    <text class="description" x="${X_OFFSET}" y="-5">
         ${descriptionSvg}
     </text>
 
