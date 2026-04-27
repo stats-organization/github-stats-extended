@@ -3,24 +3,27 @@
 import { Card } from "../common/Card.js";
 import { I18n } from "../common/I18n.js";
 import { getCardColors } from "../common/color.js";
-import { kFormatter, wrapTextMultiline } from "../common/fmt.js";
-import { encodeHTML } from "../common/html.js";
+import { kFormatter } from "../common/fmt.js";
 import { icons } from "../common/icons.js";
 import { buildSearchFilter, clampValue, parseEmojis } from "../common/ops.js";
 import {
+  countWrappedLines,
   createLanguageNode,
   flexLayout,
   iconWithLabel,
   measureText,
+  wrappedTextNode,
+  wrappedTextStyles,
 } from "../common/render.js";
 import { repoCardLocales } from "../translations.js";
 
 import { createTextNode } from "./stats.js";
 
 const ICON_SIZE = 16;
-const DESCRIPTION_LINE_WIDTH = 59;
 const CARD_DEFAULT_WIDTH = 400;
 const X_OFFSET = 25;
+const DESCRIPTION_FONT_SIZE = 13;
+const DESCRIPTION_LINE_HEIGHT_PX = 18;
 const DESCRIPTION_MAX_LINES = 3;
 
 /**
@@ -177,27 +180,32 @@ const renderRepoCard = (repo, options = {}) => {
   const header = show_owner ? nameWithOwner : name;
   const langName = (primaryLanguage && primaryLanguage.name) || "Unspecified";
   const langColor = (primaryLanguage && primaryLanguage.color) || "#333";
-  const descriptionMaxLines = description_lines_count
-    ? clampValue(description_lines_count, 1, DESCRIPTION_MAX_LINES)
-    : DESCRIPTION_MAX_LINES;
 
+  const descriptionBoxWidth = card_width - 2 * X_OFFSET;
   const desc = parseEmojis(description || "No description provided");
-  const multiLineDescription = wrapTextMultiline(
-    desc,
-    Math.round(
-      (card_width - CARD_DEFAULT_WIDTH) / 5.93 + DESCRIPTION_LINE_WIDTH,
-    ),
-    descriptionMaxLines,
-  );
+  // The browser performs the actual text wrapping inside the foreignObject;
+  // we only estimate the line count server-side so the SVG can reserve enough
+  // height. The estimate uses measureText for font-aware widths instead of a
+  // fixed character count.
   const descriptionLinesCount = description_lines_count
     ? clampValue(description_lines_count, 1, DESCRIPTION_MAX_LINES)
-    : multiLineDescription.length;
+    : countWrappedLines(
+        desc,
+        DESCRIPTION_FONT_SIZE,
+        descriptionBoxWidth,
+        DESCRIPTION_MAX_LINES,
+      );
 
-  const descriptionSvg = multiLineDescription
-    .map(
-      (line) => `<tspan dy="1.2em" x="${X_OFFSET}">${encodeHTML(line)}</tspan>`,
-    )
-    .join("");
+  const descriptionSvg = wrappedTextNode({
+    text: desc,
+    x: X_OFFSET,
+    y: 0,
+    width: descriptionBoxWidth,
+    height: descriptionLinesCount * DESCRIPTION_LINE_HEIGHT_PX,
+    lineCount: descriptionLinesCount,
+    className: "description",
+    testId: "description-text",
+  });
 
   const extraHeight = Object.keys(STATS).length
     ? -7 + (Math.ceil(statItems.length / 2) + 1) * extraLHeight
@@ -279,11 +287,12 @@ const renderRepoCard = (repo, options = {}) => {
   card.setHideBorder(hide_border);
   card.setHideTitle(false);
   card.setCSS(`
-    .description { font: 400 13px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${colors.textColor} }
+    .description {
+      font: 400 13px 'Segoe UI', Ubuntu, Sans-Serif;${wrappedTextStyles(colors.textColor)}    }
     .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${colors.textColor} }
     .badge { font: 600 11px 'Segoe UI', Ubuntu, Sans-Serif; }
     .badge rect { opacity: 0.2 }
-    
+
     .stat { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${colors.textColor} }
     .stagger {
       opacity: 0;
@@ -316,9 +325,7 @@ const renderRepoCard = (repo, options = {}) => {
           : ""
     }
 
-    <text class="description" x="${X_OFFSET}" y="-5">
-      ${descriptionSvg}
-    </text>
+    ${descriptionSvg}
 
     <g transform="translate(30, ${height - 75 - extraHeight})">
       ${starAndForkCount}

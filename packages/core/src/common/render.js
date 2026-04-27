@@ -87,6 +87,65 @@ const createProgressNode = ({
 };
 
 /**
+ * Renders multi-line text via a `foreignObject` so the browser performs
+ * native, font-aware wrapping. Content overflowing `lineCount` lines is
+ * clipped (with an ellipsis on the last visible line) by CSS line-clamp.
+ *
+ * @param {object} props Function properties.
+ * @param {string} props.text Text to render (will be HTML-encoded).
+ * @param {number} props.x X position of the foreignObject.
+ * @param {number} props.y Y position of the foreignObject.
+ * @param {number} props.width Width of the wrap box.
+ * @param {number} props.height Height of the wrap box.
+ * @param {number} props.lineCount Maximum number of lines to display.
+ * @param {string} props.className CSS class applied to the inner element.
+ * @param {string=} props.testId Optional test id for the inner element.
+ * @returns {string} foreignObject SVG node.
+ */
+const wrappedTextNode = ({
+  text,
+  x,
+  y,
+  width,
+  height,
+  lineCount,
+  className,
+  testId,
+}) => {
+  const testIdAttr = testId ? ` data-testid="${testId}"` : "";
+  return `
+    <foreignObject x="${x}" y="${y}" width="${width}" height="${height}">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="${className}" style="--lines: ${lineCount};"${testIdAttr}>${encodeHTML(
+        text,
+      )}</div>
+    </foreignObject>
+  `;
+};
+
+/**
+ * CSS rules used to render multi-line text inside a `foreignObject`. Apply this
+ * to a CSS class (e.g. `.description`) shared with `wrappedTextNode` so the
+ * browser handles wrapping and the line count is taken from the `--lines`
+ * custom property set on the element.
+ *
+ * @param {string} color Text color (CSS `color` property).
+ * @returns {string} CSS rules block (without the surrounding selector).
+ */
+const wrappedTextStyles = (color) => `
+    color: ${color};
+    margin: 0;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--lines);
+    line-clamp: var(--lines);
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
+
+/**
  * Creates an icon with label to display repository/gist stats like forks, stars, etc.
  *
  * @param {string} icon The icon to display.
@@ -228,6 +287,66 @@ const measureText = (str, fontSize = 10) => {
   );
 };
 
+/**
+ * Estimate how many lines a string will wrap to when laid out greedily at the
+ * given font size inside a box of width `maxWidth`. Uses `measureText` so the
+ * estimate reflects actual font metrics rather than a fixed character count.
+ * The browser still does the real wrap inside the foreignObject; this is only
+ * used to size the SVG.
+ *
+ * @param {string} text Text to estimate.
+ * @param {number} fontSize Font size in px (matches `measureText`).
+ * @param {number} maxWidth Available wrap width in px.
+ * @param {number} maxLines Cap on the returned line count.
+ * @returns {number} Estimated line count, at least 1, at most `maxLines`.
+ */
+const countWrappedLines = (text, fontSize, maxWidth, maxLines) => {
+  if (!text) {
+    return 1;
+  }
+
+  // Match wrapTextMultiline's Chinese heuristic: full-width comma is the
+  // expected break point, so the line count tracks the punctuation count.
+  const fullWidthComma = "，";
+  if (text.includes(fullWidthComma)) {
+    return clampValue(text.split(fullWidthComma).length, 1, maxLines);
+  }
+
+  const words = text.split(/\s+/).filter(Boolean);
+  if (words.length === 0) {
+    return 1;
+  }
+
+  const spaceWidth = measureText(" ", fontSize);
+  let lines = 1;
+  let currentWidth = 0;
+
+  for (const word of words) {
+    const wordWidth = measureText(word, fontSize);
+
+    if (currentWidth === 0) {
+      currentWidth = wordWidth;
+    } else if (currentWidth + spaceWidth + wordWidth <= maxWidth) {
+      currentWidth += spaceWidth + wordWidth;
+    } else {
+      lines += 1;
+      currentWidth = wordWidth;
+    }
+
+    // A single word wider than the box wraps mid-word (overflow-wrap: anywhere).
+    while (currentWidth > maxWidth) {
+      lines += 1;
+      currentWidth -= maxWidth;
+    }
+
+    if (lines >= maxLines) {
+      return maxLines;
+    }
+  }
+
+  return Math.min(lines, maxLines);
+};
+
 export {
   renderError,
   createLanguageNode,
@@ -235,4 +354,7 @@ export {
   iconWithLabel,
   flexLayout,
   measureText,
+  countWrappedLines,
+  wrappedTextNode,
+  wrappedTextStyles,
 };
