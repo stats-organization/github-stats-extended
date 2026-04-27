@@ -19,6 +19,8 @@ import { createTextNode } from "./stats.js";
 
 const ICON_SIZE = 16;
 const DESCRIPTION_LINE_WIDTH = 59;
+const CARD_DEFAULT_WIDTH = 400;
+const X_OFFSET = 25;
 const DESCRIPTION_MAX_LINES = 3;
 
 /**
@@ -96,8 +98,8 @@ const renderRepoCard = (repo, options = {}) => {
     card_width_input && !isNaN(card_width_input)
       ? card_width_input
       : show.length >= 2
-        ? 430
-        : 400;
+        ? CARD_DEFAULT_WIDTH + 30
+        : CARD_DEFAULT_WIDTH;
 
   const i18n = new I18n({
     locale,
@@ -182,7 +184,9 @@ const renderRepoCard = (repo, options = {}) => {
   const desc = parseEmojis(description || "No description provided");
   const multiLineDescription = wrapTextMultiline(
     desc,
-    Math.round((card_width - 400) / 5.93 + DESCRIPTION_LINE_WIDTH),
+    Math.round(
+      (card_width - CARD_DEFAULT_WIDTH) / 5.93 + DESCRIPTION_LINE_WIDTH,
+    ),
     descriptionMaxLines,
   );
   const descriptionLinesCount = description_lines_count
@@ -190,7 +194,9 @@ const renderRepoCard = (repo, options = {}) => {
     : multiLineDescription.length;
 
   const descriptionSvg = multiLineDescription
-    .map((line) => `<tspan dy="1.2em" x="25">${encodeHTML(line)}</tspan>`)
+    .map(
+      (line) => `<tspan dy="1.2em" x="${X_OFFSET}">${encodeHTML(line)}</tspan>`,
+    )
     .join("");
 
   const extraHeight = Object.keys(STATS).length
@@ -298,19 +304,19 @@ const renderRepoCard = (repo, options = {}) => {
           getBadgeSVG(
             i18n.t("repocard.template"),
             colors.textColor,
-            card_width - 400,
+            card_width - CARD_DEFAULT_WIDTH,
           )
         : isArchived
           ? // @ts-ignore
             getBadgeSVG(
               i18n.t("repocard.archived"),
               colors.textColor,
-              card_width - 400,
+              card_width - CARD_DEFAULT_WIDTH,
             )
           : ""
     }
 
-    <text class="description" x="25" y="-5">
+    <text class="description" x="${X_OFFSET}" y="-5">
       ${descriptionSvg}
     </text>
 
