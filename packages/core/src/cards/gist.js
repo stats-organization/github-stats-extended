@@ -57,10 +57,16 @@ const renderGistCard = (gistData, options = {}) => {
       theme,
     });
 
-  const lineWidth = 59;
+  const lineWidth = CARD_DEFAULT_WIDTH - X_OFFSET - 15; // right margin of 15 px
+  const fontSize = 13;
   const linesLimit = 10;
   const desc = parseEmojis(description || "No description provided");
-  const multiLineDescription = wrapTextMultiline(desc, lineWidth, linesLimit);
+  const multiLineDescription = wrapTextMultiline(
+    desc,
+    lineWidth,
+    linesLimit,
+    fontSize,
+  );
   const descriptionLines = multiLineDescription.length;
   const descriptionSvg = multiLineDescription
     .map(
@@ -124,7 +130,7 @@ const renderGistCard = (gistData, options = {}) => {
   });
 
   card.setCSS(`
-    .description { font: 400 13px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${textColor} }
+    .description { font: 400 ${fontSize}px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${textColor} }
     .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${textColor} }
     .icon { fill: ${iconColor} }
   `);

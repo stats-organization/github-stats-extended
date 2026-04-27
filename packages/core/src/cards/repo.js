@@ -18,9 +18,9 @@ import { repoCardLocales } from "../translations.js";
 import { createTextNode } from "./stats.js";
 
 const ICON_SIZE = 16;
-const DESCRIPTION_LINE_WIDTH = 59;
 const CARD_DEFAULT_WIDTH = 400;
 const X_OFFSET = 25;
+const DESCRIPTION_FONT_SIZE = 13;
 const DESCRIPTION_MAX_LINES = 3;
 
 /**
@@ -184,10 +184,9 @@ const renderRepoCard = (repo, options = {}) => {
   const desc = parseEmojis(description || "No description provided");
   const multiLineDescription = wrapTextMultiline(
     desc,
-    Math.round(
-      (card_width - CARD_DEFAULT_WIDTH) / 5.93 + DESCRIPTION_LINE_WIDTH,
-    ),
+    Math.round(card_width - X_OFFSET - 15), // right margin of 15 px
     descriptionMaxLines,
+    DESCRIPTION_FONT_SIZE,
   );
   const descriptionLinesCount = description_lines_count
     ? clampValue(description_lines_count, 1, DESCRIPTION_MAX_LINES)
@@ -279,7 +278,7 @@ const renderRepoCard = (repo, options = {}) => {
   card.setHideBorder(hide_border);
   card.setHideTitle(false);
   card.setCSS(`
-    .description { font: 400 13px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${colors.textColor} }
+    .description { font: 400 ${DESCRIPTION_FONT_SIZE}px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${colors.textColor} }
     .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${colors.textColor} }
     .badge { font: 600 11px 'Segoe UI', Ubuntu, Sans-Serif; }
     .badge rect { opacity: 0.2 }
