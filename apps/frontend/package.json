@@ -29,7 +29,7 @@
     "react-toastify": "^11.0.5",
     "redux": "^5.0.1",
     "save-svg-as-png": "^1.4.17",
-    "uuid": "^13.0.0"
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@types/react": "19.2.14",
