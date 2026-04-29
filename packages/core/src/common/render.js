@@ -317,28 +317,20 @@ const countWrappedLines = (text, fontSize, maxWidth, maxLines) => {
   // Katakana, CJK Unified Ideographs incl. Extension A) plus U+FF00–U+FFEF
   // (Halfwidth/Fullwidth Forms — fullwidth ASCII, fullwidth punctuation).
   const cjkRange = /[\u3000-\u9FFF\uFF00-\uFFEF]/;
+  // ASCII whitespace is collapsed to a single space per CSS `white-space: normal;`
+  text = text.replace(/[\t\n\r ]+/g, " ");
   const tokens = text.match(
-    /\s+|[\u3000-\u9FFF\uFF00-\uFFEF]|[^\s\u3000-\u9FFF\uFF00-\uFFEF]+/g,
+    /\s|[\u3000-\u9FFF\uFF00-\uFFEF]|[^\s\u3000-\u9FFF\uFF00-\uFFEF]+/g,
   );
   if (!tokens) {
     return 1;
   }
 
-  const whitespaceWidth = (run) => {
-    const collapsed = run.replace(/[\t\n\r ]+/g, " ");
-    let width = 0;
-    for (const ch of collapsed) {
-      // U+3000 IDEOGRAPHIC SPACE is one em wide; measureText's ASCII-only
-      // table would otherwise fall back to the average and under-estimate it.
-      width += ch === "\u3000" ? fontSize : measureText(ch, fontSize);
-    }
-    return width;
-  };
-
   const atomWidth = (atom) => {
-    // CJK glyphs are full-width by default; measureText's ASCII-only table
-    // would otherwise fall back to the average and under-estimate them.
-    if (atom.length === 1 && cjkRange.test(atom)) {
+    // CJK glyphs and U+3000 IDEOGRAPHIC SPACE are full-width by default;
+    // measureText's ASCII-only table would otherwise fall back to the average
+    // and under-estimate them.
+    if (atom.length === 1 && cjkRange.test(atom) || atom === "\u3000") {
       return fontSize;
     }
     return measureText(atom, fontSize);
@@ -348,12 +340,12 @@ const countWrappedLines = (text, fontSize, maxWidth, maxLines) => {
   let currentWidth = 0;
 
   for (const token of tokens) {
-    if (/^\s+$/.test(token)) {
+    if (token === " ") {
       // Whitespace at the start of a line is dropped by browsers.
       if (currentWidth === 0) {
         continue;
       }
-      currentWidth += whitespaceWidth(token);
+      currentWidth += measureText(token);
       continue;
     }
 
