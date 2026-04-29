@@ -3,10 +3,43 @@
 import { queryByTestId } from "@testing-library/dom";
 import { describe, expect, it } from "vitest";
 
-import { renderError } from "../src/common/render.js";
+import { countWrappedLines, renderError } from "../src/common/render.js";
 
-describe("Test render.js", () => {
-  it("should test renderError", () => {
+describe("Test countWrappedLines", () => {
+  it("should return 1 for empty text", () => {
+    expect(countWrappedLines("", 10, 200, 10)).toBe(1);
+  });
+
+  it("should return 1 when all text fits on a single line", () => {
+    expect(countWrappedLines("hi", 10, 200, 10)).toBe(1);
+  });
+
+  it("should return 2 when a two-word string wraps", () => {
+    expect(countWrappedLines("hello world", 10, 25, 10)).toBe(2);
+  });
+
+  it("should split a word wider than maxWidth (overflow-wrap: anywhere)", () => {
+    expect(countWrappedLines("aaaa", 10, 15, 10)).toBe(2);
+  });
+
+  it("should cap the result at maxLines", () => {
+    expect(countWrappedLines("word ".repeat(10), 10, 25, 3)).toBe(3);
+  });
+
+  it("should handle complex whitespace characters", () => {
+    expect(
+      countWrappedLines('"One    　   　two three."', 10, 30, 10),
+    ).toBe(5);
+  });
+
+  it("trailing spaces should not cause line breaks", () => {
+    expect(countWrappedLines("hi hi ", 10, 8, 10)).toBe(2);
+  });
+
+});
+
+describe("Test renderError", () => {
+  it("should contain error messages", () => {
     document.body.innerHTML = renderError({ message: "Something went wrong" });
     expect(
       queryByTestId(document.body, "message")?.children[0],
