@@ -111,7 +111,7 @@ describe("test renderGistCard", () => {
     const iconClassStyles = stylesObject[":host"][".icon "];
 
     expect(headerClassStyles.fill.trim()).toBe(`#${customColors.title_color}`);
-    expect(descClassStyles.color.trim()).toBe(`#${customColors.text_color}`);
+    expect(descClassStyles.fill.trim()).toBe(`#${customColors.text_color}`);
     expect(iconClassStyles.fill.trim()).toBe(`#${customColors.icon_color}`);
     expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
       "fill",
@@ -135,7 +135,7 @@ describe("test renderGistCard", () => {
       expect(headerClassStyles.fill.trim()).toBe(
         `#${themes[name].title_color}`,
       );
-      expect(descClassStyles.color.trim()).toBe(`#${themes[name].text_color}`);
+      expect(descClassStyles.fill.trim()).toBe(`#${themes[name].text_color}`);
       expect(iconClassStyles.fill.trim()).toBe(`#${themes[name].icon_color}`);
       const backgroundElement = queryByTestId(document.body, "card-bg");
       const backgroundElementFill = backgroundElement.getAttribute("fill");
@@ -159,7 +159,7 @@ describe("test renderGistCard", () => {
     const iconClassStyles = stylesObject[":host"][".icon "];
 
     expect(headerClassStyles.fill.trim()).toBe("#5a0");
-    expect(descClassStyles.color.trim()).toBe(`#${themes.radical.text_color}`);
+    expect(descClassStyles.fill.trim()).toBe(`#${themes.radical.text_color}`);
     expect(iconClassStyles.fill.trim()).toBe(`#${themes.radical.icon_color}`);
     expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
       "fill",
@@ -184,7 +184,7 @@ describe("test renderGistCard", () => {
     expect(headerClassStyles.fill.trim()).toBe(
       `#${themes.default.title_color}`,
     );
-    expect(descClassStyles.color.trim()).toBe(`#${themes.default.text_color}`);
+    expect(descClassStyles.fill.trim()).toBe(`#${themes.default.text_color}`);
     expect(iconClassStyles.fill.trim()).toBe(`#${themes.radical.icon_color}`);
     expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
       "fill",

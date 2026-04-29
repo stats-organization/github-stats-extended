@@ -34,6 +34,7 @@ export type StatCardOptions = CommonOptions & {
 
 export type RepoCardOptions = CommonOptions & {
   show_owner: boolean;
+  browser_rendering: boolean;
   description_lines_count: number;
   card_width_input;
   show: Array<string>;
@@ -73,4 +74,5 @@ export type WakaTimeOptions = CommonOptions & {
 
 export type GistCardOptions = CommonOptions & {
   show_owner: boolean;
+  browser_rendering: boolean;
 };

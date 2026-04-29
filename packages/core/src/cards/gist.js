@@ -2,7 +2,8 @@
 
 import { default as Card } from "../common/Card.js";
 import { getCardColors } from "../common/color.js";
-import { kFormatter } from "../common/fmt.js";
+import { kFormatter, wrapTextMultiline } from "../common/fmt.js";
+import { encodeHTML } from "../common/html.js";
 import { icons } from "../common/icons.js";
 import languageColors from "../common/languageColors.json" with { type: "json" };
 import { parseEmojis } from "../common/ops.js";
@@ -49,6 +50,7 @@ const renderGistCard = (gistData, options = {}) => {
     border_radius,
     border_color,
     show_owner = false,
+    browser_rendering = false,
     hide_border = false,
   } = options;
 
@@ -64,27 +66,45 @@ const renderGistCard = (gistData, options = {}) => {
     });
 
   const desc = parseEmojis(description || "No description provided");
-  // The browser performs the actual text wrapping inside the foreignObject;
-  // we only estimate the line count server-side so the SVG can reserve enough
-  // height. The estimate uses measureText for font-aware widths instead of a
-  // fixed character count.
-  const descriptionLines = countWrappedLines(
-    desc,
-    DESCRIPTION_FONT_SIZE,
-    DESCRIPTION_BOX_WIDTH,
-    DESCRIPTION_MAX_LINES,
-  );
 
-  const descriptionSvg = wrappedTextNode({
-    text: desc,
-    x: X_OFFSET,
-    y: 0,
-    width: DESCRIPTION_BOX_WIDTH,
-    height: descriptionLines * DESCRIPTION_LINE_HEIGHT_PX,
-    lineCount: descriptionLines,
-    className: "description",
-    testId: "description-text",
-  });
+  let descriptionLines, descriptionSvg;
+  if (browser_rendering) {
+    // The browser performs the actual text wrapping inside the foreignObject;
+    // we only estimate the line count server-side so the SVG can reserve enough
+    // height. The estimate uses measureText for font-aware widths instead of a
+    // fixed character count.
+    descriptionLines = countWrappedLines(
+      desc,
+      DESCRIPTION_FONT_SIZE,
+      DESCRIPTION_BOX_WIDTH,
+      DESCRIPTION_MAX_LINES,
+    );
+
+    descriptionSvg = wrappedTextNode({
+      text: desc,
+      x: X_OFFSET,
+      y: 0,
+      width: DESCRIPTION_BOX_WIDTH,
+      height: descriptionLines * DESCRIPTION_LINE_HEIGHT_PX,
+      lineCount: descriptionLines,
+      className: "description",
+      testId: "description-text",
+    });
+  } else {
+    const lineWidth = 59;
+    const linesLimit = 10;
+    const multiLineDescription = wrapTextMultiline(desc, lineWidth, linesLimit);
+    descriptionLines = multiLineDescription.length;
+    descriptionSvg = multiLineDescription
+      .map(
+        (line) =>
+          `<tspan dy="1.2em" x="${X_OFFSET}">${encodeHTML(line)}</tspan>`,
+      )
+      .join("");
+    descriptionSvg = `<text class="description" x="${X_OFFSET}" y="-5">
+        ${descriptionSvg}
+    </text>`;
+  }
 
   const lineHeight = descriptionLines > 3 ? 12 : 10;
   const height =
@@ -143,7 +163,7 @@ const renderGistCard = (gistData, options = {}) => {
 
   card.setCSS(`
     .description {
-      font: 400 ${DESCRIPTION_FONT_SIZE}px 'Segoe UI', Ubuntu, Sans-Serif;${wrappedTextStyles(textColor)}    }
+      font: 400 ${DESCRIPTION_FONT_SIZE}px 'Segoe UI', Ubuntu, Sans-Serif;fill: ${textColor};${wrappedTextStyles} }
     .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${textColor} }
     .icon { fill: ${iconColor} }
   `);
