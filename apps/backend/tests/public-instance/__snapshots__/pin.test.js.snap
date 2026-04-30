@@ -100,11 +100,14 @@ exports[`Test /api/pin contract > should match the public happy-path response sn
             .header { font-size: 15.5px; }
           }
           
-    .description { font: 400 13px 'Segoe UI', Ubuntu, Sans-Serif; fill: #434d58 }
+    .description {
+      font: 400 13px 'Segoe UI', Ubuntu, Sans-Serif;fill: #434d58;
+      
+    }
     .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: #434d58 }
     .badge { font: 600 11px 'Segoe UI', Ubuntu, Sans-Serif; }
     .badge rect { opacity: 0.2 }
-    
+
     .stat { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: #434d58 }
     .stagger {
       opacity: 0;
@@ -160,7 +163,7 @@ exports[`Test /api/pin contract > should match the public happy-path response sn
           
     
 
-    <text class="description" x="25" y="-5">
+    <text class="description" x="25" y="-5"> 
       <tspan dy="1.2em" x="25">Help us take over the world with a deeply customizable</tspan><tspan dy="1.2em" x="25">React, TypeScript and GraphQL chat app that has enough text</tspan><tspan dy="1.2em" x="25">to wrap across multiple lines in the repository card.</tspan>
     </text>
 
@@ -217,11 +220,14 @@ exports[`Test /api/pin contract > should match the public many-params response s
             .header { font-size: 15.5px; }
           }
           
-    .description { font: 400 13px 'Segoe UI', Ubuntu, Sans-Serif; fill: #abcdef }
+    .description {
+      font: 400 13px 'Segoe UI', Ubuntu, Sans-Serif;fill: #abcdef;
+      
+    }
     .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: #abcdef }
     .badge { font: 600 11px 'Segoe UI', Ubuntu, Sans-Serif; }
     .badge rect { opacity: 0.2 }
-    
+
     .stat { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: #abcdef }
     .stagger {
       opacity: 0;
@@ -277,7 +283,7 @@ exports[`Test /api/pin contract > should match the public many-params response s
           
     
 
-    <text class="description" x="25" y="-5">
+    <text class="description" x="25" y="-5"> 
       <tspan dy="1.2em" x="25">Help us take over the world with a deeply customizable React, TypeScript and GraphQL...</tspan>
     </text>
 

@@ -54,12 +54,30 @@ describe("test renderGistCard", () => {
     expect(header).toHaveTextContent("some-really-long-repo-name-for-test...");
   });
 
-  it("should clamp long descriptions to the configured line count", () => {
+  it("should trim description if description is too long", () => {
     document.body.innerHTML = renderGistCard({
       ...data,
       description:
         "The quick brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet",
     });
+    expect(
+      document.getElementsByClassName("description")[0].children[0].textContent,
+    ).toBe("The quick brown fox jumps over the lazy dog is an");
+
+    expect(
+      document.getElementsByClassName("description")[0].children[1].textContent,
+    ).toBe("English-language pangram—a sentence that contains all");
+  });
+
+  it("should respect browser_rendering=true", () => {
+    document.body.innerHTML = renderGistCard(
+      {
+        ...data,
+        description:
+          "The quick brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet",
+      },
+      { browser_rendering: true },
+    );
     // The full description stays in the DOM; the CSS line-clamp on the
     // foreignObject's inner div is what visually truncates the overflow.
     const description = document.getElementsByClassName("description")[0];
