@@ -316,7 +316,9 @@ const renderRepoCard = (repo, options = {}) => {
   card.setHideTitle(false);
   card.setCSS(`
     .description {
-      font: 400 ${DESCRIPTION_FONT_SIZE}px 'Segoe UI', Ubuntu, Sans-Serif;fill: ${colors.textColor};${wrappedTextStyles} }
+      font: 400 ${DESCRIPTION_FONT_SIZE}px 'Segoe UI', Ubuntu, Sans-Serif;fill: ${colors.textColor};
+      ${browser_rendering ? wrappedTextStyles : ""}
+    }
     .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${colors.textColor} }
     .badge { font: 600 11px 'Segoe UI', Ubuntu, Sans-Serif; }
     .badge rect { opacity: 0.2 }

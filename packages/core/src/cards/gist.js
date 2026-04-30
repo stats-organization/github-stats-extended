@@ -163,7 +163,9 @@ const renderGistCard = (gistData, options = {}) => {
 
   card.setCSS(`
     .description {
-      font: 400 ${DESCRIPTION_FONT_SIZE}px 'Segoe UI', Ubuntu, Sans-Serif;fill: ${textColor};${wrappedTextStyles} }
+      font: 400 ${DESCRIPTION_FONT_SIZE}px 'Segoe UI', Ubuntu, Sans-Serif;fill: ${textColor};
+      ${browser_rendering ? wrappedTextStyles : ""}
+    }
     .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${textColor} }
     .icon { fill: ${iconColor} }
   `);
