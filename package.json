@@ -17,7 +17,7 @@
     "eslint-plugin-react-hooks": "7.1.1",
     "globals": "17.5.0",
     "husky": "9.1.7",
-    "knip": "6.5.0",
+    "knip": "6.6.1",
     "lint-staged": "16.4.0",
     "prettier": "3.8.3",
     "turbo": "2.9.6",
