@@ -15,10 +15,7 @@ describe("Test splitWrappedText", () => {
   });
 
   it("should split a two-word string across lines", () => {
-    expect(splitWrappedText("hello world", 10, 25)).toEqual([
-      "hello",
-      "world",
-    ]);
+    expect(splitWrappedText("hello world", 10, 25)).toEqual(["hello", "world"]);
   });
 
   it("should split a word wider than maxWidth", () => {
@@ -76,7 +73,6 @@ describe("Test countWrappedLines", () => {
   it("trailing spaces should not cause line breaks", () => {
     expect(countWrappedLines("hi hi ", 10, 8, 10)).toBe(2);
   });
-
 });
 
 describe("Test renderError", () => {
