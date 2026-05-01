@@ -1,7 +1,5 @@
 // @ts-check
 
-import wrap from "word-wrap";
-
 import { encodeHTML } from "./html.js";
 import { splitWrappedText } from "./render.js";
 
