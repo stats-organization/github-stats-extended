@@ -184,10 +184,10 @@ const renderRepoCard = (repo, options = {}) => {
   const langName = (primaryLanguage && primaryLanguage.name) || "Unspecified";
   const langColor = (primaryLanguage && primaryLanguage.color) || "#333";
   const desc = parseEmojis(description || "No description provided");
+  const descriptionBoxWidth = card_width - 2 * X_OFFSET;
 
   let descriptionLinesCount, descriptionSvg;
   if (browser_rendering) {
-    const descriptionBoxWidth = card_width - 2 * X_OFFSET;
     // The browser performs the actual text wrapping inside the foreignObject;
     // we only estimate the line count server-side so the SVG can reserve enough
     // height. The estimate uses measureText for font-aware widths instead of a
@@ -216,9 +216,8 @@ const renderRepoCard = (repo, options = {}) => {
       : DESCRIPTION_MAX_LINES;
     const multiLineDescription = wrapTextMultiline(
       desc,
-      Math.round(
-        (card_width - CARD_DEFAULT_WIDTH) / 5.93 + DESCRIPTION_LINE_WIDTH,
-      ),
+      descriptionBoxWidth,
+      DESCRIPTION_FONT_SIZE,
       descriptionMaxLines,
     );
     descriptionLinesCount = description_lines_count

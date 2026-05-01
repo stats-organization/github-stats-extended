@@ -3,6 +3,7 @@
 import wrap from "word-wrap";
 
 import { encodeHTML } from "./html.js";
+import { splitWrappedText } from "./render.js";
 
 /**
  * Retrieves num with suffix k(thousands) precise to given decimal places.
@@ -57,26 +58,16 @@ const formatBytes = (bytes) => {
  * Split text over multiple lines based on the card width.
  *
  * @param {string} text Text to split.
- * @param {number} width Line width in number of characters.
+ * @param {number} width Available wrap width in px.
+ * @param {number} fontSize Font size in px.
  * @param {number} maxLines Maximum number of lines.
  * @returns {string[]} Array of lines.
  */
-const wrapTextMultiline = (text, width = 59, maxLines = 3) => {
-  const fullWidthComma = "，";
-  const encoded = encodeHTML(text);
-  const isChinese = encoded.includes(fullWidthComma);
-
-  let wrapped;
-
-  if (isChinese) {
-    wrapped = encoded.split(fullWidthComma); // Chinese full punctuation
-  } else {
-    wrapped = wrap(encoded, {
-      width,
-    }).split("\n"); // Split wrapped lines to get an array of lines
-  }
-
-  const lines = wrapped.map((line) => line.trim()).slice(0, maxLines); // Only consider maxLines lines
+const wrapTextMultiline = (text, width, fontSize, maxLines = 3) => {
+  const wrapped = splitWrappedText(text, fontSize, width);
+  const lines = wrapped
+    .map((line) => encodeHTML(line.trim()))
+    .slice(0, maxLines); // Only consider maxLines lines
 
   // Add "..." to the last line if the text exceeds maxLines
   if (wrapped.length > maxLines) {

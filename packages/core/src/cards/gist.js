@@ -91,9 +91,13 @@ const renderGistCard = (gistData, options = {}) => {
       testId: "description-text",
     });
   } else {
-    const lineWidth = 59;
     const linesLimit = 10;
-    const multiLineDescription = wrapTextMultiline(desc, lineWidth, linesLimit);
+    const multiLineDescription = wrapTextMultiline(
+      desc,
+      DESCRIPTION_BOX_WIDTH,
+      DESCRIPTION_FONT_SIZE,
+      linesLimit,
+    );
     descriptionLines = multiLineDescription.length;
     descriptionSvg = multiLineDescription
       .map(

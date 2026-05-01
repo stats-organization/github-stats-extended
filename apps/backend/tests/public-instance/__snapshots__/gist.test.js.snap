@@ -93,7 +93,7 @@ exports[`Test /api/gist contract > should match the public happy-path response s
         <g data-testid="main-card-body" transform="translate(0, 55)">
           
     <text class="description" x="25" y="-5">
-        <tspan dy="1.2em" x="25">List of countries and territories in English and Spanish:</tspan><tspan dy="1.2em" x="25">name, continent, capital, dial code, country codes, TLD,</tspan><tspan dy="1.2em" x="25">and area in sq km. Lista de países y territorios en</tspan><tspan dy="1.2em" x="25">Inglés y Español: nombre, continente, capital,</tspan><tspan dy="1.2em" x="25">código de teléfono, códigos de país,</tspan><tspan dy="1.2em" x="25">dominio y área en km cuadrados. Updated 2023</tspan>
+        <tspan dy="1.2em" x="25">List of countries and territories in English and Spanish:</tspan><tspan dy="1.2em" x="25">name, continent, capital, dial code, country codes, TLD, and</tspan><tspan dy="1.2em" x="25">area in sq km. Lista de países y territorios en Inglés y</tspan><tspan dy="1.2em" x="25">Español: nombre, continente, capital, código de teléfono,</tspan><tspan dy="1.2em" x="25">códigos de país, dominio y área en km cuadrados. Updated</tspan><tspan dy="1.2em" x="25">2023</tspan>
     </text>
 
     <g transform="translate(30, 117)">
@@ -193,7 +193,7 @@ exports[`Test /api/gist contract > should match the public many-params response 
         <g data-testid="main-card-body" transform="translate(0, 55)">
           
     <text class="description" x="25" y="-5">
-        <tspan dy="1.2em" x="25">List of countries and territories in English and Spanish:</tspan><tspan dy="1.2em" x="25">name, continent, capital, dial code, country codes, TLD,</tspan><tspan dy="1.2em" x="25">and area in sq km. Lista de países y territorios en</tspan><tspan dy="1.2em" x="25">Inglés y Español: nombre, continente, capital,</tspan><tspan dy="1.2em" x="25">código de teléfono, códigos de país,</tspan><tspan dy="1.2em" x="25">dominio y área en km cuadrados. Updated 2023</tspan>
+        <tspan dy="1.2em" x="25">List of countries and territories in English and Spanish:</tspan><tspan dy="1.2em" x="25">name, continent, capital, dial code, country codes, TLD, and</tspan><tspan dy="1.2em" x="25">area in sq km. Lista de países y territorios en Inglés y</tspan><tspan dy="1.2em" x="25">Español: nombre, continente, capital, código de teléfono,</tspan><tspan dy="1.2em" x="25">códigos de país, dominio y área en km cuadrados. Updated</tspan><tspan dy="1.2em" x="25">2023</tspan>
     </text>
 
     <g transform="translate(30, 117)">

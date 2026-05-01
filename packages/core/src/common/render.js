@@ -337,7 +337,7 @@ const splitWrappedText = (text, fontSize, maxWidth) => {
     let width = 0;
 
     for (const character of characters) {
-      const characterWidth = measureText(character);
+      const characterWidth = measureText(character, fontSize);
       if (segment && width + characterWidth > availableWidth) {
         break;
       }
@@ -346,8 +346,8 @@ const splitWrappedText = (text, fontSize, maxWidth) => {
     }
 
     return {
-       segment,
-       width,
+      segment,
+      width,
     };
   };
 
@@ -361,14 +361,14 @@ const splitWrappedText = (text, fontSize, maxWidth) => {
         continue;
       }
       lines[lines.length - 1] += token;
-      currentWidth += measureText(token);
+      currentWidth += measureText(token, fontSize);
       continue;
     }
 
     let remaining = token;
 
     while (remaining) {
-      const w = measureText(remaining);
+      const w = measureText(remaining, fontSize);
       if (currentWidth + w <= maxWidth) {
         lines[lines.length - 1] += remaining;
         currentWidth += w;
@@ -403,7 +403,10 @@ const splitWrappedText = (text, fontSize, maxWidth) => {
  * @returns {number} Estimated line count, at least 1, at most `maxLines`.
  */
 const countWrappedLines = (text, fontSize, maxWidth, maxLines) => {
-  return Math.min(Math.max(1, splitWrappedText(text, fontSize, maxWidth).length), maxLines);
+  return Math.min(
+    Math.max(1, splitWrappedText(text, fontSize, maxWidth).length),
+    maxLines,
+  );
 };
 
 export {
