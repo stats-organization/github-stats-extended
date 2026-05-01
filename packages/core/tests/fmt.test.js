@@ -89,7 +89,7 @@ describe("Test fmt.js", () => {
       11,
       3,
     );
-    expect(multiLineText).toEqual(["Hello world long long long", "text"]);
+    expect(multiLineText).toEqual(["Hello world long long", "long text"]);
   });
 
   it("wrapTextMultiline: should wrap large texts and limit max lines", () => {

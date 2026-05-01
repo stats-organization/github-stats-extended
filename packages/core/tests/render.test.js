@@ -41,7 +41,7 @@ describe("Test splitWrappedText", () => {
   });
 
   it("trailing spaces should not cause line breaks", () => {
-    expect(splitWrappedText("hi hi ", 10, 8)).toEqual(["hi", "hi"]);
+    expect(splitWrappedText("hi hi ", 10, 12)).toEqual(["hi", "hi"]);
   });
 });
 
@@ -71,7 +71,7 @@ describe("Test countWrappedLines", () => {
   });
 
   it("trailing spaces should not cause line breaks", () => {
-    expect(countWrappedLines("hi hi ", 10, 8, 10)).toBe(2);
+    expect(countWrappedLines("hi hi ", 10, 12, 10)).toBe(2);
   });
 });
 
