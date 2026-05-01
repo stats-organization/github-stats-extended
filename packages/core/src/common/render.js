@@ -273,66 +273,85 @@ const measureText = (str, fontSize = 10) => {
   ];
 
   const avg = 0.5279276315789471;
+  // CJK character range: U+3000–U+9FFF (CJK Symbols/Punctuation, Hiragana,
+  // Katakana, CJK Unified Ideographs incl. Extension A) plus U+FF00–U+FFEF
+  // (Halfwidth/Fullwidth Forms — fullwidth ASCII, fullwidth punctuation).
+  const cjkRange = /[\u3000-\u9FFF\uFF00-\uFFEF]/;
+
   return (
     str
       .split("")
-      .map((c) =>
-        c.charCodeAt(0) < widths.length ? widths[c.charCodeAt(0)] : avg,
-      )
+      .map((c) => {
+        if (cjkRange.test(c) || c === "\u3000") {
+          // CJK glyphs and U+3000 IDEOGRAPHIC SPACE are full-width by default;
+          return 1;
+        }
+        if (c.charCodeAt(0) < widths.length) {
+          return widths[c.charCodeAt(0)];
+        } else {
+          return avg;
+        }
+      })
       .reduce((cur, acc) => acc + cur) * fontSize
   );
 };
 
 /**
- * Estimate how many lines a string will wrap to when laid out greedily at the
+ * Split text into the lines it would wrap to when laid out greedily at the
  * given font size inside a box of width `maxWidth`. Uses `measureText` so the
  * estimate reflects actual font metrics rather than a fixed character count.
  * The browser still does the real wrap inside the foreignObject; this is only
  * used to size the SVG.
  *
- * @param {string} text Text to estimate.
+ * @param {string} text Text to split.
  * @param {number} fontSize Font size in px (matches `measureText`).
  * @param {number} maxWidth Available wrap width in px.
- * @param {number} maxLines Cap on the returned line count.
- * @returns {number} Estimated line count, at least 1, at most `maxLines`.
+ * @returns {string[]} Estimated wrapped lines.
  */
-const countWrappedLines = (text, fontSize, maxWidth, maxLines) => {
+const splitWrappedText = (text, fontSize, maxWidth) => {
   if (!text) {
-    return 1;
+    return [];
   }
 
   // Tokenize the text into atoms representing line-break opportunities:
-  //   - whitespace runs (collapsed/dropped at line edges per CSS rules);
+  //   - ASCII whitespace runs (collapsed/dropped at line edges per CSS rules);
+  //   - non-ASCII whitespaces
   //   - a single CJK codepoint (browsers break between any two CJK chars,
   //     punctuation or not, so each one is its own atom and ~1 em wide);
   //   - a run of non-whitespace non-CJK characters (a "word" that can only
   //     break at its boundaries, like Latin script).
   // Korean Hangul (U+AC00–U+D7AF) is intentionally NOT in the CJK range
   // because Korean wraps at word boundaries by default in HTML.
-  // CJK character range: U+3000–U+9FFF (CJK Symbols/Punctuation, Hiragana,
-  // Katakana, CJK Unified Ideographs incl. Extension A) plus U+FF00–U+FFEF
-  // (Halfwidth/Fullwidth Forms — fullwidth ASCII, fullwidth punctuation).
-  const cjkRange = /[\u3000-\u9FFF\uFF00-\uFFEF]/;
   // ASCII whitespace is collapsed to a single space per CSS `white-space: normal;`
   text = text.replace(/[\t\n\r ]+/g, " ");
   const tokens = text.match(
     /\s|[\u3000-\u9FFF\uFF00-\uFFEF]|[^\s\u3000-\u9FFF\uFF00-\uFFEF]+/g,
   );
   if (!tokens) {
-    return 1;
+    return [];
   }
 
-  const atomWidth = (atom) => {
-    // CJK glyphs and U+3000 IDEOGRAPHIC SPACE are full-width by default;
-    // measureText's ASCII-only table would otherwise fall back to the average
-    // and under-estimate them.
-    if (atom.length === 1 && cjkRange.test(atom) || atom === "\u3000") {
-      return fontSize;
+  const takeFittingSegment = (token, availableWidth) => {
+    const characters = token.split("");
+    let segment = "";
+    let width = 0;
+
+    for (const character of characters) {
+      const characterWidth = measureText(character);
+      if (segment && width + characterWidth > availableWidth) {
+        break;
+      }
+      segment += character;
+      width += characterWidth;
     }
-    return measureText(atom, fontSize);
+
+    return {
+       segment,
+       width,
+    };
   };
 
-  let lines = 1;
+  const lines = [""];
   let currentWidth = 0;
 
   for (const token of tokens) {
@@ -341,33 +360,50 @@ const countWrappedLines = (text, fontSize, maxWidth, maxLines) => {
       if (currentWidth === 0) {
         continue;
       }
+      lines[lines.length - 1] += token;
       currentWidth += measureText(token);
       continue;
     }
 
-    const w = atomWidth(token);
+    let remaining = token;
 
-    if (currentWidth === 0) {
-      currentWidth = w;
-    } else if (currentWidth + w <= maxWidth) {
-      currentWidth += w;
-    } else {
-      lines += 1;
-      currentWidth = w;
-    }
+    while (remaining) {
+      const w = measureText(remaining);
+      if (currentWidth + w <= maxWidth) {
+        lines[lines.length - 1] += remaining;
+        currentWidth += w;
+        break;
+      }
 
-    // An atom wider than the box wraps mid-glyph (overflow-wrap: anywhere).
-    while (currentWidth > maxWidth) {
-      lines += 1;
-      currentWidth -= maxWidth;
-    }
+      if (currentWidth > 0) {
+        lines.push("");
+        currentWidth = 0;
+        continue;
+      }
 
-    if (lines >= maxLines) {
-      return maxLines;
+      // An atom wider than the box wraps mid-glyph (overflow-wrap: anywhere).
+      const { segment, width } = takeFittingSegment(remaining, maxWidth);
+      lines[lines.length - 1] += segment;
+      currentWidth = width;
+      remaining = remaining.slice(segment.length);
     }
   }
 
-  return Math.min(lines, maxLines);
+  return lines.map((line) => line.replace(/[\t\n\r ]+$/, ""));
+};
+
+/**
+ * Estimate how many lines a string will wrap to when laid out greedily at the
+ * given font size inside a box of width `maxWidth`, capped at `maxLines`.
+ *
+ * @param {string} text Text to estimate.
+ * @param {number} fontSize Font size in px (matches `measureText`).
+ * @param {number} maxWidth Available wrap width in px.
+ * @param {number} maxLines Cap on the returned line count.
+ * @returns {number} Estimated line count, at least 1, at most `maxLines`.
+ */
+const countWrappedLines = (text, fontSize, maxWidth, maxLines) => {
+  return Math.min(Math.max(1, splitWrappedText(text, fontSize, maxWidth).length), maxLines);
 };
 
 export {
@@ -377,6 +413,7 @@ export {
   iconWithLabel,
   flexLayout,
   measureText,
+  splitWrappedText,
   countWrappedLines,
   wrappedTextNode,
   wrappedTextStyles,
