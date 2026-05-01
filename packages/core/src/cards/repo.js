@@ -21,7 +21,6 @@ import { repoCardLocales } from "../translations.js";
 import { createTextNode } from "./stats.js";
 
 const ICON_SIZE = 16;
-const DESCRIPTION_LINE_WIDTH = 59;
 const CARD_DEFAULT_WIDTH = 400;
 const X_OFFSET = 25;
 const DESCRIPTION_FONT_SIZE = 13;
