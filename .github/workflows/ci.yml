@@ -31,26 +31,21 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Run vercel-preparation.sh
-        run: |
-          chmod +x ./vercel-preparation.sh
-          ./vercel-preparation.sh
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies
         with:
           node-version: ${{ matrix.node }}
 
+      - name: Build packages
+        run: pnpm run build:packages
+
       - name: Build frontend
-        run: pnpm --filter frontend run build
+        run: pnpm run build:frontend
 
-      - name: Run frontend tests
-        run: pnpm --filter frontend run test
-
-      - name: Run backend tests
-        run: pnpm --filter github-readme-stats run test
+      - name: Run tests
+        run: pnpm run test
 
   frontend-test-e2e:
     name: Frontend E2E test
@@ -64,21 +59,42 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies
 
-      - name: Run vercel-preparation.sh
-        run: |
-          chmod +x ./vercel-preparation.sh
-          ./vercel-preparation.sh
+      - name: Build packages
+        run: pnpm run build:packages
 
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
 
       - name: Run Playwright tests
-        run: pnpm --filter frontend run test:e2e
+        run: pnpm --filter ./apps/frontend/ run test:e2e
+
+  backend-test-e2e:
+    name: Backend E2E test
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    continue-on-error: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Install Dependencies
+        uses: ./.github/actions/install-dependencies
+
+      - name: Build packages
+        run: pnpm run build:packages
+
+      - name: Run backend end-to-end tests
+        run: pnpm --filter ./apps/backend/ run test:e2e
 
   code-checks:
     name: Code checks
@@ -90,17 +106,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
-
-      # Heads up!
-      #
-      # 1. Execution of this script is needed to resolve `.vercel` folder from `apps/frontend/src/components/Card/SVG.js`
-      # 2. This scripts removes `apps/backend/node_modules` breaking ESLint’s module resolution.
-      #    Dependency installation must occur after running ./vercel-preparation.sh.
-      - name: Run vercel-preparation.sh
-        run: |
-          chmod +x ./vercel-preparation.sh
-          ./vercel-preparation.sh
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies

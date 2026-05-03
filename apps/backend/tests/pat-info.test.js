@@ -4,9 +4,15 @@
 
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-
-import patInfo, { RATE_LIMIT_SECONDS } from "../api-renamed/status/pat-info.js";
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
 
 const mock = new MockAdapter(axios);
 
@@ -57,20 +63,35 @@ const bad_credentials_error = {
   message: "Bad credentials",
 };
 
+let RATE_LIMIT_SECONDS, patInfo;
+
+beforeAll(async () => {
+  vi.stubEnv("PAT_1", "testPAT1");
+  vi.stubEnv("PAT_2", "testPAT2");
+  vi.stubEnv("PAT_3", "testPAT3");
+  vi.stubEnv("PAT_4", "testPAT4");
+
+  const { logger } =
+    await import("@stats-organization/github-readme-stats-core");
+  vi.spyOn(logger, "log").mockImplementation(() => {});
+  vi.spyOn(logger, "error").mockImplementation(() => {});
+
+  ({ RATE_LIMIT_SECONDS, default: patInfo } =
+    await import("../api-renamed/status/pat-info.js"));
+});
+
 afterEach(() => {
   mock.reset();
+  vi.unstubAllEnvs();
+  // modules may cache environment variables, so we need to reset them
+  vi.resetModules();
+});
+
+afterAll(() => {
+  vi.restoreAllMocks();
 });
 
 describe("Test /api/status/pat-info", () => {
-  beforeAll(() => {
-    // reset patenv first so that they are not populated with local envs
-    process.env = {};
-    process.env.PAT_1 = "testPAT1";
-    process.env.PAT_2 = "testPAT2";
-    process.env.PAT_3 = "testPAT3";
-    process.env.PAT_4 = "testPAT4";
-  });
-
   it("should return only 'validPATs' if all PATs are valid", async () => {
     mock
       .onPost("https://api.github.com/graphql")
@@ -243,7 +264,6 @@ describe("Test /api/status/pat-info", () => {
   });
 
   it("should have proper cache when error is thrown", async () => {
-    mock.reset();
     mock.onPost("https://api.github.com/graphql").networkError();
 
     const { req, res } = faker({}, {});

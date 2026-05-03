@@ -1,345 +1,181 @@
 // @ts-check
 
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { api, getConfig } from "@stats-organization/github-readme-stats-core";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import api from "../api-renamed/index.js";
-import { calculateRank } from "../src/calculateRank.js";
-import { renderStatsCard } from "../src/cards/stats.js";
+import router from "../router.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
-import { renderError } from "../src/common/render.js";
+import { getUserAccessByName, storeRequest } from "../src/common/database.js";
 
-import { data_stats, stats } from "./test-data/api-data.js";
-
-stats.rank = calculateRank({
-  all_commits: false,
-  commits: stats.totalCommits,
-  prs: stats.totalPRs,
-  reviews: stats.totalReviews,
-  issues: stats.totalIssues,
-  repos: 1,
-  stars: stats.totalStars,
-  followers: 0,
+vi.mock(import("@stats-organization/github-readme-stats-core"), async () => {
+  const { mockCore } = await import("./utils.js");
+  return mockCore();
 });
 
-const error = {
-  errors: [
-    {
-      type: "NOT_FOUND",
-      path: ["user"],
-      locations: [],
-      message: "Could not fetch user",
-    },
-  ],
-};
+vi.mock(import("../src/common/database.js"), async (importOriginal) => ({
+  ...(await importOriginal()),
+  storeRequest: vi.fn(),
+  getUserAccessByName: vi.fn(),
+}));
 
-const mock = new MockAdapter(axios);
+const apiMock = vi.mocked(api);
+const getConfigMock = vi.mocked(getConfig);
+const storeRequestMock = vi.mocked(storeRequest);
+const getUserAccessByNameMock = vi.mocked(getUserAccessByName);
 
-// @ts-ignore
-const faker = (query, data) => {
-  const req = {
-    query: {
-      username: "anuraghazra",
-      ...query,
-    },
-  };
-  const res = {
-    setHeader: vi.fn(),
-    send: vi.fn(),
-  };
-  mock.onPost("https://api.github.com/graphql").replyOnce(200, data);
+const createRequest = (search = "") => ({
+  headers: {},
+  url: `/api?${search}`,
+});
 
-  return { req, res };
-};
+const createResponse = () => ({
+  end: vi.fn(),
+  setHeader: vi.fn(),
+});
+
+const defaultCacheHeader =
+  `max-age=${CACHE_TTL.STATS_CARD.DEFAULT}, ` +
+  `s-maxage=${CACHE_TTL.STATS_CARD.DEFAULT}, ` +
+  `stale-while-revalidate=${DURATIONS.ONE_DAY}`;
+
+const errorCacheHeader =
+  `max-age=${CACHE_TTL.ERROR}, ` +
+  `s-maxage=${CACHE_TTL.ERROR}, ` +
+  `stale-while-revalidate=${DURATIONS.ONE_DAY}`;
 
 beforeEach(() => {
-  process.env.CACHE_SECONDS = undefined;
+  apiMock.mockReset();
+  getConfigMock.mockReset().mockReturnValue({});
+  storeRequestMock.mockReset().mockResolvedValue(undefined);
+  getUserAccessByNameMock.mockReset().mockResolvedValue(null);
+  // CACHE_SECONDS is not set here, this is just to safeguard against CACHE_SECONDS being set externally
+  delete process.env.CACHE_SECONDS;
 });
 
-afterEach(() => {
-  mock.reset();
-});
+describe("Test /api backend routing", () => {
+  it("happy path should pass query params and user PAT, respond with stats content and persist request", async () => {
+    getUserAccessByNameMock.mockResolvedValue({ token: "user-pat" });
+    apiMock.mockResolvedValue({
+      status: "success",
+      content: "mock-stats-svg",
+    });
 
-describe("Test /api/", () => {
-  it("should test the request", async () => {
-    const { req, res } = faker({}, data_stats);
-
-    await api(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderStatsCard(stats, { ...req.query }),
+    const req = createRequest(
+      "username=anuraghazra&theme=dark&hide=issues,prs,contribs",
     );
-  });
+    const res = createResponse();
 
-  it("should render error card on error", async () => {
-    const { req, res } = faker({}, error);
+    await router(req, res);
 
-    await api(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message: error.errors[0].message,
-        secondaryMessage:
-          "Make sure the provided username is not an organization",
-      }),
-    );
-  });
-
-  it("should render error card in same theme as requested card", async () => {
-    const { req, res } = faker({ theme: "merko" }, error);
-
-    await api(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message: error.errors[0].message,
-        secondaryMessage:
-          "Make sure the provided username is not an organization",
-        renderOptions: { theme: "merko" },
-      }),
-    );
-  });
-
-  it("should get the query options", async () => {
-    const { req, res } = faker(
+    expect(getUserAccessByNameMock).toHaveBeenCalledWith("anuraghazra");
+    expect(apiMock).toHaveBeenCalledWith(
       {
         username: "anuraghazra",
+        theme: "dark",
         hide: "issues,prs,contribs",
-        show_icons: true,
-        hide_border: true,
-        line_height: 100,
-        title_color: "fff",
-        icon_color: "fff",
-        text_color: "fff",
-        bg_color: "fff",
       },
-      data_stats,
+      "user-pat",
     );
-
-    await api(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderStatsCard(stats, {
-        hide: ["issues", "prs", "contribs"],
-        show_icons: true,
-        hide_border: true,
-        line_height: 100,
-        title_color: "fff",
-        icon_color: "fff",
-        text_color: "fff",
-        bg_color: "fff",
-      }),
-    );
-  });
-
-  it("should have proper cache", async () => {
-    const { req, res } = faker({}, data_stats);
-
-    await api(req, res);
-
+    expect(req.query).toEqual({
+      username: "anuraghazra",
+      theme: "dark",
+      hide: "issues,prs,contribs",
+    });
     expect(res.setHeader.mock.calls).toEqual([
+      ["Cache-Control", defaultCacheHeader],
       ["Content-Type", "image/svg+xml"],
-      [
-        "Cache-Control",
-        `max-age=${CACHE_TTL.STATS_CARD.DEFAULT}, ` +
-          `s-maxage=${CACHE_TTL.STATS_CARD.DEFAULT}, ` +
-          `stale-while-revalidate=${DURATIONS.ONE_DAY}`,
-      ],
     ]);
+    expect(res.end).toHaveBeenCalledExactlyOnceWith("mock-stats-svg");
+    expect(storeRequestMock).toHaveBeenCalledExactlyOnceWith(req);
   });
 
-  it("should set proper cache", async () => {
-    const cache_seconds = DURATIONS.TWELVE_HOURS;
-    const { req, res } = faker({ cache_seconds }, data_stats);
-    await api(req, res);
+  it("should use the shorter error cache for temporary stats errors", async () => {
+    apiMock.mockResolvedValue({
+      status: "error - temporary",
+      content: "temporary-error-svg",
+    });
 
-    expect(res.setHeader.mock.calls).toEqual([
-      ["Content-Type", "image/svg+xml"],
-      [
-        "Cache-Control",
-        `max-age=${cache_seconds}, ` +
-          `s-maxage=${cache_seconds}, ` +
-          `stale-while-revalidate=${DURATIONS.ONE_DAY}`,
-      ],
-    ]);
-  });
+    const req = createRequest("username=anuraghazra");
+    const res = createResponse();
 
-  it("should set shorter cache when error", async () => {
-    const { req, res } = faker({}, error);
-    await api(req, res);
+    await router(req, res);
 
-    expect(res.setHeader.mock.calls).toEqual([
-      ["Content-Type", "image/svg+xml"],
-      [
-        "Cache-Control",
-        `max-age=${CACHE_TTL.ERROR}, ` +
-          `s-maxage=${CACHE_TTL.ERROR}, ` +
-          `stale-while-revalidate=${DURATIONS.ONE_DAY}`,
-      ],
-    ]);
-  });
-
-  it("should properly set cache using CACHE_SECONDS env variable", async () => {
-    const cacheSeconds = "10000";
-    process.env.CACHE_SECONDS = cacheSeconds;
-
-    const { req, res } = faker({}, data_stats);
-    await api(req, res);
-
-    expect(res.setHeader.mock.calls).toEqual([
-      ["Content-Type", "image/svg+xml"],
-      [
-        "Cache-Control",
-        `max-age=${cacheSeconds}, ` +
-          `s-maxage=${cacheSeconds}, ` +
-          `stale-while-revalidate=${DURATIONS.ONE_DAY}`,
-      ],
-    ]);
-  });
-
-  it("should disable cache when CACHE_SECONDS is set to 0", async () => {
-    process.env.CACHE_SECONDS = "0";
-
-    const { req, res } = faker({}, data_stats);
-    await api(req, res);
-
-    expect(res.setHeader.mock.calls).toEqual([
-      ["Content-Type", "image/svg+xml"],
-      [
-        "Cache-Control",
-        "no-cache, no-store, must-revalidate, max-age=0, s-maxage=0",
-      ],
-      ["Pragma", "no-cache"],
-      ["Expires", "0"],
-    ]);
-  });
-
-  it("should set proper cache with clamped values", async () => {
-    {
-      let { req, res } = faker({ cache_seconds: 200_000 }, data_stats);
-      await api(req, res);
-
-      expect(res.setHeader.mock.calls).toEqual([
-        ["Content-Type", "image/svg+xml"],
-        [
-          "Cache-Control",
-          `max-age=${CACHE_TTL.STATS_CARD.MAX}, ` +
-            `s-maxage=${CACHE_TTL.STATS_CARD.MAX}, ` +
-            `stale-while-revalidate=${DURATIONS.ONE_DAY}`,
-        ],
-      ]);
-    }
-
-    // note i'm using block scoped vars
-    {
-      let { req, res } = faker({ cache_seconds: 0 }, data_stats);
-      await api(req, res);
-
-      expect(res.setHeader.mock.calls).toEqual([
-        ["Content-Type", "image/svg+xml"],
-        [
-          "Cache-Control",
-          `max-age=${CACHE_TTL.STATS_CARD.MIN}, ` +
-            `s-maxage=${CACHE_TTL.STATS_CARD.MIN}, ` +
-            `stale-while-revalidate=${DURATIONS.ONE_DAY}`,
-        ],
-      ]);
-    }
-
-    {
-      let { req, res } = faker({ cache_seconds: -10_000 }, data_stats);
-      await api(req, res);
-
-      expect(res.setHeader.mock.calls).toEqual([
-        ["Content-Type", "image/svg+xml"],
-        [
-          "Cache-Control",
-          `max-age=${CACHE_TTL.STATS_CARD.MIN}, ` +
-            `s-maxage=${CACHE_TTL.STATS_CARD.MIN}, ` +
-            `stale-while-revalidate=${DURATIONS.ONE_DAY}`,
-        ],
-      ]);
-    }
-  });
-
-  it("should allow changing ring_color", async () => {
-    const { req, res } = faker(
+    expect(getUserAccessByNameMock).toHaveBeenCalledWith("anuraghazra");
+    expect(apiMock).toHaveBeenCalledWith(
       {
         username: "anuraghazra",
-        hide: "issues,prs,contribs",
-        show_icons: true,
-        hide_border: true,
-        line_height: 100,
-        title_color: "fff",
-        ring_color: "0000ff",
-        icon_color: "fff",
-        text_color: "fff",
-        bg_color: "fff",
       },
-      data_stats,
+      null,
     );
-
-    await api(req, res);
-
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderStatsCard(stats, {
-        hide: ["issues", "prs", "contribs"],
-        show_icons: true,
-        hide_border: true,
-        line_height: 100,
-        title_color: "fff",
-        ring_color: "0000ff",
-        icon_color: "fff",
-        text_color: "fff",
-        bg_color: "fff",
-      }),
-    );
+    expect(res.setHeader.mock.calls).toEqual([
+      ["Cache-Control", errorCacheHeader],
+      ["Content-Type", "image/svg+xml"],
+    ]);
+    expect(res.end).toHaveBeenCalledExactlyOnceWith("temporary-error-svg");
+    expect(storeRequestMock).toHaveBeenCalledExactlyOnceWith(req);
   });
 
-  it("should render error card when wrong locale is provided", async () => {
-    const { req, res } = faker({ locale: "asdf" }, data_stats);
+  it("should not persist permanent stats errors returned by core", async () => {
+    apiMock.mockResolvedValue({
+      status: "error - permanent",
+      content: "permanent-error-svg",
+    });
 
-    await api(req, res);
+    const req = createRequest("username=anuraghazra");
+    const res = createResponse();
 
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message: "Something went wrong",
-        secondaryMessage: "Language not found",
-      }),
+    await router(req, res);
+
+    expect(getUserAccessByNameMock).toHaveBeenCalledWith("anuraghazra");
+    expect(apiMock).toHaveBeenCalledWith(
+      {
+        username: "anuraghazra",
+      },
+      null,
     );
+    expect(res.setHeader.mock.calls).toEqual([
+      ["Cache-Control", defaultCacheHeader],
+      ["Content-Type", "image/svg+xml"],
+    ]);
+    expect(res.end).toHaveBeenCalledExactlyOnceWith("permanent-error-svg");
+    expect(storeRequestMock).not.toHaveBeenCalled();
   });
 
-  it("should render error card when include_all_commits true and upstream API fails", async () => {
-    mock
-      .onGet(
-        "https://api.github.com/search/commits?per_page=1&q=author:anuraghazra",
-      )
-      .reply(200, { error: "Some test error message" });
+  it("should reject blacklisted usernames before calling core logic", async () => {
+    const req = createRequest("username=renovate-bot");
+    const res = createResponse();
 
-    const { req, res } = faker(
-      { username: "anuraghazra", include_all_commits: true },
-      data_stats,
-    );
+    await router(req, res);
 
-    await api(req, res);
+    expect(apiMock).not.toHaveBeenCalled();
+    expect(getUserAccessByNameMock).not.toHaveBeenCalled();
+    expect(res.setHeader.mock.calls).toEqual([
+      ["Cache-Control", defaultCacheHeader],
+      ["Content-Type", "image/svg+xml"],
+    ]);
+    expect(res.end).toHaveBeenCalledExactlyOnceWith(
+      "render-error:This username is blacklisted",
+    );
+    expect(storeRequestMock).not.toHaveBeenCalled();
+  });
 
-    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(
-      renderError({
-        message: "Could not fetch data from GitHub REST API.",
-        secondaryMessage: "Please try again later",
-      }),
+  it("should reject non-whitelisted usernames before calling core logic", async () => {
+    getConfigMock.mockReturnValue({ whitelist: ["allowed-user"] });
+
+    const req = createRequest("username=blocked-user");
+    const res = createResponse();
+
+    await router(req, res);
+
+    expect(apiMock).not.toHaveBeenCalled();
+    expect(getUserAccessByNameMock).not.toHaveBeenCalled();
+    expect(res.setHeader.mock.calls).toEqual([
+      ["Cache-Control", defaultCacheHeader],
+      ["Content-Type", "image/svg+xml"],
+    ]);
+    expect(res.end).toHaveBeenCalledExactlyOnceWith(
+      "render-error:This username is not whitelisted",
     );
-    // Received SVG output should not contain string "https://tiny.one/readme-stats"
-    expect(res.send.mock.calls[0][0]).not.toContain(
-      "https://tiny.one/readme-stats",
-    );
+    expect(storeRequestMock).not.toHaveBeenCalled();
   });
 });

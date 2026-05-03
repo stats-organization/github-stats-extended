@@ -22,6 +22,7 @@ const baseOptions = {
   descriptionLines: undefined,
   customTitle: "",
   langsCount: undefined,
+  hideValues: false,
   showAllStats: false,
   showIcons: false,
   includeAllCommits: false,

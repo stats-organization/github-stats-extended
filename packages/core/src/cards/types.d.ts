@@ -1,0 +1,76 @@
+type ThemeNames = keyof typeof import("../themes/index.ts");
+type RankIcon = "default" | "github" | "percentile";
+
+interface CommonOptions {
+  title_color: string;
+  icon_color: string;
+  text_color: string;
+  bg_color: string;
+  theme: ThemeNames;
+  border_radius: number;
+  border_color: string;
+  locale: string;
+  hide_border: boolean;
+}
+
+export type StatCardOptions = CommonOptions & {
+  hide: Array<string>;
+  show_icons: boolean;
+  hide_title: boolean;
+  card_width: number;
+  hide_rank: boolean;
+  include_all_commits: boolean;
+  commits_year: number;
+  line_height: number | string;
+  custom_title: string;
+  disable_animations: boolean;
+  number_format: string;
+  number_precision: number;
+  ring_color: string;
+  text_bold: boolean;
+  rank_icon: RankIcon;
+  show: Array<string>;
+};
+
+export type RepoCardOptions = CommonOptions & {
+  show_owner: boolean;
+  description_lines_count: number;
+  card_width_input;
+  show: Array<string>;
+  show_icons: boolean;
+  number_format: string;
+  text_bold: boolean;
+  line_height: number | string;
+  username;
+};
+
+export type TopLangOptions = CommonOptions & {
+  hide_title: boolean;
+  card_width: number;
+  hide: Array<string>;
+  layout: "compact" | "normal" | "donut" | "donut-vertical" | "pie";
+  custom_title: string;
+  langs_count: number;
+  disable_animations: boolean;
+  hide_progress: boolean;
+  hide_values: boolean;
+  prog_bar_bg_color: string;
+  stats_format: "percentages" | "bytes";
+};
+
+export type WakaTimeOptions = CommonOptions & {
+  hide_title: boolean;
+  hide: Array<string>;
+  card_width: number;
+  line_height: string;
+  hide_progress: boolean;
+  custom_title: string;
+  layout: "compact" | "normal";
+  langs_count: number;
+  display_format: "time" | "percent";
+  disable_animations: boolean;
+};
+
+export type GistCardOptions = CommonOptions & {
+  show_owner: boolean;
+};

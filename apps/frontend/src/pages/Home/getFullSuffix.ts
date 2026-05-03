@@ -19,6 +19,7 @@ interface Options {
   descriptionLines: number | undefined;
   customTitle: string;
   langsCount: number | undefined;
+  hideValues: boolean;
   showAllStats: boolean;
   showIcons: boolean;
   includeAllCommits: boolean;
@@ -41,6 +42,7 @@ export function getFullSuffix({
   descriptionLines,
   customTitle,
   langsCount,
+  hideValues,
   showAllStats,
   showIcons,
   includeAllCommits,
@@ -136,6 +138,10 @@ export function getFullSuffix({
     (selectedCard === CardType.TOP_LANGS || selectedCard === CardType.WAKATIME)
   ) {
     fullSuffix += `&langs_count=${langsCount}`;
+  }
+
+  if (hideValues && selectedCard === CardType.TOP_LANGS) {
+    fullSuffix += `&hide_values=true`;
   }
 
   if (showAllStats && selectedCard === CardType.STATS) {

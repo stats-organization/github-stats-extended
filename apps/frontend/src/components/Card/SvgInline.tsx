@@ -1,3 +1,6 @@
+// @ts-expect-error type info should be added later
+import { router } from "@stats-organization/github-readme-stats-backend";
+import { loadConfigFromEnv } from "@stats-organization/github-readme-stats-core";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import type { JSX } from "react";
@@ -5,8 +8,6 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 import { setShouldMock } from "../../axios-override.js";
-// @ts-expect-error will be solved by npm package
-import { default as router } from "../../backend/.vercel/output/functions/api.func/router.js";
 import { createMockRequest, createMockResponse } from "../../mock-http.js";
 import {
   useIsAuthenticated,
@@ -45,7 +46,12 @@ export function SvgInline(props: SvgInlineProps): JSX.Element {
     let isCurrent = true;
 
     const loadSvg = async () => {
-      window.process.env.PAT_1 = userToken as string;
+      const config: Record<string, string | undefined> = {
+        FETCH_MULTI_PAGE_STARS: "10",
+        PAT_1: userToken as string, // even if it's null, core's retryer.js sees there is 1 PAT and sets `RETRIES` accordingly
+      };
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      loadConfigFromEnv(config);
 
       setLoaded(false);
 

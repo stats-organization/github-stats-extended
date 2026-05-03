@@ -76,7 +76,7 @@ GitHub Stats Extended comes with several built-in themes (e.g. `dark`, `radical`
 
 <img src="https://res.cloudinary.com/anuraghazra/image/upload/v1595174536/grs-themes_l4ynja.png" alt="GitHub Stats Extended Themes" width="600px"/>
 
-You can look at a preview for [all available themes](../backend/themes/README.md) or checkout the [theme config file](../backend/themes/index.js). Please note that we paused the addition of new themes to decrease maintenance efforts; all pull requests related to new themes will be closed.
+You can look at a preview for [all available themes](../packages/core/src/themes/README.md) or checkout the [theme config file](../packages/core/src/themes/index.js). Please note that we paused the addition of new themes to decrease maintenance efforts; all pull requests related to new themes will be closed.
 
 #### Responsive Card Theme
 
@@ -102,7 +102,7 @@ We have included a `transparent` theme that has a transparent background. This t
 
 ##### Add transparent alpha channel to a themes bg\_color
 
-You can use the `bg_color` parameter to make any of [the available themes](../backend/themes/README.md) transparent. This is done by setting the `bg_color` to a color with a transparent alpha channel (i.e. `bg_color=00000000`):
+You can use the `bg_color` parameter to make any of [the available themes](../packages/core/src/themes/README.md) transparent. This is done by setting the `bg_color` to a color with a transparent alpha channel (i.e. `bg_color=00000000`):
 
 ```md
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&bg_color=00000000)
@@ -181,7 +181,7 @@ You can customize the appearance of all your cards however you wish with URL par
 | `border_color` | Card's border color. Does not apply when `hide_border` is enabled. | string (hex color) | `e4e2e2` |
 | `bg_color` | Card's background color. | string (hex color or a gradient in the form of *angle,start,end*) | `fffefe` |
 | `hide_border` | Hides the card's border. | boolean | `false` |
-| `theme` | Name of the theme, choose from [all available themes](../backend/themes/README.md). | enum | `default` |
+| `theme` | Name of the theme, choose from [all available themes](../packages/core/src/themes/README.md). | enum | `default` |
 | `cache_seconds` | Sets the cache header manually (min: 21600, max: 86400). | integer | `21600` |
 | `locale` | Sets the language in the card, you can check full list of available locales [here](#available-locales). | enum | `en` |
 | `border_radius` | Corner rounding on the card. | number | `4.5` |
@@ -417,6 +417,7 @@ You can customize the appearance and behavior of the top languages card using th
 | `disable_animations` | Disables all animations in the card. | boolean | `false` |
 | `prog_bar_bg_color` | Background color of the bars. (Applies only to `normal` layout.) | string (hex color) | `#ddd` |
 | `hide_progress` | Uses the compact layout option, hides percentages, and removes the bars. | boolean | `false` |
+| `hide_values` | Hides language percentages or bytes while keeping the progress bars or chart. | boolean | `false` |
 | `size_weight` | Configures language stats algorithm (see [Language stats algorithm](#language-stats-algorithm)). | integer | `1` |
 | `count_weight` | Configures language stats algorithm (see [Language stats algorithm](#language-stats-algorithm)). | integer | `0` |
 | `stats_format` | Switches between two available formats for language's stats `percentages` and `bytes`. | enum | `percentages` |

@@ -1,5 +1,7 @@
-import { logger } from "../src/common/log.js";
-import { fetchWakatimeStats } from "../src/fetchers/wakatime.js";
+import {
+  fetchWakatimeStats,
+  logger,
+} from "@stats-organization/github-readme-stats-core";
 
 /**
  * @param {any} req The request.

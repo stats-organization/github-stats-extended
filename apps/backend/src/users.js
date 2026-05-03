@@ -80,6 +80,7 @@ async function githubAuthenticate(code, privateAccess) {
     return { userId, accessToken, needDowngrade };
   } catch (err) {
     if (err.response) {
+      // eslint-disable-next-line preserve-caught-error
       throw new Error(`OAuth Error: ${err.response.status}`);
     }
     throw err;

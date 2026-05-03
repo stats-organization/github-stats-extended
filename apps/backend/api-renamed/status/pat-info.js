@@ -6,10 +6,12 @@
  *
  * @description This function is currently rate limited to 1 request per 3 minutes.
  */
-
-import { request } from "../../src/common/http.js";
-import { logger } from "../../src/common/log.js";
-import { dateDiff } from "../../src/common/ops.js";
+import {
+  dateDiff,
+  getConfig,
+  logger,
+  request,
+} from "@stats-organization/github-readme-stats-core";
 
 export const RATE_LIMIT_SECONDS = 60 * 3; // 1 request per 3 minutes
 
@@ -39,7 +41,7 @@ const uptimeFetcher = (variables, token) => {
 };
 
 const getAllPATs = () => {
-  return Object.keys(process.env).filter((key) => /PAT_\d*$/.exec(key));
+  return getConfig().pats;
 };
 
 /**
@@ -61,7 +63,7 @@ const getPATInfo = async (fetcher, variables) => {
 
   for (const pat of PATs) {
     try {
-      const response = await fetcher(variables, process.env[pat]);
+      const response = await fetcher(variables, pat.value);
       const errors = response.data.errors;
       const hasErrors = Boolean(errors);
       const errorType = errors?.[0]?.type;
@@ -71,7 +73,7 @@ const getPATInfo = async (fetcher, variables) => {
 
       // Store PATs with errors.
       if (hasErrors && errorType !== "RATE_LIMITED") {
-        details[pat] = {
+        details[pat.name] = {
           status: "error",
           error: {
             type: errors[0].type,
@@ -82,13 +84,13 @@ const getPATInfo = async (fetcher, variables) => {
       } else if (isRateLimited) {
         const date1 = new Date();
         const date2 = new Date(response.data?.data?.rateLimit?.resetAt);
-        details[pat] = {
+        details[pat.name] = {
           status: "exhausted",
           remaining: 0,
           resetIn: dateDiff(date2, date1) + " minutes",
         };
       } else {
-        details[pat] = {
+        details[pat.name] = {
           status: "valid",
           remaining: response.data.data.rateLimit.remaining,
         };
@@ -97,11 +99,11 @@ const getPATInfo = async (fetcher, variables) => {
       // Store the PAT if it is expired.
       const errorMessage = err.response?.data?.message?.toLowerCase();
       if (errorMessage === "bad credentials") {
-        details[pat] = {
+        details[pat.name] = {
           status: "expired",
         };
       } else if (errorMessage === "sorry. your account was suspended.") {
-        details[pat] = {
+        details[pat.name] = {
           status: "suspended",
         };
       } else {

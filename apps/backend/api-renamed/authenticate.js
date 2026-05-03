@@ -1,4 +1,5 @@
-import { logger } from "../src/common/log.js";
+import { logger } from "@stats-organization/github-readme-stats-core";
+
 import { authenticate } from "../src/users.js";
 
 /**

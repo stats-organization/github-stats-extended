@@ -38,16 +38,16 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies
 
       - name: Run update-languages-json.js script
-        run: pnpm --filter github-readme-stats run generate-langs-json
+        run: pnpm --filter ./packages/core/ run generate-langs-json
 
       - name: Create Pull Request if upstream language file is changed
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8
         with:
           commit-message: "feat(backend): update languages JSON"
           branch: "update_langs/patch"

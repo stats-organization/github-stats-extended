@@ -1,0 +1,21 @@
+{
+  "extends": ["../../tsconfig.base.json"],
+  "include": ["src", "tests", "vitest.config.ts"],
+  "compilerOptions": {
+    /**
+     * This workspace contains a lot of type errors.
+     * We will add typecheck later:
+     * @see https://github.com/stats-organization/github-stats-extended/issues/140
+     *
+     * At the moment we just need to output `js` and `.d.ts` files
+     */
+    "noCheck": true,
+
+    "allowJs": true,
+    "checkJs": true,
+
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "outDir": "build"
+  }
+}

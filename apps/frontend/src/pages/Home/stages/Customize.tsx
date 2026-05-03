@@ -47,6 +47,8 @@ interface CustomizeStageProps {
   setCustomTitle: Updater<string>;
   langsCount: number | undefined;
   setLangsCount: Updater<number | undefined>;
+  hideValues: boolean;
+  setHideValues: Updater<boolean>;
   showIcons: boolean;
   setShowIcons: Updater<boolean>;
   showAllStats: boolean;
@@ -87,6 +89,8 @@ export function CustomizeStage({
   setCustomTitle,
   langsCount,
   setLangsCount,
+  hideValues,
+  setHideValues,
   showIcons,
   setShowIcons,
   showAllStats,
@@ -319,6 +323,15 @@ export function CustomizeStage({
             onValueChange={setLangsCount}
             min={1}
             max={20}
+          />
+        )}
+        {cardType === CardType.TOP_LANGS && (
+          <CheckboxSection
+            title="Hide Values?"
+            text="Hide language percentages or bytes while keeping the selected layout visible."
+            question="Hide values?"
+            checked={hideValues}
+            onCheckedChange={setHideValues}
           />
         )}
         {cardType === CardType.WAKATIME && (
