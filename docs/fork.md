@@ -25,6 +25,11 @@ The resolution of this most requested feature in github-readme-stats was [origin
 
 GitHub-Stats-Extended proactively precomputes and caches cards. This solves the problem where [cards wouldn't load on the first try](https://github.com/anuraghazra/github-readme-stats/issues/2603). It also gives GitHub-Stats-Extended more time while generating cards in the background, which allows it to fetch more repo data:
 
+### Customization of top languages card
+GitHub-Stats-Extended allows you to display your top languages without any numbers via the `hide_values` parameter. And the `prog_bar_bg_color` parameter allows you to customize the background color of the progress bars, e.g. by setting it to white:
+
+![anuraghazra's top languages without numbers](https://github-stats-extended.vercel.app/api/top-langs?username=anuraghazra&langs_count=4&hide_values=true&prog_bar_bg_color=fff)
+
 ### Multi-page fetching for accurate star counts
 GitHub-Stats-Extended fetches up to 1000 of your starred repositories to accurately compute your stars count. In github-readme-stats, this is limited to 100 repos because github-readme-stats doesn't have the above-mentioned performance improvements.
 
