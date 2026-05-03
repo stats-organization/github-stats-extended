@@ -1,6 +1,6 @@
 # Fork Information
 
-This project is an actively maintained fork of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats).
+This project is an actively maintained fork and extension of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats).
 
 ## Key Differences
 
@@ -72,15 +72,11 @@ One of the valued maintainers [wrote](https://github.com/anuraghazra/github-read
 >
 > The volume is overwhelming for the small team, especially taking into account that right now I'm alone online and working only sometimes when I have a free hours, so it took some time to get to your PR.
 
-So I decided to implement some of the highly requested features and make the enhanced project available to everyone.
-
-## Upstream Sync Strategy
-
-The maintainers of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) keep their project up to date with dependency upgrades and do occasionally merge some pull requests. I regularly merge the latest upstream changes into this fork to keep it in sync with the upstream repo.
-
-I also try to structure my own changes in a way that minimizes merge conflicts with the upstream repo. So some of my changes might even be merged back into [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) if the upstream maintainers are interested.
+So I decided to implement some of the highly requested features and make the enhanced project available to everyone. Since the initial release of this fork I have been in contact with the maintainers of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) and we decided to join forces. github-stats-extended is now in the process of becoming the successor of github-readme-stats.
 
 ## Compatibility Notes
+
+If there should be any changes in github-readme-stats in the future, they will be synced into this fork.
 
 GitHub-Stats-Extended aims to be fully compatible with [github-readme-stats](https://github.com/anuraghazra/github-readme-stats). Generally, additional functionality introduced in this fork has to be explicitly enabled via some parameter.
 
