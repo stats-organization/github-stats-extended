@@ -87,6 +87,61 @@ const createProgressNode = ({
 };
 
 /**
+ * Renders multi-line text via a `foreignObject` so the browser performs
+ * native, font-aware wrapping. Content overflowing `lineCount` lines is
+ * clipped (with an ellipsis on the last visible line) by CSS line-clamp.
+ *
+ * @param {object} props Function properties.
+ * @param {string} props.text Text to render (will be HTML-encoded).
+ * @param {number} props.x X position of the foreignObject.
+ * @param {number} props.y Y position of the foreignObject.
+ * @param {number} props.width Width of the wrap box.
+ * @param {number} props.height Height of the wrap box.
+ * @param {number} props.lineCount Maximum number of lines to display.
+ * @param {string} props.className CSS class applied to the inner element.
+ * @param {string=} props.testId Optional test id for the inner element.
+ * @returns {string} foreignObject SVG node.
+ */
+const wrappedTextNode = ({
+  text,
+  x,
+  y,
+  width,
+  height,
+  lineCount,
+  className,
+  testId,
+}) => {
+  const testIdAttr = testId ? ` data-testid="${testId}"` : "";
+  return `
+    <foreignObject x="${x}" y="${y}" width="${width}" height="${height}">
+      <div xmlns="http://www.w3.org/1999/xhtml" class="${className}" style="--lines: ${lineCount};"${testIdAttr}>${encodeHTML(
+        text,
+      )}</div>
+    </foreignObject>
+  `;
+};
+
+/**
+ * CSS rules used to render multi-line text inside a `foreignObject`. Apply this
+ * to a CSS class (e.g. `.description`) shared with `wrappedTextNode` so the
+ * browser handles wrapping and the line count is taken from the `--lines`
+ * custom property set on the element.
+ */
+const wrappedTextStyles = `
+    margin: 0;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--lines);
+    line-clamp: var(--lines);
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
+
+/**
  * Creates an icon with label to display repository/gist stats like forks, stars, etc.
  *
  * @param {string} icon The icon to display.
@@ -187,7 +242,7 @@ const renderError = ({
 };
 
 /**
- * Retrieve text length.
+ * Retrieve text length based on Segoe UI font.
  *
  * @see https://stackoverflow.com/a/48172630/10629172
  * @param {string} str String to measure.
@@ -197,34 +252,174 @@ const renderError = ({
 const measureText = (str, fontSize = 10) => {
   // prettier-ignore
   const widths = [
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0.2796875, 0.2765625,
-    0.3546875, 0.5546875, 0.5546875, 0.8890625, 0.665625, 0.190625,
-    0.3328125, 0.3328125, 0.3890625, 0.5828125, 0.2765625, 0.3328125,
-    0.2765625, 0.3015625, 0.5546875, 0.5546875, 0.5546875, 0.5546875,
-    0.5546875, 0.5546875, 0.5546875, 0.5546875, 0.5546875, 0.5546875,
-    0.2765625, 0.2765625, 0.584375, 0.5828125, 0.584375, 0.5546875,
-    1.0140625, 0.665625, 0.665625, 0.721875, 0.721875, 0.665625,
-    0.609375, 0.7765625, 0.721875, 0.2765625, 0.5, 0.665625,
-    0.5546875, 0.8328125, 0.721875, 0.7765625, 0.665625, 0.7765625,
-    0.721875, 0.665625, 0.609375, 0.721875, 0.665625, 0.94375,
-    0.665625, 0.665625, 0.609375, 0.2765625, 0.3546875, 0.2765625,
-    0.4765625, 0.5546875, 0.3328125, 0.5546875, 0.5546875, 0.5,
-    0.5546875, 0.5546875, 0.2765625, 0.5546875, 0.5546875, 0.221875,
-    0.240625, 0.5, 0.221875, 0.8328125, 0.5546875, 0.5546875,
-    0.5546875, 0.5546875, 0.3328125, 0.5, 0.2765625, 0.5546875,
-    0.5, 0.721875, 0.5, 0.5, 0.5, 0.3546875, 0.259375, 0.353125, 0.5890625,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0.2733333110809326, 0.28499999046325686,
+    0.39166667461395266, 0.5900000095367431, 0.5383333206176758,
+    0.8183333396911621, 0.8, 0.22999999523162842, 0.30166666507720946,
+    0.30166666507720946, 0.41666665077209475, 0.6833333492279052,
+    0.21666667461395264, 0.4, 0.21666667461395264, 0.3900000095367432,
+    0.5383333206176758, 0.5383333206176758, 0.5383333206176758,
+    0.5383333206176758, 0.5383333206176758, 0.5383333206176758,
+    0.5383333206176758, 0.5383333206176758, 0.5383333206176758,
+    0.5383333206176758, 0.21666667461395264, 0.21666667461395264,
+    0.6833333492279052, 0.6833333492279052, 0.6833333492279052,
+    0.4483333110809326, 0.9550000190734863, 0.6449999809265137,
+    0.5733333110809327, 0.6183333396911621, 0.7016666889190674,
+    0.5066666603088379, 0.48833332061767576, 0.6866666793823242,
+    0.7099999904632568, 0.26666667461395266, 0.35666666030883787,
+    0.5800000190734863, 0.4699999809265137, 0.8983333587646485,
+    0.7483333110809326, 0.753333330154419, 0.5599999904632569,
+    0.753333330154419, 0.5983333110809326, 0.5316666603088379,
+    0.5233333110809326, 0.6866666793823242, 0.621666669845581,
+    0.9333333015441895, 0.5900000095367431, 0.553333330154419,
+    0.5699999809265137, 0.30166666507720946, 0.37833333015441895,
+    0.30166666507720946, 0.6833333492279052, 0.41500000953674315,
+    0.26833333969116213, 0.5083333492279053, 0.5883333206176757,
+    0.4616666793823242, 0.5883333206176757, 0.5233333110809326,
+    0.3133333444595337, 0.5883333206176757, 0.5666666507720948,
+    0.24166667461395264, 0.24166667461395264, 0.49666666984558105,
+    0.24166667461395264, 0.8616666793823242, 0.5666666507720948,
+    0.5866666793823242, 0.5883333206176757, 0.5883333206176757,
+    0.3483333349227905, 0.425, 0.33833334445953367, 0.5666666507720948,
+    0.4783333301544189, 0.7233333110809326, 0.45833334922790525,
+    0.4833333492279053, 0.45166668891906736, 0.30166666507720946,
+    0.24000000953674316, 0.30166666507720946, 0.6833333492279052,
   ];
 
-  const avg = 0.5279276315789471;
+  const avg = 0.5131403493881227;
+  // CJK character range: U+3000–U+9FFF (CJK Symbols/Punctuation, Hiragana,
+  // Katakana, CJK Unified Ideographs incl. Extension A) plus U+FF00–U+FFEF
+  // (Halfwidth/Fullwidth Forms — fullwidth ASCII, fullwidth punctuation).
+  const cjkRange = /[\u3000-\u9FFF\uFF00-\uFFEF]/;
+
   return (
     str
       .split("")
-      .map((c) =>
-        c.charCodeAt(0) < widths.length ? widths[c.charCodeAt(0)] : avg,
-      )
+      .map((c) => {
+        if (cjkRange.test(c) || c === "\u3000") {
+          // CJK glyphs and U+3000 IDEOGRAPHIC SPACE are full-width by default;
+          return 1;
+        }
+        if (c.charCodeAt(0) < widths.length) {
+          return widths[c.charCodeAt(0)];
+        } else {
+          return avg;
+        }
+      })
       .reduce((cur, acc) => acc + cur) * fontSize
+  );
+};
+
+/**
+ * Split text into the lines it would wrap to when laid out greedily at the
+ * given font size inside a box of width `maxWidth`. Uses `measureText` so the
+ * estimate reflects actual font metrics rather than a fixed character count.
+ * The browser still does the real wrap inside the foreignObject; this is only
+ * used to size the SVG.
+ *
+ * @param {string} text Text to split.
+ * @param {number} fontSize Font size in px (matches `measureText`).
+ * @param {number} maxWidth Available wrap width in px.
+ * @returns {string[]} Estimated wrapped lines.
+ */
+const splitWrappedText = (text, fontSize, maxWidth) => {
+  if (!text) {
+    return [];
+  }
+
+  // Tokenize the text into atoms representing line-break opportunities:
+  //   - ASCII whitespace runs (collapsed/dropped at line edges per CSS rules);
+  //   - non-ASCII whitespaces
+  //   - a single CJK codepoint (browsers break between any two CJK chars,
+  //     punctuation or not, so each one is its own atom and ~1 em wide);
+  //   - a run of non-whitespace non-CJK characters (a "word" that can only
+  //     break at its boundaries, like Latin script).
+  // Korean Hangul (U+AC00–U+D7AF) is intentionally NOT in the CJK range
+  // because Korean wraps at word boundaries by default in HTML.
+  // ASCII whitespace is collapsed to a single space per CSS `white-space: normal;`
+  text = text.replace(/[\t\n\r ]+/g, " ");
+  const tokens = text.match(
+    /\s|[\u3000-\u9FFF\uFF00-\uFFEF]|[^\s\u3000-\u9FFF\uFF00-\uFFEF]+/g,
+  );
+  if (!tokens) {
+    return [];
+  }
+
+  const takeFittingSegment = (token, availableWidth) => {
+    const characters = token.split("");
+    let segment = "";
+    let width = 0;
+
+    for (const character of characters) {
+      const characterWidth = measureText(character, fontSize);
+      if (segment && width + characterWidth > availableWidth) {
+        break;
+      }
+      segment += character;
+      width += characterWidth;
+    }
+
+    return {
+      segment,
+      width,
+    };
+  };
+
+  const lines = [""];
+  let currentWidth = 0;
+
+  for (const token of tokens) {
+    if (token === " ") {
+      // Whitespace at the start of a line is dropped by browsers.
+      if (currentWidth === 0) {
+        continue;
+      }
+      lines[lines.length - 1] += token;
+      currentWidth += measureText(token, fontSize);
+      continue;
+    }
+
+    let remaining = token;
+
+    while (remaining) {
+      const w = measureText(remaining, fontSize);
+      if (currentWidth + w <= maxWidth) {
+        lines[lines.length - 1] += remaining;
+        currentWidth += w;
+        break;
+      }
+
+      if (currentWidth > 0) {
+        lines.push("");
+        currentWidth = 0;
+        continue;
+      }
+
+      // An atom wider than the box wraps mid-glyph (overflow-wrap: anywhere).
+      const { segment, width } = takeFittingSegment(remaining, maxWidth);
+      lines[lines.length - 1] += segment;
+      currentWidth = width;
+      remaining = remaining.slice(segment.length);
+    }
+  }
+
+  return lines.map((line) => line.replace(/[\t\n\r ]+$/, ""));
+};
+
+/**
+ * Estimate how many lines a string will wrap to when laid out greedily at the
+ * given font size inside a box of width `maxWidth`, capped at `maxLines`.
+ *
+ * @param {string} text Text to estimate.
+ * @param {number} fontSize Font size in px (matches `measureText`).
+ * @param {number} maxWidth Available wrap width in px.
+ * @param {number} maxLines Cap on the returned line count.
+ * @returns {number} Estimated line count, at least 1, at most `maxLines`.
+ */
+const countWrappedLines = (text, fontSize, maxWidth, maxLines) => {
+  return Math.min(
+    Math.max(1, splitWrappedText(text, fontSize, maxWidth).length),
+    maxLines,
   );
 };
 
@@ -235,4 +430,8 @@ export {
   iconWithLabel,
   flexLayout,
   measureText,
+  splitWrappedText,
+  countWrappedLines,
+  wrappedTextNode,
+  wrappedTextStyles,
 };

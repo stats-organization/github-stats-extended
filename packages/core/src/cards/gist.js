@@ -8,16 +8,23 @@ import { icons } from "../common/icons.js";
 import languageColors from "../common/languageColors.json" with { type: "json" };
 import { parseEmojis } from "../common/ops.js";
 import {
+  countWrappedLines,
   createLanguageNode,
   flexLayout,
   iconWithLabel,
   measureText,
+  wrappedTextNode,
+  wrappedTextStyles,
 } from "../common/render.js";
 
 const ICON_SIZE = 16;
 const CARD_DEFAULT_WIDTH = 400;
 const X_OFFSET = 25;
 const HEADER_MAX_LENGTH = 35;
+const DESCRIPTION_BOX_WIDTH = CARD_DEFAULT_WIDTH - 2 * X_OFFSET;
+const DESCRIPTION_FONT_SIZE = 13;
+const DESCRIPTION_LINE_HEIGHT_PX = 16;
+const DESCRIPTION_MAX_LINES = 10;
 
 /**
  * @typedef {import('./types').GistCardOptions} GistCardOptions Gist card options.
@@ -43,6 +50,7 @@ const renderGistCard = (gistData, options = {}) => {
     border_radius,
     border_color,
     show_owner = false,
+    browser_rendering = false,
     hide_border = false,
   } = options;
 
@@ -57,16 +65,50 @@ const renderGistCard = (gistData, options = {}) => {
       theme,
     });
 
-  const lineWidth = 59;
-  const linesLimit = 10;
   const desc = parseEmojis(description || "No description provided");
-  const multiLineDescription = wrapTextMultiline(desc, lineWidth, linesLimit);
-  const descriptionLines = multiLineDescription.length;
-  const descriptionSvg = multiLineDescription
-    .map(
-      (line) => `<tspan dy="1.2em" x="${X_OFFSET}">${encodeHTML(line)}</tspan>`,
-    )
-    .join("");
+
+  let descriptionLines, descriptionSvg;
+  if (browser_rendering) {
+    // The browser performs the actual text wrapping inside the foreignObject;
+    // we only estimate the line count server-side so the SVG can reserve enough
+    // height. The estimate uses measureText for font-aware widths instead of a
+    // fixed character count.
+    descriptionLines = countWrappedLines(
+      desc,
+      DESCRIPTION_FONT_SIZE,
+      DESCRIPTION_BOX_WIDTH,
+      DESCRIPTION_MAX_LINES,
+    );
+
+    descriptionSvg = wrappedTextNode({
+      text: desc,
+      x: X_OFFSET,
+      y: 0,
+      width: DESCRIPTION_BOX_WIDTH,
+      height: descriptionLines * DESCRIPTION_LINE_HEIGHT_PX,
+      lineCount: descriptionLines,
+      className: "description",
+      testId: "description-text",
+    });
+  } else {
+    const linesLimit = 10;
+    const multiLineDescription = wrapTextMultiline(
+      desc,
+      DESCRIPTION_BOX_WIDTH,
+      DESCRIPTION_FONT_SIZE,
+      linesLimit,
+    );
+    descriptionLines = multiLineDescription.length;
+    descriptionSvg = multiLineDescription
+      .map(
+        (line) =>
+          `<tspan dy="1.2em" x="${X_OFFSET}">${encodeHTML(line)}</tspan>`,
+      )
+      .join("");
+    descriptionSvg = `<text class="description" x="${X_OFFSET}" y="-5">
+        ${descriptionSvg}
+    </text>`;
+  }
 
   const lineHeight = descriptionLines > 3 ? 12 : 10;
   const height =
@@ -124,16 +166,17 @@ const renderGistCard = (gistData, options = {}) => {
   });
 
   card.setCSS(`
-    .description { font: 400 13px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${textColor} }
+    .description {
+      font: 400 ${DESCRIPTION_FONT_SIZE}px 'Segoe UI', Ubuntu, Sans-Serif;fill: ${textColor};
+      ${browser_rendering ? wrappedTextStyles : ""}
+    }
     .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${textColor} }
     .icon { fill: ${iconColor} }
   `);
   card.setHideBorder(hide_border);
 
   return card.render(`
-    <text class="description" x="${X_OFFSET}" y="-5">
-        ${descriptionSvg}
-    </text>
+    ${descriptionSvg}
 
     <g transform="translate(30, ${height - 75})">
         ${starAndForkCount}
