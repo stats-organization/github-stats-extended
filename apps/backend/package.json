@@ -22,7 +22,7 @@
     "vitest": "catalog:default"
   },
   "dependencies": {
-    "axios": "^1.15.1",
+    "axios": "^1.15.2",
     "@stats-organization/github-readme-stats-core": "workspace:^",
     "pg": "^8.20.0"
   }
