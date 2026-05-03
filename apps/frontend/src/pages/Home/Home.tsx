@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { JSX } from "react";
 import { useDispatch } from "react-redux";
-import BounceLoader from "react-spinners/BounceLoader";
+import { BounceLoader } from "react-spinners";
 import { v4 as uuidv4 } from "uuid";
 
 import { authenticate } from "../../api/user";
@@ -48,7 +48,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
   const dispatch = useDispatch();
 
   // for stage two
-  const [selectedUserId, setSelectedUserId] = useState<string>(userId);
+  const [selectedUserId, setSelectedUserId] = useState(userId);
   const [repo, setRepo] = useState(DEMO_REPO);
   const [gist, setGist] = useState(DEMO_GIST);
   const [wakatimeUser, setWakatimeUser] = useState(DEMO_WAKATIME_USER);
@@ -76,6 +76,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
   >();
   const [customTitle, setCustomTitle] = useState("");
   const [langsCount, setLangsCount] = useState<number | undefined>();
+  const [hideValues, setHideValues] = useState(false);
   const [showAllStats, setShowAllStats] = useState(false);
   const [showIcons, setShowIcons] = useState(false);
   const [includeAllCommits, setIncludeAllCommits] = useState(true);
@@ -121,6 +122,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
     descriptionLines,
     customTitle,
     langsCount,
+    hideValues,
     showAllStats,
     showIcons,
     includeAllCommits,
@@ -306,6 +308,8 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
               setCustomTitle={setCustomTitle}
               langsCount={langsCount}
               setLangsCount={setLangsCount}
+              hideValues={hideValues}
+              setHideValues={setHideValues}
               showAllStats={showAllStats}
               setShowAllStats={setShowAllStats}
               showIcons={showIcons}

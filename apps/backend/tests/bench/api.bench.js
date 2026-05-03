@@ -1,81 +1,40 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { bench, describe, vi } from "vitest";
+import { beforeAll, bench, describe, vi } from "vitest";
 
-import api from "../../api-renamed/index.js";
-
-const stats = {
-  name: "Anurag Hazra",
-  totalStars: 100,
-  totalCommits: 200,
-  totalIssues: 300,
-  totalPRs: 400,
-  totalPRsMerged: 320,
-  mergedPRsPercentage: 80,
-  totalReviews: 50,
-  totalDiscussionsStarted: 10,
-  totalDiscussionsAnswered: 40,
-  contributedTo: 50,
-  rank: null,
-};
-
-const data_stats = {
-  data: {
-    user: {
-      name: stats.name,
-      repositoriesContributedTo: { totalCount: stats.contributedTo },
-      commits: {
-        totalCommitContributions: stats.totalCommits,
-      },
-      reviews: {
-        totalPullRequestReviewContributions: stats.totalReviews,
-      },
-      pullRequests: { totalCount: stats.totalPRs },
-      mergedPullRequests: { totalCount: stats.totalPRsMerged },
-      openIssues: { totalCount: stats.totalIssues },
-      closedIssues: { totalCount: 0 },
-      followers: { totalCount: 0 },
-      repositoryDiscussions: { totalCount: stats.totalDiscussionsStarted },
-      repositoryDiscussionComments: {
-        totalCount: stats.totalDiscussionsAnswered,
-      },
-      repositories: {
-        totalCount: 1,
-        nodes: [{ stargazers: { totalCount: 100 } }],
-        pageInfo: {
-          hasNextPage: false,
-          endCursor: "cursor",
-        },
-      },
-    },
-  },
-};
+import { data_stats } from "../utils.js";
 
 const mock = new MockAdapter(axios);
 
-const faker = (query, data) => {
-  const req = {
-    query: {
-      username: "anuraghazra",
-      ...query,
-    },
-  };
-  const res = {
-    setHeader: vi.fn(),
-    send: vi.fn(),
-  };
-  mock.onPost("https://api.github.com/graphql").replyOnce(200, data);
+const createResponse = () => ({
+  end: vi.fn(),
+  setHeader: vi.fn(),
+});
 
-  return { req, res };
-};
+let router;
 
-describe("/api", () => {
+beforeAll(async () => {
+  vi.stubEnv("CACHE_SECONDS", "");
+  vi.stubEnv("GIST_WHITELIST", "");
+  vi.stubEnv("POSTGRES_URL", "");
+  vi.stubEnv("WHITELIST", "");
+
+  ({ default: router } = await import("../../router.js"));
+
+  mock.onPost("https://api.github.com/graphql").reply(200, data_stats);
+});
+
+describe("bench /api", () => {
   bench(
     "base",
     async () => {
-      const { req, res } = faker({}, data_stats);
+      const req = {
+        headers: {},
+        url: "/api?username=anuraghazra",
+      };
+      const res = createResponse();
 
-      await api(req, res);
+      await router(req, res);
     },
     { warmupIterations: 50 },
   );

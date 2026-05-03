@@ -1,53 +1,40 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { bench, describe, vi } from "vitest";
+import { beforeAll, bench, describe, vi } from "vitest";
 
-import pin from "../../api-renamed/pin.js";
-
-const data_repo = {
-  repository: {
-    username: "anuraghazra",
-    name: "convoychat",
-    stargazers: {
-      totalCount: 38000,
-    },
-    description: "Help us take over the world! React + TS + GraphQL Chat App",
-    primaryLanguage: {
-      color: "#2b7489",
-      id: "MDg6TGFuZ3VhZ2UyODc=",
-      name: "TypeScript",
-    },
-    forkCount: 100,
-    isTemplate: false,
-  },
-};
-
-const data_user = {
-  data: {
-    user: { repository: data_repo.repository },
-    organization: null,
-  },
-};
+import { data_user } from "../utils.js";
 
 const mock = new MockAdapter(axios);
-mock.onPost("https://api.github.com/graphql").reply(200, data_user);
 
-describe("/api/pin", () => {
+const createResponse = () => ({
+  end: vi.fn(),
+  setHeader: vi.fn(),
+});
+
+let router;
+
+beforeAll(async () => {
+  vi.stubEnv("CACHE_SECONDS", "");
+  vi.stubEnv("GIST_WHITELIST", "");
+  vi.stubEnv("POSTGRES_URL", "");
+  vi.stubEnv("WHITELIST", "");
+
+  ({ default: router } = await import("../../router.js"));
+
+  mock.onPost("https://api.github.com/graphql").reply(200, data_user);
+});
+
+describe("bench /api/pin", () => {
   bench(
     "base",
     async () => {
       const req = {
-        query: {
-          username: "anuraghazra",
-          repo: "convoychat",
-        },
+        headers: {},
+        url: "/api/pin?username=anuraghazra&repo=convoychat",
       };
-      const res = {
-        setHeader: vi.fn(),
-        send: vi.fn(),
-      };
+      const res = createResponse();
 
-      await pin(req, res);
+      await router(req, res);
     },
     { warmupIterations: 50 },
   );

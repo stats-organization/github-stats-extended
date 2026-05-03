@@ -1,0 +1,94 @@
+{
+  "name": "@stats-organization/github-readme-stats-core",
+  "version": "2.0.0",
+  "type": "module",
+  "homepage": "https://github-stats-extended.vercel.app/frontend",
+  "bugs": {
+    "url": "https://github.com/stats-organization/github-stats-extended/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stats-organization/github-stats-extended.git",
+    "directory": "packages/core"
+  },
+  "author": {
+    "name": "Anurag Hazra",
+    "url": "https://github.com/anuraghazra/"
+  },
+  "contributors": [
+    {
+      "name": "Rick Staa",
+      "url": "https://github.com/rickstaa"
+    },
+    {
+      "name": "Alexandr Garbuzov",
+      "url": "https://github.com/qwerty541"
+    },
+    {
+      "name": "Abhijit Gupta",
+      "url": "https://github.com/avgupta456"
+    },
+    {
+      "name": "Marco Pasqualetti",
+      "url": "https://github.com/marcalexiei"
+    },
+    {
+      "name": "martin-mfg",
+      "url": "https://github.com/martin-mfg"
+    }
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": "24.x"
+  },
+  "description": "Dynamically generate stats for your GitHub readme",
+  "keywords": [
+    "github-readme-stats",
+    "readme-stats",
+    "cards",
+    "card-generator",
+    "github-stats",
+    "github-stats-extended",
+    "github-readme-stats-extended"
+  ],
+  "main": "./build/index.js",
+  "exports": {
+    ".": {
+      "@stats/source": "./src/index.ts",
+      "default": "./build/index.js"
+    }
+  },
+  "files": [
+    "build",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest",
+    "test:update:snapshot": "vitest -u",
+    "test:e2e": "vitest --config vitest.config.e2e.ts",
+    "bench": "vitest bench --run --config vitest.config.bench.ts",
+    "lint": "eslint",
+    "typecheck": "tsc -p tsconfig.typecheck.json",
+    "theme-readme-gen": "node scripts/generate-theme-doc",
+    "generate-langs-json": "node scripts/generate-langs-json"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/jest-dom": "6.9.1",
+    "@uppercod/css-to-object": "1.1.1",
+    "axios-mock-adapter": "2.1.0",
+    "js-yaml": "4.1.1",
+    "jsdom": "29.0.2",
+    "vitest": "catalog:default"
+  },
+  "dependencies": {
+    "axios": "^1.15.2",
+    "emoji-name-map": "^2.0.3",
+    "github-username-regex": "^1.0.0",
+    "word-wrap": "^1.2.5"
+  }
+}

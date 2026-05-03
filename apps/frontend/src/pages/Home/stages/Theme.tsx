@@ -1,20 +1,7 @@
+import { themes } from "@stats-organization/github-readme-stats-core";
 import type { JSX } from "react";
 
-// @ts-expect-error this will be provided by the npm package
-import { themes } from "../../../backend/themes/index";
 import { Card } from "../../../components/Card/Card";
-
-// to be removed once npm package has been created
-type ThemeData = Record<
-  string,
-  {
-    title_color: string;
-    icon_color: string;
-    text_color: string;
-    bg_color: string;
-    border_color: string;
-  }
->;
 
 const excludedThemes = [
   "merko",
@@ -25,10 +12,9 @@ const excludedThemes = [
   "holi",
 ];
 
-const themeList = Object.keys(
-  /* Needed until themes is typed correctly and retrieved from npm package */
-  themes as ThemeData,
-).filter((myTheme) => !excludedThemes.includes(myTheme));
+const themeList = Object.keys(themes).filter(
+  (myTheme) => !excludedThemes.includes(myTheme),
+);
 
 interface ThemeStageProps {
   fullSuffix: string;

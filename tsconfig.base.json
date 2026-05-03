@@ -18,6 +18,15 @@
     "types": [],
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
+    "customConditions": [
+      /**
+       * Custom condition that resolved to original typescript source
+       * It allows realtime typechecking between packages without the need to rebuild them.
+
+       * Keep in sync with `eslint.config.js` `createTypeScriptImportResolver`
+       */
+      "@stats/source"
+    ],
 
     // Interop Constraints
     "verbatimModuleSyntax": true,

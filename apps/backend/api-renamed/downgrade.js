@@ -1,7 +1,7 @@
+import { logger } from "@stats-organization/github-readme-stats-core";
 import axios from "axios";
 
 import { deleteUser, getUserAccessByKey } from "../src/common/database.js";
-import { logger } from "../src/common/log.js";
 
 export default async (req, res) => {
   // We could optimize this method by doing both database operations in one statement, using "DELETE ... RETURNING ..."

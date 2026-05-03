@@ -1,14 +1,10 @@
-/**
- * In the browser this has to be mocked to avoid runtime errors
- * @see apps/frontend/vite.config.ts
- */
-import { Pool } from "pg";
-
-export const pool = process.env.POSTGRES_URL
-  ? new Pool({
-      connectionString: process.env.POSTGRES_URL,
-    })
-  : null;
+export let pool = null;
+if (process.env.POSTGRES_URL) {
+  const { Pool } = await import("pg");
+  pool = new Pool({
+    connectionString: process.env.POSTGRES_URL,
+  });
+}
 
 /**
  * Creates all required tables if they do not exist.

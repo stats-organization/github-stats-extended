@@ -1,5 +1,6 @@
+import { logger } from "@stats-organization/github-readme-stats-core";
+
 import { deleteUser } from "../src/common/database.js";
-import { logger } from "../src/common/log.js";
 
 /**
  * @param {any} req The request.

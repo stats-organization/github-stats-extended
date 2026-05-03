@@ -1,21 +1,10 @@
 import express from "express";
 
-import gistCard from "./api-renamed/gist.js";
-import statsCard from "./api-renamed/index.js";
-import repoCard from "./api-renamed/pin.js";
-import langCard from "./api-renamed/top-langs.js";
-import wakatimeCard from "./api-renamed/wakatime.js";
+import router from "./router.js";
 
 const app = express();
-const router = express.Router();
 
-router.get("/", statsCard);
-router.get("/pin", repoCard);
-router.get("/top-langs", langCard);
-router.get("/wakatime", wakatimeCard);
-router.get("/gist", gistCard);
-
-app.use("/api", router);
+app.use(router);
 
 const port = process.env.PORT || process.env.port || 9000;
 app.listen(port, "0.0.0.0", () => {
