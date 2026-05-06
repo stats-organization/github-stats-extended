@@ -127,8 +127,12 @@ const wrappedTextNode = ({
  * to a CSS class (e.g. `.description`) shared with `wrappedTextNode` so the
  * browser handles wrapping and the line count is taken from the `--lines`
  * custom property set on the element.
+ *
+ * @param {string} color Text color (CSS `color` property).
+ * @returns {string} CSS rules block (without the surrounding selector).
  */
-const wrappedTextStyles = `
+const wrappedTextStyles = (color) => `
+    color: ${color};
     margin: 0;
     line-height: 1.2;
     overflow-wrap: anywhere;
@@ -139,6 +143,7 @@ const wrappedTextStyles = `
     line-clamp: var(--lines);
     overflow: hidden;
     text-overflow: ellipsis;
+    padding-bottom: 0.15em;
 `;
 
 /**

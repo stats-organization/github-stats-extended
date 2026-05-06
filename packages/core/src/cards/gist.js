@@ -83,7 +83,7 @@ const renderGistCard = (gistData, options = {}) => {
     descriptionSvg = wrappedTextNode({
       text: desc,
       x: X_OFFSET,
-      y: 0,
+      y: -3,
       width: DESCRIPTION_BOX_WIDTH,
       height: descriptionLines * DESCRIPTION_LINE_HEIGHT_PX,
       lineCount: descriptionLines,
@@ -168,7 +168,7 @@ const renderGistCard = (gistData, options = {}) => {
   card.setCSS(`
     .description {
       font: 400 ${DESCRIPTION_FONT_SIZE}px 'Segoe UI', Ubuntu, Sans-Serif;fill: ${textColor};
-      ${browser_rendering ? wrappedTextStyles : ""}
+      ${browser_rendering ? wrappedTextStyles(textColor) : ""}
     }
     .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${textColor} }
     .icon { fill: ${iconColor} }

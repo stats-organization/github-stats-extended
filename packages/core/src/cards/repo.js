@@ -202,7 +202,7 @@ const renderRepoCard = (repo, options = {}) => {
     descriptionSvg = wrappedTextNode({
       text: desc,
       x: X_OFFSET,
-      y: 0,
+      y: -3,
       width: descriptionBoxWidth,
       height: descriptionLinesCount * DESCRIPTION_LINE_HEIGHT_PX,
       lineCount: descriptionLinesCount,
@@ -315,7 +315,7 @@ const renderRepoCard = (repo, options = {}) => {
   card.setCSS(`
     .description {
       font: 400 ${DESCRIPTION_FONT_SIZE}px 'Segoe UI', Ubuntu, Sans-Serif;fill: ${colors.textColor};
-      ${browser_rendering ? wrappedTextStyles : ""}
+      ${browser_rendering ? wrappedTextStyles(colors.textColor) : ""}
     }
     .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${colors.textColor} }
     .badge { font: 600 11px 'Segoe UI', Ubuntu, Sans-Serif; }
