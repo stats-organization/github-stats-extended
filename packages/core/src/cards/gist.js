@@ -85,7 +85,7 @@ const renderGistCard = (gistData, options = {}) => {
       x: X_OFFSET,
       y: -3,
       width: DESCRIPTION_BOX_WIDTH,
-      height: descriptionLines * DESCRIPTION_LINE_HEIGHT_PX,
+      height: descriptionLines * DESCRIPTION_LINE_HEIGHT_PX + 10, // 10px extra for "descenders" like g, j, q, p, y
       lineCount: descriptionLines,
       className: "description",
       testId: "description-text",

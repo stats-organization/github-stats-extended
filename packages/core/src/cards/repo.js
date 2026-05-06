@@ -204,7 +204,7 @@ const renderRepoCard = (repo, options = {}) => {
       x: X_OFFSET,
       y: -3,
       width: descriptionBoxWidth,
-      height: descriptionLinesCount * DESCRIPTION_LINE_HEIGHT_PX,
+      height: descriptionLinesCount * DESCRIPTION_LINE_HEIGHT_PX + 10, // 10px extra for "descenders" like g, j, q, p, y
       lineCount: descriptionLinesCount,
       className: "description",
       testId: "description-text",
