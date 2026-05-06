@@ -388,7 +388,7 @@ const fetchStats = async (
     }
     if (res.data.errors[0].message) {
       throw new CustomError(
-        wrapTextMultiline(res.data.errors[0].message, 90, 1)[0],
+        wrapTextMultiline(res.data.errors[0].message, 525, 12)[0],
         res.statusText,
       );
     }

@@ -1,6 +1,6 @@
 # Fork Information
 
-This project is an actively maintained fork of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats).
+This project is an actively maintained fork and extension of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats).
 
 ## Key Differences
 
@@ -24,6 +24,11 @@ The resolution of this most requested feature in github-readme-stats was [origin
 ### Improved performance and latency
 
 GitHub-Stats-Extended proactively precomputes and caches cards. This solves the problem where [cards wouldn't load on the first try](https://github.com/anuraghazra/github-readme-stats/issues/2603). It also gives GitHub-Stats-Extended more time while generating cards in the background, which allows it to fetch more repo data:
+
+### Customization of top languages card
+GitHub-Stats-Extended allows you to display your top languages without any numbers via the `hide_values` parameter. And the `prog_bar_bg_color` parameter allows you to customize the background color of the progress bars, e.g. by setting it to white:
+
+![anuraghazra's top languages without numbers](https://github-stats-extended.vercel.app/api/top-langs?username=anuraghazra&langs_count=4&hide_values=true&prog_bar_bg_color=fff)
 
 ### Multi-page fetching for accurate star counts
 GitHub-Stats-Extended fetches up to 1000 of your starred repositories to accurately compute your stars count. In github-readme-stats, this is limited to 100 repos because github-readme-stats doesn't have the above-mentioned performance improvements.
@@ -67,15 +72,11 @@ One of the valued maintainers [wrote](https://github.com/anuraghazra/github-read
 >
 > The volume is overwhelming for the small team, especially taking into account that right now I'm alone online and working only sometimes when I have a free hours, so it took some time to get to your PR.
 
-So I decided to implement some of the highly requested features and make the enhanced project available to everyone.
-
-## Upstream Sync Strategy
-
-The maintainers of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) keep their project up to date with dependency upgrades and do occasionally merge some pull requests. I regularly merge the latest upstream changes into this fork to keep it in sync with the upstream repo.
-
-I also try to structure my own changes in a way that minimizes merge conflicts with the upstream repo. So some of my changes might even be merged back into [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) if the upstream maintainers are interested.
+So I decided to implement some of the highly requested features and make the enhanced project available to everyone. Since the initial release of this fork I have been in contact with the maintainers of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) and we decided to join forces. github-stats-extended is now in the process of becoming the successor of github-readme-stats.
 
 ## Compatibility Notes
+
+If there should be any changes in github-readme-stats in the future, they will be synced into this fork.
 
 GitHub-Stats-Extended aims to be fully compatible with [github-readme-stats](https://github.com/anuraghazra/github-readme-stats). Generally, additional functionality introduced in this fork has to be explicitly enabled via some parameter.
 

@@ -23,6 +23,7 @@ export default async (
     border_radius,
     border_color,
     show_owner,
+    browser_rendering,
     hide_border,
   },
   pat = null,
@@ -59,6 +60,7 @@ export default async (
         border_color,
         locale: locale ? locale.toLowerCase() : null,
         show_owner: parseBoolean(show_owner),
+        browser_rendering: parseBoolean(browser_rendering),
         hide_border: parseBoolean(hide_border),
       }),
     };

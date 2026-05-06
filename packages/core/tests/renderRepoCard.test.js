@@ -29,7 +29,8 @@ describe("Test renderRepoCard", () => {
     expect(header).toHaveTextContent("convoychat");
     expect(header).not.toHaveTextContent("anuraghazra");
     expect(document.getElementsByClassName("description")[0]).toHaveTextContent(
-      "Help us take over the world! React + TS + GraphQL Chat App",
+      // no space between "Chat" and "App" because there's a line break there
+      "Help us take over the world! React + TS + GraphQL ChatApp",
     );
     expect(queryByTestId(document.body, "stargazers")).toHaveTextContent("38k");
     expect(queryByTestId(document.body, "forkcount")).toHaveTextContent("100");
@@ -75,9 +76,39 @@ describe("Test renderRepoCard", () => {
 
     expect(
       document.getElementsByClassName("description")[0].children[1].textContent,
-    ).toBe("English-language pangram—a sentence that contains all");
+    ).toBe("English-language pangram—a sentence that contains all of");
 
     // Should not trim
+    document.body.innerHTML = renderRepoCard({
+      ...data_repo.repository,
+      description: "Small text should not trim",
+    });
+
+    expect(document.getElementsByClassName("description")[0]).toHaveTextContent(
+      "Small text should not trim",
+    );
+  });
+
+  it("should respect browser_rendering=true", () => {
+    document.body.innerHTML = renderRepoCard(
+      {
+        ...data_repo.repository,
+        description:
+          "The quick brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet",
+      },
+      { browser_rendering: true },
+    );
+
+    // Browser-side wrapping inside the foreignObject keeps the full text in
+    // the DOM; the CSS line-clamp truncates whatever exceeds the line budget
+    // at render time.
+    const description = document.getElementsByClassName("description")[0];
+    expect(description).toHaveTextContent(
+      "The quick brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet",
+    );
+    expect(description.style.getPropertyValue("--lines")).toBe("3");
+
+    // Short descriptions should leave the full text visible without clamping.
     document.body.innerHTML = renderRepoCard({
       ...data_repo.repository,
       description: "Small text should not trim",
