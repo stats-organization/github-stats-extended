@@ -25,5 +25,6 @@ jobs:
           pnpm test
           pnpm build:packages
           pnpm --filter @stats-organization/github-readme-stats-core pack --dry-run
+
       - name: Publish core package to npm
-        run: pnpm publish --provenance --access public --dry-run
+        run: pnpm --filter @stats-organization/github-readme-stats-core publish --provenance --access public
