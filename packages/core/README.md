@@ -1,0 +1,1 @@
+Core library powering [GitHub Stats Extended](https://github.com/stats-organization/github-stats-extended) and [GitHub Readme Stats Action](https://github.com/readme-tools/github-readme-stats-action).

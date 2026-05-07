@@ -13,3 +13,5 @@ onlyBuiltDependencies:
   - "@swc/core"
   - esbuild
   - unrs-resolver
+
+publishBranch: release

@@ -1,6 +1,6 @@
 {
   "name": "@stats-organization/github-readme-stats-core",
-  "version": "2.0.0",
+  "version": "0.0.1",
   "type": "module",
   "homepage": "https://github-stats-extended.vercel.app/frontend",
   "bugs": {
@@ -60,13 +60,15 @@
   },
   "files": [
     "build",
-    "src"
+    "src",
+    "README.md"
   ],
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
+    "prepack": "pnpm run build",
     "test": "vitest",
     "test:update:snapshot": "vitest -u",
     "test:e2e": "vitest --config vitest.config.e2e.ts",
