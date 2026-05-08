@@ -1,6 +1,6 @@
 {
   "name": "@stats-organization/github-readme-stats-core",
-  "version": "0.0.1",
+  "version": "2.1.2",
   "type": "module",
   "homepage": "https://github-stats-extended.vercel.app/frontend",
   "bugs": {
