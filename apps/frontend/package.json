@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",
-    "@tailwindcss/vite": "^4.2.2",
+    "@tailwindcss/vite": "^4.2.4",
     "axios": "^1",
     "axios-cache-interceptor": "^1",
     "daisyui": "^5.5.19",
@@ -36,7 +36,7 @@
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "6.0.1",
     "clsx": "2.1.1",
-    "tailwindcss": "4.2.2",
+    "tailwindcss": "4.2.4",
     "vite": "catalog:default",
     "vitest": "catalog:default"
   },
