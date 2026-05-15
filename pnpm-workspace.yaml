@@ -4,7 +4,7 @@ packages:
 
 catalog:
   "@vitest/coverage-v8": 4.1.4
-  vite: 8.0.10
+  vite: 8.0.11
   vitest: 4.1.4
 
 minimumReleaseAge: 10080
