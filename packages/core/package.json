@@ -88,7 +88,7 @@
     "vitest": "catalog:default"
   },
   "dependencies": {
-    "axios": "^1.15.2",
+    "axios": "^1.16.1",
     "emoji-name-map": "^2.0.3",
     "github-username-regex": "^1.0.0"
   }
