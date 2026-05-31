@@ -7,6 +7,7 @@ import {
 } from "../common/error.js";
 import { parseArray, parseBoolean } from "../common/ops.js";
 import { renderError } from "../common/render.js";
+import { fetchPersonalContributionLanguages } from "../fetchers/personal-contribution-languages.js";
 import { fetchTopLanguages } from "../fetchers/top-languages.js";
 import { isLocaleAvailable } from "../translations.js";
 
@@ -37,6 +38,10 @@ export default async (
     hide_progress,
     hide_values,
     stats_format,
+    personal_contributions,
+    orgs,
+    personal_pages,
+    personal_limit,
   },
   pat = null,
 ) => {
@@ -100,14 +105,23 @@ export default async (
   }
 
   try {
-    const topLangs = await fetchTopLanguages(
-      username,
-      parseArray(exclude_repo),
-      size_weight,
-      count_weight,
-      parseArray(role),
-      pat,
-    );
+    const usePersonalContributions = parseBoolean(personal_contributions);
+    const topLangs = usePersonalContributions
+      ? await fetchPersonalContributionLanguages(
+          username,
+          parseArray(orgs),
+          personal_pages,
+          personal_limit,
+          pat,
+        )
+      : await fetchTopLanguages(
+          username,
+          parseArray(exclude_repo),
+          size_weight,
+          count_weight,
+          parseArray(role),
+          pat,
+        );
 
     return {
       status: "success",
