@@ -15,6 +15,10 @@ on:
 
 jobs:
   triggerRepeatRecent:
+    if: |
+      github.repository == 'anuraghazra/github-readme-stats' ||
+      github.repository == 'stats-organization/github-readme-stats' ||
+      github.repository == 'stats-organization/github-stats-extended'
     name: Trigger server to update cached data.
     runs-on: ubuntu-latest
     steps:
