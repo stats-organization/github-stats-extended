@@ -10,7 +10,7 @@ catalogs:
       specifier: 4.1.6
       version: 4.1.6
     axios:
-      specifier: ^1.16.1
+      specifier: ^1.15.2
       version: 1.16.1
     jsdom:
       specifier: 29.1.1
