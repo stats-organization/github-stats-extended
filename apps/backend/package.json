@@ -18,12 +18,12 @@
   "devDependencies": {
     "axios-mock-adapter": "2.1.0",
     "express": "5.2.1",
-    "jsdom": "catalog:default",
+    "jsdom": "29.0.2",
     "vitest": "catalog:default"
   },
   "dependencies": {
-    "axios": "catalog:default",
+    "axios": "^1.15.2",
     "@stats-organization/github-readme-stats-core": "workspace:^",
-    "pg": "^8.21.0"
+    "pg": "^8.20.0"
   }
 }
