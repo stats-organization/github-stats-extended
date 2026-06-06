@@ -90,15 +90,15 @@ importers:
         specifier: workspace:^
         version: link:../../packages/core
       axios:
-        specifier: 1.15.2
-        version: 1.15.2
+        specifier: 1.16.0
+        version: 1.16.0
       pg:
         specifier: ^8.21.0
         version: 8.21.0
     devDependencies:
       axios-mock-adapter:
         specifier: 2.1.0
-        version: 2.1.0(axios@1.15.2)
+        version: 2.1.0(axios@1.16.0)
       express:
         specifier: 5.2.1
         version: 5.2.1
@@ -124,11 +124,11 @@ importers:
         specifier: ^4.3.0
         version: 4.3.0(vite@8.0.10(@types/node@24.12.2)(jiti@2.7.0)(yaml@2.9.0))
       axios:
-        specifier: 1.15.2
-        version: 1.15.2
+        specifier: 1.16.0
+        version: 1.16.0
       axios-cache-interceptor:
         specifier: ^1
-        version: 1.12.0(axios@1.15.2)
+        version: 1.12.0(axios@1.16.0)
       daisyui:
         specifier: ^5.5.20
         version: 5.5.20
@@ -188,8 +188,8 @@ importers:
   packages/core:
     dependencies:
       axios:
-        specifier: 1.15.2
-        version: 1.15.2
+        specifier: 1.16.0
+        version: 1.16.0
       emoji-name-map:
         specifier: ^2.0.3
         version: 2.0.3
@@ -208,7 +208,7 @@ importers:
         version: 1.1.1
       axios-mock-adapter:
         specifier: 2.1.0
-        version: 2.1.0(axios@1.15.2)
+        version: 2.1.0(axios@1.16.0)
       js-yaml:
         specifier: 4.1.1
         version: 4.1.1
@@ -1339,8 +1339,8 @@ packages:
     peerDependencies:
       axios: '>= 0.17.0'
 
-  axios@1.15.2:
-    resolution: {integrity: sha512-wLrXxPtcrPTsNlJmKjkPnNPK2Ihe0hn0wGSaTEiHRPxwjvJwT3hKmXF4dpqxmPO9SoNb2FsYXj/xEo0gHN+D5A==}
+  axios@1.16.0:
+    resolution: {integrity: sha512-6hp5CwvTPlN2A31g5dxnwAX0orzM7pmCRDLnZSX772mv8WDqICwFjowHuPs04Mc8deIld1+ejhtaMn5vp6b+1w==}
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -4115,22 +4115,22 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.1.0
 
-  axios-cache-interceptor@1.12.0(axios@1.15.2):
+  axios-cache-interceptor@1.12.0(axios@1.16.0):
     dependencies:
-      axios: 1.15.2
+      axios: 1.16.0
       cache-parser: 1.2.6
       fast-defer: 1.1.9
       http-vary: 1.0.3
       object-code: 2.0.0
       try: 1.0.3
 
-  axios-mock-adapter@2.1.0(axios@1.15.2):
+  axios-mock-adapter@2.1.0(axios@1.16.0):
     dependencies:
-      axios: 1.15.2
+      axios: 1.16.0
       fast-deep-equal: 3.1.3
       is-buffer: 2.0.5
 
-  axios@1.15.2:
+  axios@1.16.0:
     dependencies:
       follow-redirects: 1.16.0
       form-data: 4.0.5
