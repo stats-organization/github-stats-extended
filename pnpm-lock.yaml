@@ -90,15 +90,15 @@ importers:
         specifier: workspace:^
         version: link:../../packages/core
       axios:
-        specifier: 1.16.0
-        version: 1.16.0
+        specifier: 1.16.1
+        version: 1.16.1
       pg:
         specifier: ^8.21.0
         version: 8.21.0
     devDependencies:
       axios-mock-adapter:
         specifier: 2.1.0
-        version: 2.1.0(axios@1.16.0)
+        version: 2.1.0(axios@1.16.1)
       express:
         specifier: 5.2.1
         version: 5.2.1
@@ -124,11 +124,11 @@ importers:
         specifier: ^4.3.0
         version: 4.3.0(vite@8.0.10(@types/node@24.12.2)(jiti@2.7.0)(yaml@2.9.0))
       axios:
-        specifier: 1.16.0
-        version: 1.16.0
+        specifier: 1.16.1
+        version: 1.16.1
       axios-cache-interceptor:
         specifier: ^1
-        version: 1.12.0(axios@1.16.0)
+        version: 1.12.0(axios@1.16.1)
       daisyui:
         specifier: ^5.5.20
         version: 5.5.20
@@ -188,8 +188,8 @@ importers:
   packages/core:
     dependencies:
       axios:
-        specifier: 1.16.0
-        version: 1.16.0
+        specifier: 1.16.1
+        version: 1.16.1
       emoji-name-map:
         specifier: ^2.0.3
         version: 2.0.3
@@ -208,7 +208,7 @@ importers:
         version: 1.1.1
       axios-mock-adapter:
         specifier: 2.1.0
-        version: 2.1.0(axios@1.16.0)
+        version: 2.1.0(axios@1.16.1)
       js-yaml:
         specifier: 4.1.1
         version: 4.1.1
@@ -1245,6 +1245,10 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
+  agent-base@6.0.2:
+    resolution: {integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==}
+    engines: {node: '>= 6.0.0'}
+
   ajv@6.14.0:
     resolution: {integrity: sha512-IWrosm/yrn43eiKqkfkHis7QioDleaXQHdDVPKg0FSwwd/DuvyX79TZnFOnYpB7dcsFAMmtFztZuXPDvSePkFw==}
 
@@ -1339,8 +1343,8 @@ packages:
     peerDependencies:
       axios: '>= 0.17.0'
 
-  axios@1.16.0:
-    resolution: {integrity: sha512-6hp5CwvTPlN2A31g5dxnwAX0orzM7pmCRDLnZSX772mv8WDqICwFjowHuPs04Mc8deIld1+ejhtaMn5vp6b+1w==}
+  axios@1.16.1:
+    resolution: {integrity: sha512-caYkukvroVPO8KrzuJEb50Hm07KwfBZPEC3VeFHTsqWHvKTsy54hjJz9BS/cdaypROE2rH6xvm9mHX4fgWkr3A==}
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -1905,6 +1909,10 @@ packages:
 
   http-vary@1.0.3:
     resolution: {integrity: sha512-sx7Y8YTqF3o0mFJJvF66n8dbaE8v3liV1RgCz46XP5xK7dnzyZHvwMWRA115q5kjbCPBV65/nOMlgW54WLyiag==}
+
+  https-proxy-agent@5.0.1:
+    resolution: {integrity: sha512-dFcAjpTQFgoLMzC2VwU+C/CbS7uRL0lWmxDITmqm7C+7F0Odmj6s9l6alZc6AELXhrnggM2CeWSXHGOdX2YtwA==}
+    engines: {node: '>= 6'}
 
   husky@9.1.7:
     resolution: {integrity: sha512-5gs5ytaNjBrh5Ow3zrvdUUY+0VxIuWVL4i9irt6friV+BqdCfmV11CQTWMiBYWHbXhco+J1kHfTOUkePhCDvMA==}
@@ -4013,6 +4021,12 @@ snapshots:
 
   acorn@8.16.0: {}
 
+  agent-base@6.0.2:
+    dependencies:
+      debug: 4.4.3
+    transitivePeerDependencies:
+      - supports-color
+
   ajv@6.14.0:
     dependencies:
       fast-deep-equal: 3.1.3
@@ -4115,28 +4129,30 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.1.0
 
-  axios-cache-interceptor@1.12.0(axios@1.16.0):
+  axios-cache-interceptor@1.12.0(axios@1.16.1):
     dependencies:
-      axios: 1.16.0
+      axios: 1.16.1
       cache-parser: 1.2.6
       fast-defer: 1.1.9
       http-vary: 1.0.3
       object-code: 2.0.0
       try: 1.0.3
 
-  axios-mock-adapter@2.1.0(axios@1.16.0):
+  axios-mock-adapter@2.1.0(axios@1.16.1):
     dependencies:
-      axios: 1.16.0
+      axios: 1.16.1
       fast-deep-equal: 3.1.3
       is-buffer: 2.0.5
 
-  axios@1.16.0:
+  axios@1.16.1:
     dependencies:
       follow-redirects: 1.16.0
       form-data: 4.0.5
+      https-proxy-agent: 5.0.1
       proxy-from-env: 2.1.0
     transitivePeerDependencies:
       - debug
+      - supports-color
 
   balanced-match@1.0.2: {}
 
@@ -4829,6 +4845,13 @@ snapshots:
       toidentifier: 1.0.1
 
   http-vary@1.0.3: {}
+
+  https-proxy-agent@5.0.1:
+    dependencies:
+      agent-base: 6.0.2
+      debug: 4.4.3
+    transitivePeerDependencies:
+      - supports-color
 
   husky@9.1.7: {}
 
