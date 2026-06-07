@@ -7,7 +7,7 @@
     "@eslint/compat": "2.0.5",
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.60.0",
-    "@types/node": "24.12.2",
+    "@types/node": "24.12.4",
     "@vitest/coverage-v8": "catalog:default",
     "eslint": "10.2.1",
     "eslint-import-resolver-typescript": "4.4.4",
