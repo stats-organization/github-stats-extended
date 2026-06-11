@@ -4,7 +4,7 @@ packages:
 
 catalog:
   "@vitest/coverage-v8": 4.1.7
-  axios: ^1.16.1
+  axios: ^1.17.0
   jsdom: 29.1.1
   vite: 8.0.14
   vitest: 4.1.7
