@@ -1,7 +1,7 @@
 {
   "recommendations": [
     "yzhang.markdown-all-in-one",
-    "prettier.prettier-vscode",
+    "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
     "github.vscode-github-actions"
   ]
