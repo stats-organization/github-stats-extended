@@ -1,12 +1,12 @@
-# Deploy on your own
+# Run It Yourself
 
-Since the GitHub API only allows a limited number of requests per hour, my `https://github-stats-extended.vercel.app/api` could possibly hit the rate limiter. If you deploy it yourself via GitHub Actions or your own hosted instance, then you do not have to worry about anything. Also, if you don't want to give my GitHub-Stats-Extended instance access to your private contributions but still want to include these contributions in your stats, you can simply host your own instance.
+We cache generated cards for a few hours to avoid potential rate-limiting in the GitHub API or on Vercel. If you want to set your own cache duration or you want to include private contributions in your stats without granting our hosted version of GitHub-Stats-Extended access to your private contributions, you can run GitHub-Stats-Extended on your own.
 
-GitHub Actions is the simplest setup with static SVGs stored in your repo but less frequent updates, while self-hosting takes more work and can serve fresher stats (with caching).
+GitHub Actions is the simplest setup with static SVGs stored in your repo but less frequent updates, while self-hosting GitHub-Stats-Extended on Vercel takes more work and can serve fresher stats (with caching).
 
-## GitHub Actions
+## GitHub Action
 
-GitHub Actions generates static SVGs and avoids per-request API calls. By default it uses `GITHUB_TOKEN` (public stats only), for private stats, set a [PAT](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) as a secret and pass it to the action instead.
+With [github-readme-stats-action](https://github.com/stats-organization/github-readme-stats-action) you can generate static cards in your GitHub Actions workflow, commit them to your profile repository, and embed them directly from there. This avoids any per-request API calls.
 
 Create `/.github/workflows/grs.yml` in your profile repo (`USERNAME/USERNAME`):
 
@@ -15,17 +15,21 @@ name: Update README cards
 
 on:
   schedule:
-    - cron: "0 3 * * *"
+    - cron: "0 0 * * *" # Runs once daily at midnight
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Generate stats card
-        uses: readme-tools/github-readme-stats-action@v1
+        uses: stats-organization/github-readme-stats-action@v2
         with:
           card: stats
           options: username=${{ github.repository_owner }}&show_icons=true
@@ -34,14 +38,14 @@ jobs:
 
       - name: Commit cards
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add profile/*.svg
           git commit -m "Update README cards" || exit 0
           git push
 ```
 
-Then embed from your profile README:
+Then embed from your [profile README](https://docs.github.com/en/account-and-profile/how-tos/profile-customization/managing-your-profile-readme#adding-a-profile-readme):
 
 ```md
 ![Stats](./profile/stats.svg)
@@ -49,7 +53,7 @@ Then embed from your profile README:
 
 See more options and examples in the [GitHub Readme Stats Action README](https://github.com/stats-organization/github-readme-stats-action#readme).
 
-## Self-hosted (Vercel/Other)
+## Self-hosted on Vercel
 
 Running your own instance avoids public rate limits and gives you full control over caching, tokens, and private stats.
 
@@ -88,14 +92,11 @@ Selecting the right scopes for your token is important in case you want to displ
 
 ### On Vercel
 
-<b>:film\_projector: [Check Out Step By Step Video Tutorial By @codeSTACKr](https://youtu.be/n6d4KHSKqGk?t=107)</b>
-
 Click on the deploy button to get started!
 
 [![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/stats-organization/github-stats-extended)
 
-<details>
- <summary><b>:hammer_and_wrench: Recommended: Step-by-step guide on setting up your own Vercel instance</b></summary>
+<b>Recommended: Step-by-step guide on setting up your own Vercel instance</b>
 
 1. Go to [vercel.com](https://vercel.com/).
 2. Click on `Log in`.
@@ -122,27 +123,7 @@ Click on the deploy button to get started!
 12. Click deploy, and you're good to go. See your domains to use the API!
 13. optional: add an SQL database; by using e.g. the ["Nile" integration](https://vercel.com/marketplace/nile) or by manually setting the environment variable `POSTGRES_URL`
 14. optional: [create your own OAuth App](https://github.com/settings/developers) and set environment variables `OAUTH_REDIRECT_URI`, `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` on Vercel accordingly
-15. optional: in addition to the Vercel project based on the `apps/backend` folder, create a second project based on the `apps/frontend` folder. No environment variables needed.
-16. optional: set the environment variable `TURBO_PLATFORM_ENV_DISABLED` to `true` to disable the build-time warning from [turbo](https://turborepo.dev/) about environment variables missing from "turbo.json" - This warning is not relevant in our project.
-
-</details>
-
-### On other platforms
-
-> [!WARNING]
-> This way of using GitHub-Stats-Extended is not officially supported and was added to cater to some particular use cases where Vercel could not be used (e.g. [#2341](https://github.com/anuraghazra/github-readme-stats/discussions/2341)). The support for this method, therefore, is limited.
-
-<details>
-<summary><b>:hammer_and_wrench: Step-by-step guide for deploying on other platforms</b></summary>
-
-1.  Fork or clone this repo as per your needs
-2.  Move `express` from the devDependencies to the dependencies section of `package.json`
-    <https://github.com/anuraghazra/github-readme-stats/blob/ba7c2f8b55eac8452e479c8bd38b044d204d0424/package.json#L54-L61>
-    3.  Run `npm i` if needed (initial setup)
-    4.  Run `node express.js` to start the server, or set the entry point to `express.js` in `package.json` if you're deploying on a managed service
-        <https://github.com/anuraghazra/github-readme-stats/blob/ba7c2f8b55eac8452e479c8bd38b044d204d0424/package.json#L11>
-    5.  You're done 🎉
-       </details>
+15. optional: set the environment variable `TURBO_PLATFORM_ENV_DISABLED` to `true` to disable the build-time warning from [turbo](https://turborepo.dev/) about environment variables missing from "turbo.json" - This warning is not relevant in our project.
 
 ### Available environment variables
 

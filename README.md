@@ -5,13 +5,14 @@
 <a href="https://github-stats-extended.vercel.app/api?username=anuraghazra"><img src="https://github-stats-extended.vercel.app/api?username=anuraghazra"></a>
 </div>
 
-This project is an [extended version](docs/fork.md) of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats). It generates [various stats cards](#card-types), e.g. about your GitHub contributions, your top languages, etc. You can [customize](#advanced-customization) the cards via multiple parameters.
+This project is the [extended, actively maintained successor](docs/fork.md) of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats). It generates [various stats cards](#card-types), e.g. about your GitHub contributions, your top languages, etc. You can [customize](#advanced-customization) the cards via multiple parameters.
 
 # Table of Contents
 - [Quick Start](#quick-start)
+- [Migration from github-readme-stats](#migration-from-github-readme-stats)
 - [Card Types](#card-types)
 - [Advanced Customization](#advanced-customization)
-- [Self-Hosting](#self-hosting)
+- [Run It Yourself](#run-it-yourself)
 - [Acknowledgements](#acknowledgements)
 - [Contributing](#contributing)
 
@@ -26,6 +27,16 @@ This project is an [extended version](docs/fork.md) of [github-readme-stats](htt
 -----------------------
 
 As more comfortable alternative, use the [GitHub-Stats-Extended Wizard](https://github-stats-extended.vercel.app/frontend) to create your custom stats card. Copy the generated markdown code and paste it into your [GitHub profile README](https://docs.github.com/en/account-and-profile/how-tos/profile-customization/managing-your-profile-readme#adding-a-profile-readme). Done!
+
+# Migration from github-readme-stats
+To migrate from [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) you only need to change the domain from `github-readme-stats.vercel.app` to `github-stats-extended.vercel.app`:
+
+```diff
+- https://github-readme-stats.vercel.app/api?username=octocat&theme=radical
++ https://github-stats-extended.vercel.app/api?username=octocat&theme=radical
+```
+
+GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For more details see [Compatibility Notes](docs/fork.md#compatibility-notes).
 
 # Card Types
 - Show your GitHub statistics:
@@ -55,13 +66,13 @@ As more comfortable alternative, use the [GitHub-Stats-Extended Wizard](https://
 # Advanced Customization
 The [GitHub-Stats-Extended Wizard](https://github-stats-extended.vercel.app/frontend) offers some essential customization options. For more advanced customization check out the [advanced documentation](docs/advanced_documentation.md).
 
+# Run It Yourself
+If you want to run GitHub-Stats-Extended on your own, there are two main deployment options: you can use [github-readme-stats-action](https://github.com/stats-organization/github-readme-stats-action) to generate cards in your own GitHub Actions workflow. Or you can self-host GitHub-Stats-Extended on Vercel.
+
+See [Run It Yourself](docs/deploy.md) for detailed instructions.
+
 # Acknowledgements
-This project is based on [github-readme-stats](https://github.com/anuraghazra/github-readme-stats). On top of their functionality I added several new features and improvements. See [Fork Information](docs/fork.md) for a list of changes. The frontend I added to the project is based on [GitHub Trends](https://github.com/avgupta456/github-trends). Big thanks to [@anuraghazra](https://github.com/anuraghazra), [@avgupta456](https://github.com/avgupta456), [@rickstaa](https://github.com/rickstaa), [@qwerty541](https://github.com/qwerty541) and everyone else who worked on these projects! ❤️
-
-# Self-Hosting
-Since the GitHub API only allows a limited number of requests per hour, the public instance of GitHub-Stats-Extended at https://github-stats-extended.vercel.app/api could possibly hit the rate limiter. If you host your own instance you do not have to worry about anything. Also, if you don't want to give my GitHub-Stats-Extended instance access to your private contributions but still want to include these contributions in your stats, you can simply host your own instance.
-
-See [Deploy on your own](docs/deploy.md) for various deployment options.
+This project is based on [github-readme-stats](https://github.com/anuraghazra/github-readme-stats). On top of that project's functionality GitHub-Stats-Extended adds several new features and improvements. See [Fork Information](docs/fork.md) for a list of changes. The frontend added to GitHub-Stats-Extended is based on [GitHub Trends](https://github.com/avgupta456/github-trends). Big thanks to [@anuraghazra](https://github.com/anuraghazra), [@avgupta456](https://github.com/avgupta456), [@rickstaa](https://github.com/rickstaa), [@qwerty541](https://github.com/qwerty541) and everyone else who worked on these projects! ❤️
 
 # Contributing
 Contributions are welcome!
