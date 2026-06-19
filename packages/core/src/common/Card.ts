@@ -1,25 +1,37 @@
-// @ts-check
-
 import { encodeHTML } from "./html.js";
 import { flexLayout } from "./render.js";
 
+interface CardColors {
+  /** Card title color. */
+  titleColor?: string;
+  /** Card text color. */
+  textColor?: string;
+  /** Card icon color. */
+  iconColor?: string;
+  /** Card background color. */
+  bgColor?: string | Array<string>;
+  /** Card border color. */
+  borderColor?: string;
+}
+
 class Card {
+  width: number;
+  height: number;
+  hideBorder: boolean;
+  hideTitle: boolean;
+  border_radius: number;
+  colors: CardColors;
+  title: string;
+  css: string;
+  paddingX: number;
+  paddingY: number;
+  titlePrefixIcon: string | undefined;
+  animations: boolean;
+  a11yTitle: string;
+  a11yDesc: string;
+
   /**
    * Creates a new card instance.
-   *
-   * @param {object} args Card arguments.
-   * @param {number=} args.width Card width.
-   * @param {number=} args.height Card height.
-   * @param {number=} args.border_radius Card border radius.
-   * @param {string=} args.customTitle Card custom title.
-   * @param {string=} args.defaultTitle Card default title.
-   * @param {string=} args.titlePrefixIcon Card title prefix icon.
-   * @param {object} [args.colors={}] Card colors arguments.
-   * @param {string=} args.colors.titleColor Card title color.
-   * @param {string=} args.colors.textColor Card text color.
-   * @param {string=} args.colors.iconColor Card icon color.
-   * @param {string|string[]=} args.colors.bgColor Card background color.
-   * @param {string=} args.colors.borderColor Card border color.
    */
   constructor({
     width = 100,
@@ -29,6 +41,21 @@ class Card {
     customTitle,
     defaultTitle = "",
     titlePrefixIcon,
+  }: {
+    /** Card width. */
+    width?: number;
+    /** Card height. */
+    height?: number;
+    /** Card border radius. */
+    border_radius?: number;
+    /** Card custom title. */
+    customTitle?: string;
+    /** Card default title. */
+    defaultTitle?: string;
+    /** Card title prefix icon. */
+    titlePrefixIcon?: string;
+    /** Card colors arguments. */
+    colors?: CardColors;
   }) {
     this.width = width;
     this.height = height;
@@ -40,10 +67,9 @@ class Card {
 
     // returns theme based colors with proper overrides and defaults
     this.colors = colors;
-    this.title =
-      customTitle === undefined
-        ? encodeHTML(defaultTitle)
-        : encodeHTML(customTitle);
+    this.title = encodeHTML(
+      customTitle === undefined ? defaultTitle : customTitle,
+    );
 
     this.css = "";
 
@@ -55,45 +81,44 @@ class Card {
     this.a11yDesc = "";
   }
 
-  /**
-   * @returns {void}
-   */
-  disableAnimations() {
+  disableAnimations(): void {
     this.animations = false;
   }
 
   /**
-   * @param {Object} props The props object.
-   * @param {string} props.title Accessibility title.
-   * @param {string} props.desc Accessibility description.
-   * @returns {void}
+   * @param props The props object.
    */
-  setAccessibilityLabel({ title, desc }) {
+  setAccessibilityLabel({
+    title,
+    desc,
+  }: {
+    /** Accessibility title. */
+    title: string;
+    /** Accessibility description. */
+    desc: string;
+  }): void {
     this.a11yTitle = title;
     this.a11yDesc = desc;
   }
 
   /**
-   * @param {string} value The CSS to add to the card.
-   * @returns {void}
+   * @param value The CSS to add to the card.
    */
-  setCSS(value) {
+  setCSS(value: string): void {
     this.css = value;
   }
 
   /**
-   * @param {boolean} value Whether to hide the border or not.
-   * @returns {void}
+   * @param value Whether to hide the border or not.
    */
-  setHideBorder(value) {
+  setHideBorder(value: boolean): void {
     this.hideBorder = value;
   }
 
   /**
-   * @param {boolean} value Whether to hide the title or not.
-   * @returns {void}
+   * @param value Whether to hide the title or not.
    */
-  setHideTitle(value) {
+  setHideTitle(value: boolean): void {
     this.hideTitle = value;
     if (value) {
       this.height -= 30;
@@ -101,17 +126,16 @@ class Card {
   }
 
   /**
-   * @param {string} text The title to set.
-   * @returns {void}
+   * @param text The title to set.
    */
-  setTitle(text) {
+  setTitle(text: string): void {
     this.title = text;
   }
 
   /**
-   * @returns {string} The rendered card title.
+   * @returns The rendered card title.
    */
-  renderTitle() {
+  renderTitle(): string {
     const titleText = `
       <text
         x="0"
@@ -131,7 +155,7 @@ class Card {
         width="16"
         height="16"
       >
-        ${this.titlePrefixIcon}
+        ${String(this.titlePrefixIcon)}
       </svg>
     `;
     return `
@@ -148,9 +172,9 @@ class Card {
   }
 
   /**
-   * @returns {string} The rendered card gradient.
+   * @returns The rendered card gradient.
    */
-  renderGradient() {
+  renderGradient(): string {
     if (typeof this.colors.bgColor !== "object") {
       return "";
     }
@@ -161,13 +185,15 @@ class Card {
         <defs>
           <linearGradient
             id="gradient"
-            gradientTransform="rotate(${this.colors.bgColor[0]})"
+            gradientTransform="rotate(${String(this.colors.bgColor[0])})"
             gradientUnits="userSpaceOnUse"
           >
-            ${gradients.map((grad, index) => {
-              let offset = (index * 100) / (gradients.length - 1);
-              return `<stop offset="${offset}%" stop-color="#${grad}" />`;
-            })}
+            ${gradients
+              .map((grad, index) => {
+                const offset = (index * 100) / (gradients.length - 1);
+                return `<stop offset="${offset}%" stop-color="#${grad}" />`;
+              })
+              .join(",")}
           </linearGradient>
         </defs>
         `
@@ -177,9 +203,9 @@ class Card {
   /**
    * Retrieves css animations for a card.
    *
-   * @returns {string} Animation css.
+   * @returns Animation css.
    */
-  getAnimations = () => {
+  getAnimations = (): string => {
     return `
       /* Animations */
       @keyframes scaleInAnimation {
@@ -202,10 +228,10 @@ class Card {
   };
 
   /**
-   * @param {string} body The inner body of the card.
-   * @returns {string} The rendered card.
+   * @param body The inner body of the card.
+   * @returns The rendered card.
    */
-  render(body) {
+  render(body: string): string {
     return `
       <svg
         width="${this.width}"
@@ -221,7 +247,7 @@ class Card {
         <style>
           .header {
             font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
-            fill: ${this.colors.titleColor};
+            fill: ${String(this.colors.titleColor)};
             animation: fadeInAnimation 0.8s ease-in-out forwards;
           }
           @supports(-moz-appearance: auto) {
@@ -232,9 +258,9 @@ class Card {
 
           ${this.getAnimations()}
           ${
-            this.animations === false
-              ? `* { animation-duration: 0s !important; animation-delay: 0s !important; }`
-              : ""
+            this.animations
+              ? ""
+              : `* { animation-duration: 0s !important; animation-delay: 0s !important; }`
           }
         </style>
 
@@ -246,12 +272,12 @@ class Card {
           y="0.5"
           rx="${this.border_radius}"
           height="99%"
-          stroke="${this.colors.borderColor}"
+          stroke="${String(this.colors.borderColor)}"
           width="${this.width - 1}"
           fill="${
             typeof this.colors.bgColor === "object"
               ? "url(#gradient)"
-              : this.colors.bgColor
+              : String(this.colors.bgColor)
           }"
           stroke-opacity="${this.hideBorder ? 0 : 1}"
         />

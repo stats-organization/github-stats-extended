@@ -1,5 +1,3 @@
-// @ts-check
-
 import { queryByTestId } from "@testing-library/dom";
 import { describe, expect, it } from "vitest";
 

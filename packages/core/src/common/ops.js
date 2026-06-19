@@ -1,5 +1,3 @@
-// @ts-check
-
 import toEmoji from "emoji-name-map";
 
 import { OWNER_AFFILIATIONS } from "./constants.js";

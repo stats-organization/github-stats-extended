@@ -50,7 +50,7 @@ export function SvgInline(props: SvgInlineProps): JSX.Element {
         FETCH_MULTI_PAGE_STARS: "10",
         PAT_1: userToken as string, // even if it's null, core's retryer.js sees there is 1 PAT and sets `RETRIES` accordingly
       };
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+
       loadConfigFromEnv(config);
 
       setLoaded(false);

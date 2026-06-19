@@ -1,5 +1,3 @@
-// @ts-check
-
 import { renderStatsCard } from "../cards/stats.js";
 import {
   MissingParamError,

@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { getCardColors } from "../src/common/color";
+import { getCardColors } from "../src/common/color.js";
 
 describe("Test color.js", () => {
   it("getCardColors: should return expected values", () => {
-    let colors = getCardColors({
+    const colors = getCardColors({
       title_color: "f00",
       text_color: "0f0",
       ring_color: "0000ff",
@@ -24,7 +24,7 @@ describe("Test color.js", () => {
   });
 
   it("getCardColors: should fallback to default colors if color is invalid", () => {
-    let colors = getCardColors({
+    const colors = getCardColors({
       title_color: "invalidcolor",
       text_color: "0f0",
       icon_color: "00f",
@@ -43,7 +43,7 @@ describe("Test color.js", () => {
   });
 
   it("getCardColors: should fallback to specified theme colors if is not defined", () => {
-    let colors = getCardColors({
+    const colors = getCardColors({
       theme: "dark",
     });
     expect(colors).toStrictEqual({
@@ -57,7 +57,7 @@ describe("Test color.js", () => {
   });
 
   it("getCardColors: should return ring color equal to title color if not ring color is defined", () => {
-    let colors = getCardColors({
+    const colors = getCardColors({
       title_color: "f00",
       text_color: "0f0",
       icon_color: "00f",
@@ -76,7 +76,7 @@ describe("Test color.js", () => {
   });
 
   it("getCardColors: should fallback to default theme if theme is invalid", () => {
-    let colors = getCardColors({
+    const colors = getCardColors({
       theme: "invalidTheme",
     });
     expect(colors).toStrictEqual({

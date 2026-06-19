@@ -1,8 +1,8 @@
-// @ts-check
-
 import { describe, expect, it, vi } from "vitest";
 
 import { retryer } from "../src/common/retryer.js";
+
+type Fetcher = Parameters<typeof retryer>[0];
 
 vi.mock(import("../src/common/log.js"), async () => {
   const { createLoggerMock } = await import("./utils.js");
@@ -13,14 +13,14 @@ const fetcher = vi.fn().mockResolvedValue({ data: "ok" });
 
 const fetcherFail = vi.fn().mockResolvedValue({
   data: { errors: [{ type: "RATE_LIMITED" }] },
-});
+}) as unknown as Fetcher;
 
 const fetcherFailOnSecondTry = vi.fn((_vars, _token, retries) => {
   if (retries < 1) {
     return Promise.resolve({ data: { errors: [{ type: "RATE_LIMITED" }] } });
   }
   return Promise.resolve({ data: "ok" });
-});
+}) as unknown as Fetcher;
 
 const fetcherFailWithMessageBasedRateLimitErr = vi.fn(
   (_vars, _token, retries) => {
@@ -38,29 +38,29 @@ const fetcherFailWithMessageBasedRateLimitErr = vi.fn(
     }
     return Promise.resolve({ data: "ok" });
   },
-);
+) as unknown as Fetcher;
 
-const customFetcher = vi.fn((variables, token) => {
+const customFetcher = vi.fn((_variables: unknown, token: string) => {
   return Promise.resolve({ data: { token } });
-});
+}) as unknown as Fetcher;
 
 describe("Test Retryer", () => {
   it("retryer should return value and have zero retries on first try", async () => {
-    let res = await retryer(fetcher, {});
+    const res = await retryer(fetcher, {});
 
     expect(fetcher).toHaveBeenCalledTimes(1);
     expect(res).toStrictEqual({ data: "ok" });
   });
 
   it("retryer should return value and have 2 retries", async () => {
-    let res = await retryer(fetcherFailOnSecondTry, {});
+    const res = await retryer(fetcherFailOnSecondTry, {});
 
     expect(fetcherFailOnSecondTry).toHaveBeenCalledTimes(2);
     expect(res).toStrictEqual({ data: "ok" });
   });
 
   it("retryer should return value and have 2 retries with message based rate limit error", async () => {
-    let res = await retryer(fetcherFailWithMessageBasedRateLimitErr, {});
+    const res = await retryer(fetcherFailWithMessageBasedRateLimitErr, {});
 
     expect(fetcherFailWithMessageBasedRateLimitErr).toHaveBeenCalledTimes(2);
     expect(res).toStrictEqual({ data: "ok" });

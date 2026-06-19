@@ -1,5 +1,3 @@
-// @ts-check
-
 import { renderTopLanguages } from "../cards/top-languages.js";
 import {
   MissingParamError,

@@ -72,7 +72,7 @@ describe("Test fmt.js", () => {
 
   it("wrapTextMultiline: should not wrap small texts", () => {
     {
-      let multiLineText = wrapTextMultiline(
+      const multiLineText = wrapTextMultiline(
         "Small text should not wrap",
         130,
         11,
@@ -83,7 +83,7 @@ describe("Test fmt.js", () => {
   });
 
   it("wrapTextMultiline: should wrap large texts", () => {
-    let multiLineText = wrapTextMultiline(
+    const multiLineText = wrapTextMultiline(
       "Hello world long long long text",
       130,
       11,
@@ -93,7 +93,7 @@ describe("Test fmt.js", () => {
   });
 
   it("wrapTextMultiline: should wrap large texts and limit max lines", () => {
-    let multiLineText = wrapTextMultiline(
+    const multiLineText = wrapTextMultiline(
       "Hello world long long long text",
       53,
       11,
@@ -103,13 +103,13 @@ describe("Test fmt.js", () => {
   });
 
   it("wrapTextMultiline: should handle chinese characters", () => {
-    let multiLineText = wrapTextMultiline(
+    const multiLineText = wrapTextMultiline(
       "专门为刚开始刷题的同学准备的算法基地，没有最细只有更细，立志用动画将晦涩难懂的算法说的通俗易懂！",
       130,
       11,
       3,
     );
-    expect(multiLineText.length).toEqual(3);
-    expect(multiLineText[0].length).toEqual(11 * 8); // &#xxxxx; x 8
+    expect(multiLineText).toHaveLength(3);
+    expect(multiLineText[0]).toHaveLength(11 * 8); // &#xxxxx; x 8
   });
 });

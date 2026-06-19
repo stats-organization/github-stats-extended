@@ -1,14 +1,12 @@
-// @ts-check
-
 import { OWNER_AFFILIATIONS } from "./constants.js";
 
 /**
- * @type {string} A general message to ask user to try again later.
+ * A general message to ask user to try again later.
  */
 const TRY_AGAIN_LATER = "Please try again later";
 
 /**
- * @type {Object<string, string>} A map of error types to secondary error messages.
+ * A map of error types to secondary error messages.
  */
 const SECONDARY_ERROR_MESSAGES = {
   MAX_RETRY:
@@ -28,16 +26,21 @@ const SECONDARY_ERROR_MESSAGES = {
  * Custom error class to handle custom GRS errors.
  */
 class CustomError extends Error {
+  type: string;
+  secondaryMessage: string;
+
   /**
    * Custom error constructor.
    *
-   * @param {string} message Error message.
-   * @param {string} type Error type.
+   * @param message Error message.
+   * @param type Error type.
    */
-  constructor(message, type) {
+  constructor(message: string, type: string) {
     super(message);
     this.type = type;
-    this.secondaryMessage = SECONDARY_ERROR_MESSAGES[type] || type;
+    type PartialRecord = Partial<Record<string, string>>;
+    this.secondaryMessage =
+      (SECONDARY_ERROR_MESSAGES as PartialRecord)[type] ?? type;
   }
 
   static MAX_RETRY = "MAX_RETRY";
@@ -53,13 +56,16 @@ class CustomError extends Error {
  * Missing query parameter class.
  */
 class MissingParamError extends Error {
+  missedParams: Array<string>;
+  secondaryMessage: string | undefined;
+
   /**
    * Missing query parameter error constructor.
    *
-   * @param {string[]} missedParams An array of missing parameters names.
-   * @param {string=} secondaryMessage Optional secondary message to display.
+   * @param missedParams An array of missing parameters names.
+   * @param secondaryMessage Optional secondary message to display.
    */
-  constructor(missedParams, secondaryMessage) {
+  constructor(missedParams: Array<string>, secondaryMessage?: string) {
     const msg = `Missing params ${missedParams
       .map((p) => `"${p}"`)
       .join(", ")} make sure you pass the parameters in URL`;
@@ -72,10 +78,10 @@ class MissingParamError extends Error {
 /**
  * Retrieve secondary message from an error object.
  *
- * @param {Error} err The error object.
- * @returns {string|undefined} The secondary message if available, otherwise undefined.
+ * @param err The error object.
+ * @returns The secondary message if available, otherwise undefined.
  */
-const retrieveSecondaryMessage = (err) => {
+const retrieveSecondaryMessage = (err: Error): string | undefined => {
   return "secondaryMessage" in err && typeof err.secondaryMessage === "string"
     ? err.secondaryMessage
     : undefined;

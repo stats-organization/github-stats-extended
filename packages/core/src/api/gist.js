@@ -1,5 +1,3 @@
-// @ts-check
-
 import { renderGistCard } from "../cards/gist.js";
 import {
   MissingParamError,

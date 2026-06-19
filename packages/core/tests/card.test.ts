@@ -1,12 +1,16 @@
 import { queryByTestId } from "@testing-library/dom";
 import { cssToObject } from "@uppercod/css-to-object";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 
 import { Card } from "../src/common/Card.js";
 import { getCardColors } from "../src/common/color.js";
 import { icons } from "../src/common/icons.js";
 
 describe("Card", () => {
+  afterEach(() => {
+    document.body.innerHTML = "";
+  });
+
   it("should hide border", () => {
     const card = new Card({});
     card.setHideBorder(true);
@@ -68,21 +72,21 @@ describe("Card", () => {
   });
 
   it("title should have prefix icon", () => {
-    const card = new Card({ title: "ok", titlePrefixIcon: icons.contribs });
+    const card = new Card({ titlePrefixIcon: icons.contribs });
 
     document.body.innerHTML = card.render(``);
     expect(document.getElementsByClassName("icon")[0]).toBeInTheDocument();
   });
 
   it("title should not have prefix icon", () => {
-    const card = new Card({ title: "ok" });
+    const card = new Card({});
 
     document.body.innerHTML = card.render(``);
     expect(document.getElementsByClassName("icon")[0]).toBeUndefined();
   });
 
   it("should have proper height, width", () => {
-    const card = new Card({ height: 200, width: 200, title: "ok" });
+    const card = new Card({ height: 200, width: 200 });
     document.body.innerHTML = card.render(``);
     expect(document.getElementsByTagName("svg")[0]).toHaveAttribute(
       "height",
@@ -95,7 +99,7 @@ describe("Card", () => {
   });
 
   it("should have less height after title is hidden", () => {
-    const card = new Card({ height: 200, title: "ok" });
+    const card = new Card({ height: 200 });
     card.setHideTitle(true);
 
     document.body.innerHTML = card.render(``);
@@ -147,10 +151,10 @@ describe("Card", () => {
     document.body.innerHTML = card.render(``);
 
     const styleTag = document.querySelector("style");
-    const stylesObject = cssToObject(styleTag.innerHTML);
-    const headerClassStyles = stylesObject[":host"][".header "];
+    const stylesObject = cssToObject(styleTag?.innerHTML ?? "");
+    const headerClassStyles = stylesObject[":host"]?.[".header "];
 
-    expect(headerClassStyles["fill"].trim()).toBe("#f00");
+    expect(headerClassStyles?.["fill"]?.trim()).toBe("#f00");
     expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
       "fill",
       "#fff",

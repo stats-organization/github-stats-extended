@@ -1,5 +1,3 @@
-// @ts-check
-
 /*
 The icons in this file are based on https://github.com/primer/octicons which is released under the MIT license:
 
@@ -46,12 +44,16 @@ const icons = {
 /**
  * Get rank icon
  *
- * @param {string} rankIcon - The rank icon type.
- * @param {string} rankLevel - The rank level.
- * @param {number} percentile - The rank percentile.
- * @returns {string} - The SVG code of the rank icon
+ * @param rankIcon - The rank icon type.
+ * @param rankLevel - The rank level.
+ * @param percentile - The rank percentile.
+ * @returns The SVG code of the rank icon
  */
-const rankIcon = (rankIcon, rankLevel, percentile) => {
+const rankIcon = (
+  rankIcon: string,
+  rankLevel: string,
+  percentile: number,
+): string => {
   switch (rankIcon) {
     case "github":
       return `

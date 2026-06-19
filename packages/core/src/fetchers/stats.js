@@ -1,5 +1,3 @@
-// @ts-check
-
 import axios from "axios";
 import githubUsernameRegex from "github-username-regex";
 

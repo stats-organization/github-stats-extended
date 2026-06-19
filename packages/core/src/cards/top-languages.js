@@ -1,5 +1,3 @@
-// @ts-check
-
 import { Card } from "../common/Card.js";
 import { I18n } from "../common/I18n.js";
 import { fallbackColor, getCardColors } from "../common/color.js";

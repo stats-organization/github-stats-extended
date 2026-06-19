@@ -5,6 +5,9 @@
     "rootDir": "./src",
     "declaration": true,
     "declarationMap": true,
-    "customConditions": []
+    "customConditions": [],
+
+    // Typecheck is performed in a separate task
+    "noCheck": true
   }
 }

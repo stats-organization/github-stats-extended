@@ -1,5 +1,3 @@
-// @ts-check
-
 import { renderRepoCard } from "../cards/repo.js";
 import {
   MissingParamError,

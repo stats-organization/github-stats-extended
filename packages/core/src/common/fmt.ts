@@ -1,16 +1,14 @@
-// @ts-check
-
 import { encodeHTML } from "./html.js";
 import { splitWrappedText } from "./render.js";
 
 /**
  * Retrieves num with suffix k(thousands) precise to given decimal places.
  *
- * @param {number} num The number to format.
- * @param {number=} precision The number of decimal places to include.
- * @returns {string|number} The formatted number.
+ * @param num The number to format.
+ * @param precision The number of decimal places to include.
+ * @returns The formatted number.
  */
-const kFormatter = (num, precision) => {
+const kFormatter = (num: number, precision?: number): string | number => {
   const abs = Math.abs(num);
   const sign = Math.sign(num);
 
@@ -22,17 +20,17 @@ const kFormatter = (num, precision) => {
     return sign * abs;
   }
 
-  return sign * parseFloat((abs / 1000).toFixed(1)) + "k";
+  return `${sign * parseFloat((abs / 1000).toFixed(1))}k`;
 };
 
 /**
  * Convert bytes to a human-readable string representation.
  *
- * @param {number} bytes The number of bytes to convert.
- * @returns {string} The human-readable representation of bytes.
+ * @param bytes The number of bytes to convert.
+ * @returns The human-readable representation of bytes.
  * @throws {Error} If bytes is negative or too large.
  */
-const formatBytes = (bytes) => {
+const formatBytes = (bytes: number): string => {
   if (bytes < 0) {
     throw new Error("Bytes must be a non-negative number");
   }
@@ -45,23 +43,29 @@ const formatBytes = (bytes) => {
   const base = 1024;
   const i = Math.floor(Math.log(bytes) / Math.log(base));
 
-  if (i >= sizes.length) {
+  const unit = sizes[i];
+  if (unit === undefined) {
     throw new Error("Bytes is too large to convert to a human-readable string");
   }
 
-  return `${(bytes / Math.pow(base, i)).toFixed(1)} ${sizes[i]}`;
+  return `${(bytes / Math.pow(base, i)).toFixed(1)} ${unit}`;
 };
 
 /**
  * Split text over multiple lines based on the card width.
  *
- * @param {string} text Text to split.
- * @param {number} width Available wrap width in px.
- * @param {number} fontSize Font size in px.
- * @param {number} maxLines Maximum number of lines.
- * @returns {string[]} Array of lines.
+ * @param text Text to split.
+ * @param width Available wrap width in px.
+ * @param fontSize Font size in px.
+ * @param maxLines Maximum number of lines.
+ * @returns Array of lines.
  */
-const wrapTextMultiline = (text, width, fontSize, maxLines = 3) => {
+const wrapTextMultiline = (
+  text: string,
+  width: number,
+  fontSize: number,
+  maxLines = 3,
+): Array<string> => {
   const wrapped = splitWrappedText(text, fontSize, width);
   const lines = wrapped
     .map((line) => encodeHTML(line.trim()))
@@ -69,7 +73,11 @@ const wrapTextMultiline = (text, width, fontSize, maxLines = 3) => {
 
   // Add "..." to the last line if the text exceeds maxLines
   if (wrapped.length > maxLines) {
-    lines[maxLines - 1] += "...";
+    const lastIndex = maxLines - 1;
+    const lastLine = lines[lastIndex];
+    if (lastLine !== undefined) {
+      lines[lastIndex] = `${lastLine}...`;
+    }
   }
 
   // Remove empty lines if text fits in less than maxLines lines

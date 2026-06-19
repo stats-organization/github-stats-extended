@@ -1,5 +1,3 @@
-// @ts-check
-
 import { renderWakatimeCard } from "../cards/wakatime.js";
 import {
   MissingParamError,
