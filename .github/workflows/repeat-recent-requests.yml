@@ -13,6 +13,8 @@ on:
     - cron: "45 * * * *"
   workflow_dispatch:
 
+permissions: {}
+
 jobs:
   triggerRepeatRecent:
     if: |
