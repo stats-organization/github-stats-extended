@@ -60,6 +60,23 @@ interface CardColors {
   ringColor: string;
 }
 
+interface GetCardColorsOptions {
+  /** Card title color. */
+  title_color?: string;
+  /** Card text color. */
+  text_color?: string;
+  /** Card icon color. */
+  icon_color?: string;
+  /** Card background color. */
+  bg_color?: string;
+  /** Card border color. */
+  border_color?: string;
+  /** Card ring color. */
+  ring_color?: string;
+  /** Card theme. */
+  theme?: string;
+}
+
 /**
  * Returns theme based colors with proper overrides and defaults.
  *
@@ -73,15 +90,7 @@ const getCardColors = ({
   border_color,
   ring_color,
   theme,
-}: {
-  title_color?: string;
-  text_color?: string;
-  icon_color?: string;
-  bg_color?: string;
-  border_color?: string;
-  ring_color?: string;
-  theme?: string;
-}): CardColors => {
+}: GetCardColorsOptions): CardColors => {
   const defaultTheme = themes.default;
   const isThemeProvided = theme !== undefined && theme in themes;
 

@@ -1,22 +1,20 @@
 import { encodeHTML } from "./common/html.js";
 
-/**
- * Retrieves stat card labels in the available locales.
- *
- * @param props Function arguments.
- * @returns The locales object.
- *
- * @see https://www.andiamo.co.uk/resources/iso-language-codes/ for language codes.
- */
-const statCardLocales = ({
-  name,
-  apostrophe,
-}: {
+interface StatCardLocalesOptions {
   /** The name of the locale. */
   name: string;
   /** Whether to use apostrophe or not. */
   apostrophe: string;
-}) => {
+}
+
+/**
+ * Retrieves stat card labels in the available locales.
+ *
+ * @returns The locales object.
+ *
+ * @see https://www.andiamo.co.uk/resources/iso-language-codes/ for language codes.
+ */
+const statCardLocales = ({ name, apostrophe }: StatCardLocalesOptions) => {
   const encodedName = encodeHTML(name);
   return {
     "statcard.title": {
