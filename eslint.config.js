@@ -150,6 +150,10 @@ export default defineConfig(
         },
       ],
 
+      // Keep `@param props.x` doc names in sync with the destructured
+      // parameters so they cannot silently drift on rename.
+      "jsdoc/check-param-names": "error",
+
       // We don't need this we have typescript
       "jsdoc/require-returns": "off",
       "jsdoc/require-returns-description": "off",

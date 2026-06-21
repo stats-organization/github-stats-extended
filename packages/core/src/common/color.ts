@@ -60,26 +60,17 @@ interface CardColors {
   ringColor: string;
 }
 
-interface GetCardColorsOptions {
-  /** Card title color. */
-  title_color?: string;
-  /** Card text color. */
-  text_color?: string;
-  /** Card icon color. */
-  icon_color?: string;
-  /** Card background color. */
-  bg_color?: string;
-  /** Card border color. */
-  border_color?: string;
-  /** Card ring color. */
-  ring_color?: string;
-  /** Card theme. */
-  theme?: string;
-}
-
 /**
  * Returns theme based colors with proper overrides and defaults.
  *
+ * @param props Function arguments.
+ * @param props.title_color Card title color.
+ * @param props.text_color Card text color.
+ * @param props.icon_color Card icon color.
+ * @param props.bg_color Card background color.
+ * @param props.border_color Card border color.
+ * @param props.ring_color Card ring color.
+ * @param props.theme Card theme.
  * @returns Card colors.
  */
 const getCardColors = ({
@@ -90,7 +81,15 @@ const getCardColors = ({
   border_color,
   ring_color,
   theme,
-}: GetCardColorsOptions): CardColors => {
+}: {
+  title_color?: string;
+  text_color?: string;
+  icon_color?: string;
+  bg_color?: string;
+  border_color?: string;
+  ring_color?: string;
+  theme?: string;
+}): CardColors => {
   const defaultTheme = themes.default;
   const isThemeProvided = theme !== undefined && theme in themes;
 

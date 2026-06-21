@@ -1,12 +1,5 @@
 const FALLBACK_LOCALE = "en";
 
-interface I18nOptions<Translations> {
-  /** Locale. */
-  locale?: string;
-  /** Translations. */
-  translations: Translations;
-}
-
 /**
  * I18n translation class.
  */
@@ -14,7 +7,18 @@ class I18n<Translations extends Record<string, Record<string, string>>> {
   locale: string;
   translations: Translations;
 
-  constructor({ locale, translations }: I18nOptions<Translations>) {
+  /**
+   * @param props Constructor arguments.
+   * @param props.locale Locale.
+   * @param props.translations Translations.
+   */
+  constructor({
+    locale,
+    translations,
+  }: {
+    locale?: string;
+    translations: Translations;
+  }) {
     this.locale = locale || FALLBACK_LOCALE;
     this.translations = translations;
   }

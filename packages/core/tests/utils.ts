@@ -16,8 +16,7 @@ import type * as loggerModule from "../src/common/log.js";
  * For example, with `precision = 3`, values must be within `0.001`.
  *
  * @param expected The expected numeric value to compare against.
- *
- * @param
+ * @param precision
  *   The number of decimal places of tolerance. Higher values mean stricter
  *   comparison. Internally converted to epsilon = 10^-precision.
  *

@@ -14,30 +14,6 @@ interface CardColors {
   borderColor?: string;
 }
 
-interface CardOptions {
-  /** Card width. */
-  width?: number;
-  /** Card height. */
-  height?: number;
-  /** Card border radius. */
-  border_radius?: number;
-  /** Card custom title. */
-  customTitle?: string;
-  /** Card default title. */
-  defaultTitle?: string;
-  /** Card title prefix icon. */
-  titlePrefixIcon?: string;
-  /** Card colors arguments. */
-  colors?: CardColors;
-}
-
-interface AccessibilityLabelOptions {
-  /** Accessibility title. */
-  title: string;
-  /** Accessibility description. */
-  desc: string;
-}
-
 class Card {
   width: number;
   height: number;
@@ -56,6 +32,15 @@ class Card {
 
   /**
    * Creates a new card instance.
+   *
+   * @param props Card arguments.
+   * @param props.width Card width.
+   * @param props.height Card height.
+   * @param props.border_radius Card border radius.
+   * @param props.colors Card colors arguments.
+   * @param props.customTitle Card custom title.
+   * @param props.defaultTitle Card default title.
+   * @param props.titlePrefixIcon Card title prefix icon.
    */
   constructor({
     width = 100,
@@ -65,7 +50,15 @@ class Card {
     customTitle,
     defaultTitle = "",
     titlePrefixIcon,
-  }: CardOptions) {
+  }: {
+    width?: number;
+    height?: number;
+    border_radius?: number;
+    colors?: CardColors;
+    customTitle?: string;
+    defaultTitle?: string;
+    titlePrefixIcon?: string;
+  }) {
     this.width = width;
     this.height = height;
 
@@ -94,7 +87,18 @@ class Card {
     this.animations = false;
   }
 
-  setAccessibilityLabel({ title, desc }: AccessibilityLabelOptions): void {
+  /**
+   * @param props The props object.
+   * @param props.title Accessibility title.
+   * @param props.desc Accessibility description.
+   */
+  setAccessibilityLabel({
+    title,
+    desc,
+  }: {
+    title: string;
+    desc: string;
+  }): void {
     this.a11yTitle = title;
     this.a11yDesc = desc;
   }
