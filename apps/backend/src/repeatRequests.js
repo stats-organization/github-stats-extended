@@ -66,6 +66,6 @@ export async function repeatRecentRequests() {
   if (urls.length === 0) {
     console.log("No recent requests found.");
   } else {
-    await makeRequests(urls, 5);
+    await makeRequests(urls, 3);
   }
 }
