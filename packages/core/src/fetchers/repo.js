@@ -53,7 +53,7 @@ const fetcher = (variables, token) => {
   );
 };
 
-const urlExample = "/api/pin?username=USERNAME&amp;repo=REPO_NAME";
+const urlExample = "/api/pin?username=USERNAME&repo=REPO_NAME";
 
 /**
  * @typedef {import("./types").RepositoryData} RepositoryData Repository data.

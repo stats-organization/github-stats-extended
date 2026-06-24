@@ -21,8 +21,46 @@ const isValidHexColor = (hexColor: string): boolean => {
 const isValidGradient = (colors: Array<string>): boolean => {
   return (
     colors.length > 2 &&
-    colors.slice(1).every((color) => isValidHexColor(color))
+    colors
+      .slice(1)
+      .every(
+        (color) =>
+          isValidHexColor(color) &&
+          !isNaN(Number(colors[0])) &&
+          colors[0]?.trim() !== "",
+      )
   );
+};
+
+/**
+ * Checks if a string is a valid input for a color or gradient.
+ *
+ * @param color String to check, may be null or undefined.
+ * @returns True if the given string is a valid input.
+ */
+const isValidColorInput = (color: string | null | undefined): boolean => {
+  if (color === null || color === undefined) {
+    return true;
+  }
+  const colors = color.split(",");
+  return isValidGradient(colors) || isValidHexColor(color);
+};
+
+/**
+ * Iterates over a collection of colors inputs and verifies that each is a valid color or gradient.
+ *
+ * @param colors Object whose values are checked as valid color inputs.
+ * @return The first key where the associated input value is not valid. null if all inputs are valid.
+ */
+const findInvalidColor = (
+  colors: Record<string, string | null | undefined>,
+): string | null => {
+  for (const [key, value] of Object.entries(colors)) {
+    if (!isValidColorInput(value)) {
+      return key;
+    }
+  }
+  return null;
 };
 
 /**
@@ -146,4 +184,4 @@ const getCardColors = ({
   return { titleColor, iconColor, textColor, bgColor, borderColor, ringColor };
 };
 
-export { fallbackColor, getCardColors };
+export { fallbackColor, getCardColors, findInvalidColor };

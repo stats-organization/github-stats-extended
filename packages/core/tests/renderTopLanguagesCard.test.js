@@ -2,6 +2,7 @@ import { queryAllByTestId, queryByTestId } from "@testing-library/dom";
 import { cssToObject } from "@uppercod/css-to-object";
 import { describe, expect, it } from "vitest";
 
+import topLangsApi from "../src/api/top-langs.js";
 import {
   MIN_CARD_WIDTH,
   calculateCompactLayoutHeight,
@@ -992,6 +993,20 @@ describe("Test renderTopLanguages", () => {
     );
     expect(queryAllByTestId(document.body, "lang-pie")[0].tagName).toBe(
       "circle",
+    );
+  });
+});
+
+describe("test top-langs API", () => {
+  it("should return a permanent error for an invalid color parameter", async () => {
+    const result = await topLangsApi({
+      username: "user",
+      title_color: "not-a-color",
+    });
+
+    expect(result.status).toBe("error - permanent");
+    expect(result.content).toContain(
+      `Invalid color input for parameter "title_color"`,
     );
   });
 });

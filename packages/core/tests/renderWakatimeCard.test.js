@@ -1,6 +1,7 @@
 import { queryByTestId } from "@testing-library/dom";
 import { describe, expect, it } from "vitest";
 
+import wakatimeApi from "../src/api/wakatime.js";
 import { renderWakatimeCard } from "../src/cards/wakatime.js";
 
 import { wakaTimeData } from "./fetchWakatime.test.js";
@@ -89,5 +90,19 @@ describe("Test Render WakaTime Card", () => {
       display_format: "percent",
     });
     expect(card).toMatchSnapshot();
+  });
+});
+
+describe("test wakatime API", () => {
+  it("should return a permanent error for an invalid color parameter", async () => {
+    const result = await wakatimeApi({
+      username: "user",
+      title_color: "not-a-color",
+    });
+
+    expect(result.status).toBe("error - permanent");
+    expect(result.content).toContain(
+      `Invalid color input for parameter "title_color"`,
+    );
   });
 });

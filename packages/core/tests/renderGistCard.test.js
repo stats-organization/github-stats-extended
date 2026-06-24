@@ -2,6 +2,7 @@ import { queryByTestId } from "@testing-library/dom";
 import { cssToObject } from "@uppercod/css-to-object";
 import { describe, expect, it } from "vitest";
 
+import gistApi from "../src/api/gist.js";
 import { renderGistCard } from "../src/cards/gist.js";
 import { themes } from "../src/themes/index.js";
 
@@ -254,6 +255,17 @@ describe("test renderGistCard", () => {
     });
     expect(document.getElementsByClassName("description")[0]).toHaveTextContent(
       "No description provided",
+    );
+  });
+});
+
+describe("test gist API", () => {
+  it("should return permanent error for invalid color input", async () => {
+    const result = await gistApi({ id: "abc123", title_color: "not-a-color" });
+
+    expect(result.status).toBe("error - permanent");
+    expect(result.content).toContain(
+      `Invalid color input for parameter "title_color"`,
     );
   });
 });

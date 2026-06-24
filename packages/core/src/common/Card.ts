@@ -182,8 +182,7 @@ class Card {
     }
 
     const gradients = this.colors.bgColor.slice(1);
-    return typeof this.colors.bgColor === "object"
-      ? `
+    return `
         <defs>
           <linearGradient
             id="gradient"
@@ -198,8 +197,7 @@ class Card {
               .join(",")}
           </linearGradient>
         </defs>
-        `
-      : "";
+        `;
   }
 
   /**

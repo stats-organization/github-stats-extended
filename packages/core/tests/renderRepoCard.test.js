@@ -2,6 +2,7 @@ import { queryByTestId } from "@testing-library/dom";
 import { cssToObject } from "@uppercod/css-to-object";
 import { describe, expect, it } from "vitest";
 
+import pinApi from "../src/api/pin.js";
 import { renderRepoCard } from "../src/cards/repo.js";
 import { themes } from "../src/themes/index.js";
 
@@ -398,5 +399,20 @@ describe("Test renderRepoCard", () => {
       },
     );
     expect(document.querySelector("svg")).toHaveAttribute("height", "120");
+  });
+});
+
+describe("test pin API", () => {
+  it("should return a permanent error for an invalid color parameter", async () => {
+    const result = await pinApi({
+      username: "user",
+      repo: "repo",
+      title_color: "not-a-color",
+    });
+
+    expect(result.status).toBe("error - permanent");
+    expect(result.content).toContain(
+      `Invalid color input for parameter "title_color"`,
+    );
   });
 });
