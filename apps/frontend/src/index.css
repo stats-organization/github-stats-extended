@@ -1,14 +1,67 @@
-/* ./src/index.css */
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes:
+    light --default,
+    dark --prefersdark;
+}
+
+:root {
+  /* Snappy duration for interactive elements (buttons, hovers). */
+  --transition-fast: 100ms;
+  /* Slower, deliberate fade for large surfaces during a theme switch. */
+  --transition-surface: 300ms;
+}
 
 body {
   margin: 0;
   font-family: "Segoe UI", Ubuntu, Sans-Serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-base-100);
+  color: var(--color-base-content);
 }
 
-button {
-  cursor: pointer;
+/* Smoothly animate color changes when switching themes / on hover. */
+*,
+*::before,
+*::after {
+  transition-property: background-color, border-color, color, fill, stroke;
+  /* ease-out starts immediately; plain `ease` has a slow start that reads as a
+     delay on fast interactions like button hovers. */
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  transition-duration: var(--transition-fast);
+}
+
+/*
+ * Large surface backgrounds fade more slowly so a theme switch reads as a
+ * deliberate fade rather than an instant flip. Durations reference the custom
+ * properties above so the reduced-motion override below zeroes them out
+ * regardless of selector specificity.
+ */
+body,
+.bg-base-100,
+.bg-base-200,
+.bg-base-300 {
+  transition-duration: var(--transition-surface);
+}
+
+/*
+ * DaisyUI's `.btn` ships its own 200ms transition which felt slow. Our global
+ * rule above is unlayered, so it would otherwise clobber the button's
+ * property list and easing. Restore both here (fill, text and border animate
+ * together for outline buttons; ease-out for an immediate response) and keep
+ * only the duration snappy.
+ */
+.btn {
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  transition-duration: var(--transition-fast);
+}
+
+/* Respect users who prefer reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0ms;
+    --transition-surface: 0ms;
+  }
 }

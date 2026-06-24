@@ -1,18 +1,42 @@
 import { clsx } from "clsx";
 import type { HTMLProps, JSX, ReactNode } from "react";
 
-interface ButtonProps extends HTMLProps<HTMLButtonElement> {
+type ButtonVariant = "primary" | "neutral" | "error";
+type ButtonSize = "sm" | "md" | "lg";
+
+interface ButtonProps extends Omit<HTMLProps<HTMLButtonElement>, "size"> {
   children: ReactNode;
+  /** DaisyUI color variant. Omit for the default neutral button. */
+  variant?: ButtonVariant | undefined;
+  size?: ButtonSize;
+  /** Render the outlined style (`btn-outline`). */
+  outline?: boolean;
 }
 
 export function Button(props: ButtonProps): JSX.Element {
-  const { className, children, ...rest } = props;
+  const {
+    className,
+    children,
+    variant,
+    size = "md",
+    outline = false,
+    ...rest
+  } = props;
+
   return (
     <button
       {...rest}
       type="button"
       className={clsx(
-        "border-0 py-2 px-6 inline-flex focus:outline-none rounded-[0.25rem] text-lg",
+        "btn text-lg",
+        {
+          "btn-primary": variant === "primary",
+          "btn-neutral": variant === "neutral",
+          "btn-error": variant === "error",
+          "btn-outline": outline,
+          "btn-sm": size === "sm",
+          "btn-lg": size === "lg",
+        },
         className,
       )}
     >

@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { getUserMetadata } from "../../api/user";
 import { clearAxiosCache } from "../../axios-override";
 import type { StageIndex } from "../../models/Stage";
+import { useTheme } from "../../redux/selectors/themeSelectors";
 import {
   useIsAuthenticated,
   useUserKey,
@@ -56,6 +57,7 @@ export function AppTrends() {
   const userKey = useUserKey();
   const userToken = useUserToken();
   const isAuthenticated = useIsAuthenticated();
+  const { isDark } = useTheme();
 
   const [stage, setStage] = useState<StageIndex>(isAuthenticated ? 1 : 0);
 
@@ -116,9 +118,9 @@ export function AppTrends() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header currStageIndex={stage} onStageIndexChange={setStage} />
-      <section className="bg-white text-gray-700 flex-grow">
+      <section className="bg-base-100 text-base-content flex-grow">
         <HomeScreen stage={stage} setStage={setStage} />
-        <ToastContainer />
+        <ToastContainer theme={isDark ? "dark" : "light"} />
       </section>
     </div>
   );

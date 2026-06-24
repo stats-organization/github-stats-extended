@@ -230,11 +230,14 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
   }
 
   return (
-    <div ref={contentSectionRef} className="h-full px-2 lg:px-8 text-gray-600">
+    <div
+      ref={contentSectionRef}
+      className="h-full px-2 lg:px-8 text-base-content/70"
+    >
       <div className="flex flex-col">
         <div className="m-4 rounded-sm">
           <div className="lg:p-4">
-            <h1 className="text-2xl text-gray-600 font-semibold">
+            <h1 className="text-2xl text-base-content/70 font-semibold">
               {STAGE_LABELS[stage].title}
             </h1>
             <div>
@@ -245,7 +248,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
                     <a
                       href={`https://github.com/${userId}`}
                       target="_blank"
-                      className="text-blue-500 hover:underline font-semibold"
+                      className="text-primary hover:underline font-semibold"
                     >
                       {userId}
                     </a>
@@ -382,6 +385,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
                     return "";
                 }
               })()}
+              theme={theme}
               themeSuffix={themeSuffix}
               guestHint={
                 isAuthenticated

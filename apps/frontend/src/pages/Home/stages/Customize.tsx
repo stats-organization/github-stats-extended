@@ -109,7 +109,7 @@ export function CustomizeStage({
 
   return (
     <div className="w-full flex flex-wrap">
-      <div className="h-auto lg:w-2/5 md:w-1/2 p-10 rounded-sm bg-gray-200">
+      <div className="h-auto lg:w-2/5 md:w-1/2 p-10 rounded-sm bg-base-200">
         {(cardType === CardType.STATS || cardType === CardType.TOP_LANGS) && (
           <TextSection
             title="Username"
@@ -126,7 +126,7 @@ export function CustomizeStage({
                         e.preventDefault();
                         setStage(0);
                       }}
-                      className="underline text-blue-900"
+                      className="underline text-primary"
                     >
                       log in
                     </a>{" "}
@@ -170,7 +170,7 @@ export function CustomizeStage({
                         e.preventDefault();
                         setStage(0);
                       }}
-                      className="underline text-blue-900"
+                      className="underline text-primary"
                     >
                       log in
                     </a>{" "}
@@ -214,7 +214,7 @@ export function CustomizeStage({
                         e.preventDefault();
                         setStage(0);
                       }}
-                      className="underline text-blue-900"
+                      className="underline text-primary"
                     >
                       log in
                     </a>{" "}
@@ -251,7 +251,7 @@ export function CustomizeStage({
                 <a
                   href="https://wakatime.com/"
                   target="_blank"
-                  className="underline text-blue-900"
+                  className="underline text-primary"
                 >
                   WakaTime
                 </a>{" "}
@@ -411,7 +411,7 @@ export function CustomizeStage({
           <a
             href="https://github.com/stats-organization/github-stats-extended/blob/master/docs/advanced_documentation.md"
             target="_blank"
-            className="underline text-blue-900"
+            className="underline text-primary"
           >
             customization documentation
           </a>{" "}
