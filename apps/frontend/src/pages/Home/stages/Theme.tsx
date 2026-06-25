@@ -2,7 +2,11 @@ import { themes } from "@stats-organization/github-readme-stats-core";
 import type { JSX } from "react";
 
 import { Card } from "../../../components/Card/Card";
-import { getCardThemeBackdrop } from "../../../components/Card/themeBackdrop";
+import {
+  getCardThemeBackdrop,
+  getThemeSortRank,
+} from "../../../components/Card/themeBackdrop";
+import { useTheme } from "../../../redux/selectors/themeSelectors";
 
 const excludedThemes = [
   "merko",
@@ -13,9 +17,10 @@ const excludedThemes = [
   "holi",
 ];
 
-const themeList = Object.keys(themes).filter(
-  (myTheme) => !excludedThemes.includes(myTheme),
-);
+// Light themes first, adaptive themes in the middle, dark themes last.
+const themeList = Object.keys(themes)
+  .filter((myTheme) => !excludedThemes.includes(myTheme))
+  .sort((a, b) => getThemeSortRank(a) - getThemeSortRank(b));
 
 interface ThemeStageProps {
   fullSuffix: string;
@@ -28,6 +33,8 @@ export function ThemeStage({
   fullSuffix,
   onThemeChange,
 }: ThemeStageProps): JSX.Element {
+  const { isDark } = useTheme();
+
   return (
     <>
       <div className="flex flex-wrap">
@@ -48,7 +55,7 @@ export function ThemeStage({
                 imageSrc={`${fullSuffix}&theme=${myTheme}`}
                 selected={theme === myTheme}
                 stage={3}
-                backgroundColor={getCardThemeBackdrop(myTheme)}
+                backgroundColor={getCardThemeBackdrop(myTheme, isDark)}
                 titleColor={`#${themeColors.title_color}`}
               />
             </button>

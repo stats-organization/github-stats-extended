@@ -36,7 +36,7 @@ export function LoginOptions(props: LoginOptionsProps): JSX.Element {
       <div className="flex items-center gap-4 mb-4">
         <a href={GITHUB_PRIVATE_AUTH_URL}>
           <Button
-            outline
+            variant="neutral"
             className="h-12 flex justify-center items-center w-[260px]"
           >
             <GithubIcon className="w-6 h-6" />
@@ -51,7 +51,7 @@ export function LoginOptions(props: LoginOptionsProps): JSX.Element {
 
       <div className="flex items-center gap-4">
         <Button
-          outline
+          variant="neutral"
           className="h-12 flex justify-center items-center w-[260px]"
           onClick={onContinueAsGuest}
         >

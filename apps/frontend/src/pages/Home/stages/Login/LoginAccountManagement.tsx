@@ -57,7 +57,7 @@ export function LoginAccountManagement(): JSX.Element {
               href={`https://${HOST}/api/downgrade?user_key=${userKey as string}`}
             >
               <Button
-                outline
+                variant="neutral"
                 className="h-12 flex justify-center items-center w-[320px]"
               >
                 <GithubIcon className="w-6 h-6" />
@@ -95,7 +95,7 @@ export function LoginAccountManagement(): JSX.Element {
       {/* Delete Account Button */}
       <div className="mt-6 flex items-center gap-4">
         <Button
-          outline
+          variant="neutral"
           className="h-12 flex justify-center items-center w-[320px]"
           onClick={openDeleteModal}
         >
@@ -110,7 +110,7 @@ export function LoginAccountManagement(): JSX.Element {
       {/* Logout Button */}
       <div className="mt-6 flex items-center gap-4">
         <Button
-          outline
+          variant="neutral"
           className="h-12 flex justify-center items-center w-[320px]"
           onClick={handleLogout}
         >

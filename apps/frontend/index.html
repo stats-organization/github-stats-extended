@@ -38,7 +38,10 @@
   </head>
   <body>
     <script>
-      // Apply the persisted (or system) theme before first paint to avoid a flash.
+      // Apply the persisted theme from localStorage before first paint. This is
+      // what makes a saved theme survive a reload when it differs from the OS
+      // preference (DaisyUI's `--prefersdark` only covers the OS default, and
+      // nothing in React sets `data-theme` on mount).
       // Also suppress color transitions until after the first paint so elements
       // don't animate from their unstyled state on load.
       (function () {
@@ -49,7 +52,6 @@
           ).matches;
           var theme = stored || (matchesDarkTheme ? "dark" : "light");
           document.documentElement.setAttribute("data-theme", theme);
-          document.documentElement.classList.add("no-transitions");
         } catch (e) {}
       })();
     </script>

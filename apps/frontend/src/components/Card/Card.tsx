@@ -30,7 +30,7 @@ export const Card = ({
 }: CardProps): JSX.Element => {
   return (
     <div
-      className={clsx("p-6 rounded border-2", {
+      className={clsx("p-6 rounded border-4", {
         "h-[370px] w-[510px]": fixedSize,
         "border-primary": selected,
         "border-base-300": !selected,

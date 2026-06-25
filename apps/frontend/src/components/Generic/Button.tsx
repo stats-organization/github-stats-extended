@@ -9,19 +9,10 @@ interface ButtonProps extends Omit<HTMLProps<HTMLButtonElement>, "size"> {
   /** DaisyUI color variant. Omit for the default neutral button. */
   variant?: ButtonVariant | undefined;
   size?: ButtonSize;
-  /** Render the outlined style (`btn-outline`). */
-  outline?: boolean;
 }
 
 export function Button(props: ButtonProps): JSX.Element {
-  const {
-    className,
-    children,
-    variant,
-    size = "md",
-    outline = false,
-    ...rest
-  } = props;
+  const { className, children, variant, size = "md", ...rest } = props;
 
   return (
     <button
@@ -33,7 +24,6 @@ export function Button(props: ButtonProps): JSX.Element {
           "btn-primary": variant === "primary",
           "btn-neutral": variant === "neutral",
           "btn-error": variant === "error",
-          "btn-outline": outline,
           "btn-sm": size === "sm",
           "btn-lg": size === "lg",
         },

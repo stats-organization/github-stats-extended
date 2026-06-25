@@ -7,6 +7,7 @@ import {
   DEMO_USER,
   DEMO_WAKATIME_USER,
 } from "../../../../constants";
+import { useTheme } from "../../../../redux/selectors/themeSelectors";
 
 const cards: Array<{ demoImageSrc: string }> = [
   {
@@ -39,6 +40,10 @@ function getCardXPosition(cardIndex: number): number {
 }
 
 export function LoginBoxDemoCards(): JSX.Element {
+  const { isDark } = useTheme();
+  // Show dark-themed demo cards in dark mode so they fit the surroundings.
+  const themeParam = isDark ? "&theme=github_dark" : "";
+
   return (
     <div className="w-full h-full lg:w-2/5 flex lg:flex-col lg:p-8 relative overflow-hidden">
       <div className="relative w-full h-full">
@@ -52,7 +57,11 @@ export function LoginBoxDemoCards(): JSX.Element {
               marginBottom: "1%",
             }}
           >
-            <CardImage imageSrc={card.demoImageSrc} compact={false} stage={0} />
+            <CardImage
+              imageSrc={`${card.demoImageSrc}${themeParam}`}
+              compact={false}
+              stage={0}
+            />
           </div>
         ))}
       </div>

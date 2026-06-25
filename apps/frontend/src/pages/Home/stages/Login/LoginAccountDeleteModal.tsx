@@ -60,12 +60,7 @@ export function LoginAccountDeleteModal(
             <Button variant="primary" onClick={onClose}>
               Cancel
             </Button>
-            <Button
-              variant="error"
-              outline
-              className="ml-auto"
-              onClick={onConfirm}
-            >
+            <Button variant="error" className="ml-auto" onClick={onConfirm}>
               Delete Account
             </Button>
           </div>

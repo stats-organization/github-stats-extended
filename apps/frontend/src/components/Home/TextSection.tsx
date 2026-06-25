@@ -54,9 +54,10 @@ export function TextSection({
       <p>{description}</p>
       <input
         type="text"
-        className={clsx("input mt-2 w-3/4 min-w-48 max-w-xl", {
-          "cursor-not-allowed": disabled,
-        })}
+        className={clsx(
+          "border border-base-content/20 rounded px-2 py-1 mt-2 w-3/4 min-w-48 max-w-xl",
+          disabled ? "cursor-not-allowed bg-base-200" : "bg-base-100",
+        )}
         value={internalValue}
         onChange={(e) => {
           setInternalValue(e.target.value);

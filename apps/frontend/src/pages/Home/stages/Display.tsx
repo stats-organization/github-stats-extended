@@ -6,6 +6,7 @@ import { CardImage } from "../../../components/Card/CardImage";
 import { getCardThemeBackdrop } from "../../../components/Card/themeBackdrop";
 import { Button } from "../../../components/Generic/Button";
 import { HOST } from "../../../constants";
+import { useTheme } from "../../../redux/selectors/themeSelectors";
 
 interface DisplayStageProps {
   filename: string;
@@ -22,6 +23,8 @@ export function DisplayStage({
   themeSuffix,
   guestHint,
 }: DisplayStageProps): JSX.Element {
+  const { isDark } = useTheme();
+
   const downloadPNG = () => {
     saveSvgAsPng(
       document.getElementById("svgWrapper")?.shadowRoot?.firstElementChild
@@ -84,8 +87,7 @@ export function DisplayStage({
             ].map((item) => (
               <Button
                 key={item.title}
-                variant={item.highlight ? "primary" : undefined}
-                outline={!item.highlight}
+                variant={item.highlight ? "primary" : "neutral"}
                 className="m-4 w-60 flex justify-center"
                 onClick={item.onClick}
               >
@@ -99,7 +101,7 @@ export function DisplayStage({
       <div className="w-full lg:w-3/5 md:w-1/2 object-center pt-5 md:pt-0 pl-0 md:pl-5 lg:pl-0">
         <div
           className="w-full lg:w-3/5 mx-auto flex flex-col justify-center sticky top-32 rounded p-4"
-          style={{ background: getCardThemeBackdrop(theme) }}
+          style={{ background: getCardThemeBackdrop(theme, isDark) }}
         >
           <CardImage
             imageSrc={`${themeSuffix}&disable_animations=true`}

@@ -26,8 +26,10 @@ body {
 *::before,
 *::after {
   transition-property: background-color, border-color, color, fill, stroke;
-  /* ease-out starts immediately; plain `ease` has a slow start that reads as a
-     delay on fast interactions like button hovers. */
+  /* 
+   * An ease-out curve: animations start at full speed so quick interactions
+   * like button hovers feel responsive instead of laggy. 
+   */
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
   transition-duration: var(--transition-fast);
 }
@@ -46,16 +48,26 @@ body,
 }
 
 /*
- * DaisyUI's `.btn` ships its own 200ms transition which felt slow. Our global
- * rule above is unlayered, so it would otherwise clobber the button's
- * property list and easing. Restore both here (fill, text and border animate
- * together for outline buttons; ease-out for an immediate response) and keep
- * only the duration snappy.
+ * DaisyUI's `.btn` ships its own 200ms transition which felt slow. The global
+ * rule above is unlayered, so it would otherwise clobber the button's property
+ * list and timing function. Restore both here (so fill, text and border animate
+ * together on outline buttons) and only speed up the duration.
  */
 .btn {
   transition-property: color, background-color, border-color, box-shadow;
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
   transition-duration: var(--transition-fast);
+}
+
+/* 
+ * DaisyUI's default hover is very subtle; make it noticeable. Primary darkens,
+ * while neutral (near-black in both themes) lightens so the change shows. 
+ */
+.btn-primary:hover {
+  background-color: color-mix(in oklab, var(--color-primary), #000 18%);
+}
+.btn-neutral:hover {
+  background-color: color-mix(in oklab, var(--color-neutral), #fff 18%);
 }
 
 /* Respect users who prefer reduced motion. */
