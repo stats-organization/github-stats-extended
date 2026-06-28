@@ -87,7 +87,7 @@ export function DisplayStage({
             ].map((item) => (
               <Button
                 key={item.title}
-                variant={item.highlight ? "primary" : "neutral"}
+                variant={item.highlight ? "primary" : "soft"}
                 className="m-4 w-60 flex justify-center"
                 onClick={item.onClick}
               >

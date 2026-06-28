@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 import type { HTMLProps, JSX, ReactNode } from "react";
 
-type ButtonVariant = "primary" | "neutral" | "error";
+type ButtonVariant = "primary" | "soft" | "error";
 type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonProps extends Omit<HTMLProps<HTMLButtonElement>, "size"> {
@@ -22,7 +22,7 @@ export function Button(props: ButtonProps): JSX.Element {
         "btn text-lg",
         {
           "btn-primary": variant === "primary",
-          "btn-neutral": variant === "neutral",
+          "btn-soft": variant === "soft",
           "btn-error": variant === "error",
           "btn-sm": size === "sm",
           "btn-lg": size === "lg",

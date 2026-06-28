@@ -19,6 +19,7 @@ import {
 import { CardType } from "../../models/CardType";
 import { STAGE_LABELS } from "../../models/Stage";
 import type { StageIndex } from "../../models/Stage";
+import { useTheme } from "../../redux/selectors/themeSelectors";
 import {
   useIsAuthenticated,
   usePrivateAccess,
@@ -83,7 +84,9 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
   const [enableAnimations, setEnableAnimations] = useState(true);
   const [usePercent, setUsePercent] = useState(false);
 
-  const [theme, setTheme] = useState("default");
+  const { isDark } = useTheme();
+  const themeParam = isDark ? "&theme=github_dark" : "";
+  const [theme, setTheme] = useState(isDark ? "dark" : "default");
 
   const handleCardTypeChange = (cardType: CardType) => {
     if (cardType === CardType.TOP_LANGS) {
@@ -331,7 +334,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
               setWakatimeUser={setWakatimeUser}
               usePercent={usePercent}
               setUsePercent={setUsePercent}
-              fullSuffix={fullSuffix}
+              fullSuffix={fullSuffix + themeParam}
               setStage={setStage}
             />
           )}

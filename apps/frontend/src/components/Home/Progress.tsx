@@ -24,7 +24,7 @@ function ProgressSection({
     <button
       className={clsx(
         "w-1/4 flex flex-col mx-2 p-2 cursor-pointer",
-        passed ? "border-primary" : "border-base-content/40",
+        passed ? "border-primary" : "border-base-content/60",
         isActive ? "border-t-[14px] -mt-[5px]" : "border-t-4",
       )}
       type="button"
@@ -33,13 +33,13 @@ function ProgressSection({
       <div
         className={clsx("text-lg font-bold", {
           "text-primary": passed,
-          "text-base-content/50": !passed,
+          "text-base-content/60": !passed,
           "-mt-[4px]": isActive,
         })}
       >
         {`Step ${num + 1}`}
       </div>
-      <div className={passed ? "text-base-content/70" : "text-base-content/50"}>
+      <div className={passed ? "text-base-content/80" : "text-base-content/60"}>
         {item}
       </div>
     </button>
@@ -61,7 +61,7 @@ export function ProgressBar({
   const rightDisabled = currItemIndex === items.length - 1;
 
   return (
-    <div className="w-full flex items-center sticky top-0 bg-base-200 z-50 pt-3 pb-1 px-1 md:px-20 shadow-md">
+    <div className="w-full flex items-center sticky top-0 bg-base-300 z-50 pt-3 pb-1 px-1 md:px-20 shadow-md">
       <button
         type="button"
         aria-label="Previous step"

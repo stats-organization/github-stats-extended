@@ -5,6 +5,20 @@
     dark --prefersdark;
 }
 
+/*
+Override primary color with default blue from github-stats-extended.
+Override background color in dark mode with GitHub's dark mode background color.
+*/
+@plugin "daisyui/theme" {
+  name: "light";
+  --color-primary: #2f80ed;
+}
+@plugin "daisyui/theme" {
+  name: "dark";
+  --color-primary: #2f80ed;
+  --color-base-100: #0d1117;
+}
+
 :root {
   /* Snappy duration for interactive elements (buttons, hovers). */
   --transition-fast: 100ms;
@@ -19,6 +33,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-base-100);
   color: var(--color-base-content);
+}
+
+button {
+  cursor: pointer;
 }
 
 /* Smoothly animate color changes when switching themes / on hover. */
@@ -60,14 +78,23 @@ body,
 }
 
 /* 
- * DaisyUI's default hover is very subtle; make it noticeable. Primary darkens,
- * while neutral (near-black in both themes) lightens so the change shows. 
+ * DaisyUI's default hover is very subtle; make it noticeable. Primary always darkens,
+ * while soft lightens in dark mode and darkens in light mode, so the change shows.
  */
 .btn-primary:hover {
-  background-color: color-mix(in oklab, var(--color-primary), #000 18%);
+  background-color: color-mix(in oklab, var(--color-primary), #000 30%);
 }
-.btn-neutral:hover {
-  background-color: color-mix(in oklab, var(--color-neutral), #fff 18%);
+.btn-soft {
+  background-color: color-mix(in oklab, var(--color-base-100), #888 35%);
+}
+.btn-soft:hover {
+  background-color: color-mix(in oklab, var(--color-base-100), #888 60%);
+}
+
+input:focus,
+select:focus {
+  outline: 0;
+  border: var(--color-primary) solid 1px;
 }
 
 /* Respect users who prefer reduced motion. */

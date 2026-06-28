@@ -9,6 +9,7 @@ import {
   DEMO_WAKATIME_USER,
 } from "../../../constants";
 import { CardType } from "../../../models/CardType";
+import { useTheme } from "../../../redux/selectors/themeSelectors";
 import { useUserId } from "../../../redux/selectors/userSelectors";
 
 interface SelectCardStageProps {
@@ -21,6 +22,9 @@ export function SelectCardStage({
   onCardTypeChange,
 }: SelectCardStageProps): JSX.Element {
   const userId = useUserId(DEMO_USER);
+  const { isDark } = useTheme();
+  // Show dark-themed demo cards in dark mode so they fit the surroundings.
+  const themeParam = isDark ? "&theme=github_dark" : "";
 
   const options = useMemo<
     Array<{
@@ -34,37 +38,37 @@ export function SelectCardStage({
       {
         title: "GitHub Stats Card",
         description: "your overall GitHub statistics",
-        demoImageSrc: `?username=${userId}&include_all_commits=true`,
+        demoImageSrc: `?username=${userId}&include_all_commits=true${themeParam}`,
         cardType: CardType.STATS,
       },
       {
         title: "Top Languages Card",
         description: "your most frequently used languages",
-        demoImageSrc: `/top-langs?username=${userId}&langs_count=4`,
+        demoImageSrc: `/top-langs?username=${userId}&langs_count=4${themeParam}`,
         cardType: CardType.TOP_LANGS,
       },
       {
         title: "GitHub Extra Pin",
         description:
           "pin more than 6 repositories in your profile using a GitHub profile readme",
-        demoImageSrc: `/pin?repo=${DEMO_REPO}`,
+        demoImageSrc: `/pin?repo=${DEMO_REPO}${themeParam}`,
         cardType: CardType.PIN,
       },
       {
         title: "GitHub Gist Pin",
         description:
           "pin gists in your GitHub profile using a GitHub profile readme",
-        demoImageSrc: `/gist?id=${DEMO_GIST}`,
+        demoImageSrc: `/gist?id=${DEMO_GIST}${themeParam}`,
         cardType: CardType.GIST,
       },
       {
         title: "WakaTime Stats Card",
         description: "your coding activity from WakaTime",
-        demoImageSrc: `/wakatime?username=${DEMO_WAKATIME_USER}&langs_count=6&card_width=450`,
+        demoImageSrc: `/wakatime?username=${DEMO_WAKATIME_USER}&langs_count=6&card_width=450${themeParam}`,
         cardType: CardType.WAKATIME,
       },
     ],
-    [userId],
+    [userId, themeParam],
   );
 
   return (

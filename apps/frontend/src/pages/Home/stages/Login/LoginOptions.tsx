@@ -28,7 +28,7 @@ export function LoginOptions(props: LoginOptionsProps): JSX.Element {
             GitHub Public Access
           </Button>
         </a>
-        <p className="text-sm text-base-content/70 flex-1">
+        <p className="text-sm text-base-content/80 flex-1">
           Generate stats based on your contributions in public repositories.
         </p>
       </div>
@@ -36,14 +36,14 @@ export function LoginOptions(props: LoginOptionsProps): JSX.Element {
       <div className="flex items-center gap-4 mb-4">
         <a href={GITHUB_PRIVATE_AUTH_URL}>
           <Button
-            variant="neutral"
+            variant="soft"
             className="h-12 flex justify-center items-center w-[260px]"
           >
             <GithubIcon className="w-6 h-6" />
             GitHub Private Access
           </Button>
         </a>
-        <p className="text-sm text-base-content/70 flex-1">
+        <p className="text-sm text-base-content/80 flex-1">
           Include contributions from private repositories for more complete and
           accurate stats.
         </p>
@@ -51,13 +51,13 @@ export function LoginOptions(props: LoginOptionsProps): JSX.Element {
 
       <div className="flex items-center gap-4">
         <Button
-          variant="neutral"
+          variant="soft"
           className="h-12 flex justify-center items-center w-[260px]"
           onClick={onContinueAsGuest}
         >
           Continue as Guest
         </Button>
-        <p className="text-sm text-base-content/70 flex-1">
+        <p className="text-sm text-base-content/80 flex-1">
           Explore options using sample data. Insert your own username in the
           last step.
         </p>

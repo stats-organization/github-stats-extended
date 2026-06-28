@@ -20,7 +20,13 @@ export function Header({
 }: HeaderProps): JSX.Element {
   return (
     <>
-      <div className="text-neutral-content bg-neutral shadow-md z-50">
+      <div
+        className="text-neutral-content shadow-md z-50"
+        style={{
+          backgroundColor:
+            "color-mix(in oklab, var(--color-primary), #000 50%)",
+        }}
+      >
         <div className="px-5 py-2 flex flex-wrap">
           {/* Logo */}
           <a

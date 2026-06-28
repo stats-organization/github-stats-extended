@@ -56,7 +56,11 @@ export function ThemeStage({
                 selected={theme === myTheme}
                 stage={3}
                 backgroundColor={getCardThemeBackdrop(myTheme, isDark)}
-                titleColor={`#${themeColors.title_color}`}
+                titleColor={`#${
+                  myTheme === "ambient_gradient" && !isDark
+                    ? (themes["ambient_gradient"].bg_color.split(",")[1] ?? "")
+                    : themeColors.title_color
+                }`}
               />
             </button>
           );

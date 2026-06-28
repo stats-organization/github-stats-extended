@@ -1,7 +1,7 @@
 import { themes } from "@stats-organization/github-readme-stats-core";
 
 // We use the same background colors here which GitHub uses.
-const LIGHT_CARD_BG = "#ffffff";
+export const LIGHT_CARD_BG = "#ffffff";
 const DARK_CARD_BG = "#0d1117";
 
 // Themes that look good in either mode (their text/icon colors read on both a
