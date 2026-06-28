@@ -11,15 +11,17 @@ Override background color in dark mode with GitHub's dark mode background color.
 */
 @plugin "daisyui/theme" {
   name: "light";
-  --color-primary: #2f80ed;
+  --color-error: var(--color-red-700);
 }
 @plugin "daisyui/theme" {
   name: "dark";
-  --color-primary: #2f80ed;
+  --color-error: var(--color-red-900);
   --color-base-100: #0d1117;
 }
 
 :root {
+  --color-primary: #2f80ed;
+
   /* Snappy duration for interactive elements (buttons, hovers). */
   --transition-fast: 100ms;
   /* Slower, deliberate fade for large surfaces during a theme switch. */
@@ -89,6 +91,13 @@ body,
 }
 .btn-soft:hover {
   background-color: color-mix(in oklab, var(--color-base-100), #888 60%);
+}
+.btn-error {
+  color: var(--color-neutral-content);
+}
+.btn-error:hover {
+  color: var(--color-neutral-content);
+  background-color: color-mix(in oklab, var(--color-error), #f00 40%);
 }
 
 input:focus,

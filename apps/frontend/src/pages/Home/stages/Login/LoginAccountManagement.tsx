@@ -99,7 +99,9 @@ export function LoginAccountManagement(): JSX.Element {
           className="h-12 flex justify-center items-center w-[320px]"
           onClick={openDeleteModal}
         >
-          <span className="xl:text-lg text-error">Delete Account</span>
+          <span className="xl:text-lg text-error text-shadow-none">
+            Delete Account
+          </span>
         </Button>
         <p className="text-sm text-base-content/70 flex-1">
           This will delete your GitHub-Stats-Extended account and then redirect
