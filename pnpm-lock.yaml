@@ -10,8 +10,8 @@ catalogs:
       specifier: 4.1.8
       version: 4.1.8
     axios:
-      specifier: ^1.17.0
-      version: 1.17.0
+      specifier: ^1.18.1
+      version: 1.18.1
     jsdom:
       specifier: 29.1.1
       version: 29.1.1
@@ -94,14 +94,14 @@ importers:
         version: link:../../packages/core
       axios:
         specifier: catalog:default
-        version: 1.17.0
+        version: 1.18.1
       pg:
         specifier: ^8.21.0
         version: 8.21.0
     devDependencies:
       axios-mock-adapter:
         specifier: 2.1.0
-        version: 2.1.0(axios@1.17.0)
+        version: 2.1.0(axios@1.18.1)
       express:
         specifier: 5.2.1
         version: 5.2.1
@@ -128,10 +128,10 @@ importers:
         version: 4.3.0(vite@8.0.16(@types/node@24.13.2)(jiti@2.7.0)(yaml@2.9.0))
       axios:
         specifier: catalog:default
-        version: 1.17.0
+        version: 1.18.1
       axios-cache-interceptor:
         specifier: ^1
-        version: 1.12.0(axios@1.17.0)
+        version: 1.12.0(axios@1.18.1)
       daisyui:
         specifier: ^5.5.23
         version: 5.5.23
@@ -192,7 +192,7 @@ importers:
     dependencies:
       axios:
         specifier: catalog:default
-        version: 1.17.0
+        version: 1.18.1
       emoji-name-map:
         specifier: ^2.0.3
         version: 2.0.3
@@ -211,7 +211,7 @@ importers:
         version: 1.1.1
       axios-mock-adapter:
         specifier: 2.1.0
-        version: 2.1.0(axios@1.17.0)
+        version: 2.1.0(axios@1.18.1)
       js-yaml:
         specifier: 4.2.0
         version: 4.2.0
@@ -1338,8 +1338,8 @@ packages:
     peerDependencies:
       axios: '>= 0.17.0'
 
-  axios@1.17.0:
-    resolution: {integrity: sha512-J8SwNxprqqpbfenehxWYXE7CW+wM1BB4w3+N+g+/Wx40xM4rsLrfPmHHxSWIxJLYDgSY/HqlFPIYb2/S3rxafw==}
+  axios@1.18.1:
+    resolution: {integrity: sha512-3nTvFlvpn9Zu/RkHUqtc7/+al4UpRW5az71ap5zccp6e8RAYEzhMTecX8Dz1wWDYrPpUoB1HAQEGEAEvUr7S9g==}
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -4128,22 +4128,22 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.1.0
 
-  axios-cache-interceptor@1.12.0(axios@1.17.0):
+  axios-cache-interceptor@1.12.0(axios@1.18.1):
     dependencies:
-      axios: 1.17.0
+      axios: 1.18.1
       cache-parser: 1.2.6
       fast-defer: 1.1.9
       http-vary: 1.0.3
       object-code: 2.0.0
       try: 1.0.3
 
-  axios-mock-adapter@2.1.0(axios@1.17.0):
+  axios-mock-adapter@2.1.0(axios@1.18.1):
     dependencies:
-      axios: 1.17.0
+      axios: 1.18.1
       fast-deep-equal: 3.1.3
       is-buffer: 2.0.5
 
-  axios@1.17.0:
+  axios@1.18.1:
     dependencies:
       follow-redirects: 1.16.0
       form-data: 4.0.5
