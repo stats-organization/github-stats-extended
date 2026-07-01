@@ -4,7 +4,6 @@
  */
 declare module "emoji-name-map" {
   const emojiNameMap: {
-    emoji: Record<string, string>;
     get(name: string): string | undefined;
   };
   export default emojiNameMap;

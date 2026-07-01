@@ -119,14 +119,12 @@ const dateDiff = (d1: Date, d2: Date): number => {
  *
  * @throws {CustomError} If affiliations contains invalid values.
  */
-const parseOwnerAffiliations = (
-  affiliations: Array<string> | undefined,
-): Array<string> => {
+const parseOwnerAffiliations = (affiliations: Array<string>): Array<string> => {
   // Set default value for ownerAffiliations.
   // NOTE: Done here since parseArray() will always return an empty array even nothing
   //was specified.
   const normalized =
-    affiliations && affiliations.length > 0
+    affiliations.length > 0
       ? affiliations.map((affiliation) => affiliation.toUpperCase())
       : ["OWNER"];
 

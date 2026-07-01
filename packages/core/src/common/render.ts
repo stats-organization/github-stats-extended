@@ -208,7 +208,7 @@ const iconWithLabel = (
 // Script parameters.
 const ERROR_CARD_LENGTH = 576.5;
 
-const UPSTREAM_API_ERRORS: Array<string> = [
+const UPSTREAM_API_ERRORS = [
   TRY_AGAIN_LATER,
   SECONDARY_ERROR_MESSAGES.MAX_RETRY,
 ];
