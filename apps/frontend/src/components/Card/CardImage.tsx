@@ -1,23 +1,25 @@
 import { clsx } from "clsx";
 
 import { HOST } from "../../constants";
+import type { CardUrlBuilder } from "../../models/CardUrl";
 
 import { SvgInline } from "./SvgInline";
 
 interface CardImageProps {
-  imageSrc: string;
+  card: CardUrlBuilder;
   stage: number;
   compact?: boolean;
   className?: string;
 }
 
 export const CardImage = ({
-  imageSrc,
+  card,
   stage,
   compact = false,
   className,
 }: CardImageProps) => {
-  const fullImageSrc = `https://${HOST}/api${imageSrc}&client=wizard`;
+  // `client=wizard` marks requests coming from the wizard preview.
+  const fullImageSrc = card.client("wizard").toApiUrl(HOST);
 
   return (
     <div className={clsx("w-full relative", className)}>

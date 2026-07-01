@@ -5,7 +5,7 @@ import { DEFAULT_OPTION as STATS_DEFAULT_RANK } from "../../components/Home/Stat
 import { DEFAULT_OPTION as WAKATIME_DEFAULT_LAYOUT } from "../../components/Home/WakatimeLayoutSection";
 import { CardType } from "../../models/CardType";
 
-import { getFullSuffix } from "./getFullSuffix";
+import { buildCardUrl } from "./buildCardUrl";
 
 const baseOptions = {
   selectedCard: CardType.STATS,
@@ -30,15 +30,15 @@ const baseOptions = {
   usePercent: false,
 };
 
-describe("getFullSuffix", () => {
+describe("buildCardUrl", () => {
   it("builds stats suffix with defaults", () => {
-    const result = getFullSuffix(baseOptions);
+    const result = buildCardUrl(baseOptions);
 
-    expect(result).toBe("?username=john");
+    expect(result.toString()).toBe("?username=john");
   });
 
   it("adds stats options", () => {
-    const result = getFullSuffix({
+    const result = buildCardUrl({
       ...baseOptions,
       showIcons: true,
       includeAllCommits: true,
@@ -46,53 +46,54 @@ describe("getFullSuffix", () => {
       showTitle: false,
     });
 
-    expect(result).toBe(
+    expect(result.toString()).toBe(
       "?username=john" +
         "&hide_title=true" +
-        "&show=reviews,discussions_started,discussions_answered,prs_merged,prs_merged_percentage,prs_commented,prs_reviewed,issues_commented" +
+        // commas are percent-encoded (%2C) now that params go through URLSearchParams
+        "&show=reviews%2Cdiscussions_started%2Cdiscussions_answered%2Cprs_merged%2Cprs_merged_percentage%2Cprs_commented%2Cprs_reviewed%2Cissues_commented" +
         "&show_icons=true" +
         "&include_all_commits=true",
     );
   });
 
   it("builds top-langs suffix", () => {
-    const result = getFullSuffix({
+    const result = buildCardUrl({
       ...baseOptions,
       selectedCard: CardType.TOP_LANGS,
       langsCount: 5,
       showTitle: false,
     });
 
-    expect(result).toBe(
+    expect(result.toString()).toBe(
       "/top-langs?username=john&hide_title=true&langs_count=5",
     );
   });
 
   it("builds pin suffix using userId not selectedUserId", () => {
-    const result = getFullSuffix({
+    const result = buildCardUrl({
       ...baseOptions,
       selectedCard: CardType.PIN,
       showOwner: true,
       descriptionLines: 3,
     });
 
-    expect(result).toBe(
+    expect(result.toString()).toBe(
       "/pin?username=john-github&repo=repo1&show_owner=true&description_lines_count=3",
     );
   });
 
   it("builds gist suffix", () => {
-    const result = getFullSuffix({
+    const result = buildCardUrl({
       ...baseOptions,
       selectedCard: CardType.GIST,
       showOwner: true,
     });
 
-    expect(result).toBe("/gist?id=gist1&show_owner=true");
+    expect(result.toString()).toBe("/gist?id=gist1&show_owner=true");
   });
 
   it("builds wakatime suffix with percent and custom title", () => {
-    const result = getFullSuffix({
+    const result = buildCardUrl({
       ...baseOptions,
       selectedCard: CardType.WAKATIME,
       wakatimeUser: "waka",
@@ -101,18 +102,18 @@ describe("getFullSuffix", () => {
       showTitle: false,
     });
 
-    expect(result).toBe(
+    expect(result.toString()).toBe(
       "/wakatime?username=waka&hide_title=true&custom_title=My%20Stats&display_format=percent",
     );
   });
 
   it("adds non-default layouts", () => {
-    const result = getFullSuffix({
+    const result = buildCardUrl({
       ...baseOptions,
       selectedCard: CardType.TOP_LANGS,
       selectedLanguagesLayout: { id: 2, value: "compact", label: "Compact" },
     });
 
-    expect(result).toBe("/top-langs?username=john&layout=compact");
+    expect(result.toString()).toBe("/top-langs?username=john&layout=compact");
   });
 });
