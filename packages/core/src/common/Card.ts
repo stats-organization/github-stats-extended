@@ -243,20 +243,27 @@ class Card {
    * @returns The rendered card.
    */
   render(body: string): string {
-    if (!isValidHexColor(this.colors.titleColor ?? "", true)) {
+    if (
+      this.colors.titleColor !== undefined &&
+      !isValidHexColor(this.colors.titleColor, true)
+    ) {
       throw new Error(
         `Invalid title color: ${this.colors.titleColor ?? "<empty>"}`,
       );
     }
-    if (!isValidHexColor(this.colors.borderColor ?? "", true)) {
+    if (
+      this.colors.borderColor !== undefined &&
+      !isValidHexColor(this.colors.borderColor, true)
+    ) {
       throw new Error(
         `Invalid border color: ${this.colors.borderColor ?? "<empty>"}`,
       );
     }
     if (
+      this.colors.bgColor !== undefined &&
       !(typeof this.colors.bgColor === "object"
         ? isValidGradient(this.colors.bgColor)
-        : isValidHexColor(this.colors.bgColor ?? ""))
+        : isValidHexColor(this.colors.bgColor, true))
     ) {
       throw new Error(
         `Invalid background color: ${String(this.colors.bgColor)}`,

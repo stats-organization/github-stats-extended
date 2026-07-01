@@ -229,7 +229,7 @@ const iconWithLabel = (icon, label, testid, iconSize) => {
         ${icon}
       </svg>
     `;
-  const text = `<text data-testid="${encodeHTML(testid)}" class="gray">${encodeHTML(label)}</text>`;
+  const text = `<text data-testid="${encodeHTML(testid)}" class="gray">${encodeHTML(String(label))}</text>`;
   return flexLayout({ items: [iconSvg, text], gap: 20 }).join("");
 };
 

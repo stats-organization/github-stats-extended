@@ -119,6 +119,7 @@ const renderRepoCard = (repo, options = {}) => {
   });
 
   let repoFilter = encodeURIComponent(buildSearchFilter([nameWithOwner], []));
+  const encodedUsername = encodeURIComponent(username);
   const STATS = {};
   if (show.includes("prs_authored")) {
     STATS.prs_authored = {
@@ -126,7 +127,7 @@ const renderRepoCard = (repo, options = {}) => {
       label: i18n.t("repocard.prs-authored"),
       value: totalPRsAuthored,
       id: "prs_authored",
-      link: `https://github.com/search?q=${repoFilter}author%3A${username}&amp;type=pullrequests`,
+      link: `https://github.com/search?q=${repoFilter}author%3A${encodedUsername}&amp;type=pullrequests`,
     };
   }
   if (show.includes("prs_commented")) {
@@ -135,7 +136,7 @@ const renderRepoCard = (repo, options = {}) => {
       label: i18n.t("repocard.prs-commented"),
       value: totalPRsCommented,
       id: "prs_commented",
-      link: `https://github.com/search?q=${repoFilter}commenter%3A${username}+-author%3A${username}&amp;type=pullrequests`,
+      link: `https://github.com/search?q=${repoFilter}commenter%3A${encodedUsername}+-author%3A${encodedUsername}&amp;type=pullrequests`,
     };
   }
   if (show.includes("prs_reviewed")) {
@@ -144,7 +145,7 @@ const renderRepoCard = (repo, options = {}) => {
       label: i18n.t("repocard.prs-reviewed"),
       value: totalPRsReviewed,
       id: "prs_reviewed",
-      link: `https://github.com/search?q=${repoFilter}reviewed-by%3A${username}+-author%3A${username}&amp;type=pullrequests`,
+      link: `https://github.com/search?q=${repoFilter}reviewed-by%3A${encodedUsername}+-author%3A${encodedUsername}&amp;type=pullrequests`,
     };
   }
   if (show.includes("issues_authored")) {
@@ -153,7 +154,7 @@ const renderRepoCard = (repo, options = {}) => {
       label: i18n.t("repocard.issues-authored"),
       value: totalIssuesAuthored,
       id: "issues_authored",
-      link: `https://github.com/search?q=${repoFilter}author%3A${username}&amp;type=issues`,
+      link: `https://github.com/search?q=${repoFilter}author%3A${encodedUsername}&amp;type=issues`,
     };
   }
   if (show.includes("issues_commented")) {
@@ -162,7 +163,7 @@ const renderRepoCard = (repo, options = {}) => {
       label: i18n.t("repocard.issues-commented"),
       value: totalIssuesCommented,
       id: "issues_commented",
-      link: `https://github.com/search?q=${repoFilter}commenter%3A${username}+-author%3A${username}&amp;type=issues`,
+      link: `https://github.com/search?q=${repoFilter}commenter%3A${encodedUsername}+-author%3A${encodedUsername}&amp;type=issues`,
     };
   }
 

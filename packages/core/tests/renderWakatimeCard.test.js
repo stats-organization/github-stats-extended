@@ -102,7 +102,7 @@ describe("test wakatime API", () => {
 
     expect(result.status).toBe("error - permanent");
     expect(result.content).toContain(
-      `Invalid color input for parameter "title_color"`,
+      `Invalid color input for parameter &#34;title_color&#34;`,
     );
   });
 });

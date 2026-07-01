@@ -435,13 +435,14 @@ const renderStatsCard = (
   }
 
   let repoFilter = encodeURIComponent(buildSearchFilter(repo, owner));
+  const encodedUsername = encodeURIComponent(username);
   if (show.includes("prs_authored")) {
     STATS.prs_authored = {
       icon: icons.prs,
       label: i18n.t("statcard.prs-authored"),
       value: totalPRsAuthored,
       id: "prs_authored",
-      link: `https://github.com/search?q=${repoFilter}author%3A${username}&amp;type=pullrequests`,
+      link: `https://github.com/search?q=${repoFilter}author%3A${encodedUsername}&amp;type=pullrequests`,
     };
   }
   if (show.includes("prs_commented")) {
@@ -450,7 +451,7 @@ const renderStatsCard = (
       label: i18n.t("statcard.prs-commented"),
       value: totalPRsCommented,
       id: "prs_commented",
-      link: `https://github.com/search?q=${repoFilter}commenter%3A${username}+-author%3A${username}&amp;type=pullrequests`,
+      link: `https://github.com/search?q=${repoFilter}commenter%3A${encodedUsername}+-author%3A${encodedUsername}&amp;type=pullrequests`,
     };
   }
   if (show.includes("prs_reviewed")) {
@@ -459,7 +460,7 @@ const renderStatsCard = (
       label: i18n.t("statcard.prs-reviewed"),
       value: totalPRsReviewed,
       id: "prs_reviewed",
-      link: `https://github.com/search?q=${repoFilter}reviewed-by%3A${username}+-author%3A${username}&amp;type=pullrequests`,
+      link: `https://github.com/search?q=${repoFilter}reviewed-by%3A${encodedUsername}+-author%3A${encodedUsername}&amp;type=pullrequests`,
     };
   }
   if (show.includes("issues_authored")) {
@@ -468,7 +469,7 @@ const renderStatsCard = (
       label: i18n.t("statcard.issues-authored"),
       value: totalIssuesAuthored,
       id: "issues_authored",
-      link: `https://github.com/search?q=${repoFilter}author%3A${username}&amp;type=issues`,
+      link: `https://github.com/search?q=${repoFilter}author%3A${encodedUsername}&amp;type=issues`,
     };
   }
   if (show.includes("issues_commented")) {
@@ -477,7 +478,7 @@ const renderStatsCard = (
       label: i18n.t("statcard.issues-commented"),
       value: totalIssuesCommented,
       id: "issues_commented",
-      link: `https://github.com/search?q=${repoFilter}commenter%3A${username}+-author%3A${username}&amp;type=issues`,
+      link: `https://github.com/search?q=${repoFilter}commenter%3A${encodedUsername}+-author%3A${encodedUsername}&amp;type=issues`,
     };
   }
 

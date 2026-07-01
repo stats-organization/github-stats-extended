@@ -27,7 +27,7 @@ describe("test renderGistCard", () => {
     expect(header).toHaveTextContent("test");
     expect(header).not.toHaveTextContent("anuraghazra");
     expect(document.getElementsByClassName("description")[0]).toHaveTextContent(
-      "Small test repository with different Python programs.",
+      "Small <b>test</b> repository with different Python programs.",
     );
     expect(queryByTestId(document.body, "starsCount")).toHaveTextContent("163");
     expect(queryByTestId(document.body, "forksCount")).toHaveTextContent("19");
@@ -265,7 +265,7 @@ describe("test gist API", () => {
 
     expect(result.status).toBe("error - permanent");
     expect(result.content).toContain(
-      `Invalid color input for parameter "title_color"`,
+      `Invalid color input for parameter &#34;title_color&#34;`,
     );
   });
 });

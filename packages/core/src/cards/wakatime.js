@@ -1,6 +1,7 @@
 import { Card } from "../common/Card.js";
 import { I18n } from "../common/I18n.js";
-import { getCardColors } from "../common/color.js";
+import { getCardColors, isValidHexColor } from "../common/color.js";
+import { encodeHTML } from "../common/html.js";
 import languageColors from "../common/languageColors.json" with { type: "json" };
 import { clampValue, lowercaseTrim } from "../common/ops.js";
 import { createProgressNode, flexLayout } from "../common/render.js";
@@ -24,8 +25,12 @@ const TOTAL_TEXT_WIDTH = 275;
  * @returns {string} No coding activity SVG node string.
  */
 const noCodingActivityNode = ({ color, text }) => {
+  if (!isValidHexColor(color, true)) {
+    throw new Error(`Invalid text color: ${color ?? "<empty>"}`);
+  }
+
   return `
-    <text x="25" y="11" class="stat bold" fill="${color}">${text}</text>
+    <text x="25" y="11" class="stat bold" fill="${color}">${encodeHTML(text)}</text>
   `;
 };
 
@@ -58,6 +63,13 @@ const formatLanguageValue = ({ display_format, lang }) => {
  * @returns {string} The compact layout language SVG node.
  */
 const createCompactLangNode = ({ lang, x, y, display_format }) => {
+  if (!Number.isFinite(x)) {
+    throw new Error(`Invalid x: ${x ?? "<empty>"}`);
+  }
+  if (!Number.isFinite(y)) {
+    throw new Error(`Invalid y: ${y ?? "<empty>"}`);
+  }
+
   // @ts-ignore
   const color = languageColors[lang.name] || "#858585";
   const value = formatLanguageValue({ display_format, lang });
@@ -66,7 +78,7 @@ const createCompactLangNode = ({ lang, x, y, display_format }) => {
     <g transform="translate(${x}, ${y})">
       <circle cx="5" cy="6" r="5" fill="${color}" />
       <text data-testid="lang-name" x="15" y="10" class='lang-name'>
-        ${lang.name} - ${value}
+        ${encodeHTML(lang.name)} - ${encodeHTML(value)}
       </text>
     </g>
   `;
@@ -125,6 +137,15 @@ const createTextNode = ({
   progressBarBackgroundColor,
   progressBarWidth,
 }) => {
+  if (!Number.isFinite(index)) {
+    throw new Error(`Invalid index: ${index ?? "<empty>"}`);
+  }
+  if (!Number.isFinite(progressBarWidth)) {
+    throw new Error(
+      `Invalid progressBarWidth: ${progressBarWidth ?? "<empty>"}`,
+    );
+  }
+
   const staggerDelay = (index + 3) * 150;
   const cardProgress = hideProgress
     ? null
@@ -142,12 +163,12 @@ const createTextNode = ({
 
   return `
     <g class="stagger" style="animation-delay: ${staggerDelay}ms" transform="translate(25, 0)">
-      <text class="stat bold" y="12.5" data-testid="${id}">${label}:</text>
+      <text class="stat bold" y="12.5" data-testid="${encodeHTML(id)}">${encodeHTML(label)}:</text>
       <text
         class="stat"
         x="${hideProgress ? HIDDEN_PROGRESSBAR_PADDING : PROGRESSBAR_PADDING + progressBarWidth}"
         y="12.5"
-      >${value}</text>
+      >${encodeHTML(value)}</text>
       ${cardProgress}
     </g>
   `;
@@ -179,11 +200,15 @@ const recalculatePercentages = (languages) => {
  * @param {string} colors.textColor The text color.
  * @returns {string} Card CSS styles.
  */
-const getStyles = ({
+const getStyles = function ({
   // eslint-disable-next-line no-unused-vars
   titleColor,
   textColor,
-}) => {
+}) {
+  if (!isValidHexColor(textColor, true)) {
+    throw new Error(`Invalid text color: ${textColor ?? "<empty>"}`);
+  }
+
   return `
     .stat {
       font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: ${textColor};

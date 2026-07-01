@@ -1,7 +1,12 @@
 import { Card } from "../common/Card.js";
 import { I18n } from "../common/I18n.js";
-import { fallbackColor, getCardColors } from "../common/color.js";
+import {
+  fallbackColor,
+  getCardColors,
+  isValidHexColor,
+} from "../common/color.js";
 import { formatBytes } from "../common/fmt.js";
+import { encodeHTML } from "../common/html.js";
 import { chunkArray, clampValue, lowercaseTrim } from "../common/ops.js";
 import {
   createProgressNode,
@@ -244,8 +249,8 @@ const createProgressTextNode = ({
 
   return `
     <g class="stagger" style="animation-delay: ${staggerDelay}ms">
-      <text data-testid="lang-name" x="2" y="15" class="lang-name">${name}</text>
-      ${hideValues ? "" : `<text x="${progressTextX}" y="34" class="lang-name">${displayValue}</text>`}
+      <text data-testid="lang-name" x="2" y="15" class="lang-name">${encodeHTML(name)}</text>
+      ${hideValues ? "" : `<text x="${progressTextX}" y="34" class="lang-name">${encodeHTML(displayValue)}</text>`}
       ${createProgressNode({
         x: 0,
         y: 25,
@@ -285,11 +290,15 @@ const createCompactLangNode = ({
   const staggerDelay = (index + 3) * 150;
   const color = lang.color || "#858585";
 
+  if (!isValidHexColor(color, true)) {
+    throw new Error(`Invalid language color: ${color ?? "<empty>"}`);
+  }
+
   return `
     <g class="stagger" style="animation-delay: ${staggerDelay}ms">
       <circle cx="5" cy="6" r="5" fill="${color}" />
       <text data-testid="lang-name" x="15" y="10" class='lang-name'>
-        ${lang.name} ${hideProgress || hideValues ? "" : displayValue}
+        ${encodeHTML(lang.name)} ${hideProgress || hideValues ? "" : encodeHTML(displayValue)}
       </text>
     </g>
   `;
@@ -439,6 +448,10 @@ const renderCompactLayout = (
   let progressOffset = 0;
   const compactProgressBar = langs
     .map((lang) => {
+      if (!isValidHexColor(lang.color, true)) {
+        throw new Error(`Invalid language color: ${lang.color ?? "<empty>"}`);
+      }
+
       const percentage = parseFloat(
         ((lang.size / totalLanguageSize) * offsetWidth).toFixed(2),
       );
@@ -514,13 +527,17 @@ const renderDonutVerticalLayout = (
 
   // Generate each donut vertical chart part
   for (const lang of langs) {
+    if (!isValidHexColor(lang.color, true)) {
+      throw new Error(`Invalid language color: ${lang.color ?? "<empty>"}`);
+    }
+
     const percentage = (lang.size / totalLanguageSize) * 100;
     const circleLength = totalCircleLength * (percentage / 100);
     const delay = startDelayCoefficient * 100;
 
     circles.push(`
       <g class="stagger" style="animation-delay: ${delay}ms">
-        <circle 
+        <circle
           cx="150"
           cy="100"
           r="${radius}"
@@ -589,6 +606,10 @@ const renderPieLayout = (langs, totalLanguageSize, statsFormat, hideValues) => {
 
   // Generate each pie chart part
   for (const lang of langs) {
+    if (!isValidHexColor(lang.color, true)) {
+      throw new Error(`Invalid language color: ${lang.color ?? "<empty>"}`);
+    }
+
     if (langs.length === 1) {
       paths.push(`
         <circle
@@ -716,12 +737,21 @@ const renderDonutLayout = (
   statsFormat,
   hideValues,
 ) => {
+  if (!Number.isFinite(width)) {
+    throw new Error(`Invalid width: ${width ?? "<empty>"}`);
+  }
+
   const centerX = width / 3;
   const centerY = width / 3;
   const radius = centerX - 60;
   const strokeWidth = 12;
 
-  const colors = langs.map((lang) => lang.color);
+  const colors = langs.map((lang) => {
+    if (!isValidHexColor(lang.color, true)) {
+      throw new Error(`Invalid language color: ${lang.color ?? "<empty>"}`);
+    }
+    return lang.color;
+  });
   const langsPercents = langs.map((lang) =>
     parseFloat(((lang.size / totalLanguageSize) * 100).toFixed(2)),
   );
@@ -783,10 +813,14 @@ const renderDonutLayout = (
  * @returns {string} No languages data SVG node string.
  */
 const noLanguagesDataNode = ({ color, text, layout }) => {
+  if (!isValidHexColor(color, true)) {
+    throw new Error(`Invalid text color: ${color ?? "<empty>"}`);
+  }
+
   return `
     <text x="${
       layout === "pie" || layout === "donut-vertical" ? CARD_PADDING : 0
-    }" y="11" class="stat bold" fill="${color}">${text}</text>
+    }" y="11" class="stat bold" fill="${color}">${encodeHTML(text)}</text>
   `;
 };
 
