@@ -7,14 +7,24 @@ import { clampValue } from "./ops.js";
  * Auto layout utility, allows us to layout things vertically or horizontally with
  * proper gaping.
  *
- * @param {object} props Function properties.
- * @param {string[]} props.items Array of items to layout.
- * @param {number} props.gap Gap between items.
- * @param {"column" | "row"=} props.direction Direction to layout items.
- * @param {number[]=} props.sizes Array of sizes for each item.
- * @returns {string[]} Array of items with proper layout.
+ * @param props Function properties.
+ * @param props.items Array of items to layout.
+ * @param props.gap Gap between items.
+ * @param props.direction Direction to layout items.
+ * @param props.sizes Array of sizes for each item.
+ * @returns Array of items with proper layout.
  */
-const flexLayout = ({ items, gap, direction, sizes = [] }) => {
+const flexLayout = ({
+  items,
+  gap,
+  direction,
+  sizes = [],
+}: {
+  items: Array<string>;
+  gap: number;
+  direction?: "column" | "row";
+  sizes?: Array<number>;
+}): Array<string> => {
   let lastSize = 0;
   // filter() for filtering out empty strings
   return items.filter(Boolean).map((item, i) => {
@@ -31,11 +41,11 @@ const flexLayout = ({ items, gap, direction, sizes = [] }) => {
 /**
  * Creates a node to display the primary programming language of the repository/gist.
  *
- * @param {string} langName Language name.
- * @param {string} langColor Language color.
- * @returns {string} Language display SVG object.
+ * @param langName Language name.
+ * @param langColor Language color.
+ * @returns Language display SVG object.
  */
-const createLanguageNode = (langName, langColor) => {
+const createLanguageNode = (langName: string, langColor: string): string => {
   return `
     <g data-testid="primary-lang">
       <circle data-testid="lang-color" cx="0" cy="-5" r="6" fill="${langColor}" />
@@ -47,15 +57,15 @@ const createLanguageNode = (langName, langColor) => {
 /**
  * Create a node to indicate progress in percentage along a horizontal line.
  *
- * @param {Object} params Object that contains the createProgressNode parameters.
- * @param {number} params.x X-axis position.
- * @param {number} params.y Y-axis position.
- * @param {number} params.width Width of progress bar.
- * @param {string} params.color Progress color.
- * @param {number} params.progress Progress value.
- * @param {string} params.progressBarBackgroundColor Progress bar bg color.
- * @param {number} params.delay Delay before animation starts.
- * @returns {string} Progress node.
+ * @param params Object that contains the createProgressNode parameters.
+ * @param params.x X-axis position.
+ * @param params.y Y-axis position.
+ * @param params.width Width of progress bar.
+ * @param params.color Progress color.
+ * @param params.progress Progress value.
+ * @param params.progressBarBackgroundColor Progress bar bg color.
+ * @param params.delay Delay before animation starts.
+ * @returns Progress node.
  */
 const createProgressNode = ({
   x,
@@ -65,7 +75,15 @@ const createProgressNode = ({
   progress,
   progressBarBackgroundColor,
   delay,
-}) => {
+}: {
+  x: number;
+  y: number;
+  width: number;
+  color: string;
+  progress: number;
+  progressBarBackgroundColor: string;
+  delay: number;
+}): string => {
   const progressPercentage = clampValue(progress, 2, 100);
 
   return `
@@ -89,16 +107,16 @@ const createProgressNode = ({
  * native, font-aware wrapping. Content overflowing `lineCount` lines is
  * clipped (with an ellipsis on the last visible line) by CSS line-clamp.
  *
- * @param {object} props Function properties.
- * @param {string} props.text Text to render (will be HTML-encoded).
- * @param {number} props.x X position of the foreignObject.
- * @param {number} props.y Y position of the foreignObject.
- * @param {number} props.width Width of the wrap box.
- * @param {number} props.height Height of the wrap box.
- * @param {number} props.lineCount Maximum number of lines to display.
- * @param {string} props.className CSS class applied to the inner element.
- * @param {string=} props.testId Optional test id for the inner element.
- * @returns {string} foreignObject SVG node.
+ * @param props Function properties.
+ * @param props.text Text to render (will be HTML-encoded).
+ * @param props.x X position of the foreignObject.
+ * @param props.y Y position of the foreignObject.
+ * @param props.width Width of the wrap box.
+ * @param props.height Height of the wrap box.
+ * @param props.lineCount Maximum number of lines to display.
+ * @param props.className CSS class applied to the inner element.
+ * @param props.testId Optional test id for the inner element.
+ * @returns foreignObject SVG node.
  */
 const wrappedTextNode = ({
   text,
@@ -109,7 +127,16 @@ const wrappedTextNode = ({
   lineCount,
   className,
   testId,
-}) => {
+}: {
+  text: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  lineCount: number;
+  className: string;
+  testId?: string;
+}): string => {
   const testIdAttr = testId ? ` data-testid="${testId}"` : "";
   return `
     <foreignObject x="${x}" y="${y}" width="${width}" height="${height}">
@@ -126,10 +153,10 @@ const wrappedTextNode = ({
  * browser handles wrapping and the line count is taken from the `--lines`
  * custom property set on the element.
  *
- * @param {string} color Text color (CSS `color` property).
- * @returns {string} CSS rules block (without the surrounding selector).
+ * @param color Text color (CSS `color` property).
+ * @returns CSS rules block (without the surrounding selector).
  */
-const wrappedTextStyles = (color) => `
+const wrappedTextStyles = (color: string): string => `
     color: ${color};
     margin: 0;
     line-height: 1.2;
@@ -147,13 +174,18 @@ const wrappedTextStyles = (color) => `
 /**
  * Creates an icon with label to display repository/gist stats like forks, stars, etc.
  *
- * @param {string} icon The icon to display.
- * @param {number|string} label The label to display.
- * @param {string} testid The testid to assign to the label.
- * @param {number} iconSize The size of the icon.
- * @returns {string} Icon with label SVG object.
+ * @param icon The icon to display.
+ * @param label The label to display.
+ * @param testid The testid to assign to the label.
+ * @param iconSize The size of the icon.
+ * @returns Icon with label SVG object.
  */
-const iconWithLabel = (icon, label, testid, iconSize) => {
+const iconWithLabel = (
+  icon: string,
+  label: number | string,
+  testid: string,
+  iconSize: number,
+): string => {
   if (typeof label === "number" && label <= 0) {
     return "";
   }
@@ -184,23 +216,34 @@ const UPSTREAM_API_ERRORS = [
 /**
  * Renders error message on the card.
  *
- * @param {object} args Function arguments.
- * @param {string} args.message Main error message.
- * @param {string} [args.secondaryMessage=""] The secondary error message.
- * @param {object} [args.renderOptions={}] Render options.
- * @param {string=} args.renderOptions.title_color Card title color.
- * @param {string=} args.renderOptions.text_color Card text color.
- * @param {string=} args.renderOptions.bg_color Card background color.
- * @param {string=} args.renderOptions.border_color Card border color.
- * @param {Parameters<typeof getCardColors>[0]["theme"]=} args.renderOptions.theme Card theme.
- * @param {boolean=} args.renderOptions.show_repo_link Whether to show repo link or not.
- * @returns {string} The SVG markup.
+ * @param args Function arguments.
+ * @param args.message Main error message.
+ * @param args.secondaryMessage The secondary error message.
+ * @param args.renderOptions Render options.
+ * @param args.renderOptions.title_color Card title color.
+ * @param args.renderOptions.text_color Card text color.
+ * @param args.renderOptions.bg_color Card background color.
+ * @param args.renderOptions.border_color Card border color.
+ * @param args.renderOptions.theme Card theme.
+ * @param args.renderOptions.show_repo_link Whether to show repo link or not.
+ * @returns The SVG markup.
  */
 const renderError = ({
   message,
   secondaryMessage = "",
   renderOptions = {},
-}) => {
+}: {
+  message: string;
+  secondaryMessage?: string;
+  renderOptions?: {
+    title_color?: string;
+    text_color?: string;
+    bg_color?: string;
+    border_color?: string;
+    theme?: string;
+    show_repo_link?: boolean;
+  };
+}): string => {
   const {
     title_color,
     text_color,
@@ -222,7 +265,7 @@ const renderError = ({
   });
 
   return `
-    <svg width="${ERROR_CARD_LENGTH}"  height="120" viewBox="0 0 ${ERROR_CARD_LENGTH} 120" fill="${bgColor}" xmlns="http://www.w3.org/2000/svg">
+    <svg width="${ERROR_CARD_LENGTH}"  height="120" viewBox="0 0 ${ERROR_CARD_LENGTH} 120" fill="${String(bgColor)}" xmlns="http://www.w3.org/2000/svg">
     <style>
     .text { font: 600 16px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${titleColor} }
     .small { font: 600 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${textColor} }
@@ -230,7 +273,7 @@ const renderError = ({
     </style>
     <rect x="0.5" y="0.5" width="${
       ERROR_CARD_LENGTH - 1
-    }" height="99%" rx="4.5" fill="${bgColor}" stroke="${borderColor}"/>
+    }" height="99%" rx="4.5" fill="${String(bgColor)}" stroke="${borderColor}"/>
     <text x="25" y="45" class="text">Something went wrong!${
       UPSTREAM_API_ERRORS.includes(secondaryMessage) || !show_repo_link
         ? ""
@@ -248,11 +291,11 @@ const renderError = ({
  * Retrieve text length based on Segoe UI font.
  *
  * @see https://stackoverflow.com/a/48172630/10629172
- * @param {string} str String to measure.
- * @param {number} fontSize Font size.
- * @returns {number} Text length.
+ * @param str String to measure.
+ * @param fontSize Font size.
+ * @returns Text length.
  */
-const measureText = (str, fontSize = 10) => {
+const measureText = (str: string, fontSize = 10): number => {
   // prettier-ignore
   const widths = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -304,7 +347,7 @@ const measureText = (str, fontSize = 10) => {
           return 1;
         }
         if (c.charCodeAt(0) < widths.length) {
-          return widths[c.charCodeAt(0)];
+          return widths[c.charCodeAt(0)] ?? avg;
         } else {
           return avg;
         }
@@ -320,12 +363,16 @@ const measureText = (str, fontSize = 10) => {
  * The browser still does the real wrap inside the foreignObject; this is only
  * used to size the SVG.
  *
- * @param {string} text Text to split.
- * @param {number} fontSize Font size in px (matches `measureText`).
- * @param {number} maxWidth Available wrap width in px.
- * @returns {string[]} Estimated wrapped lines.
+ * @param text Text to split.
+ * @param fontSize Font size in px (matches `measureText`).
+ * @param maxWidth Available wrap width in px.
+ * @returns Estimated wrapped lines.
  */
-const splitWrappedText = (text, fontSize, maxWidth) => {
+const splitWrappedText = (
+  text: string,
+  fontSize: number,
+  maxWidth: number,
+): Array<string> => {
   if (!text) {
     return [];
   }
@@ -340,15 +387,15 @@ const splitWrappedText = (text, fontSize, maxWidth) => {
   // Korean Hangul (U+AC00–U+D7AF) is intentionally NOT in the CJK range
   // because Korean wraps at word boundaries by default in HTML.
   // ASCII whitespace is collapsed to a single space per CSS `white-space: normal;`
-  text = text.replace(/[\t\n\r ]+/g, " ");
-  const tokens = text.match(
+  const normalizedText = text.replace(/[\t\n\r ]+/g, " ");
+  const tokens = normalizedText.match(
     /\s|[\u3000-\u9FFF\uFF00-\uFFEF]|[^\s\u3000-\u9FFF\uFF00-\uFFEF]+/g,
   );
   if (!tokens) {
     return [];
   }
 
-  const takeFittingSegment = (token, availableWidth) => {
+  const takeFittingSegment = (token: string, availableWidth: number) => {
     const characters = token.split("");
     let segment = "";
     let width = 0;
@@ -377,7 +424,7 @@ const splitWrappedText = (text, fontSize, maxWidth) => {
       if (currentWidth === 0) {
         continue;
       }
-      lines[lines.length - 1] += token;
+      lines[lines.length - 1] = (lines[lines.length - 1] ?? "") + token;
       currentWidth += measureText(token, fontSize);
       continue;
     }
@@ -387,7 +434,7 @@ const splitWrappedText = (text, fontSize, maxWidth) => {
     while (remaining) {
       const w = measureText(remaining, fontSize);
       if (currentWidth + w <= maxWidth) {
-        lines[lines.length - 1] += remaining;
+        lines[lines.length - 1] = (lines[lines.length - 1] ?? "") + remaining;
         currentWidth += w;
         break;
       }
@@ -400,7 +447,7 @@ const splitWrappedText = (text, fontSize, maxWidth) => {
 
       // An atom wider than the box wraps mid-glyph (overflow-wrap: anywhere).
       const { segment, width } = takeFittingSegment(remaining, maxWidth);
-      lines[lines.length - 1] += segment;
+      lines[lines.length - 1] = (lines[lines.length - 1] ?? "") + segment;
       currentWidth = width;
       remaining = remaining.slice(segment.length);
     }
@@ -413,13 +460,18 @@ const splitWrappedText = (text, fontSize, maxWidth) => {
  * Estimate how many lines a string will wrap to when laid out greedily at the
  * given font size inside a box of width `maxWidth`, capped at `maxLines`.
  *
- * @param {string} text Text to estimate.
- * @param {number} fontSize Font size in px (matches `measureText`).
- * @param {number} maxWidth Available wrap width in px.
- * @param {number} maxLines Cap on the returned line count.
- * @returns {number} Estimated line count, at least 1, at most `maxLines`.
+ * @param text Text to estimate.
+ * @param fontSize Font size in px (matches `measureText`).
+ * @param maxWidth Available wrap width in px.
+ * @param maxLines Cap on the returned line count.
+ * @returns Estimated line count, at least 1, at most `maxLines`.
  */
-const countWrappedLines = (text, fontSize, maxWidth, maxLines) => {
+const countWrappedLines = (
+  text: string,
+  fontSize: number,
+  maxWidth: number,
+  maxLines: number,
+): number => {
   return Math.min(
     Math.max(1, splitWrappedText(text, fontSize, maxWidth).length),
     maxLines,

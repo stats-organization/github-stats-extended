@@ -82,13 +82,13 @@ const getCardColors = ({
   ring_color,
   theme,
 }: {
-  title_color?: string;
-  text_color?: string;
-  icon_color?: string;
-  bg_color?: string;
-  border_color?: string;
-  ring_color?: string;
-  theme?: string;
+  title_color?: string | undefined;
+  text_color?: string | undefined;
+  icon_color?: string | undefined;
+  bg_color?: string | undefined;
+  border_color?: string | undefined;
+  ring_color?: string | undefined;
+  theme?: string | undefined;
 }): CardColors => {
   const defaultTheme = themes.default;
   const isThemeProvided = theme !== undefined && theme in themes;

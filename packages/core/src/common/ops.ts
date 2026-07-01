@@ -6,10 +6,10 @@ import { CustomError } from "./error.js";
 /**
  * Returns boolean if value is either "true" or "false" else the value as it is.
  *
- * @param {string | boolean} value The value to parse.
- * @returns {boolean | undefined } The parsed value.
+ * @param value The value to parse.
+ * @returns The parsed value.
  */
-const parseBoolean = (value) => {
+const parseBoolean = (value: string | boolean): boolean | undefined => {
   if (typeof value === "boolean") {
     return value;
   }
@@ -27,10 +27,10 @@ const parseBoolean = (value) => {
 /**
  * Parse string to array of strings.
  *
- * @param {string} str The string to parse.
- * @returns {string[]} The array of strings.
+ * @param str The string to parse.
+ * @returns The array of strings.
  */
-const parseArray = (str) => {
+const parseArray = (str: string): Array<string> => {
   if (!str) {
     return [];
   }
@@ -40,47 +40,44 @@ const parseArray = (str) => {
 /**
  * Clamp the given number between the given range.
  *
- * @param {number} number The number to clamp.
- * @param {number} min The minimum value.
- * @param {number} max The maximum value.
- * @returns {number} The clamped number.
+ * @param number The number to clamp.
+ * @param min The minimum value.
+ * @param max The maximum value.
+ * @returns The clamped number.
  */
-const clampValue = (number, min, max) => {
-  // @ts-ignore
-  if (Number.isNaN(parseInt(number, 10))) {
+const clampValue = (
+  number: string | number,
+  min: number,
+  max: number,
+): number => {
+  if (Number.isNaN(parseInt(String(number), 10))) {
     return min;
   }
-  return Math.max(min, Math.min(number, max));
+  return Math.max(min, Math.min(Number(number), max));
 };
 
 /**
  * Lowercase and trim string.
  *
- * @param {string} name String to lowercase and trim.
- * @returns {string} Lowercased and trimmed string.
+ * @param name String to lowercase and trim.
+ * @returns Lowercased and trimmed string.
  */
-const lowercaseTrim = (name) => name.toLowerCase().trim();
+const lowercaseTrim = (name: string): string => name.toLowerCase().trim();
 
 /**
  * Split array of languages in two columns.
  *
  * @template T Language object.
- * @param {Array<T>} arr Array of languages.
- * @param {number} perChunk Number of languages per column.
- * @returns {Array<T>} Array of languages split in two columns.
+ * @param arr Array of languages.
+ * @param perChunk Number of languages per column.
+ * @returns Array of languages split in two columns.
  */
-const chunkArray = (arr, perChunk) => {
-  return arr.reduce((resultArray, item, index) => {
+const chunkArray = <T>(arr: Array<T>, perChunk: number): Array<Array<T>> => {
+  return arr.reduce<Array<Array<T>>>((resultArray, item, index) => {
     const chunkIndex = Math.floor(index / perChunk);
-
-    if (!resultArray[chunkIndex]) {
-      // @ts-ignore
-      resultArray[chunkIndex] = []; // start a new chunk
-    }
-
-    // @ts-ignore
-    resultArray[chunkIndex].push(item);
-
+    const chunk = resultArray[chunkIndex] ?? [];
+    chunk.push(item);
+    resultArray[chunkIndex] = chunk;
     return resultArray;
   }, []);
 };
@@ -88,10 +85,10 @@ const chunkArray = (arr, perChunk) => {
 /**
  * Parse emoji from string.
  *
- * @param {string} str String to parse emoji from.
- * @returns {string} String with emoji parsed.
+ * @param str String to parse emoji from.
+ * @returns String with emoji parsed.
  */
-const parseEmojis = (str) => {
+const parseEmojis = (str: string): string => {
   if (!str) {
     throw new Error("[parseEmoji]: str argument not provided");
   }
@@ -103,11 +100,11 @@ const parseEmojis = (str) => {
 /**
  * Get diff in minutes between two dates.
  *
- * @param {Date} d1 First date.
- * @param {Date} d2 Second date.
- * @returns {number} Number of minutes between the two dates.
+ * @param d1 First date.
+ * @param d2 Second date.
+ * @returns Number of minutes between the two dates.
  */
-const dateDiff = (d1, d2) => {
+const dateDiff = (d1: Date, d2: Date): number => {
   const date1 = new Date(d1);
   const date2 = new Date(d2);
   const diff = date1.getTime() - date2.getTime();
@@ -117,40 +114,41 @@ const dateDiff = (d1, d2) => {
 /**
  * Parse owner affiliations.
  *
- * @param {string[]} affiliations input affiliations to be parsed.
- * @returns {string[]} Parsed affiliations.
+ * @param affiliations input affiliations to be parsed.
+ * @returns Parsed affiliations.
  *
  * @throws {CustomError} If affiliations contains invalid values.
  */
-const parseOwnerAffiliations = (affiliations) => {
+const parseOwnerAffiliations = (affiliations: Array<string>): Array<string> => {
   // Set default value for ownerAffiliations.
   // NOTE: Done here since parseArray() will always return an empty array even nothing
   //was specified.
-  affiliations =
-    affiliations && affiliations.length > 0
+  const normalized =
+    affiliations.length > 0
       ? affiliations.map((affiliation) => affiliation.toUpperCase())
       : ["OWNER"];
 
   // Check if ownerAffiliations contains valid values.
   if (
-    affiliations.some(
-      (affiliation) => !OWNER_AFFILIATIONS.includes(affiliation),
-    )
+    normalized.some((affiliation) => !OWNER_AFFILIATIONS.includes(affiliation))
   ) {
     throw new CustomError(
       "Invalid query parameter",
       CustomError.INVALID_AFFILIATION,
     );
   }
-  return affiliations;
+  return normalized;
 };
 
-const buildSearchFilter = (repos = [], owners = []) => {
-  let repoFilter =
+const buildSearchFilter = (
+  repos: Array<string> | string = [],
+  owners: Array<string> | string = [],
+): string => {
+  const repoFilter =
     Array.isArray(repos) && repos.length > 0
       ? repos.map((r) => `repo:${r} `).join("")
       : "";
-  let orgFilter =
+  const orgFilter =
     Array.isArray(owners) && owners.length > 0
       ? owners.map((o) => `owner:${o} `).join("")
       : "";
