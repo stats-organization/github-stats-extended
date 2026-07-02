@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
 import type { JSX, ReactNode } from "react";
+
+import { useDebouncedField } from "../../hooks/useDebouncedField";
 
 import { Section } from "./Section";
 
@@ -26,35 +27,11 @@ export function NumericSection({
   disabled = false,
   placeholder,
 }: NumericSectionProps): JSX.Element {
-  const [internalValue, setInternalValue] = useState(() => value?.toString());
-  const debounceTimeout = useRef<number | null>(null);
-
-  useEffect(() => {
-    // Debounce onValueChange
-    if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current);
-    }
-    if (internalValue === value) {
-      return undefined;
-    }
-
-    debounceTimeout.current = window.setTimeout(() => {
-      const maybeNumber = internalValue && parseInt(internalValue, 10);
-      if (typeof maybeNumber !== "number" || Number.isNaN(maybeNumber)) {
-        onValueChange(undefined);
-      } else {
-        onValueChange(maybeNumber);
-      }
-    }, 700);
-
-    return () => {
-      clearTimeout(debounceTimeout.current as number);
-    };
-  }, [internalValue, onValueChange, value]);
-
-  useEffect(() => {
-    setInternalValue(value?.toString());
-  }, [value]);
+  const { inputValue, setInputValue } = useDebouncedField({
+    value,
+    onValueChange,
+    type: "number",
+  });
 
   return (
     <Section title={title}>
@@ -62,9 +39,9 @@ export function NumericSection({
       <input
         type="number"
         className="border border-base-content/20 rounded px-2 py-1 mt-2 w-1/4 bg-base-100"
-        value={internalValue ?? ""}
+        value={inputValue}
         onChange={(e) => {
-          setInternalValue(e.target.value);
+          setInputValue(e.target.value);
         }}
         min={min}
         max={max}

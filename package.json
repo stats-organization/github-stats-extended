@@ -4,6 +4,7 @@
   "type": "module",
   "packageManager": "pnpm@10.33.2+sha512.a90faf6feeab71ad6c6e57f94e0fe1a12f5dcc22cd754db40ae9593eb6a3e0b6b12e3540218bb37ae083404b1f2ce6db2a4121e979829b4aff94b99f49da1cf8",
   "devDependencies": {
+    "@eslint-react/eslint-plugin": "5.9.2",
     "@eslint/compat": "2.1.0",
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.60.0",
@@ -13,8 +14,6 @@
     "eslint-import-resolver-typescript": "4.4.5",
     "eslint-plugin-import-x": "4.16.2",
     "eslint-plugin-jsdoc": "63.0.2",
-    "eslint-plugin-react": "7.37.5",
-    "eslint-plugin-react-hooks": "7.1.1",
     "globals": "17.6.0",
     "husky": "9.1.7",
     "knip": "6.16.1",
