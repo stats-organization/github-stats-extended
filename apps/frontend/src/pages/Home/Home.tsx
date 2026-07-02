@@ -56,9 +56,14 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
 
   const [selectedCard, setSelectedCard] = useState<CardType>(CardType.STATS);
 
-  useEffect(() => {
+  // Reset the selected user to the resolved account id when it changes,
+  // adjusting state during render rather than in an effect:
+  // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+  const [prevUserId, setPrevUserId] = useState(userId);
+  if (userId !== prevUserId) {
+    setPrevUserId(userId);
     setSelectedUserId(userId);
-  }, [userId]);
+  }
 
   // for stage three
   const [selectedStatsRank, setSelectedStatsRank] =
@@ -232,6 +237,46 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
     );
   }
 
+  const cardFilename = ((): string => {
+    switch (selectedCard) {
+      case CardType.STATS:
+      case CardType.TOP_LANGS:
+        return `${selectedUserId}_card`;
+      case CardType.PIN:
+        return `${repo}_card`;
+      case CardType.GIST:
+        return `gist_card`;
+      case CardType.WAKATIME:
+        return `${wakatimeUser}_card`;
+      default:
+        selectedCard satisfies never;
+        return "";
+    }
+  })();
+
+  const cardLink = ((): string => {
+    switch (selectedCard) {
+      case CardType.STATS:
+      case CardType.TOP_LANGS:
+        return `https://${HOST}/api${themeSuffix}`;
+
+      case CardType.PIN: {
+        let myRepo = repo;
+        if (!myRepo.includes("/")) {
+          myRepo = `${userId}/${myRepo}`;
+        }
+        return `https://github.com/${myRepo}`;
+      }
+      case CardType.GIST:
+        return gistUrl;
+      case CardType.WAKATIME:
+        return `https://wakatime.com/@${wakatimeUser}`;
+      default:
+        selectedCard satisfies never;
+        return "";
+    }
+  })();
+
   return (
     <div
       ref={contentSectionRef}
@@ -350,44 +395,8 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
           )}
           {stage === 4 && (
             <DisplayStage
-              filename={(() => {
-                switch (selectedCard) {
-                  case CardType.STATS:
-                  case CardType.TOP_LANGS:
-                    return `${selectedUserId}_card`;
-                  case CardType.PIN:
-                    return `${repo}_card`;
-                  case CardType.GIST:
-                    return `gist_card`;
-                  case CardType.WAKATIME:
-                    return `${wakatimeUser}_card`;
-                  default:
-                    selectedCard satisfies never;
-                    return "";
-                }
-              })()}
-              link={(() => {
-                switch (selectedCard) {
-                  case CardType.STATS:
-                  case CardType.TOP_LANGS:
-                    return `https://${HOST}/api${themeSuffix}`;
-
-                  case CardType.PIN: {
-                    let myRepo = repo;
-                    if (!myRepo.includes("/")) {
-                      myRepo = `${userId}/${myRepo}`;
-                    }
-                    return `https://github.com/${myRepo}`;
-                  }
-                  case CardType.GIST:
-                    return gistUrl;
-                  case CardType.WAKATIME:
-                    return `https://wakatime.com/@${wakatimeUser}`;
-                  default:
-                    selectedCard satisfies never;
-                    return "";
-                }
-              })()}
+              filename={cardFilename}
+              link={cardLink}
               theme={theme}
               themeSuffix={themeSuffix}
               guestHint={
