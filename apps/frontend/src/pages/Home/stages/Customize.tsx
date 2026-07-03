@@ -1,7 +1,6 @@
-import type { JSX, default as React } from "react";
+import type { JSX } from "react";
 
 import { CardImage } from "../../../components/Card/CardImage";
-import type { SelectOption } from "../../../components/Generic/Select";
 import { CheckboxSection } from "../../../components/Home/CheckboxSection";
 import { LanguagesLayoutSection } from "../../../components/Home/LanguagesLayoutSection";
 import { NumericSection } from "../../../components/Home/NumericSection";
@@ -18,95 +17,65 @@ import { CardType } from "../../../models/CardType";
 import type { CardUrlBuilder } from "../../../models/CardUrl";
 import type { StageIndex } from "../../../models/Stage";
 import { useIsAuthenticated } from "../../../redux/selectors/userSelectors";
+import type { CardOptions } from "../cardOptions";
 
-type Updater<T> = React.Dispatch<React.SetStateAction<T>>;
+/**
+ * Extract the trailing path segments from pasted text, so pasting a full
+ * GitHub URL yields just the username (1 segment), owner/repo (2), or Gist id (1).
+ */
+function pastedPathTail(text: string, segments: number): string {
+  let value = text;
+  if (value.endsWith("/")) {
+    value = value.slice(0, -1);
+  }
+  const parts = value.split("/");
+  if (parts.length > segments) {
+    value = parts.slice(-segments).join("/");
+  }
+  return value;
+}
 
-/** @todo todo consider using React context API to avoid prop drilling */
 interface CustomizeStageProps {
   selectedCard: CardType;
-  selectedStatsRank: SelectOption;
-  setSelectedStatsRank: Updater<SelectOption>;
-  selectedLanguagesLayout: SelectOption;
-  setSelectedLanguagesLayout: Updater<SelectOption>;
-  selectedWakatimeLayout: SelectOption;
-  setSelectedWakatimeLayout: Updater<SelectOption>;
-  selectedUserId: string;
-  setSelectedUserId: Updater<string>;
-  repo: string;
-  setRepo: Updater<string>;
-  gist: string;
-  setGist: Updater<string>;
-  wakatimeUser: string;
-  setWakatimeUser: Updater<string>;
-  showTitle: boolean;
-  setShowTitle: Updater<boolean>;
-  descriptionLines: number | undefined;
-  setDescriptionLines: Updater<number | undefined>;
-  showOwner: boolean;
-  setShowOwner: Updater<boolean>;
-  customTitle: string;
-  setCustomTitle: Updater<string>;
-  langsCount: number | undefined;
-  setLangsCount: Updater<number | undefined>;
-  hideValues: boolean;
-  setHideValues: Updater<boolean>;
-  showIcons: boolean;
-  setShowIcons: Updater<boolean>;
-  showAllStats: boolean;
-  setShowAllStats: Updater<boolean>;
-  includeAllCommits: boolean;
-  setIncludeAllCommits: Updater<boolean>;
-  enableAnimations: boolean;
-  setEnableAnimations: Updater<boolean>;
-  usePercent: boolean;
-  setUsePercent: Updater<boolean>;
+  options: CardOptions;
+  onOptionChange: <K extends keyof CardOptions>(
+    key: K,
+    value: CardOptions[K],
+  ) => void;
   card: CardUrlBuilder;
   setStage: (stageIndex: StageIndex) => void;
 }
 
 export function CustomizeStage({
   selectedCard,
-  selectedStatsRank,
-  setSelectedStatsRank,
-  selectedLanguagesLayout,
-  setSelectedLanguagesLayout,
-  selectedWakatimeLayout,
-  setSelectedWakatimeLayout,
-  selectedUserId,
-  setSelectedUserId,
-  repo,
-  setRepo,
-  gist,
-  setGist,
-  wakatimeUser,
-  setWakatimeUser,
-  showTitle,
-  setShowTitle,
-  showOwner,
-  setShowOwner,
-  descriptionLines,
-  setDescriptionLines,
-  customTitle,
-  setCustomTitle,
-  langsCount,
-  setLangsCount,
-  hideValues,
-  setHideValues,
-  showIcons,
-  setShowIcons,
-  showAllStats,
-  setShowAllStats,
-  includeAllCommits,
-  setIncludeAllCommits,
-  enableAnimations,
-  setEnableAnimations,
-  usePercent,
-  setUsePercent,
+  options,
+  onOptionChange,
   card,
   setStage,
 }: CustomizeStageProps): JSX.Element {
   const cardType = selectedCard;
   const isAuthenticated = useIsAuthenticated();
+
+  const {
+    selectedUserId,
+    repo,
+    gist,
+    wakatimeUser,
+    selectedStatsRank,
+    selectedLanguagesLayout,
+    selectedWakatimeLayout,
+    showTitle,
+    showOwner,
+    descriptionLines,
+    customTitle,
+    langsCount,
+    hideValues,
+    showAllStats,
+    showIcons,
+    includeAllCommits,
+    enableAnimations,
+    usePercent,
+  } = options;
 
   return (
     <div className="w-full flex flex-wrap">
@@ -138,19 +107,16 @@ export function CustomizeStage({
             }
             placeholder={`e.g. "${DEMO_USER}"`}
             value={selectedUserId}
-            onValueChange={setSelectedUserId}
+            onValueChange={(value) => {
+              onOptionChange("selectedUserId", value);
+            }}
             onPaste={(e) => {
               e.preventDefault();
-              let newValue = e.clipboardData.getData("text");
               // if the user pasted a full GitHub URL, extract username
-              if (newValue.endsWith("/")) {
-                newValue = newValue.slice(0, -1);
-              }
-              const parts = newValue.split("/");
-              if (parts.length > 1) {
-                newValue = parts.slice(-1).join("/");
-              }
-              setSelectedUserId(newValue);
+              onOptionChange(
+                "selectedUserId",
+                pastedPathTail(e.clipboardData.getData("text"), 1),
+              );
             }}
             disabled={!isAuthenticated}
           />
@@ -182,19 +148,16 @@ export function CustomizeStage({
             }
             placeholder={`e.g. "${DEMO_REPO}"`}
             value={repo}
-            onValueChange={setRepo}
+            onValueChange={(value) => {
+              onOptionChange("repo", value);
+            }}
             onPaste={(e) => {
               e.preventDefault();
-              let newValue = e.clipboardData.getData("text");
               // if the user pasted a full GitHub URL, extract owner/repo
-              if (newValue.endsWith("/")) {
-                newValue = newValue.slice(0, -1);
-              }
-              const parts = newValue.split("/");
-              if (parts.length > 2) {
-                newValue = parts.slice(-2).join("/");
-              }
-              setRepo(newValue);
+              onOptionChange(
+                "repo",
+                pastedPathTail(e.clipboardData.getData("text"), 2),
+              );
             }}
             disabled={!isAuthenticated}
           />
@@ -226,19 +189,16 @@ export function CustomizeStage({
             }
             placeholder={`e.g. "${DEMO_GIST}"`}
             value={gist}
-            onValueChange={setGist}
+            onValueChange={(value) => {
+              onOptionChange("gist", value);
+            }}
             onPaste={(e) => {
               e.preventDefault();
-              let newValue = e.clipboardData.getData("text");
               // if the user pasted a full GitHub URL, extract Gist ID
-              if (newValue.endsWith("/")) {
-                newValue = newValue.slice(0, -1);
-              }
-              const parts = newValue.split("/");
-              if (parts.length > 1) {
-                newValue = parts.slice(-1).join("/");
-              }
-              setGist(newValue);
+              onOptionChange(
+                "gist",
+                pastedPathTail(e.clipboardData.getData("text"), 1),
+              );
             }}
             disabled={!isAuthenticated}
           />
@@ -261,7 +221,9 @@ export function CustomizeStage({
             }
             placeholder={`e.g. "${DEMO_WAKATIME_USER}"`}
             value={wakatimeUser}
-            onValueChange={setWakatimeUser}
+            onValueChange={(value) => {
+              onOptionChange("wakatimeUser", value);
+            }}
           />
         )}
         {cardType === CardType.STATS && (
@@ -270,13 +232,17 @@ export function CustomizeStage({
             text="Show all available statistics."
             question="Show all stats?"
             checked={showAllStats}
-            onCheckedChange={setShowAllStats}
+            onCheckedChange={(checked) => {
+              onOptionChange("showAllStats", checked);
+            }}
           />
         )}
         {cardType === CardType.STATS && (
           <StatsRankSection
             selectedOption={selectedStatsRank}
-            onOptionChange={setSelectedStatsRank}
+            onOptionChange={(option) => {
+              onOptionChange("selectedStatsRank", option);
+            }}
           />
         )}
         {cardType === CardType.STATS && (
@@ -285,7 +251,9 @@ export function CustomizeStage({
             text="Show icons next to all stats."
             question="Show icons?"
             checked={showIcons}
-            onCheckedChange={setShowIcons}
+            onCheckedChange={(checked) => {
+              onOptionChange("showIcons", checked);
+            }}
           />
         )}
         {cardType === CardType.STATS && (
@@ -294,19 +262,25 @@ export function CustomizeStage({
             text="Count total commits or just commits of the last 365 days."
             question="Include all commits?"
             checked={includeAllCommits}
-            onCheckedChange={setIncludeAllCommits}
+            onCheckedChange={(checked) => {
+              onOptionChange("includeAllCommits", checked);
+            }}
           />
         )}
         {cardType === CardType.TOP_LANGS && (
           <LanguagesLayoutSection
             selectedLanguageLayoutOption={selectedLanguagesLayout}
-            onLanguageLayoutOptionChange={setSelectedLanguagesLayout}
+            onLanguageLayoutOptionChange={(option) => {
+              onOptionChange("selectedLanguagesLayout", option);
+            }}
           />
         )}
         {cardType === CardType.WAKATIME && (
           <WakatimeLayoutSection
             selectedOption={selectedWakatimeLayout}
-            onOptionChange={setSelectedWakatimeLayout}
+            onOptionChange={(option) => {
+              onOptionChange("selectedWakatimeLayout", option);
+            }}
           />
         )}
         {(cardType === CardType.TOP_LANGS ||
@@ -321,7 +295,9 @@ export function CustomizeStage({
               </>
             }
             value={langsCount}
-            onValueChange={setLangsCount}
+            onValueChange={(value) => {
+              onOptionChange("langsCount", value);
+            }}
             min={1}
             max={20}
           />
@@ -332,7 +308,9 @@ export function CustomizeStage({
             text="Hide language percentages or bytes while keeping the selected layout visible."
             question="Hide values?"
             checked={hideValues}
-            onCheckedChange={setHideValues}
+            onCheckedChange={(checked) => {
+              onOptionChange("hideValues", checked);
+            }}
           />
         )}
         {cardType === CardType.WAKATIME && (
@@ -341,7 +319,9 @@ export function CustomizeStage({
             text="Show time spent in hours or percentages."
             question="Show percentages?"
             checked={usePercent}
-            onCheckedChange={setUsePercent}
+            onCheckedChange={(checked) => {
+              onOptionChange("usePercent", checked);
+            }}
           />
         )}
         {(cardType === CardType.STATS ||
@@ -352,7 +332,9 @@ export function CustomizeStage({
             text="Shows a title at the top of the card."
             question="Show title?"
             checked={showTitle}
-            onCheckedChange={setShowTitle}
+            onCheckedChange={(checked) => {
+              onOptionChange("showTitle", checked);
+            }}
           />
         )}
         {(cardType === CardType.STATS || cardType === CardType.WAKATIME) && (
@@ -367,7 +349,9 @@ export function CustomizeStage({
             }
             placeholder='e.g. "My GitHub Stats"'
             value={customTitle}
-            onValueChange={setCustomTitle}
+            onValueChange={(value) => {
+              onOptionChange("customTitle", value);
+            }}
           />
         )}
         {(cardType === CardType.STATS ||
@@ -378,7 +362,9 @@ export function CustomizeStage({
             // text="Enable Animations."
             question="enable animations?"
             checked={enableAnimations}
-            onCheckedChange={setEnableAnimations}
+            onCheckedChange={(checked) => {
+              onOptionChange("enableAnimations", checked);
+            }}
           />
         )}
         {(cardType === CardType.PIN || cardType === CardType.GIST) && (
@@ -387,7 +373,9 @@ export function CustomizeStage({
             text="Shows the repo owner's name next to the repo name."
             question="Show owner?"
             checked={showOwner}
-            onCheckedChange={setShowOwner}
+            onCheckedChange={(checked) => {
+              onOptionChange("showOwner", checked);
+            }}
           />
         )}
         {cardType === CardType.PIN && (
@@ -402,7 +390,9 @@ export function CustomizeStage({
               </>
             }
             value={descriptionLines}
-            onValueChange={setDescriptionLines}
+            onValueChange={(value) => {
+              onOptionChange("descriptionLines", value);
+            }}
             min={1}
             max={3}
           />

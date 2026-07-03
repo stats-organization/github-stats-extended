@@ -6,11 +6,14 @@ import { DEFAULT_OPTION as WAKATIME_DEFAULT_LAYOUT } from "../../components/Home
 import { CardType } from "../../models/CardType";
 
 import { buildCardUrl } from "./buildCardUrl";
+import type { CardOptions } from "./cardOptions";
 
-const baseOptions = {
-  selectedCard: CardType.STATS,
+const USER_ID = "john-github";
+
+// Built inline instead of via `getDefaultCardOptions`, which imports
+// `constants.ts` and needs a `window` global these node-based tests lack.
+const baseOptions: CardOptions = {
   selectedUserId: "john",
-  userId: "john-github",
   repo: "repo1",
   gist: "gist1",
   wakatimeUser: "wakaUser",
@@ -32,13 +35,13 @@ const baseOptions = {
 
 describe("buildCardUrl", () => {
   it("builds stats suffix with defaults", () => {
-    const result = buildCardUrl(baseOptions);
+    const result = buildCardUrl(USER_ID, CardType.STATS, baseOptions);
 
     expect(result.toString()).toBe("?username=john");
   });
 
   it("adds stats options", () => {
-    const result = buildCardUrl({
+    const result = buildCardUrl(USER_ID, CardType.STATS, {
       ...baseOptions,
       showIcons: true,
       includeAllCommits: true,
@@ -57,9 +60,8 @@ describe("buildCardUrl", () => {
   });
 
   it("builds top-langs suffix", () => {
-    const result = buildCardUrl({
+    const result = buildCardUrl(USER_ID, CardType.TOP_LANGS, {
       ...baseOptions,
-      selectedCard: CardType.TOP_LANGS,
       langsCount: 5,
       showTitle: false,
     });
@@ -70,9 +72,8 @@ describe("buildCardUrl", () => {
   });
 
   it("builds pin suffix using userId not selectedUserId", () => {
-    const result = buildCardUrl({
+    const result = buildCardUrl(USER_ID, CardType.PIN, {
       ...baseOptions,
-      selectedCard: CardType.PIN,
       showOwner: true,
       descriptionLines: 3,
     });
@@ -83,9 +84,8 @@ describe("buildCardUrl", () => {
   });
 
   it("builds gist suffix", () => {
-    const result = buildCardUrl({
+    const result = buildCardUrl(USER_ID, CardType.GIST, {
       ...baseOptions,
-      selectedCard: CardType.GIST,
       showOwner: true,
     });
 
@@ -93,9 +93,8 @@ describe("buildCardUrl", () => {
   });
 
   it("builds wakatime suffix with percent and custom title", () => {
-    const result = buildCardUrl({
+    const result = buildCardUrl(USER_ID, CardType.WAKATIME, {
       ...baseOptions,
-      selectedCard: CardType.WAKATIME,
       wakatimeUser: "waka",
       usePercent: true,
       customTitle: "My Stats",
@@ -108,9 +107,8 @@ describe("buildCardUrl", () => {
   });
 
   it("adds non-default layouts", () => {
-    const result = buildCardUrl({
+    const result = buildCardUrl(USER_ID, CardType.TOP_LANGS, {
       ...baseOptions,
-      selectedCard: CardType.TOP_LANGS,
       selectedLanguagesLayout: { id: 2, value: "compact", label: "Compact" },
     });
 

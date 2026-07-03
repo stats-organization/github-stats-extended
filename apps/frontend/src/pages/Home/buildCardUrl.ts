@@ -1,4 +1,3 @@
-import type { SelectOption } from "../../components/Generic/Select";
 import { DEFAULT_OPTION as LANGUAGES_DEFAULT_LAYOUT } from "../../components/Home/LanguagesLayoutSection";
 import { DEFAULT_OPTION as STATS_DEFAULT_RANK } from "../../components/Home/StatsRankSection";
 import { DEFAULT_OPTION as WAKATIME_DEFAULT_LAYOUT } from "../../components/Home/WakatimeLayoutSection";
@@ -6,51 +5,34 @@ import { CardType } from "../../models/CardType";
 import { cardUrl } from "../../models/CardUrl";
 import type { CardUrlBuilder } from "../../models/CardUrl";
 
-interface Options {
-  userId: string;
-  selectedUserId: string;
-  selectedCard: CardType;
-  repo: string;
-  gist: string;
-  wakatimeUser: string;
-  selectedStatsRank: SelectOption;
-  selectedLanguagesLayout: SelectOption;
-  selectedWakatimeLayout: SelectOption;
-  showTitle: boolean;
-  showOwner: boolean;
-  descriptionLines: number | undefined;
-  customTitle: string;
-  langsCount: number | undefined;
-  hideValues: boolean;
-  showAllStats: boolean;
-  showIcons: boolean;
-  includeAllCommits: boolean;
-  enableAnimations: boolean;
-  usePercent: boolean;
-}
+import type { CardOptions } from "./cardOptions";
 
-export function buildCardUrl({
-  userId,
-  selectedCard,
-  selectedUserId,
-  repo,
-  gist,
-  wakatimeUser,
-  selectedStatsRank,
-  selectedLanguagesLayout,
-  selectedWakatimeLayout,
-  showTitle,
-  showOwner,
-  descriptionLines,
-  customTitle,
-  langsCount,
-  hideValues,
-  showAllStats,
-  showIcons,
-  includeAllCommits,
-  enableAnimations,
-  usePercent,
-}: Options): CardUrlBuilder {
+export function buildCardUrl(
+  userId: string,
+  selectedCard: CardType,
+  options: CardOptions,
+): CardUrlBuilder {
+  const {
+    selectedUserId,
+    repo,
+    gist,
+    wakatimeUser,
+    selectedStatsRank,
+    selectedLanguagesLayout,
+    selectedWakatimeLayout,
+    showTitle,
+    showOwner,
+    descriptionLines,
+    customTitle,
+    langsCount,
+    hideValues,
+    showAllStats,
+    showIcons,
+    includeAllCommits,
+    enableAnimations,
+    usePercent,
+  } = options;
+
   switch (selectedCard) {
     case CardType.STATS: {
       let url = cardUrl(CardType.STATS);
