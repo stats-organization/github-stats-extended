@@ -82,7 +82,7 @@ export function AppTrends() {
   }, [userToken]);
 
   /*
-   * Advance to step 1 only when `isAuthenticated` transitions, so a logged-in user can still navigate back to step 1.
+   * Advance to step 1 only when `isAuthenticated` transitions, so a logged-in user can still navigate back to step 0.
    * Tracked during render (comparing the previous value) rather than in an effect:
    * https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
    */
