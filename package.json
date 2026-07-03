@@ -14,7 +14,7 @@
     "eslint-import-resolver-typescript": "4.4.5",
     "eslint-plugin-import-x": "4.16.2",
     "eslint-plugin-jsdoc": "63.0.2",
-    "globals": "17.6.0",
+    "globals": "17.7.0",
     "husky": "9.1.7",
     "knip": "6.16.1",
     "lint-staged": "17.0.7",
