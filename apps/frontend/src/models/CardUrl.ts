@@ -28,8 +28,9 @@ import { CardType } from "./CardType";
  * | description_lines_count |       |           |  ✓  |      |          |
  * | display_format          |       |           |     |      |    ✓     |
  * | card_width              |       |           |     |      |    ✓     |
- * | theme / client /        |   ✓   |     ✓     |  ✓  |  ✓   |    ✓     |
- * | disable_animations      |       |           |     |      |          |
+ * | theme                   |   ✓   |     ✓     |  ✓  |  ✓   |    ✓     |
+ * | client                  |   ✓   |     ✓     |  ✓  |  ✓   |    ✓     |
+ * | disable_animations      |   ✓   |     ✓     |  ✓  |  ✓   |    ✓     |
  *
  * The last row lists the universal params, valid on every card.
  */
