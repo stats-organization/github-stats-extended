@@ -67,8 +67,10 @@ jobs:
       - name: Build packages
         run: pnpm run build:packages
 
+      # Only install chromium since it is the only browser enabled in
+      # apps/frontend/playwright.config.ts. Update this if more projects are added.
       - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Run Playwright tests
         run: pnpm --filter ./apps/frontend/ run test:e2e
