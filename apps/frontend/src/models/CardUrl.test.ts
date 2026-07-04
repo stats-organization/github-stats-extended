@@ -42,11 +42,9 @@ describe("cardUrl", () => {
     expect(withIcons.toString()).toBe("?username=john&show_icons=true");
   });
 
-  it("drops empty, false, and undefined values", () => {
-    expect(cardUrl(CardType.STATS).username("").toString()).toBe("");
-    expect(
-      cardUrl(CardType.STATS).username("john").showIcons(false).toString(),
-    ).toBe("?username=john");
+  it("sets values verbatim (callers decide whether to include a param)", () => {
+    // no dropping of empty/false — the value is set as given
+    expect(cardUrl(CardType.STATS).username("").toString()).toBe("?username=");
   });
 
   it("encodes special characters", () => {

@@ -53,7 +53,10 @@ export function buildCardUrl({
 }: Options): CardUrlBuilder {
   switch (selectedCard) {
     case CardType.STATS: {
-      let url = cardUrl(CardType.STATS).username(selectedUserId);
+      let url = cardUrl(CardType.STATS);
+      if (selectedUserId) {
+        url = url.username(selectedUserId);
+      }
       if (selectedStatsRank !== STATS_DEFAULT_RANK) {
         url = url.rankIcon(selectedStatsRank.value);
       }
@@ -81,7 +84,10 @@ export function buildCardUrl({
     }
 
     case CardType.TOP_LANGS: {
-      let url = cardUrl(CardType.TOP_LANGS).username(selectedUserId);
+      let url = cardUrl(CardType.TOP_LANGS);
+      if (selectedUserId) {
+        url = url.username(selectedUserId);
+      }
       if (selectedLanguagesLayout !== LANGUAGES_DEFAULT_LAYOUT) {
         url = url.layout(selectedLanguagesLayout.value);
       }
@@ -115,7 +121,13 @@ export function buildCardUrl({
        *
        * @see https://github.com/stats-organization/github-stats-extended/pull/73#discussion_r2792177515
        */
-      let url = cardUrl(CardType.PIN).username(userId).repo(repo);
+      let url = cardUrl(CardType.PIN);
+      if (userId) {
+        url = url.username(userId);
+      }
+      if (repo) {
+        url = url.repo(repo);
+      }
       if (showOwner) {
         url = url.showOwner();
       }
@@ -126,7 +138,10 @@ export function buildCardUrl({
     }
 
     case CardType.GIST: {
-      let url = cardUrl(CardType.GIST).gistId(gist);
+      let url = cardUrl(CardType.GIST);
+      if (gist) {
+        url = url.gistId(gist);
+      }
       if (showOwner) {
         url = url.showOwner();
       }
@@ -134,7 +149,10 @@ export function buildCardUrl({
     }
 
     case CardType.WAKATIME: {
-      let url = cardUrl(CardType.WAKATIME).username(wakatimeUser);
+      let url = cardUrl(CardType.WAKATIME);
+      if (wakatimeUser) {
+        url = url.username(wakatimeUser);
+      }
       if (selectedWakatimeLayout !== WAKATIME_DEFAULT_LAYOUT) {
         url = url.layout(selectedWakatimeLayout.value);
       }

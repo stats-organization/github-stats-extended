@@ -45,15 +45,13 @@ abstract class CardUrlBase<S extends CardUrlBase<S>> {
   /** Path segment appended after `/api` (empty for the stats card). */
   protected abstract readonly path: string;
 
-  /** The single place that produces a new instance. */
-  protected with(key: string, value: string | number | boolean | undefined): S {
+  /**
+   * The single place that produces a new instance. Sets the param verbatim;
+   * callers decide whether a param should be included (see `buildCardUrl`).
+   */
+  protected with(key: string, value: string | number | boolean): S {
     const next = new Map(this.params);
-    // empty / false / undefined => drop the param (matches "only if set" logic)
-    if (value === undefined || value === "" || value === false) {
-      next.delete(key);
-    } else {
-      next.set(key, String(value));
-    }
+    next.set(key, String(value));
     return this.create(next);
   }
 
