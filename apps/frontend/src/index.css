@@ -1,14 +1,115 @@
-/* ./src/index.css */
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes:
+    light --default,
+    dark --prefersdark;
+}
+
+/*
+Override primary color with default blue from github-stats-extended.
+Override background color in dark mode with GitHub's dark mode background color.
+*/
+@plugin "daisyui/theme" {
+  name: "light";
+  --color-primary: #2f80ed;
+  --color-error: var(--color-red-700);
+}
+@plugin "daisyui/theme" {
+  name: "dark";
+  --color-primary: #2f80ed;
+  --color-error: var(--color-red-900);
+  --color-base-100: #0d1117;
+}
+
+:root {
+  /* Snappy duration for interactive elements (buttons, hovers). */
+  --transition-fast: 100ms;
+  /* Slower, deliberate fade for large surfaces during a theme switch. */
+  --transition-surface: 300ms;
+}
 
 body {
   margin: 0;
   font-family: "Segoe UI", Ubuntu, Sans-Serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-base-100);
+  color: var(--color-base-content);
 }
 
 button {
   cursor: pointer;
+}
+
+/* Smoothly animate color changes when switching themes / on hover. */
+*,
+*::before,
+*::after {
+  transition-property: background-color, border-color, color, fill, stroke;
+  /* 
+   * An ease-out curve: animations start at full speed so quick interactions
+   * like button hovers feel responsive instead of laggy. 
+   */
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  transition-duration: var(--transition-fast);
+}
+
+/*
+ * Large surface backgrounds fade more slowly so a theme switch reads as a
+ * deliberate fade rather than an instant flip. Durations reference the custom
+ * properties above so the reduced-motion override below zeroes them out
+ * regardless of selector specificity.
+ */
+body,
+.bg-base-100,
+.bg-base-200,
+.bg-base-300 {
+  transition-duration: var(--transition-surface);
+}
+
+/*
+ * DaisyUI's `.btn` ships its own 200ms transition which felt slow. The global
+ * rule above is unlayered, so it would otherwise clobber the button's property
+ * list and timing function. Restore both here (so fill, text and border animate
+ * together on outline buttons) and only speed up the duration.
+ */
+.btn {
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  transition-duration: var(--transition-fast);
+}
+
+/* 
+ * DaisyUI's default hover is very subtle; make it noticeable. Primary always darkens,
+ * while soft lightens in dark mode and darkens in light mode, so the change shows.
+ */
+.btn-primary:hover {
+  background-color: color-mix(in oklab, var(--color-primary), #000 30%);
+}
+.btn-soft {
+  background-color: color-mix(in oklab, var(--color-base-100), #888 35%);
+}
+.btn-soft:hover {
+  background-color: color-mix(in oklab, var(--color-base-100), #888 60%);
+}
+.btn-error {
+  color: var(--color-neutral-content);
+}
+.btn-error:hover {
+  color: var(--color-neutral-content);
+  background-color: color-mix(in oklab, var(--color-error), #f00 40%);
+}
+
+input:focus,
+select:focus {
+  outline: 0;
+  border: var(--color-primary) solid 1px;
+}
+
+/* Respect users who prefer reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0ms;
+    --transition-surface: 0ms;
+  }
 }

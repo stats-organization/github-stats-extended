@@ -56,14 +56,17 @@ export function LoginAccountManagement(): JSX.Element {
             <a
               href={`https://${HOST}/api/downgrade?user_key=${userKey as string}`}
             >
-              <Button className="h-12 flex justify-center items-center w-[320px] text-black border border-black bg-white hover:bg-gray-100">
+              <Button
+                variant="soft"
+                className="h-12 flex justify-center items-center w-[320px]"
+              >
                 <GithubIcon className="w-6 h-6" />
                 <span className="ml-2 xl:text-lg">
                   Downgrade to Public Access
                 </span>
               </Button>
             </a>
-            <p className="text-sm text-gray-600 flex-1">
+            <p className="text-sm text-base-content/70 flex-1">
               Switch to public access if you prefer not to share private
               contributions.
             </p>
@@ -71,14 +74,17 @@ export function LoginAccountManagement(): JSX.Element {
         ) : (
           <div className="flex items-center gap-4">
             <a href={GITHUB_PRIVATE_AUTH_URL}>
-              <Button className="h-12 flex justify-center items-center w-[320px] text-white bg-blue-500 hover:bg-blue-600">
+              <Button
+                variant="primary"
+                className="h-12 flex justify-center items-center w-[320px]"
+              >
                 <GithubIcon className="w-6 h-6" />
                 <span className="ml-2 xl:text-lg">
                   Upgrade to Private Access
                 </span>
               </Button>
             </a>
-            <p className="text-sm text-gray-600 flex-1">
+            <p className="text-sm text-base-content/70 flex-1">
               Upgrade to include contributions in private repositories for more
               complete and accurate stats.
             </p>
@@ -89,12 +95,15 @@ export function LoginAccountManagement(): JSX.Element {
       {/* Delete Account Button */}
       <div className="mt-6 flex items-center gap-4">
         <Button
-          className="h-12 flex justify-center items-center w-[320px] text-black border border-black bg-white hover:bg-gray-100"
+          variant="soft"
+          className="h-12 flex justify-center items-center w-[320px]"
           onClick={openDeleteModal}
         >
-          <span className="xl:text-lg text-red-600">Delete Account</span>
+          <span className="xl:text-lg text-error text-shadow-none">
+            Delete Account
+          </span>
         </Button>
-        <p className="text-sm text-gray-600 flex-1">
+        <p className="text-sm text-base-content/70 flex-1">
           This will delete your GitHub-Stats-Extended account and then redirect
           you to a GitHub screen where you can revoke your access token.
         </p>
@@ -103,12 +112,13 @@ export function LoginAccountManagement(): JSX.Element {
       {/* Logout Button */}
       <div className="mt-6 flex items-center gap-4">
         <Button
-          className="h-12 flex justify-center items-center w-[320px] text-black border border-black bg-white hover:bg-gray-100"
+          variant="soft"
+          className="h-12 flex justify-center items-center w-[320px]"
           onClick={handleLogout}
         >
           <span className="xl:text-lg">Log Out</span>
         </Button>
-        <p className="text-sm text-gray-600 flex-1">
+        <p className="text-sm text-base-content/70 flex-1">
           Log out from GitHub-Stats-Extended.
         </p>
       </div>

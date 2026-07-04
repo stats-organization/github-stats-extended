@@ -12,8 +12,8 @@ test("load initial page correctly", async ({ page }) => {
   // Logo exists
   await expect(page.locator('img[alt="logo"]')).toBeVisible();
 
-  // Star on GitHub button
-  const starButton = page.getByRole("button", { name: /star on/i });
+  // Star on GitHub link
+  const starButton = page.getByRole("link", { name: /star on/i });
   await expect(starButton).toBeVisible();
 
   const githubLink = page.locator(
@@ -37,6 +37,45 @@ test("load initial page correctly", async ({ page }) => {
   const guestBtn = page.getByRole("button", { name: /continue as guest/i });
   await expect(guestBtn).toBeVisible();
   await expect(guestBtn).toBeEnabled();
+});
+
+test("theme picker switches and persists the theme", async ({ page }) => {
+  await page.goto("");
+
+  const html = page.locator("html");
+  const trigger = page.getByRole("button", { name: /choose theme/i });
+  const options = page.getByRole("menuitemradio");
+
+  // The menu is closed initially.
+  await expect(trigger).toBeVisible();
+  await expect(trigger).toHaveAttribute("aria-expanded", "false");
+  await expect(options).toHaveCount(0);
+
+  // Opening it reveals the options (portaled to body, above the stepper).
+  await trigger.click();
+  await expect(trigger).toHaveAttribute("aria-expanded", "true");
+
+  // Read the themes off the options instead of hardcoding their names.
+  const firstTheme = await options.first().getAttribute("data-theme-value");
+  const lastTheme = await options.last().getAttribute("data-theme-value");
+
+  // Selecting an option applies the theme, persists it, and closes the menu.
+  await options.last().click();
+  await expect(html).toHaveAttribute("data-theme", lastTheme ?? "");
+  await expect(options).toHaveCount(0);
+  await expect(
+    page.evaluate(() => localStorage.getItem("theme")),
+  ).resolves.toBe(lastTheme);
+
+  // The choice survives a reload and is marked as selected on reopen.
+  await page.reload();
+  await expect(html).toHaveAttribute("data-theme", lastTheme ?? "");
+  await trigger.click();
+  await expect(options.last()).toHaveAttribute("aria-checked", "true");
+
+  // Switching to another option works too.
+  await options.first().click();
+  await expect(html).toHaveAttribute("data-theme", firstTheme ?? "");
 });
 
 test("navigates between steps", async ({ page }) => {

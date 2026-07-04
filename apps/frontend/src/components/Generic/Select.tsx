@@ -27,10 +27,7 @@ export function Select({
 }: SelectProps): JSX.Element {
   return (
     <select
-      className={clsx(
-        "text-gray-700 text-base bg-white select select-sm w-40 rounded-sm mt-4",
-        className,
-      )}
+      className={clsx("text-base select select-sm w-40 mt-4", className)}
       value={selectedOption.value}
       onChange={(e) => {
         onOptionChange(options[e.target.selectedIndex] as SelectOption);
@@ -43,7 +40,7 @@ export function Select({
           value={option.value}
           disabled={option.disabled}
           className={clsx({
-            "bg-blue-200": option.value === selectedOption.value,
+            "bg-primary/20": option.value === selectedOption.value,
           })}
         >
           {option.label}

@@ -45,7 +45,7 @@ export function LoginAccountDeleteModal(
     <div className="fixed left-0 top-0 w-full h-full">
       <div className="w-full h-full flex justify-center items-center">
         <div
-          className="w-96 p-4 bg-white rounded-sm border-2 border-gray-200 text-gray-700"
+          className="w-96 p-4 bg-base-100 rounded-sm border-2 border-base-300 text-base-content"
           ref={wrapperRef}
         >
           <p className="mb-1 text-2xl">Delete Account</p>
@@ -57,16 +57,10 @@ export function LoginAccountDeleteModal(
           </p>
           <br />
           <div className="flex flex-wrap">
-            <Button
-              className="bg-blue-500 hover:bg-blue-600 text-white rounded-[0.25rem]"
-              onClick={onClose}
-            >
+            <Button variant="primary" onClick={onClose}>
               Cancel
             </Button>
-            <Button
-              className="bg-gray-200 hover:bg-gray-300 ml-auto rounded-[0.25rem] text-red-600 border-2"
-              onClick={onConfirm}
-            >
+            <Button variant="error" className="ml-auto" onClick={onConfirm}>
               Delete Account
             </Button>
           </div>

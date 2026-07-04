@@ -24,7 +24,7 @@ function ProgressSection({
     <button
       className={clsx(
         "w-1/4 flex flex-col mx-2 p-2 cursor-pointer",
-        passed ? "border-blue-500" : "border-gray-500",
+        passed ? "border-primary" : "border-base-content/60",
         isActive ? "border-t-[14px] -mt-[5px]" : "border-t-4",
       )}
       type="button"
@@ -32,14 +32,16 @@ function ProgressSection({
     >
       <div
         className={clsx("text-lg font-bold", {
-          "text-blue-500": passed,
-          "text-gray-500": !passed,
+          "text-primary": passed,
+          "text-base-content/60": !passed,
           "-mt-[4px]": isActive,
         })}
       >
         {`Step ${num + 1}`}
       </div>
-      <div className={passed ? "text-gray-700" : "text-gray-500"}>{item}</div>
+      <div className={passed ? "text-base-content/80" : "text-base-content/60"}>
+        {item}
+      </div>
     </button>
   );
 }
@@ -59,16 +61,23 @@ export function ProgressBar({
   const rightDisabled = currItemIndex === items.length - 1;
 
   return (
-    <div className="w-full flex items-center sticky top-0 bg-gray-200 z-50 pt-3 pb-1 px-1 md:px-20 shadow-md">
-      <LeftArrowIcon
-        className={clsx("w-8 h-8", {
-          "text-gray-400 cursor-not-allowed": leftDisabled,
-          "text-gray-700 cursor-pointer": !leftDisabled,
-        })}
+    <div className="w-full flex items-center sticky top-0 bg-base-300 z-50 pt-3 pb-1 px-1 md:px-20 shadow-md">
+      <button
+        type="button"
+        aria-label="Previous step"
+        disabled={leftDisabled}
+        className="btn btn-ghost btn-circle"
         onClick={() => {
           onItemClick(Math.max(currItemIndex - 1, 0));
         }}
-      />
+      >
+        <LeftArrowIcon
+          className={clsx("w-8 h-8", {
+            "text-base-content/30": leftDisabled,
+            "text-base-content/70": !leftDisabled,
+          })}
+        />
+      </button>
       <div className="px-2 flex-grow flex flex-row">
         {items.map((item, index) => {
           return (
@@ -85,15 +94,22 @@ export function ProgressBar({
           );
         })}
       </div>
-      <RightArrowIcon
-        className={clsx("w-8 h-8", {
-          "text-gray-400 cursor-not-allowed": rightDisabled,
-          "text-gray-700 cursor-pointer": !rightDisabled,
-        })}
+      <button
+        type="button"
+        aria-label="Next step"
+        disabled={rightDisabled}
+        className="btn btn-ghost btn-circle"
         onClick={() => {
           onItemClick(Math.min(currItemIndex + 1, items.length - 1));
         }}
-      />
+      >
+        <RightArrowIcon
+          className={clsx("w-8 h-8", {
+            "text-base-content/30": rightDisabled,
+            "text-base-content/70": !rightDisabled,
+          })}
+        />
+      </button>
     </div>
   );
 }

@@ -37,6 +37,24 @@
     <title>GitHub Stats Extended</title>
   </head>
   <body>
+    <script>
+      // Apply the persisted theme from localStorage before first paint. This is
+      // what makes a saved theme survive a reload when it differs from the OS
+      // preference (DaisyUI's `--prefersdark` only covers the OS default, and
+      // nothing in React sets `data-theme` on mount).
+      // Also suppress color transitions until after the first paint so elements
+      // don't animate from their unstyled state on load.
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          const matchesDarkTheme = window.matchMedia(
+            "(prefers-color-scheme: dark)",
+          ).matches;
+          var theme = stored || (matchesDarkTheme ? "dark" : "light");
+          document.documentElement.setAttribute("data-theme", theme);
+        } catch (e) {}
+      })();
+    </script>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <script type="module" src="/src/index.tsx"></script>

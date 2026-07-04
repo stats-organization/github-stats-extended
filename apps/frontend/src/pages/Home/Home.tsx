@@ -19,6 +19,7 @@ import {
 import { CardType } from "../../models/CardType";
 import { STAGE_LABELS } from "../../models/Stage";
 import type { StageIndex } from "../../models/Stage";
+import { useTheme } from "../../redux/selectors/themeSelectors";
 import {
   useIsAuthenticated,
   usePrivateAccess,
@@ -55,9 +56,14 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
 
   const [selectedCard, setSelectedCard] = useState<CardType>(CardType.STATS);
 
-  useEffect(() => {
+  // Reset the selected user to the resolved account id when it changes,
+  // adjusting state during render rather than in an effect:
+  // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+  const [prevUserId, setPrevUserId] = useState(userId);
+  if (userId !== prevUserId) {
+    setPrevUserId(userId);
     setSelectedUserId(userId);
-  }, [userId]);
+  }
 
   // for stage three
   const [selectedStatsRank, setSelectedStatsRank] =
@@ -83,7 +89,9 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
   const [enableAnimations, setEnableAnimations] = useState(true);
   const [usePercent, setUsePercent] = useState(false);
 
-  const [theme, setTheme] = useState("default");
+  const { isDark } = useTheme();
+  const themeParam = isDark ? "&theme=github_dark" : "";
+  const [theme, setTheme] = useState(isDark ? "dark" : "default");
 
   const handleCardTypeChange = (cardType: CardType) => {
     if (cardType === CardType.TOP_LANGS) {
@@ -229,12 +237,55 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
     );
   }
 
+  const cardFilename = ((): string => {
+    switch (selectedCard) {
+      case CardType.STATS:
+      case CardType.TOP_LANGS:
+        return `${selectedUserId}_card`;
+      case CardType.PIN:
+        return `${repo}_card`;
+      case CardType.GIST:
+        return `gist_card`;
+      case CardType.WAKATIME:
+        return `${wakatimeUser}_card`;
+      default:
+        selectedCard satisfies never;
+        return "";
+    }
+  })();
+
+  const cardLink = ((): string => {
+    switch (selectedCard) {
+      case CardType.STATS:
+      case CardType.TOP_LANGS:
+        return `https://${HOST}/api${themeSuffix}`;
+
+      case CardType.PIN: {
+        let myRepo = repo;
+        if (!myRepo.includes("/")) {
+          myRepo = `${userId}/${myRepo}`;
+        }
+        return `https://github.com/${myRepo}`;
+      }
+      case CardType.GIST:
+        return gistUrl;
+      case CardType.WAKATIME:
+        return `https://wakatime.com/@${wakatimeUser}`;
+      default:
+        selectedCard satisfies never;
+        return "";
+    }
+  })();
+
   return (
-    <div ref={contentSectionRef} className="h-full px-2 lg:px-8 text-gray-600">
+    <div
+      ref={contentSectionRef}
+      className="h-full px-2 lg:px-8 text-base-content/70"
+    >
       <div className="flex flex-col">
         <div className="m-4 rounded-sm">
           <div className="lg:p-4">
-            <h1 className="text-2xl text-gray-600 font-semibold">
+            <h1 className="text-2xl text-base-content/70 font-semibold">
               {STAGE_LABELS[stage].title}
             </h1>
             <div>
@@ -245,7 +296,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
                     <a
                       href={`https://github.com/${userId}`}
                       target="_blank"
-                      className="text-blue-500 hover:underline font-semibold"
+                      className="text-primary hover:underline font-semibold"
                     >
                       {userId}
                     </a>
@@ -328,7 +379,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
               setWakatimeUser={setWakatimeUser}
               usePercent={usePercent}
               setUsePercent={setUsePercent}
-              fullSuffix={fullSuffix}
+              fullSuffix={fullSuffix + themeParam}
               setStage={setStage}
             />
           )}
@@ -344,44 +395,9 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
           )}
           {stage === 4 && (
             <DisplayStage
-              filename={(() => {
-                switch (selectedCard) {
-                  case CardType.STATS:
-                  case CardType.TOP_LANGS:
-                    return `${selectedUserId}_card`;
-                  case CardType.PIN:
-                    return `${repo}_card`;
-                  case CardType.GIST:
-                    return `gist_card`;
-                  case CardType.WAKATIME:
-                    return `${wakatimeUser}_card`;
-                  default:
-                    selectedCard satisfies never;
-                    return "";
-                }
-              })()}
-              link={(() => {
-                switch (selectedCard) {
-                  case CardType.STATS:
-                  case CardType.TOP_LANGS:
-                    return `https://${HOST}/api${themeSuffix}`;
-
-                  case CardType.PIN: {
-                    let myRepo = repo;
-                    if (!myRepo.includes("/")) {
-                      myRepo = `${userId}/${myRepo}`;
-                    }
-                    return `https://github.com/${myRepo}`;
-                  }
-                  case CardType.GIST:
-                    return gistUrl;
-                  case CardType.WAKATIME:
-                    return `https://wakatime.com/@${wakatimeUser}`;
-                  default:
-                    selectedCard satisfies never;
-                    return "";
-                }
-              })()}
+              filename={cardFilename}
+              link={cardLink}
+              theme={theme}
               themeSuffix={themeSuffix}
               guestHint={
                 isAuthenticated

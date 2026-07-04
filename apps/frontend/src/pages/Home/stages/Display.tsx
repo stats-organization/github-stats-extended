@@ -1,15 +1,17 @@
-import { clsx } from "clsx";
 import type { JSX } from "react";
 import { toast } from "react-toastify";
 import { saveSvgAsPng } from "save-svg-as-png";
 
 import { CardImage } from "../../../components/Card/CardImage";
+import { getCardThemeBackdrop } from "../../../components/Card/themeBackdrop";
 import { Button } from "../../../components/Generic/Button";
 import { HOST } from "../../../constants";
+import { useTheme } from "../../../redux/selectors/themeSelectors";
 
 interface DisplayStageProps {
   filename: string;
   link: string;
+  theme: string;
   themeSuffix: string;
   guestHint: string | null;
 }
@@ -17,9 +19,12 @@ interface DisplayStageProps {
 export function DisplayStage({
   filename,
   link,
+  theme,
   themeSuffix,
   guestHint,
 }: DisplayStageProps): JSX.Element {
+  const { isDark } = useTheme();
+
   const downloadPNG = () => {
     saveSvgAsPng(
       document.getElementById("svgWrapper")?.shadowRoot?.firstElementChild
@@ -61,7 +66,7 @@ export function DisplayStage({
   return (
     <div className="w-full flex flex-wrap">
       <div className="h-auto lg:w-2/5 md:w-1/2">
-        <div className="p-10 rounded-sm bg-gray-200">
+        <div className="p-10 rounded-sm bg-base-200">
           <div className="flex flex-col items-center">
             {[
               {
@@ -82,10 +87,8 @@ export function DisplayStage({
             ].map((item) => (
               <Button
                 key={item.title}
-                className={clsx("m-4 w-60 flex justify-center", {
-                  "bg-blue-500 hover:bg-blue-600 text-white": item.highlight,
-                  "bg-white hover:bg-gray-100 text-black": !item.highlight,
-                })}
+                variant={item.highlight ? "primary" : "soft"}
+                className="m-4 w-60 flex justify-center"
                 onClick={item.onClick}
               >
                 {item.title}
@@ -96,10 +99,14 @@ export function DisplayStage({
         </div>
       </div>
       <div className="w-full lg:w-3/5 md:w-1/2 object-center pt-5 md:pt-0 pl-0 md:pl-5 lg:pl-0">
-        <div className="w-full lg:w-3/5 mx-auto flex flex-col justify-center sticky top-32">
+        <div
+          className="w-full lg:w-3/5 mx-auto flex flex-col justify-center sticky top-32 rounded p-4"
+          style={{ background: getCardThemeBackdrop(theme, isDark) }}
+        >
           <CardImage
             imageSrc={`${themeSuffix}&disable_animations=true`}
             stage={4}
+            className="flex justify-center"
           />
         </div>
       </div>

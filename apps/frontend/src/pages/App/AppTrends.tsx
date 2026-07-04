@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 
 import { getUserMetadata } from "../../api/user";
 import { clearAxiosCache } from "../../axios-override";
 import type { StageIndex } from "../../models/Stage";
+import { useTheme } from "../../redux/selectors/themeSelectors";
 import {
   useIsAuthenticated,
   useUserKey,
@@ -56,6 +57,7 @@ export function AppTrends() {
   const userKey = useUserKey();
   const userToken = useUserToken();
   const isAuthenticated = useIsAuthenticated();
+  const { isDark } = useTheme();
 
   const [stage, setStage] = useState<StageIndex>(isAuthenticated ? 1 : 0);
 
@@ -79,24 +81,20 @@ export function AppTrends() {
     clearAxiosCache();
   }, [userToken]);
 
+  /*
+   * Advance to step 1 only when `isAuthenticated` transitions, so a logged-in user can still navigate back to step 0.
+   * Tracked during render (comparing the previous value) rather than in an effect:
+   * https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+   */
   {
-    /*
-     * This effect must only be executed when `isAuthenticated` changes,
-     * otherwise logged-in user are unable to go back to step 1.
-     */
-    const prevIsAuthenticated = useRef(isAuthenticated);
-
-    useEffect(() => {
-      if (prevIsAuthenticated.current === isAuthenticated) {
-        return;
-      }
-
-      prevIsAuthenticated.current = isAuthenticated;
-
+    const [prevIsAuthenticated, setPrevIsAuthenticated] =
+      useState(isAuthenticated);
+    if (isAuthenticated !== prevIsAuthenticated) {
+      setPrevIsAuthenticated(isAuthenticated);
       if (isAuthenticated && stage === 0) {
         setStage(1);
       }
-    }, [isAuthenticated, stage]);
+    }
   }
 
   useEffect(() => {
@@ -116,9 +114,9 @@ export function AppTrends() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header currStageIndex={stage} onStageIndexChange={setStage} />
-      <section className="bg-white text-gray-700 flex-grow">
+      <section className="bg-base-100 text-base-content flex-grow">
         <HomeScreen stage={stage} setStage={setStage} />
-        <ToastContainer />
+        <ToastContainer theme={isDark ? "dark" : "light"} />
       </section>
     </div>
   );
