@@ -26,7 +26,7 @@ const TOTAL_TEXT_WIDTH = 275;
  */
 const noCodingActivityNode = ({ color, text }) => {
   if (!isValidHexColor(color, true)) {
-    throw new Error(`Invalid text color: ${color ?? "<empty>"}`);
+    throw new Error(`Invalid text color: "${color}"`);
   }
 
   return `
@@ -64,10 +64,10 @@ const formatLanguageValue = ({ display_format, lang }) => {
  */
 const createCompactLangNode = ({ lang, x, y, display_format }) => {
   if (!Number.isFinite(x)) {
-    throw new Error(`Invalid x: ${x ?? "<empty>"}`);
+    throw new Error(`Invalid x: "${x}"`);
   }
   if (!Number.isFinite(y)) {
-    throw new Error(`Invalid y: ${y ?? "<empty>"}`);
+    throw new Error(`Invalid y: "${y}"`);
   }
 
   // @ts-ignore
@@ -138,12 +138,10 @@ const createTextNode = ({
   progressBarWidth,
 }) => {
   if (!Number.isFinite(index)) {
-    throw new Error(`Invalid index: ${index ?? "<empty>"}`);
+    throw new Error(`Invalid index: "${index}"`);
   }
   if (!Number.isFinite(progressBarWidth)) {
-    throw new Error(
-      `Invalid progressBarWidth: ${progressBarWidth ?? "<empty>"}`,
-    );
+    throw new Error(`Invalid progressBarWidth: "${progressBarWidth}"`);
   }
 
   const staggerDelay = (index + 3) * 150;
@@ -206,7 +204,7 @@ const getStyles = function ({
   textColor,
 }) {
   if (!isValidHexColor(textColor, true)) {
-    throw new Error(`Invalid text color: ${textColor ?? "<empty>"}`);
+    throw new Error(`Invalid text color: "${textColor}"`);
   }
 
   return `

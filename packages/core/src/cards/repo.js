@@ -34,10 +34,10 @@ const DESCRIPTION_MAX_LINES = 3;
  */
 const getBadgeSVG = (label, textColor, xOffset = 0) => {
   if (!isValidHexColor(textColor, true)) {
-    throw new Error(`Invalid text color: ${textColor ?? "<empty>"}`);
+    throw new Error(`Invalid text color: "${textColor}"`);
   }
   if (!Number.isFinite(xOffset)) {
-    throw new Error(`Invalid xOffset: ${xOffset ?? "<empty>"}`);
+    throw new Error(`Invalid xOffset: "${xOffset}"`);
   }
 
   return `

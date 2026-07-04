@@ -53,7 +53,7 @@ const flexLayout = ({
  */
 const createLanguageNode = (langName: string, langColor: string): string => {
   if (!isValidHexColor(langColor, true)) {
-    throw new Error(`Invalid language color: ${langColor ?? "<empty>"}`);
+    throw new Error(`Invalid language color: "${langColor}"`);
   }
 
   return `
@@ -95,24 +95,24 @@ const createProgressNode = ({
   delay: number;
 }): string => {
   if (!isValidHexColor(color, true)) {
-    throw new Error(`Invalid progress color: ${color ?? "<empty>"}`);
+    throw new Error(`Invalid progress color: "${color}"`);
   }
   if (!isValidHexColor(progressBarBackgroundColor, true)) {
     throw new Error(
-      `Invalid progress bar background color: ${progressBarBackgroundColor ?? "<empty>"}`,
+      `Invalid progress bar background color: "${progressBarBackgroundColor}"`,
     );
   }
   if (!Number.isFinite(width)) {
-    throw new Error(`Invalid width: ${width ?? "<empty>"}`);
+    throw new Error(`Invalid width: "${width}"`);
   }
   if (!Number.isFinite(x)) {
-    throw new Error(`Invalid x: ${x ?? "<empty>"}`);
+    throw new Error(`Invalid x: "${x}"`);
   }
   if (!Number.isFinite(y)) {
-    throw new Error(`Invalid y: ${y ?? "<empty>"}`);
+    throw new Error(`Invalid y: "${y}"`);
   }
   if (!Number.isFinite(delay)) {
-    throw new Error(`Invalid delay: ${delay ?? "<empty>"}`);
+    throw new Error(`Invalid delay: "${delay}"`);
   }
 
   const progressPercentage = clampValue(progress, 2, 100);
@@ -169,19 +169,19 @@ const wrappedTextNode = ({
   testId?: string;
 }): string => {
   if (!Number.isFinite(x)) {
-    throw new Error(`Invalid x: ${x ?? "<empty>"}`);
+    throw new Error(`Invalid x: "${x}"`);
   }
   if (!Number.isFinite(y)) {
-    throw new Error(`Invalid y: ${y ?? "<empty>"}`);
+    throw new Error(`Invalid y: "${y}"`);
   }
   if (!Number.isFinite(width)) {
-    throw new Error(`Invalid width: ${width ?? "<empty>"}`);
+    throw new Error(`Invalid width: "${width}"`);
   }
   if (!Number.isFinite(height)) {
-    throw new Error(`Invalid height: ${height ?? "<empty>"}`);
+    throw new Error(`Invalid height: "${height}"`);
   }
   if (!Number.isFinite(lineCount)) {
-    throw new Error(`Invalid lineCount: ${lineCount ?? "<empty>"}`);
+    throw new Error(`Invalid lineCount: "${lineCount}"`);
   }
 
   const testIdAttr = testId ? ` data-testid="${encodeHTML(testId)}"` : "";
@@ -205,7 +205,7 @@ const wrappedTextNode = ({
  */
 const wrappedTextStyles = (color: string): string => {
   if (!isValidHexColor(color, true)) {
-    throw new Error(`Invalid text color: ${color ?? "<empty>"}`);
+    throw new Error(`Invalid text color: "${color}"`);
   }
 
   return `
@@ -246,7 +246,7 @@ const iconWithLabel = (
   }
 
   if (!Number.isFinite(iconSize)) {
-    throw new Error(`Invalid iconSize: ${iconSize ?? "<empty>"}`);
+    throw new Error(`Invalid iconSize: "${iconSize}"`);
   }
 
   const iconSvg = `

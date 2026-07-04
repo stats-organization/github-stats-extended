@@ -87,13 +87,13 @@ const createTextNode = ({
   labelXOffset = 25,
 }) => {
   if (!Number.isFinite(labelXOffset)) {
-    throw new Error(`Invalid labelXOffset: ${labelXOffset ?? "<empty>"}`);
+    throw new Error(`Invalid labelXOffset: "${labelXOffset}"`);
   }
   if (!Number.isFinite(shiftValuePos)) {
-    throw new Error(`Invalid shiftValuePos: ${shiftValuePos ?? "<empty>"}`);
+    throw new Error(`Invalid shiftValuePos: "${shiftValuePos}"`);
   }
   if (!Number.isFinite(index)) {
-    throw new Error(`Invalid index: ${index ?? "<empty>"}`);
+    throw new Error(`Invalid index: "${index}"`);
   }
 
   const precision =

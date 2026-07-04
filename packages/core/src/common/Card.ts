@@ -247,17 +247,13 @@ class Card {
       this.colors.titleColor !== undefined &&
       !isValidHexColor(this.colors.titleColor, true)
     ) {
-      throw new Error(
-        `Invalid title color: ${this.colors.titleColor ?? "<empty>"}`,
-      );
+      throw new Error(`Invalid title color: "${this.colors.titleColor}"`);
     }
     if (
       this.colors.borderColor !== undefined &&
       !isValidHexColor(this.colors.borderColor, true)
     ) {
-      throw new Error(
-        `Invalid border color: ${this.colors.borderColor ?? "<empty>"}`,
-      );
+      throw new Error(`Invalid border color: "${this.colors.borderColor}"`);
     }
     if (
       this.colors.bgColor !== undefined &&

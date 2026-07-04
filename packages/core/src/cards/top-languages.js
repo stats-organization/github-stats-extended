@@ -291,7 +291,7 @@ const createCompactLangNode = ({
   const color = lang.color || "#858585";
 
   if (!isValidHexColor(color, true)) {
-    throw new Error(`Invalid language color: ${color ?? "<empty>"}`);
+    throw new Error(`Invalid language color: "${color}"`);
   }
 
   return `
@@ -449,7 +449,7 @@ const renderCompactLayout = (
   const compactProgressBar = langs
     .map((lang) => {
       if (!isValidHexColor(lang.color, true)) {
-        throw new Error(`Invalid language color: ${lang.color ?? "<empty>"}`);
+        throw new Error(`Invalid language color: "${lang.color}"`);
       }
 
       const percentage = parseFloat(
@@ -528,7 +528,7 @@ const renderDonutVerticalLayout = (
   // Generate each donut vertical chart part
   for (const lang of langs) {
     if (!isValidHexColor(lang.color, true)) {
-      throw new Error(`Invalid language color: ${lang.color ?? "<empty>"}`);
+      throw new Error(`Invalid language color: "${lang.color}"`);
     }
 
     const percentage = (lang.size / totalLanguageSize) * 100;
@@ -607,7 +607,7 @@ const renderPieLayout = (langs, totalLanguageSize, statsFormat, hideValues) => {
   // Generate each pie chart part
   for (const lang of langs) {
     if (!isValidHexColor(lang.color, true)) {
-      throw new Error(`Invalid language color: ${lang.color ?? "<empty>"}`);
+      throw new Error(`Invalid language color: "${lang.color}"`);
     }
 
     if (langs.length === 1) {
@@ -738,7 +738,7 @@ const renderDonutLayout = (
   hideValues,
 ) => {
   if (!Number.isFinite(width)) {
-    throw new Error(`Invalid width: ${width ?? "<empty>"}`);
+    throw new Error(`Invalid width: "${width}"`);
   }
 
   const centerX = width / 3;
@@ -748,7 +748,7 @@ const renderDonutLayout = (
 
   const colors = langs.map((lang) => {
     if (!isValidHexColor(lang.color, true)) {
-      throw new Error(`Invalid language color: ${lang.color ?? "<empty>"}`);
+      throw new Error(`Invalid language color: "${lang.color}"`);
     }
     return lang.color;
   });
@@ -814,7 +814,7 @@ const renderDonutLayout = (
  */
 const noLanguagesDataNode = ({ color, text, layout }) => {
   if (!isValidHexColor(color, true)) {
-    throw new Error(`Invalid text color: ${color ?? "<empty>"}`);
+    throw new Error(`Invalid text color: "${color}"`);
   }
 
   return `
