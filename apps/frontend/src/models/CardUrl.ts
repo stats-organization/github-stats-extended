@@ -13,26 +13,24 @@ import { CardType } from "./CardType";
  * | param                   | STATS | TOP_LANGS | PIN | GIST | WAKATIME |
  * | ----------------------- | :---: | :-------: | :-: | :--: | :------: |
  * | username                |   ✓   |     ✓     |  ✓  |      |    ✓     |
- * | repo                    |       |           |  ✓  |      |          |
- * | id (gist)               |       |           |     |  ✓   |          |
- * | rank_icon               |   ✓   |           |     |      |          |
- * | layout                  |       |     ✓     |     |      |    ✓     |
  * | hide_title              |   ✓   |     ✓     |     |      |    ✓     |
  * | custom_title            |   ✓   |           |     |      |    ✓     |
- * | langs_count             |       |     ✓     |     |      |    ✓     |
- * | hide_values             |       |     ✓     |     |      |          |
+ * | rank_icon               |   ✓   |           |     |      |          |
  * | show                    |   ✓   |           |     |      |          |
  * | show_icons              |   ✓   |           |     |      |          |
  * | include_all_commits     |   ✓   |           |     |      |          |
- * | show_owner              |       |           |  ✓  |  ✓   |          |
+ * | hide_values             |       |     ✓     |     |      |          |
+ * | layout                  |       |     ✓     |     |      |    ✓     |
+ * | langs_count             |       |     ✓     |     |      |    ✓     |
+ * | repo                    |       |           |  ✓  |      |          |
  * | description_lines_count |       |           |  ✓  |      |          |
+ * | show_owner              |       |           |  ✓  |  ✓   |          |
+ * | id (gist)               |       |           |     |  ✓   |          |
  * | display_format          |       |           |     |      |    ✓     |
  * | card_width              |       |           |     |      |    ✓     |
  * | theme                   |   ✓   |     ✓     |  ✓  |  ✓   |    ✓     |
  * | client                  |   ✓   |     ✓     |  ✓  |  ✓   |    ✓     |
  * | disable_animations      |   ✓   |     ✓     |  ✓  |  ✓   |    ✓     |
- *
- * The last row lists the universal params, valid on every card.
  */
 abstract class CardUrlBase<S extends CardUrlBase<S>> {
   protected constructor(
