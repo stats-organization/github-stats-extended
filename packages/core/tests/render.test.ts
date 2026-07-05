@@ -92,4 +92,31 @@ describe("Test renderError", () => {
       queryByTestId(document.body, "message")?.children[1],
     ).toHaveTextContent(/Secondary Message/gim);
   });
+
+  it("should encode error message", () => {
+    const errorSVG = renderError({
+      message: "<script>alert('xss')</script>",
+    });
+
+    expect(errorSVG).toContain(
+      "&#60;script&#62;alert(&#39;xss&#39;)&#60;/script&#62;",
+    );
+
+    document.body.innerHTML = errorSVG;
+    const svg = document.querySelector("svg");
+    expect(svg?.querySelector("script")).toBeNull();
+  });
+
+  it("should encode secondary error message", () => {
+    const errorSVG = renderError({
+      message: "Error",
+      secondaryMessage: '"title_color"<img src=x onerror="alert(1)">',
+    });
+
+    expect(errorSVG).toContain("&#60;img");
+
+    document.body.innerHTML = errorSVG;
+    const svg = document.querySelector("svg");
+    expect(svg?.querySelector("img")).toBeNull();
+  });
 });

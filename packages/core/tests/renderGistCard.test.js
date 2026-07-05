@@ -20,14 +20,15 @@ const data = {
 
 describe("test renderGistCard", () => {
   it("should render correctly", () => {
-    document.body.innerHTML = renderGistCard(data, { browser_rendering: true });
+    document.body.innerHTML = renderGistCard(data);
 
     const [header] = document.getElementsByClassName("header");
 
     expect(header).toHaveTextContent("test");
     expect(header).not.toHaveTextContent("anuraghazra");
     expect(document.getElementsByClassName("description")[0]).toHaveTextContent(
-      "Small <b>test</b> repository with different Python programs.",
+      // Between "Python" and "programs" there is a line break caused by: </tspan><tspan dy="1.2em" x="25">
+      "Small <b>test</b> repository with different Pythonprograms.",
     );
     expect(queryByTestId(document.body, "starsCount")).toHaveTextContent("163");
     expect(queryByTestId(document.body, "forksCount")).toHaveTextContent("19");
@@ -75,7 +76,7 @@ describe("test renderGistCard", () => {
       {
         ...data,
         description:
-          "The quick brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet",
+          "The <b>quick</b> brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet",
       },
       { browser_rendering: true },
     );
@@ -83,7 +84,7 @@ describe("test renderGistCard", () => {
     // foreignObject's inner div is what visually truncates the overflow.
     const description = document.getElementsByClassName("description")[0];
     expect(description).toHaveTextContent(
-      "The quick brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet",
+      "The <b>quick</b> brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet",
     );
     expect(
       Number(description.style.getPropertyValue("--lines")),
@@ -241,7 +242,7 @@ describe("test renderGistCard", () => {
 
   it("should render without rounding", () => {
     document.body.innerHTML = renderGistCard(data, {
-      border_radius: "0",
+      border_radius: 0,
     });
     expect(document.querySelector("rect")).toHaveAttribute("rx", "0");
     document.body.innerHTML = renderGistCard(data, {});

@@ -353,7 +353,7 @@ describe("Test renderRepoCard", () => {
 
   it("should render without rounding", () => {
     document.body.innerHTML = renderRepoCard(data_repo.repository, {
-      border_radius: "0",
+      border_radius: 0,
     });
     expect(document.querySelector("rect")).toHaveAttribute("rx", "0");
     document.body.innerHTML = renderRepoCard(data_repo.repository, {});

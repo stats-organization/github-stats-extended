@@ -68,7 +68,7 @@ class Card {
     this.hideBorder = false;
     this.hideTitle = false;
 
-    this.border_radius = border_radius;
+    this.border_radius = parseFloat(String(border_radius));
 
     // returns theme based colors with proper overrides and defaults
     this.colors = colors;
@@ -243,6 +243,9 @@ class Card {
    * @returns The rendered card.
    */
   render(body: string): string {
+    if (!Number.isFinite(this.border_radius)) {
+      throw new Error(`Invalid border radius: "${this.border_radius}"`);
+    }
     if (
       this.colors.titleColor !== undefined &&
       !isValidHexColor(this.colors.titleColor, true)
