@@ -240,11 +240,7 @@ class WakatimeCardUrl extends CardUrlBase<WakatimeCardUrl> {
 
 /** Any card-URL builder, regardless of card type (all share the universal API). */
 export type CardUrlBuilder =
-  | StatsCardUrl
-  | TopLangsCardUrl
-  | PinCardUrl
-  | GistCardUrl
-  | WakatimeCardUrl;
+  StatsCardUrl | TopLangsCardUrl | PinCardUrl | GistCardUrl | WakatimeCardUrl;
 
 /**
  * Create a card-URL builder typed to the given card, so only the params that
