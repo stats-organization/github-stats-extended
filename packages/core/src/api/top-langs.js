@@ -1,5 +1,5 @@
 import { renderTopLanguages } from "../cards/top-languages.js";
-import { findInvalidColor } from "../common/color.ts";
+import { findInvalidColor } from "../common/color.js";
 import {
   MissingParamError,
   retrieveSecondaryMessage,

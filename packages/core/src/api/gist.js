@@ -1,5 +1,5 @@
 import { renderGistCard } from "../cards/gist.js";
-import { findInvalidColor } from "../common/color.ts";
+import { findInvalidColor } from "../common/color.js";
 import {
   MissingParamError,
   retrieveSecondaryMessage,

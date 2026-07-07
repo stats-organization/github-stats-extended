@@ -1,5 +1,5 @@
 import { renderRepoCard } from "../cards/repo.js";
-import { findInvalidColor } from "../common/color.ts";
+import { findInvalidColor } from "../common/color.js";
 import {
   MissingParamError,
   retrieveSecondaryMessage,

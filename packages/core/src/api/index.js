@@ -1,5 +1,5 @@
 import { renderStatsCard } from "../cards/stats.js";
-import { findInvalidColor } from "../common/color.ts";
+import { findInvalidColor } from "../common/color.js";
 import {
   MissingParamError,
   retrieveSecondaryMessage,
