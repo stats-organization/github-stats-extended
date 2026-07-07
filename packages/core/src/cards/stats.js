@@ -3,7 +3,7 @@ import { I18n } from "../common/I18n.js";
 import { getCardColors } from "../common/color.js";
 import { CustomError } from "../common/error.js";
 import { kFormatter } from "../common/fmt.js";
-import { encodeHTML } from "../common/html.ts";
+import { encodeHTML } from "../common/html.js";
 import { icons, rankIcon } from "../common/icons.js";
 import { buildSearchFilter, clampValue } from "../common/ops.js";
 import { flexLayout, measureText } from "../common/render.js";
