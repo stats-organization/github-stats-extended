@@ -84,7 +84,7 @@ export function ThemePicker(): JSX.Element {
       <button
         ref={buttonRef}
         type="button"
-        className="btn btn-ghost btn-circle"
+        className="btn btn-ghost btn-circle  not-[&:hover]:text-current"
         aria-label="Choose theme"
         aria-haspopup="menu"
         aria-expanded={open}
