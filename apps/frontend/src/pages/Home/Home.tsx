@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { JSX } from "react";
 import { useDispatch } from "react-redux";
@@ -27,12 +26,13 @@ import {
 } from "../../redux/selectors/userSelectors";
 import { login } from "../../redux/slices/user";
 
-import { getFullSuffix } from "./getFullSuffix";
+import { buildCardUrl } from "./buildCardUrl";
 import { CustomizeStage } from "./stages/Customize";
 import { DisplayStage } from "./stages/Display";
 import { LoginStage } from "./stages/Login/Login";
 import { SelectCardStage } from "./stages/SelectCard";
 import { ThemeStage } from "./stages/Theme";
+import { useCardDescriptor } from "./useCardDescriptor";
 
 interface HomeScreenProps {
   stage: StageIndex;
@@ -90,7 +90,6 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
   const [usePercent, setUsePercent] = useState(false);
 
   const { isDark } = useTheme();
-  const themeParam = isDark ? "&theme=github_dark" : "";
   const [theme, setTheme] = useState(isDark ? "dark" : "default");
 
   const handleCardTypeChange = (cardType: CardType) => {
@@ -115,77 +114,84 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
     setStage(2);
   };
 
-  const fullSuffix = getFullSuffix({
-    userId,
-    selectedCard,
-    selectedUserId,
-    repo,
-    gist,
-    wakatimeUser,
-    selectedStatsRank,
-    selectedLanguagesLayout,
-    selectedWakatimeLayout,
-    showTitle,
-    showOwner,
-    descriptionLines,
-    customTitle,
-    langsCount,
-    hideValues,
-    showAllStats,
-    showIcons,
-    includeAllCommits,
-    enableAnimations,
-    usePercent,
-  });
+  // Memoized so the builder keeps a stable reference across renders when its
+  // inputs are unchanged. Card components consume it by value (they derive a URL
+  // string), but memoizing keeps it safe to pass as a prop if any of them are
+  // ever wrapped in React.memo.
+  const cardBuilder = useMemo(
+    () =>
+      buildCardUrl({
+        userId,
+        selectedCard,
+        selectedUserId,
+        repo,
+        gist,
+        wakatimeUser,
+        selectedStatsRank,
+        selectedLanguagesLayout,
+        selectedWakatimeLayout,
+        showTitle,
+        showOwner,
+        descriptionLines,
+        customTitle,
+        langsCount,
+        hideValues,
+        showAllStats,
+        showIcons,
+        includeAllCommits,
+        enableAnimations,
+        usePercent,
+      }),
+    [
+      userId,
+      selectedCard,
+      selectedUserId,
+      repo,
+      gist,
+      wakatimeUser,
+      selectedStatsRank,
+      selectedLanguagesLayout,
+      selectedWakatimeLayout,
+      showTitle,
+      showOwner,
+      descriptionLines,
+      customTitle,
+      langsCount,
+      hideValues,
+      showAllStats,
+      showIcons,
+      includeAllCommits,
+      enableAnimations,
+      usePercent,
+    ],
+  );
+
+  // Preview builder for the customize stage, dark-themed to match the surroundings.
+  const customizeCardBuilder = useMemo(
+    () => (isDark ? cardBuilder.theme("github_dark") : cardBuilder),
+    [cardBuilder, isDark],
+  );
 
   // for stage four
-  let themeSuffix = fullSuffix;
+  const isRepoCard =
+    selectedCard === CardType.PIN || selectedCard === CardType.GIST;
+  const defaultTheme = isRepoCard ? "default_repocard" : "default";
+  const isDefaultTheme = theme === defaultTheme;
 
-  if (
-    !(
-      (theme === "default" &&
-        [CardType.STATS, CardType.TOP_LANGS, CardType.WAKATIME].includes(
-          selectedCard as never,
-        )) ||
-      (theme === "default_repocard" &&
-        [CardType.PIN, CardType.GIST].includes(selectedCard as never))
-    )
-  ) {
-    themeSuffix += `&theme=${theme}`;
-  }
+  const themeBuilder = useMemo(
+    () => (isDefaultTheme ? cardBuilder : cardBuilder.theme(theme)),
+    [cardBuilder, isDefaultTheme, theme],
+  );
 
   // for stage five
-  const [gistUrl, setGistUrl] = useState("");
-
-  const guestHint = useMemo(() => {
-    switch (selectedCard) {
-      case CardType.STATS:
-      case CardType.TOP_LANGS:
-        return `username "${DEMO_USER}"`;
-      case CardType.PIN:
-        return `repo "${DEMO_REPO}"`;
-      case CardType.GIST:
-        return `Gist ID "${DEMO_GIST}"`;
-      case CardType.WAKATIME:
-        return `WakaTime username "${DEMO_WAKATIME_USER}"`;
-      default:
-        selectedCard satisfies never;
-        return "";
-    }
-  }, [selectedCard]);
-
-  useEffect(() => {
-    async function fetchGistURL() {
-      try {
-        const fullUrl = `https://api.github.com/gists/${gist}`;
-        const result = await axios.get<{ html_url: string }>(fullUrl);
-        setGistUrl(result.data.html_url);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    void fetchGistURL();
-  }, [gist]);
+  const cardDescriptor = useCardDescriptor({
+    selectedCard,
+    themeBuilder,
+    repo,
+    userId,
+    wakatimeUser,
+    gist,
+  });
 
   const contentSectionRef = useRef<HTMLDivElement | null>(null);
 
@@ -236,46 +242,6 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
       </div>
     );
   }
-
-  const cardFilename = ((): string => {
-    switch (selectedCard) {
-      case CardType.STATS:
-      case CardType.TOP_LANGS:
-        return `${selectedUserId}_card`;
-      case CardType.PIN:
-        return `${repo}_card`;
-      case CardType.GIST:
-        return `gist_card`;
-      case CardType.WAKATIME:
-        return `${wakatimeUser}_card`;
-      default:
-        selectedCard satisfies never;
-        return "";
-    }
-  })();
-
-  const cardLink = ((): string => {
-    switch (selectedCard) {
-      case CardType.STATS:
-      case CardType.TOP_LANGS:
-        return `https://${HOST}/api${themeSuffix}`;
-
-      case CardType.PIN: {
-        let myRepo = repo;
-        if (!myRepo.includes("/")) {
-          myRepo = `${userId}/${myRepo}`;
-        }
-        return `https://github.com/${myRepo}`;
-      }
-      case CardType.GIST:
-        return gistUrl;
-      case CardType.WAKATIME:
-        return `https://wakatime.com/@${wakatimeUser}`;
-      default:
-        selectedCard satisfies never;
-        return "";
-    }
-  })();
 
   return (
     <div
@@ -379,13 +345,13 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
               setWakatimeUser={setWakatimeUser}
               usePercent={usePercent}
               setUsePercent={setUsePercent}
-              fullSuffix={fullSuffix + themeParam}
+              card={customizeCardBuilder}
               setStage={setStage}
             />
           )}
           {stage === 3 && (
             <ThemeStage
-              fullSuffix={fullSuffix}
+              card={cardBuilder}
               theme={theme}
               onThemeChange={(theme) => {
                 setTheme(theme);
@@ -395,14 +361,14 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
           )}
           {stage === 4 && (
             <DisplayStage
-              filename={cardFilename}
-              link={cardLink}
+              filename={cardBuilder.filename()}
+              link={cardDescriptor.link}
               theme={theme}
-              themeSuffix={themeSuffix}
+              card={themeBuilder}
               guestHint={
                 isAuthenticated
                   ? null
-                  : `Replace the sample ${guestHint} with your own after copying your Markdown or URL!`
+                  : `Replace the sample ${cardDescriptor.guestHint} with your own after copying your Markdown or URL!`
               }
             />
           )}

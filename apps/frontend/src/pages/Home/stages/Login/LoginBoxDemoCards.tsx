@@ -7,24 +7,26 @@ import {
   DEMO_USER,
   DEMO_WAKATIME_USER,
 } from "../../../../constants";
+import { CardType } from "../../../../models/CardType";
+import { cardUrl } from "../../../../models/CardUrl";
 import { useTheme } from "../../../../redux/selectors/themeSelectors";
 
-const cards: Array<{ demoImageSrc: string }> = [
-  {
-    demoImageSrc: `/pin?repo=${DEMO_REPO}&disable_animations=true`,
-  },
-  {
-    demoImageSrc: `/top-langs?username=${DEMO_USER}&langs_count=4&disable_animations=true`,
-  },
-  {
-    demoImageSrc: `?username=${DEMO_USER}&include_all_commits=true&disable_animations=true`,
-  },
-  {
-    demoImageSrc: `/wakatime?username=${DEMO_WAKATIME_USER}&langs_count=6&card_width=450&disable_animations=true`,
-  },
-  {
-    demoImageSrc: `/gist?id=${DEMO_GIST}&disable_animations=true`,
-  },
+const cards = [
+  cardUrl(CardType.PIN).repo(DEMO_REPO).disableAnimations(),
+  cardUrl(CardType.TOP_LANGS)
+    .username(DEMO_USER)
+    .langsCount(4)
+    .disableAnimations(),
+  cardUrl(CardType.STATS)
+    .username(DEMO_USER)
+    .includeAllCommits()
+    .disableAnimations(),
+  cardUrl(CardType.WAKATIME)
+    .username(DEMO_WAKATIME_USER)
+    .langsCount(6)
+    .cardWidth(450)
+    .disableAnimations(),
+  cardUrl(CardType.GIST).gistId(DEMO_GIST).disableAnimations(),
 ];
 
 function getCardXPosition(cardIndex: number): number {
@@ -41,29 +43,27 @@ function getCardXPosition(cardIndex: number): number {
 
 export function LoginBoxDemoCards(): JSX.Element {
   const { isDark } = useTheme();
-  // Show dark-themed demo cards in dark mode so they fit the surroundings.
-  const themeParam = isDark ? "&theme=github_dark" : "";
 
   return (
     <div className="w-full h-full lg:w-2/5 flex lg:flex-col lg:p-8 relative overflow-hidden">
       <div className="relative w-full h-full">
-        {cards.map((card, index) => (
-          <div
-            key={card.demoImageSrc}
-            style={{
-              left: `${getCardXPosition(index)}%`,
-              position: "relative",
-              zoom: "0.5",
-              marginBottom: "1%",
-            }}
-          >
-            <CardImage
-              imageSrc={`${card.demoImageSrc}${themeParam}`}
-              compact={false}
-              stage={0}
-            />
-          </div>
-        ))}
+        {cards.map((card, index) => {
+          // Show dark-themed demo cards in dark mode so they fit the surroundings.
+          const demoCard = isDark ? card.theme("github_dark") : card;
+          return (
+            <div
+              key={demoCard.toString()}
+              style={{
+                left: `${getCardXPosition(index)}%`,
+                position: "relative",
+                zoom: "0.5",
+                marginBottom: "1%",
+              }}
+            >
+              <CardImage card={demoCard} compact={false} stage={0} />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import {
   getCardThemeBackdrop,
   getThemeSortRank,
 } from "../../../components/Card/themeBackdrop";
+import type { CardUrlBuilder } from "../../../models/CardUrl";
 import { useTheme } from "../../../redux/selectors/themeSelectors";
 
 const excludedThemes = [
@@ -23,14 +24,14 @@ const themeList = Object.keys(themes)
   .sort((a, b) => getThemeSortRank(a) - getThemeSortRank(b));
 
 interface ThemeStageProps {
-  fullSuffix: string;
+  card: CardUrlBuilder;
   theme: string;
   onThemeChange: (theme: string) => void;
 }
 
 export function ThemeStage({
   theme,
-  fullSuffix,
+  card,
   onThemeChange,
 }: ThemeStageProps): JSX.Element {
   const { isDark } = useTheme();
@@ -52,7 +53,7 @@ export function ThemeStage({
               <Card
                 title={myTheme}
                 description=""
-                imageSrc={`${fullSuffix}&theme=${myTheme}`}
+                card={card.theme(myTheme)}
                 selected={theme === myTheme}
                 stage={3}
                 backgroundColor={getCardThemeBackdrop(myTheme, isDark)}

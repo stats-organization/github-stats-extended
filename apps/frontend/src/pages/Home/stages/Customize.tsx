@@ -15,6 +15,7 @@ import {
   DEMO_WAKATIME_USER,
 } from "../../../constants";
 import { CardType } from "../../../models/CardType";
+import type { CardUrlBuilder } from "../../../models/CardUrl";
 import type { StageIndex } from "../../../models/Stage";
 import { useIsAuthenticated } from "../../../redux/selectors/userSelectors";
 
@@ -59,7 +60,7 @@ interface CustomizeStageProps {
   setEnableAnimations: Updater<boolean>;
   usePercent: boolean;
   setUsePercent: Updater<boolean>;
-  fullSuffix: string;
+  card: CardUrlBuilder;
   setStage: (stageIndex: StageIndex) => void;
 }
 
@@ -101,7 +102,7 @@ export function CustomizeStage({
   setEnableAnimations,
   usePercent,
   setUsePercent,
-  fullSuffix,
+  card,
   setStage,
 }: CustomizeStageProps): JSX.Element {
   const cardType = selectedCard;
@@ -420,7 +421,7 @@ export function CustomizeStage({
       </div>
       <div className="w-full lg:w-3/5 md:w-1/2 object-center pt-5 md:pt-0 pl-0 md:pl-5 lg:pl-0">
         <div className="w-full lg:w-3/5 mx-auto flex flex-col justify-center sticky top-32">
-          <CardImage imageSrc={fullSuffix} stage={2} />
+          <CardImage card={card} stage={2} />
         </div>
       </div>
     </div>

@@ -31,7 +31,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies
@@ -59,7 +59,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies
@@ -67,8 +67,10 @@ jobs:
       - name: Build packages
         run: pnpm run build:packages
 
+      # Only install chromium since it is the only browser enabled in
+      # apps/frontend/playwright.config.ts. Update this if more projects are added.
       - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Run Playwright tests
         run: pnpm --filter ./apps/frontend/ run test:e2e
@@ -85,7 +87,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies
@@ -106,7 +108,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies
