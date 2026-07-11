@@ -448,8 +448,9 @@ const renderCompactLayout = (
   let progressOffset = 0;
   const compactProgressBar = langs
     .map((lang) => {
-      if (!isValidHexColor(lang.color, true)) {
-        throw new Error(`Invalid language color: "${lang.color}"`);
+      const langColor = lang.color || DEFAULT_LANG_COLOR;
+      if (!isValidHexColor(langColor, true)) {
+        throw new Error(`Invalid language color: "${langColor}"`);
       }
 
       const percentage = parseFloat(
@@ -466,7 +467,7 @@ const renderCompactLayout = (
           y="0"
           width="${progress}"
           height="8"
-          fill="${lang.color || "#858585"}"
+          fill="${langColor}"
         />
       `;
       progressOffset += percentage;
@@ -527,8 +528,9 @@ const renderDonutVerticalLayout = (
 
   // Generate each donut vertical chart part
   for (const lang of langs) {
-    if (!isValidHexColor(lang.color, true)) {
-      throw new Error(`Invalid language color: "${lang.color}"`);
+    const langColor = lang.color || DEFAULT_LANG_COLOR;
+    if (!isValidHexColor(langColor, true)) {
+      throw new Error(`Invalid language color: "${langColor}"`);
     }
 
     const percentage = (lang.size / totalLanguageSize) * 100;
@@ -542,7 +544,7 @@ const renderDonutVerticalLayout = (
           cy="100"
           r="${radius}"
           fill="transparent"
-          stroke="${lang.color}"
+          stroke="${langColor}"
           stroke-width="25"
           stroke-dasharray="${totalCircleLength}"
           stroke-dashoffset="${indent}"
@@ -606,8 +608,9 @@ const renderPieLayout = (langs, totalLanguageSize, statsFormat, hideValues) => {
 
   // Generate each pie chart part
   for (const lang of langs) {
-    if (!isValidHexColor(lang.color, true)) {
-      throw new Error(`Invalid language color: "${lang.color}"`);
+    const langColor = lang.color || DEFAULT_LANG_COLOR;
+    if (!isValidHexColor(langColor, true)) {
+      throw new Error(`Invalid language color: "${langColor}"`);
     }
 
     if (langs.length === 1) {
@@ -617,7 +620,7 @@ const renderPieLayout = (langs, totalLanguageSize, statsFormat, hideValues) => {
           cy="${centerY}"
           r="${radius}"
           stroke="none"
-          fill="${lang.color}"
+          fill="${langColor}"
           data-testid="lang-pie"
           size="100"
         />
@@ -650,7 +653,7 @@ const renderPieLayout = (langs, totalLanguageSize, statsFormat, hideValues) => {
           data-testid="lang-pie"
           size="${percentage}"
           d="M ${centerX} ${centerY} L ${startPoint.x} ${startPoint.y} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${endPoint.x} ${endPoint.y} Z"
-          fill="${lang.color}"
+          fill="${langColor}"
         />
       </g>
     `);
@@ -747,10 +750,11 @@ const renderDonutLayout = (
   const strokeWidth = 12;
 
   const colors = langs.map((lang) => {
-    if (!isValidHexColor(lang.color, true)) {
-      throw new Error(`Invalid language color: "${lang.color}"`);
+    const langColor = lang.color || DEFAULT_LANG_COLOR;
+    if (!isValidHexColor(langColor, true)) {
+      throw new Error(`Invalid language color: "${langColor}"`);
     }
-    return lang.color;
+    return langColor;
   });
   const langsPercents = langs.map((lang) =>
     parseFloat(((lang.size / totalLanguageSize) * 100).toFixed(2)),
