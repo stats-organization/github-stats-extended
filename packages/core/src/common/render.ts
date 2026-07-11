@@ -1,4 +1,4 @@
-import { getCardColors, isValidHexColor } from "./color.js";
+import { getCardColors, isPrefixedHexColor } from "./color.js";
 import { SECONDARY_ERROR_MESSAGES, TRY_AGAIN_LATER } from "./error.js";
 import { encodeHTML } from "./html.js";
 import { clampValue } from "./ops.js";
@@ -52,7 +52,7 @@ const flexLayout = ({
  * @returns Language display SVG object.
  */
 const createLanguageNode = (langName: string, langColor: string): string => {
-  if (!isValidHexColor(langColor, true)) {
+  if (!isPrefixedHexColor(langColor)) {
     throw new Error(`Invalid language color: "${langColor}"`);
   }
 
@@ -94,10 +94,10 @@ const createProgressNode = ({
   progressBarBackgroundColor: string;
   delay: number;
 }): string => {
-  if (!isValidHexColor(color, true)) {
+  if (!isPrefixedHexColor(color)) {
     throw new Error(`Invalid progress color: "${color}"`);
   }
-  if (!isValidHexColor(progressBarBackgroundColor, true)) {
+  if (!isPrefixedHexColor(progressBarBackgroundColor)) {
     throw new Error(
       `Invalid progress bar background color: "${progressBarBackgroundColor}"`,
     );
@@ -204,7 +204,7 @@ const wrappedTextNode = ({
  * @returns CSS rules block (without the surrounding selector).
  */
 const wrappedTextStyles = (color: string): string => {
-  if (!isValidHexColor(color, true)) {
+  if (!isPrefixedHexColor(color)) {
     throw new Error(`Invalid text color: "${color}"`);
   }
 

@@ -1,6 +1,6 @@
 import { Card } from "../common/Card.js";
 import { I18n } from "../common/I18n.js";
-import { getCardColors, isValidHexColor } from "../common/color.js";
+import { getCardColors, isPrefixedHexColor } from "../common/color.js";
 import { kFormatter, wrapTextMultiline } from "../common/fmt.js";
 import { encodeHTML } from "../common/html.js";
 import { icons } from "../common/icons.js";
@@ -33,7 +33,7 @@ const DESCRIPTION_MAX_LINES = 3;
  * @returns {string} Wrapped repo description SVG object.
  */
 const getBadgeSVG = (label, textColor, xOffset = 0) => {
-  if (!isValidHexColor(textColor, true)) {
+  if (!isPrefixedHexColor(textColor)) {
     throw new Error(`Invalid text color: "${textColor}"`);
   }
   if (!Number.isFinite(xOffset)) {

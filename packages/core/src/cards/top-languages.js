@@ -3,7 +3,7 @@ import { I18n } from "../common/I18n.js";
 import {
   fallbackColor,
   getCardColors,
-  isValidHexColor,
+  isPrefixedHexColor,
 } from "../common/color.js";
 import { formatBytes } from "../common/fmt.js";
 import { encodeHTML } from "../common/html.js";
@@ -290,7 +290,7 @@ const createCompactLangNode = ({
   const staggerDelay = (index + 3) * 150;
   const color = lang.color || "#858585";
 
-  if (!isValidHexColor(color, true)) {
+  if (!isPrefixedHexColor(color)) {
     throw new Error(`Invalid language color: "${color}"`);
   }
 
@@ -449,7 +449,7 @@ const renderCompactLayout = (
   const compactProgressBar = langs
     .map((lang) => {
       const langColor = lang.color || DEFAULT_LANG_COLOR;
-      if (!isValidHexColor(langColor, true)) {
+      if (!isPrefixedHexColor(langColor)) {
         throw new Error(`Invalid language color: "${langColor}"`);
       }
 
@@ -529,7 +529,7 @@ const renderDonutVerticalLayout = (
   // Generate each donut vertical chart part
   for (const lang of langs) {
     const langColor = lang.color || DEFAULT_LANG_COLOR;
-    if (!isValidHexColor(langColor, true)) {
+    if (!isPrefixedHexColor(langColor)) {
       throw new Error(`Invalid language color: "${langColor}"`);
     }
 
@@ -609,7 +609,7 @@ const renderPieLayout = (langs, totalLanguageSize, statsFormat, hideValues) => {
   // Generate each pie chart part
   for (const lang of langs) {
     const langColor = lang.color || DEFAULT_LANG_COLOR;
-    if (!isValidHexColor(langColor, true)) {
+    if (!isPrefixedHexColor(langColor)) {
       throw new Error(`Invalid language color: "${langColor}"`);
     }
 
@@ -751,7 +751,7 @@ const renderDonutLayout = (
 
   const colors = langs.map((lang) => {
     const langColor = lang.color || DEFAULT_LANG_COLOR;
-    if (!isValidHexColor(langColor, true)) {
+    if (!isPrefixedHexColor(langColor)) {
       throw new Error(`Invalid language color: "${langColor}"`);
     }
     return langColor;
@@ -817,7 +817,7 @@ const renderDonutLayout = (
  * @returns {string} No languages data SVG node string.
  */
 const noLanguagesDataNode = ({ color, text, layout }) => {
-  if (!isValidHexColor(color, true)) {
+  if (!isPrefixedHexColor(color)) {
     throw new Error(`Invalid text color: "${color}"`);
   }
 

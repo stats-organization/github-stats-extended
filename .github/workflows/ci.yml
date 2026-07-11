@@ -8,6 +8,7 @@ on:
   pull_request:
     branches:
       - master
+      - fix-warnings
 
 concurrency:
   group: "${{ github.workflow }}-${{ github.head_ref }}"

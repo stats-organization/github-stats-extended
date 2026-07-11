@@ -1,4 +1,4 @@
-import { isValidGradient, isValidHexColor } from "./color.js";
+import { isPrefixedHexColor, isValidGradient } from "./color.js";
 import { encodeHTML } from "./html.js";
 import { flexLayout } from "./render.js";
 
@@ -248,13 +248,13 @@ class Card {
     }
     if (
       this.colors.titleColor !== undefined &&
-      !isValidHexColor(this.colors.titleColor, true)
+      !isPrefixedHexColor(this.colors.titleColor)
     ) {
       throw new Error(`Invalid title color: "${this.colors.titleColor}"`);
     }
     if (
       this.colors.borderColor !== undefined &&
-      !isValidHexColor(this.colors.borderColor, true)
+      !isPrefixedHexColor(this.colors.borderColor)
     ) {
       throw new Error(`Invalid border color: "${this.colors.borderColor}"`);
     }
@@ -262,7 +262,7 @@ class Card {
       this.colors.bgColor !== undefined &&
       !(typeof this.colors.bgColor === "object"
         ? isValidGradient(this.colors.bgColor)
-        : isValidHexColor(this.colors.bgColor, true))
+        : isPrefixedHexColor(this.colors.bgColor))
     ) {
       throw new Error(
         `Invalid background color: ${String(this.colors.bgColor)}`,

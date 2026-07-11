@@ -3,8 +3,9 @@ import { describe, expect, it } from "vitest";
 import {
   findInvalidColor,
   getCardColors,
+  isBareHexColor,
+  isPrefixedHexColor,
   isValidGradient,
-  isValidHexColor,
 } from "../src/common/color.js";
 
 describe("getCardColors", () => {
@@ -95,23 +96,35 @@ describe("getCardColors", () => {
   });
 });
 
-describe("isValidHexColor", () => {
+describe("isPrefixedHexColor", () => {
   it("should validate hex colors with # prefix", () => {
-    expect(isValidHexColor("#f00", true)).toBe(true);
-    expect(isValidHexColor("#ffffff", true)).toBe(true);
-    expect(isValidHexColor("#12345678", true)).toBe(true);
-    expect(isValidHexColor("f00", true)).toBe(false);
-    expect(isValidHexColor("#red", true)).toBe(false);
-    expect(isValidHexColor("red", true)).toBe(false);
+    expect(isPrefixedHexColor("#f00")).toBe(true);
+    expect(isPrefixedHexColor("#ffffff")).toBe(true);
+    expect(isPrefixedHexColor("#12345678")).toBe(true);
+    expect(isPrefixedHexColor("f00")).toBe(false);
+    expect(isPrefixedHexColor("#red")).toBe(false);
+    expect(isPrefixedHexColor("red")).toBe(false);
   });
 
+  it("should reject non-string values", () => {
+    expect(isPrefixedHexColor(null)).toBe(false);
+    expect(isPrefixedHexColor(undefined)).toBe(false);
+  });
+});
+
+describe("isBareHexColor", () => {
   it("should validate hex colors without # prefix", () => {
-    expect(isValidHexColor("f00")).toBe(true);
-    expect(isValidHexColor("ffffff")).toBe(true);
-    expect(isValidHexColor("12345678")).toBe(true);
-    expect(isValidHexColor("#f00")).toBe(false);
-    expect(isValidHexColor("#red")).toBe(false);
-    expect(isValidHexColor("red")).toBe(false);
+    expect(isBareHexColor("f00")).toBe(true);
+    expect(isBareHexColor("ffffff")).toBe(true);
+    expect(isBareHexColor("12345678")).toBe(true);
+    expect(isBareHexColor("#f00")).toBe(false);
+    expect(isBareHexColor("#red")).toBe(false);
+    expect(isBareHexColor("red")).toBe(false);
+  });
+
+  it("should reject non-string values", () => {
+    expect(isBareHexColor(null)).toBe(false);
+    expect(isBareHexColor(undefined)).toBe(false);
   });
 });
 
@@ -129,6 +142,9 @@ describe("isValidGradient", () => {
     expect(isValidGradient(["90"])).toBe(false);
     expect(isValidGradient(["", "f00", "0f0"])).toBe(false); // empty angle
     expect(isValidGradient(["90", "f00", "red"])).toBe(false); // invalid color
+    expect(isValidGradient(["Infinity", "f00", "0f0"])).toBe(false); // non-finite angle
+    expect(isValidGradient(["-Infinity", "f00", "0f0"])).toBe(false); // non-finite angle
+    expect(isValidGradient(["abc", "f00", "0f0"])).toBe(false); // non-numeric angle
   });
 });
 
