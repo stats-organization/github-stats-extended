@@ -55,10 +55,27 @@ export default async (
     };
   }
 
+  const safePattern = /^[-\w/.,]+$/;
+  if (username && !safePattern.test(username)) {
+    return {
+      status: "error - permanent",
+      content: renderError({
+        message: "Something went wrong",
+        secondaryMessage: "Username contains unsafe characters",
+        renderOptions: {
+          title_color,
+          text_color,
+          bg_color,
+          border_color,
+          theme,
+        },
+      }),
+    };
+  }
+
   if (
     layout !== undefined &&
-    (typeof layout !== "string" ||
-      !["compact", "normal", "donut", "donut-vertical", "pie"].includes(layout))
+    !["compact", "normal", "donut", "donut-vertical", "pie"].includes(layout)
   ) {
     return {
       status: "error - permanent",
@@ -78,8 +95,7 @@ export default async (
 
   if (
     stats_format !== undefined &&
-    (typeof stats_format !== "string" ||
-      !["bytes", "percentages"].includes(stats_format))
+    !["bytes", "percentages"].includes(stats_format)
   ) {
     return {
       status: "error - permanent",

@@ -43,6 +43,24 @@ export default async (
     };
   }
 
+  const safePattern = /^[-\w/.,]+$/;
+  if (id && !safePattern.test(id)) {
+    return {
+      status: "error - permanent",
+      content: renderError({
+        message: "Something went wrong",
+        secondaryMessage: "Gist ID contains unsafe characters",
+        renderOptions: {
+          title_color,
+          text_color,
+          bg_color,
+          border_color,
+          theme,
+        },
+      }),
+    };
+  }
+
   try {
     const gistData = await fetchGist(id, pat);
 

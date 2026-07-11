@@ -49,6 +49,24 @@ export default async ({
     };
   }
 
+  const safePattern = /^[-\w/.,]+$/;
+  if (username && !safePattern.test(username)) {
+    return {
+      status: "error - permanent",
+      content: renderError({
+        message: "Something went wrong",
+        secondaryMessage: "Username contains unsafe characters",
+        renderOptions: {
+          title_color,
+          text_color,
+          bg_color,
+          border_color,
+          theme,
+        },
+      }),
+    };
+  }
+
   try {
     const stats = await fetchWakatimeStats({ username, api_domain });
 
