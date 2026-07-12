@@ -1010,3 +1010,25 @@ describe("test top-langs API", () => {
     );
   });
 });
+
+describe("test renderTopLanguages with languages missing a color", () => {
+  // GitHub's GraphQL `Language.color` is nullable, so a language can reach the
+  // card with `color: null`. It must fall back to the default color instead of
+  // throwing.
+  const langsWithNullColor = {
+    HTML: { color: "#0f0", name: "HTML", size: 200 },
+    Text: { color: null, name: "Text", size: 100 },
+  };
+
+  it.each(["normal", "compact", "donut", "donut-vertical", "pie"])(
+    "should render the %s layout using the default color",
+    (layout) => {
+      expect(() =>
+        renderTopLanguages(langsWithNullColor, { layout }),
+      ).not.toThrow();
+
+      const card = renderTopLanguages(langsWithNullColor, { layout });
+      expect(card).toContain("#858585");
+    },
+  );
+});

@@ -1,6 +1,6 @@
 import { Card } from "../common/Card.js";
 import { I18n } from "../common/I18n.js";
-import { getCardColors, isValidHexColor } from "../common/color.js";
+import { getCardColors, isPrefixedHexColor } from "../common/color.js";
 import { encodeHTML } from "../common/html.js";
 import languageColors from "../common/languageColors.json" with { type: "json" };
 import { clampValue, lowercaseTrim } from "../common/ops.js";
@@ -25,7 +25,7 @@ const TOTAL_TEXT_WIDTH = 275;
  * @returns {string} No coding activity SVG node string.
  */
 const noCodingActivityNode = ({ color, text }) => {
-  if (!isValidHexColor(color, true)) {
+  if (!isPrefixedHexColor(color)) {
     throw new Error(`Invalid text color: "${color}"`);
   }
 
@@ -203,7 +203,7 @@ const getStyles = function ({
   titleColor,
   textColor,
 }) {
-  if (!isValidHexColor(textColor, true)) {
+  if (!isPrefixedHexColor(textColor)) {
     throw new Error(`Invalid text color: "${textColor}"`);
   }
 

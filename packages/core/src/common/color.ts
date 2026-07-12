@@ -1,38 +1,53 @@
 import { themes } from "../themes/index.js";
 
+/** Matches a 3-, 4-, 6-, or 8-digit hex color with no leading `#`. */
+const HEX_COLOR =
+  /^([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{4}|[A-Fa-f0-9]{3})$/;
+
 /**
- * Checks if a string is a valid hex color.
+ * Checks if a value is a bare hex color, i.e. hex digits with no `#` prefix
+ * (`"f00"`, `"ffffff"`). This is the form user-supplied color params and
+ * gradient stops arrive in.
  *
- * @param hexColor String to check.
- * @param numberSignPrefix Whether the hex color must have a '#' prefix.
- * @returns True if the given string is a valid hex color.
+ * @param value Value to check.
+ * @returns True if the value is a bare hex color.
  */
-const isValidHexColor = (
-  hexColor: string,
-  numberSignPrefix = false,
-): boolean => {
-  return new RegExp(
-    `^${numberSignPrefix ? "#" : ""}([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}|[A-Fa-f0-9]{4})$`,
-  ).test(hexColor);
+const isBareHexColor = (value: unknown): boolean => {
+  return typeof value === "string" && HEX_COLOR.test(value);
 };
 
 /**
- * Check if the given string is a valid gradient.
+ * Checks if a value is a `#`-prefixed hex color (`"#f00"`, `"#ffffff"`). This
+ * is the form colors take once resolved by {@link getCardColors}, i.e. right
+ * before they are written into the SVG.
  *
- * @param colors Array of colors.
- * @returns True if the given string is a valid gradient.
+ * @param value Value to check.
+ * @returns True if the value is a `#`-prefixed hex color.
  */
-const isValidGradient = (colors: Array<string>): boolean => {
+const isPrefixedHexColor = (value: unknown): boolean => {
   return (
-    colors.length > 2 &&
-    colors
-      .slice(1)
-      .every(
-        (color) =>
-          isValidHexColor(color) &&
-          !isNaN(Number(colors[0])) &&
-          colors[0]?.trim() !== "",
-      )
+    typeof value === "string" &&
+    value.startsWith("#") &&
+    HEX_COLOR.test(value.slice(1))
+  );
+};
+
+/**
+ * Checks if the given parts form a valid gradient: a finite numeric angle
+ * followed by at least two bare-hex color stops, e.g. `["90", "f00", "0f0"]`.
+ * The angle is written into the SVG `gradientTransform="rotate(...)"`.
+ *
+ * @param parts Gradient parts: `[angle, ...stops]`.
+ * @returns True if the parts form a valid gradient.
+ */
+const isValidGradient = (parts: Array<string>): boolean => {
+  const [angle, ...stops] = parts;
+  return (
+    stops.length >= 2 &&
+    angle !== undefined &&
+    angle.trim() !== "" &&
+    Number.isFinite(Number(angle)) &&
+    stops.every(isBareHexColor)
   );
 };
 
@@ -46,8 +61,7 @@ const isValidColorInput = (color: string | null | undefined): boolean => {
   if (color === null || color === undefined) {
     return true;
   }
-  const colors = color.split(",");
-  return isValidGradient(colors) || isValidHexColor(color);
+  return isValidGradient(color.split(",")) || isBareHexColor(color);
 };
 
 /**
@@ -83,7 +97,7 @@ const fallbackColor = (
     return colors;
   }
 
-  if (color !== undefined && isValidHexColor(color)) {
+  if (color !== undefined && isBareHexColor(color)) {
     return `#${color}`;
   }
 
@@ -193,5 +207,6 @@ export {
   getCardColors,
   findInvalidColor,
   isValidGradient,
-  isValidHexColor,
+  isBareHexColor,
+  isPrefixedHexColor,
 };
