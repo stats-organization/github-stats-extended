@@ -54,13 +54,13 @@ class Card {
     defaultTitle = "",
     titlePrefixIcon,
   }: {
-    width?: number;
-    height?: number;
-    border_radius?: number;
-    colors?: CardColors;
-    customTitle?: string;
-    defaultTitle?: string;
-    titlePrefixIcon?: string;
+    width?: number | undefined;
+    height?: number | undefined;
+    border_radius?: number | undefined;
+    colors?: CardColors | undefined;
+    customTitle?: string | undefined;
+    defaultTitle?: string | undefined;
+    titlePrefixIcon?: string | undefined;
   }) {
     this.width = width;
     this.height = height;

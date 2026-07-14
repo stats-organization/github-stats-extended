@@ -14,6 +14,9 @@ import {
   wrappedTextNode,
   wrappedTextStyles,
 } from "../common/render.js";
+import type { GistData } from "../fetchers/types.js";
+
+import type { GistCardOptions } from "./types.js";
 
 const ICON_SIZE = 16;
 const CARD_DEFAULT_WIDTH = 400;
@@ -25,18 +28,16 @@ const DESCRIPTION_LINE_HEIGHT_PX = 16;
 const DESCRIPTION_MAX_LINES = 10;
 
 /**
- * @typedef {import('./types').GistCardOptions} GistCardOptions Gist card options.
- * @typedef {import('../fetchers/types').GistData} GistData Gist data.
- */
-
-/**
  * Render gist card.
  *
- * @param {GistData} gistData Gist data.
- * @param {Partial<GistCardOptions>} options Gist card options.
- * @returns {string} Gist card.
+ * @param gistData Gist data.
+ * @param options Gist card options.
+ * @returns Gist card.
  */
-const renderGistCard = (gistData, options = {}) => {
+const renderGistCard = (
+  gistData: GistData,
+  options: Partial<GistCardOptions> = {},
+): string => {
   const { name, nameWithOwner, description, language, starsCount, forksCount } =
     gistData;
   const {
@@ -128,9 +129,11 @@ const renderGistCard = (gistData, options = {}) => {
   );
 
   const languageName = language || "Unspecified";
-  // @ts-ignore
+  // @ts-expect-error Stops TypeScript from raising error.
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Suppressing the resulting error-any
   const languageColor = languageColors[languageName] || "#858585";
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- Suppressing the resulting error-any
   const svgLanguage = createLanguageNode(languageName, languageColor);
 
   const starAndForkCount = flexLayout({
