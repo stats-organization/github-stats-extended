@@ -5,10 +5,11 @@ import { CustomError } from "./error.js";
 import { logger } from "./log.js";
 
 /**
- * Subset of the response payload the retryer inspects to detect
- * rate-limiting and credential failures.
+ * Error-detection fields the retryer inspects to detect rate-limiting and credential failures.
+ * Every fetcher's payload is intersected with
+ * this, so the retryer can read `errors`/`message` regardless of the payload's own shape.
  */
-interface ResponseData {
+interface ResponseErrors {
   errors?: Array<{ type?: string; message?: string }>;
   message?: string;
 }
@@ -27,27 +28,34 @@ function getRandomInt(max: number): number {
   return Math.floor(Math.random() * max);
 }
 
-type FetcherResponse = AxiosResponse<ResponseData>;
+/**
+ * A fetcher's Axios response. `TData` is the shape of `response.data`,
+ * which is intersected with {@link ResponseErrors} so the retryer can inspect
+ * `errors`/`message`.
+ * Defaults to `unknown` (error fields only) for callers that don't care about the payload.
+ */
+type FetcherResponse<TData = unknown> = AxiosResponse<TData & ResponseErrors>;
 
-type FetcherFunction = (
+type FetcherFunction<TData = unknown> = (
   variables: Record<string, unknown>,
   token: string,
   retriesForTests?: number,
-) => Promise<FetcherResponse>;
+) => Promise<FetcherResponse<TData>>;
 
 /**
  * Try to execute the fetcher function until it succeeds or the max number of retries is reached.
  *
+ * @template TData Shape of `response.data` returned by the fetcher.
  * @param fetcher The fetcher function.
  * @param variables Object with arguments to pass to the fetcher function.
  * @param pat Optional PAT override.
  * @returns The response from the fetcher function.
  */
-const retryer = async (
-  fetcher: FetcherFunction,
+const retryer = async <TData = unknown>(
+  fetcher: FetcherFunction<TData>,
   variables: Record<string, unknown>,
   pat: string | null = null,
-): Promise<FetcherResponse> => {
+): Promise<FetcherResponse<TData>> => {
   const PATs = pat
     ? [{ name: "user PAT from database", value: pat }]
     : getConfig().pats;
@@ -86,7 +94,7 @@ const retryer = async (
         return response;
       }
     } catch (err) {
-      const e = err as { response?: FetcherResponse };
+      const e = err as { response?: FetcherResponse<TData> };
 
       // network/unexpected error → let caller treat as failure
       if (!e.response) {
