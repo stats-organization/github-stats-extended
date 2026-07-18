@@ -61,6 +61,17 @@ const data_contributed_to = {
   },
 };
 
+const contributed_to_resource_limit_error = {
+  errors: [
+    {
+      type: "RESOURCE_LIMITS_EXCEEDED",
+      path: ["user", "repositoriesContributedTo"],
+      locations: [],
+      message: "Resource limits for this query exceeded.",
+    },
+  ],
+};
+
 const data_without_pull_requests = {
   data: {
     user: {
@@ -146,6 +157,14 @@ beforeEach(() => {
       return [200, data_stats];
     }
 
+    if (req.query.includes("totalPullRequestReviewContributions")) {
+      return [200, data_stats];
+    }
+
+    if (req.query.includes("pullRequests(first: 1)")) {
+      return [200, data_stats];
+    }
+
     return [200, req.variables.after ? data_repo : data_repo_page1];
   });
 });
@@ -195,6 +214,10 @@ describe("Test fetchStats", () => {
       .onPost("https://api.github.com/graphql")
       .replyOnce(200, data_stats)
       .onPost("https://api.github.com/graphql")
+      .replyOnce(200, data_stats)
+      .onPost("https://api.github.com/graphql")
+      .replyOnce(200, data_stats)
+      .onPost("https://api.github.com/graphql")
       .replyOnce(200, data_repo_zero_stars)
       .onPost("https://api.github.com/graphql")
       .replyOnce(200, data_contributed_to);
@@ -230,6 +253,30 @@ describe("Test fetchStats", () => {
       totalIssuesCommented: 0,
       rank,
     });
+  });
+
+  it("should omit contributed repositories when GitHub exceeds its resource limit", async () => {
+    mock.reset();
+
+    mock
+      .onPost("https://api.github.com/graphql")
+      .replyOnce(200, data_stats)
+      .onPost("https://api.github.com/graphql")
+      .replyOnce(200, data_stats)
+      .onPost("https://api.github.com/graphql")
+      .replyOnce(200, data_stats)
+      .onPost("https://api.github.com/graphql")
+      .replyOnce(200, data_repo_page1)
+      .onPost("https://api.github.com/graphql")
+      .replyOnce(200, contributed_to_resource_limit_error);
+
+    const stats = await fetchStats("domdfcoding");
+
+    expect(stats.contributedTo).toBeNull();
+    expect(stats.name).toBe("Anurag Hazra");
+    expect(stats.totalCommits).toBe(100);
+    expect(stats.totalReviews).toBe(50);
+    expect(stats.totalStars).toBe(300);
   });
 
   it("should throw error", async () => {

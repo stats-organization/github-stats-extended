@@ -45,15 +45,11 @@ const GRAPHQL_CONTRIBUTED_TO_QUERY = `
   }
 `;
 
-const GRAPHQL_STATS_QUERY = `
-  query userInfo($login: String!, $includeMergedPullRequests: Boolean!, $includeDiscussions: Boolean!, $includeDiscussionsAnswers: Boolean!, $startTime: DateTime = null) {
+const GRAPHQL_COUNTS_QUERY = `
+  query userInfo($login: String!, $includeMergedPullRequests: Boolean!, $includeDiscussions: Boolean!, $includeDiscussionsAnswers: Boolean!) {
     user(login: $login) {
       name
       login
-      contributions: contributionsCollection(from: $startTime) {
-        totalCommitContributions
-        totalPullRequestReviewContributions
-      }
       pullRequests(first: 1) {
         totalCount
       }
@@ -79,17 +75,75 @@ const GRAPHQL_STATS_QUERY = `
   }
 `;
 
+const GRAPHQL_COMMITS_QUERY = `
+  query userInfo($login: String!, $startTime: DateTime = null) {
+    user(login: $login) {
+      contributions: contributionsCollection(from: $startTime) {
+        totalCommitContributions
+      }
+    }
+  }
+`;
+
+const GRAPHQL_REVIEWS_QUERY = `
+  query userInfo($login: String!) {
+    user(login: $login) {
+      contributions: contributionsCollection {
+        totalPullRequestReviewContributions
+      }
+    }
+  }
+`;
+
 /**
- * Stats fetcher object.
+ * Account and count statistics fetcher.
  *
  * @param {object} variables Fetcher variables.
  * @param {string} token GitHub token.
  * @returns {Promise<import('axios').AxiosResponse>} Axios response.
  */
-const fetcher = (variables, token) => {
+const countsFetcher = (variables, token) => {
   return request(
     {
-      query: GRAPHQL_STATS_QUERY,
+      query: GRAPHQL_COUNTS_QUERY,
+      variables,
+    },
+    {
+      Authorization: `bearer ${token}`,
+    },
+  );
+};
+
+/**
+ * Commit contribution statistics fetcher.
+ *
+ * @param {object} variables Fetcher variables.
+ * @param {string} token GitHub token.
+ * @returns {Promise<import('axios').AxiosResponse>} Axios response.
+ */
+const commitsFetcher = (variables, token) => {
+  return request(
+    {
+      query: GRAPHQL_COMMITS_QUERY,
+      variables,
+    },
+    {
+      Authorization: `bearer ${token}`,
+    },
+  );
+};
+
+/**
+ * Pull-request review contribution statistics fetcher.
+ *
+ * @param {object} variables Fetcher variables.
+ * @param {string} token GitHub token.
+ * @returns {Promise<import('axios').AxiosResponse>} Axios response.
+ */
+const reviewsFetcher = (variables, token) => {
+  return request(
+    {
+      query: GRAPHQL_REVIEWS_QUERY,
       variables,
     },
     {
@@ -160,28 +214,60 @@ const statsFetcher = async ({
   ownerAffiliations,
   pat,
 }) => {
-  const statsResponse = await retryer(
-    fetcher,
+  const countsResponse = await retryer(
+    countsFetcher,
     {
       login: username,
       includeMergedPullRequests,
       includeDiscussions,
       includeDiscussionsAnswers,
+    },
+    pat,
+  );
+
+  if (countsResponse.data.errors) {
+    return countsResponse;
+  }
+
+  // Clone the response before attaching results from separate queries so
+  // cached GraphQL response objects are never mutated.
+  const stats = structuredClone({
+    data: countsResponse.data,
+    statusText: countsResponse.statusText,
+  });
+
+  const commitsResponse = await retryer(
+    commitsFetcher,
+    {
+      login: username,
       startTime,
     },
     pat,
   );
 
-  if (statsResponse.data.errors) {
-    return statsResponse;
+  if (commitsResponse.data.errors) {
+    return commitsResponse;
   }
 
-  // Clone the response before attaching results from the separate queries so
-  // cached GraphQL response objects are never mutated.
-  const stats = structuredClone({
-    data: statsResponse.data,
-    statusText: statsResponse.statusText,
-  });
+  const reviewsResponse = await retryer(
+    reviewsFetcher,
+    {
+      login: username,
+    },
+    pat,
+  );
+
+  if (reviewsResponse.data.errors) {
+    return reviewsResponse;
+  }
+
+  stats.data.data.user.contributions = {
+    totalCommitContributions:
+      commitsResponse.data.data.user.contributions.totalCommitContributions,
+    totalPullRequestReviewContributions:
+      reviewsResponse.data.data.user.contributions
+        .totalPullRequestReviewContributions,
+  };
 
   let repositories;
   let hasNextPage = true;
@@ -237,12 +323,26 @@ const statsFetcher = async ({
     pat,
   );
 
-  if (contributedToResponse.data.errors) {
-    return contributedToResponse;
-  }
+  const contributedToErrors = contributedToResponse.data.errors;
 
-  stats.data.data.user.repositoriesContributedTo =
-    contributedToResponse.data.data.user.repositoriesContributedTo;
+  if (contributedToErrors) {
+    const onlyResourceLimitErrors = contributedToErrors.every(
+      (error) => error.type === "RESOURCE_LIMITS_EXCEEDED",
+    );
+
+    if (!onlyResourceLimitErrors) {
+      return contributedToResponse;
+    }
+
+    logger.log(
+      `Unable to fetch repositoriesContributedTo for ${username}: GitHub resource limit exceeded.`,
+    );
+
+    stats.data.data.user.repositoriesContributedTo = null;
+  } else {
+    stats.data.data.user.repositoriesContributedTo =
+      contributedToResponse.data.data.user.repositoriesContributedTo;
+  }
 
   return stats;
 };
@@ -428,7 +528,7 @@ const fetchStats = async (
     totalStars: 0,
     totalDiscussionsStarted: 0,
     totalDiscussionsAnswered: 0,
-    contributedTo: 0,
+    contributedTo: null,
     totalPRsAuthored: 0,
     totalPRsCommented: 0,
     totalPRsReviewed: 0,
@@ -517,7 +617,7 @@ const fetchStats = async (
     stats.totalDiscussionsAnswered =
       user.repositoryDiscussionComments.totalCount;
   }
-  stats.contributedTo = user.repositoriesContributedTo.totalCount;
+  stats.contributedTo = user.repositoriesContributedTo?.totalCount ?? null;
 
   // Retrieve stars while filtering out repositories to be hidden.
   const allExcludedRepos = [

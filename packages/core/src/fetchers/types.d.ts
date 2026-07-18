@@ -40,7 +40,7 @@ export interface StatsData {
   totalStars: number;
   totalDiscussionsStarted: number;
   totalDiscussionsAnswered: number;
-  contributedTo: number;
+  contributedTo: number | null;
   totalPRsAuthored: number;
   totalPRsCommented: number;
   totalPRsReviewed: number;

@@ -59,6 +59,17 @@ describe("Test renderStatsCard", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("should omit contributed repositories when the value is unavailable", () => {
+    document.body.innerHTML = renderStatsCard({
+      ...stats,
+      contributedTo: null,
+    });
+
+    expect(queryByTestId(document.body, "contribs")).not.toBeInTheDocument();
+    expect(queryByTestId(document.body, "stars")).toBeInTheDocument();
+    expect(queryByTestId(document.body, "commits")).toBeInTheDocument();
+  });
+
   it("should have proper name apostrophe", () => {
     document.body.innerHTML = renderStatsCard({ ...stats, name: "Anil Das" });
 
