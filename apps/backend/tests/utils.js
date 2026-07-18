@@ -8,10 +8,8 @@ export const data_stats = {
       name: "Anurag Hazra",
       login: "anuraghazra",
       repositoriesContributedTo: { totalCount: 51 },
-      commits: {
+      contributions: {
         totalCommitContributions: 200,
-      },
-      reviews: {
         totalPullRequestReviewContributions: 1234,
       },
       pullRequests: { totalCount: 4000 },

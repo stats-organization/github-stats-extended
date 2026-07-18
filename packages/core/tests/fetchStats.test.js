@@ -16,11 +16,8 @@ const data_stats = {
   data: {
     user: {
       name: "Anurag Hazra",
-      repositoriesContributedTo: { totalCount: 61 },
-      commits: {
+      contributions: {
         totalCommitContributions: 100,
-      },
-      reviews: {
         totalPullRequestReviewContributions: 50,
       },
       pullRequests: { totalCount: 300 },
@@ -30,6 +27,16 @@ const data_stats = {
       followers: { totalCount: 100 },
       repositoryDiscussions: { totalCount: 10 },
       repositoryDiscussionComments: { totalCount: 40 },
+    },
+  },
+};
+
+const data_year2003 = JSON.parse(JSON.stringify(data_stats));
+data_year2003.data.user.contributions.totalCommitContributions = 428;
+
+const data_repo_page1 = {
+  data: {
+    user: {
       repositories: {
         totalCount: 5,
         nodes: [
@@ -46,8 +53,13 @@ const data_stats = {
   },
 };
 
-const data_year2003 = JSON.parse(JSON.stringify(data_stats));
-data_year2003.data.user.commits.totalCommitContributions = 428;
+const data_contributed_to = {
+  data: {
+    user: {
+      repositoriesContributedTo: { totalCount: 61 },
+    },
+  },
+};
 
 const data_without_pull_requests = {
   data: {
@@ -55,6 +67,8 @@ const data_without_pull_requests = {
       ...data_stats.data.user,
       pullRequests: { totalCount: 0 },
       mergedPullRequests: { totalCount: 0 },
+      repositories: data_repo_page1.data.user.repositories,
+      repositoriesContributedTo: { totalCount: 61 },
     },
   },
 };
@@ -80,6 +94,7 @@ const data_repo_zero_stars = {
   data: {
     user: {
       repositories: {
+        totalCount: 5,
         nodes: [
           { name: "test-repo-1", stargazers: { totalCount: 100 } },
           { name: "test-repo-2", stargazers: { totalCount: 100 } },
@@ -95,7 +110,6 @@ const data_repo_zero_stars = {
     },
   },
 };
-
 const error = {
   errors: [
     {
@@ -110,22 +124,29 @@ const error = {
 const mock = new MockAdapter(axios);
 
 beforeEach(() => {
-  process.env.FETCH_MULTI_PAGE_STARS = "false"; // Set to `false` to fetch only one page of stars.
+  process.env.FETCH_MULTI_PAGE_STARS = "false";
   loadConfigFromEnv();
-  mock.onPost("https://api.github.com/graphql").reply((cfg) => {
-    let req = JSON.parse(cfg.data);
 
-    if (
-      req.variables &&
-      req.variables.startTime &&
-      req.variables.startTime.startsWith("2003")
-    ) {
-      return [200, data_year2003];
+  mock.onPost("https://api.github.com/graphql").reply((cfg) => {
+    const req = JSON.parse(cfg.data);
+
+    if (req.query.includes("repositoriesContributedTo")) {
+      return [200, data_contributed_to];
     }
-    return [
-      200,
-      req.query.includes("totalCommitContributions") ? data_stats : data_repo,
-    ];
+
+    if (req.query.includes("totalCommitContributions")) {
+      if (
+        req.variables &&
+        req.variables.startTime &&
+        req.variables.startTime.startsWith("2003")
+      ) {
+        return [200, data_year2003];
+      }
+
+      return [200, data_stats];
+    }
+
+    return [200, req.variables.after ? data_repo : data_repo_page1];
   });
 });
 
@@ -174,7 +195,9 @@ describe("Test fetchStats", () => {
       .onPost("https://api.github.com/graphql")
       .replyOnce(200, data_stats)
       .onPost("https://api.github.com/graphql")
-      .replyOnce(200, data_repo_zero_stars);
+      .replyOnce(200, data_repo_zero_stars)
+      .onPost("https://api.github.com/graphql")
+      .replyOnce(200, data_contributed_to);
 
     let stats = await fetchStats("anuraghazra");
     const rank = calculateRank({

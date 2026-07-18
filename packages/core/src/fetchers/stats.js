@@ -35,19 +35,24 @@ const GRAPHQL_REPOS_QUERY = `
   }
 `;
 
+const GRAPHQL_CONTRIBUTED_TO_QUERY = `
+  query userInfo($login: String!) {
+    user(login: $login) {
+      repositoriesContributedTo(first: 1, contributionTypes: [COMMIT, ISSUE, PULL_REQUEST, REPOSITORY]) {
+        totalCount
+      }
+    }
+  }
+`;
+
 const GRAPHQL_STATS_QUERY = `
-  query userInfo($login: String!, $after: String, $includeMergedPullRequests: Boolean!, $includeDiscussions: Boolean!, $includeDiscussionsAnswers: Boolean!, $startTime: DateTime = null, $ownerAffiliations: [RepositoryAffiliation]) {
+  query userInfo($login: String!, $includeMergedPullRequests: Boolean!, $includeDiscussions: Boolean!, $includeDiscussionsAnswers: Boolean!, $startTime: DateTime = null) {
     user(login: $login) {
       name
       login
-      commits: contributionsCollection (from: $startTime) {
-        totalCommitContributions,
-      }
-      reviews: contributionsCollection {
+      contributions: contributionsCollection(from: $startTime) {
+        totalCommitContributions
         totalPullRequestReviewContributions
-      }
-      repositoriesContributedTo(first: 1, contributionTypes: [COMMIT, ISSUE, PULL_REQUEST, REPOSITORY]) {
-        totalCount
       }
       pullRequests(first: 1) {
         totalCount
@@ -70,7 +75,6 @@ const GRAPHQL_STATS_QUERY = `
       repositoryDiscussionComments(onlyAnswers: true) @include(if: $includeDiscussionsAnswers) {
         totalCount
       }
-      ${GRAPHQL_REPOS_FIELD}
     }
   }
 `;
@@ -78,15 +82,52 @@ const GRAPHQL_STATS_QUERY = `
 /**
  * Stats fetcher object.
  *
- * @param {object & { after: string | null }} variables Fetcher variables.
+ * @param {object} variables Fetcher variables.
  * @param {string} token GitHub token.
  * @returns {Promise<import('axios').AxiosResponse>} Axios response.
  */
 const fetcher = (variables, token) => {
-  const query = variables.after ? GRAPHQL_REPOS_QUERY : GRAPHQL_STATS_QUERY;
   return request(
     {
-      query,
+      query: GRAPHQL_STATS_QUERY,
+      variables,
+    },
+    {
+      Authorization: `bearer ${token}`,
+    },
+  );
+};
+
+/**
+ * Repositories fetcher object.
+ *
+ * @param {object & { after: string | null }} variables Fetcher variables.
+ * @param {string} token GitHub token.
+ * @returns {Promise<import('axios').AxiosResponse>} Axios response.
+ */
+const reposFetcher = (variables, token) => {
+  return request(
+    {
+      query: GRAPHQL_REPOS_QUERY,
+      variables,
+    },
+    {
+      Authorization: `bearer ${token}`,
+    },
+  );
+};
+
+/**
+ * Contributed repositories fetcher object.
+ *
+ * @param {object} variables Fetcher variables.
+ * @param {string} token GitHub token.
+ * @returns {Promise<import('axios').AxiosResponse>} Axios response.
+ */
+const contributedToFetcher = (variables, token) => {
+  return request(
+    {
+      query: GRAPHQL_CONTRIBUTED_TO_QUERY,
       variables,
     },
     {
@@ -119,43 +160,60 @@ const statsFetcher = async ({
   ownerAffiliations,
   pat,
 }) => {
-  let stats;
-  let hasNextPage = true;
-  let endCursor = null;
-  let fetchedPages = 0;
-  while (hasNextPage) {
-    const variables = {
+  const statsResponse = await retryer(
+    fetcher,
+    {
       login: username,
-      first: 100,
-      after: endCursor,
       includeMergedPullRequests,
       includeDiscussions,
       includeDiscussionsAnswers,
       startTime,
-      ownerAffiliations,
-    };
-    let res = await retryer(fetcher, variables, pat);
+    },
+    pat,
+  );
+
+  if (statsResponse.data.errors) {
+    return statsResponse;
+  }
+
+  // Clone the response before attaching results from the separate queries so
+  // cached GraphQL response objects are never mutated.
+  const stats = structuredClone({
+    data: statsResponse.data,
+    statusText: statsResponse.statusText,
+  });
+
+  let repositories;
+  let hasNextPage = true;
+  let endCursor = null;
+  let fetchedPages = 0;
+
+  while (hasNextPage) {
+    const res = await retryer(
+      reposFetcher,
+      {
+        login: username,
+        after: endCursor,
+        ownerAffiliations,
+      },
+      pat,
+    );
+
     if (res.data.errors) {
       return res;
     }
 
-    // Store stats data.
-    const repoNodes = res.data.data.user.repositories.nodes;
-    if (stats) {
-      if (fetchedPages === 1) {
-        // make deep copy of relevant stats fields to avoid altering the cached response object in frontend
-        stats = structuredClone({
-          data: stats.data,
-          statusText: stats.statusText,
-        });
-      }
-      stats.data.data.user.repositories.nodes.push(...repoNodes);
+    const repoPage = res.data.data.user.repositories;
+    const repoNodes = repoPage.nodes;
+
+    if (repositories) {
+      repositories.nodes.push(...repoNodes);
     } else {
-      stats = res;
+      repositories = structuredClone(repoPage);
     }
 
-    // Disable multi page fetching on public Vercel instance due to rate limits.
     fetchedPages++;
+
     const repoNodesWithStars = repoNodes.filter(
       (node) => node.stargazers.totalCount !== 0,
     );
@@ -164,10 +222,27 @@ const statsFetcher = async ({
       (getConfig().fetchMultiPageStars === "true" ||
         getConfig().fetchMultiPageStars > fetchedPages) &&
       repoNodes.length === repoNodesWithStars.length &&
-      res.data.data.user.repositories.pageInfo.hasNextPage;
+      repoPage.pageInfo.hasNextPage;
 
-    endCursor = res.data.data.user.repositories.pageInfo.endCursor;
+    endCursor = repoPage.pageInfo.endCursor;
   }
+
+  stats.data.data.user.repositories = repositories;
+
+  const contributedToResponse = await retryer(
+    contributedToFetcher,
+    {
+      login: username,
+    },
+    pat,
+  );
+
+  if (contributedToResponse.data.errors) {
+    return contributedToResponse;
+  }
+
+  stats.data.data.user.repositoriesContributedTo =
+    contributedToResponse.data.data.user.repositoriesContributedTo;
 
   return stats;
 };
@@ -411,7 +486,7 @@ const fetchStats = async (
       pat,
     );
   } else {
-    stats.totalCommits = user.commits.totalCommitContributions;
+    stats.totalCommits = user.contributions.totalCommitContributions;
   }
   let repoUserStats = await fetchRepoUserStats(
     username,
@@ -433,7 +508,7 @@ const fetchStats = async (
       (user.mergedPullRequests.totalCount / user.pullRequests.totalCount) *
         100 || 0;
   }
-  stats.totalReviews = user.reviews.totalPullRequestReviewContributions;
+  stats.totalReviews = user.contributions.totalPullRequestReviewContributions;
   stats.totalIssues = user.openIssues.totalCount + user.closedIssues.totalCount;
   if (include_discussions) {
     stats.totalDiscussionsStarted = user.repositoryDiscussions.totalCount;
