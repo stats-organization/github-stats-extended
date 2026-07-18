@@ -63,13 +63,33 @@ const data_repo = {
   data: {
     user: {
       repositories: {
+        totalCount: 5,
+        nodes: [
+          { name: "test-repo-1", stargazers: { totalCount: 100 } },
+          { name: "test-repo-2", stargazers: { totalCount: 100 } },
+          { name: "test-repo-3", stargazers: { totalCount: 100 } },
+        ],
+        pageInfo: {
+          hasNextPage: true,
+          endCursor: "cursor",
+        },
+      },
+    },
+  },
+};
+
+const data_repo_page2 = {
+  data: {
+    user: {
+      repositories: {
+        totalCount: 5,
         nodes: [
           { name: "test-repo-4", stargazers: { totalCount: 50 } },
           { name: "test-repo-5", stargazers: { totalCount: 50 } },
         ],
         pageInfo: {
           hasNextPage: false,
-          endCursor: "cursor",
+          endCursor: "cursor2",
         },
       },
     },
@@ -80,6 +100,7 @@ const data_repo_zero_stars = {
   data: {
     user: {
       repositories: {
+        totalCount: 5,
         nodes: [
           { name: "test-repo-1", stargazers: { totalCount: 100 } },
           { name: "test-repo-2", stargazers: { totalCount: 100 } },
@@ -115,6 +136,9 @@ beforeEach(() => {
   mock.onPost("https://api.github.com/graphql").reply((cfg) => {
     let req = JSON.parse(cfg.data);
 
+    if (req.query.includes("stargazers")) {
+      return [200, req.variables.after ? data_repo_page2 : data_repo];
+    }
     if (
       req.variables &&
       req.variables.startTime &&
@@ -122,10 +146,7 @@ beforeEach(() => {
     ) {
       return [200, data_year2003];
     }
-    return [
-      200,
-      req.query.includes("totalCommitContributions") ? data_stats : data_repo,
-    ];
+    return [200, data_stats];
   });
 });
 
@@ -170,11 +191,13 @@ describe("Test fetchStats", () => {
 
   it("should stop fetching when there are repos with zero stars", async () => {
     mock.reset();
-    mock
-      .onPost("https://api.github.com/graphql")
-      .replyOnce(200, data_stats)
-      .onPost("https://api.github.com/graphql")
-      .replyOnce(200, data_repo_zero_stars);
+    mock.onPost("https://api.github.com/graphql").reply((cfg) => {
+      let req = JSON.parse(cfg.data);
+      if (req.query.includes("stargazers")) {
+        return [200, data_repo_zero_stars];
+      }
+      return [200, data_stats];
+    });
 
     let stats = await fetchStats("anuraghazra");
     const rank = calculateRank({
@@ -216,6 +239,34 @@ describe("Test fetchStats", () => {
     await expect(fetchStats("anuraghazra")).rejects.toThrow(
       "Could not resolve to a User with the login of 'noname'.",
     );
+  });
+
+  it("should set contributedTo to null when repositoriesContributedTo exceeds resource limits", async () => {
+    mock.reset();
+    mock.onPost("https://api.github.com/graphql").reply((cfg) => {
+      let req = JSON.parse(cfg.data);
+      if (req.query.includes("repositoriesContributedTo")) {
+        return [
+          200,
+          {
+            data: { user: null },
+            errors: [
+              {
+                type: "RESOURCE_LIMITS_EXCEEDED",
+                message: "Resource limits for this query exceeded.",
+              },
+            ],
+          },
+        ];
+      }
+      if (req.query.includes("stargazers")) {
+        return [200, data_repo];
+      }
+      return [200, data_stats];
+    });
+
+    let stats = await fetchStats("anuraghazra");
+    expect(stats.contributedTo).toBeNull();
   });
 
   it("should fetch total commits", async () => {

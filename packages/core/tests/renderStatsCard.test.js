@@ -59,6 +59,13 @@ describe("Test renderStatsCard", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("should omit the contribs row when contributedTo is null", () => {
+    document.body.innerHTML = renderStatsCard({ ...stats, contributedTo: null });
+
+    expect(queryByTestId(document.body, "contribs")).not.toBeInTheDocument();
+    expect(getByTestId(document.body, "stars").textContent).toBe("100");
+  });
+
   it("should have proper name apostrophe", () => {
     document.body.innerHTML = renderStatsCard({ ...stats, name: "Anil Das" });
 

@@ -35,20 +35,11 @@ const GRAPHQL_REPOS_QUERY = `
   }
 `;
 
-const GRAPHQL_STATS_QUERY = `
-  query userInfo($login: String!, $after: String, $includeMergedPullRequests: Boolean!, $includeDiscussions: Boolean!, $includeDiscussionsAnswers: Boolean!, $startTime: DateTime = null, $ownerAffiliations: [RepositoryAffiliation]) {
+const GRAPHQL_COUNTS_QUERY = `
+  query userInfo($login: String!, $includeMergedPullRequests: Boolean!, $includeDiscussions: Boolean!, $includeDiscussionsAnswers: Boolean!) {
     user(login: $login) {
       name
       login
-      commits: contributionsCollection (from: $startTime) {
-        totalCommitContributions,
-      }
-      reviews: contributionsCollection {
-        totalPullRequestReviewContributions
-      }
-      repositoriesContributedTo(first: 1, contributionTypes: [COMMIT, ISSUE, PULL_REQUEST, REPOSITORY]) {
-        totalCount
-      }
       pullRequests(first: 1) {
         totalCount
       }
@@ -70,29 +61,115 @@ const GRAPHQL_STATS_QUERY = `
       repositoryDiscussionComments(onlyAnswers: true) @include(if: $includeDiscussionsAnswers) {
         totalCount
       }
-      ${GRAPHQL_REPOS_FIELD}
+    }
+  }
+`;
+
+const GRAPHQL_COMMITS_QUERY = `
+  query userInfo($login: String!, $startTime: DateTime = null) {
+    user(login: $login) {
+      commits: contributionsCollection (from: $startTime) {
+        totalCommitContributions
+      }
+    }
+  }
+`;
+
+const GRAPHQL_REVIEWS_QUERY = `
+  query userInfo($login: String!) {
+    user(login: $login) {
+      reviews: contributionsCollection {
+        totalPullRequestReviewContributions
+      }
+    }
+  }
+`;
+
+const GRAPHQL_CONTRIBUTED_QUERY = `
+  query userInfo($login: String!) {
+    user(login: $login) {
+      repositoriesContributedTo(first: 1, contributionTypes: [COMMIT, ISSUE, PULL_REQUEST, REPOSITORY]) {
+        totalCount
+      }
     }
   }
 `;
 
 /**
- * Stats fetcher object.
+ * Build a fetcher for the given GraphQL query.
  *
- * @param {object & { after: string | null }} variables Fetcher variables.
- * @param {string} token GitHub token.
- * @returns {Promise<import('axios').AxiosResponse>} Axios response.
+ * @param {string} query GraphQL query.
+ * @returns {(variables: object, token: string) => Promise<import('axios').AxiosResponse>} Fetcher.
  */
-const fetcher = (variables, token) => {
-  const query = variables.after ? GRAPHQL_REPOS_QUERY : GRAPHQL_STATS_QUERY;
-  return request(
-    {
-      query,
-      variables,
-    },
-    {
-      Authorization: `bearer ${token}`,
-    },
-  );
+const queryFetcher =
+  (query) =>
+  (variables, token) => {
+    return request(
+      {
+        query,
+        variables,
+      },
+      {
+        Authorization: `bearer ${token}`,
+      },
+    );
+  };
+
+const countsFetcher = queryFetcher(GRAPHQL_COUNTS_QUERY);
+const commitsFetcher = queryFetcher(GRAPHQL_COMMITS_QUERY);
+const reviewsFetcher = queryFetcher(GRAPHQL_REVIEWS_QUERY);
+const contributedFetcher = queryFetcher(GRAPHQL_CONTRIBUTED_QUERY);
+const reposFetcher = queryFetcher(GRAPHQL_REPOS_QUERY);
+
+/**
+ * Fetch the user's repositories, paginating while stars remain to be counted.
+ *
+ * @param {string} username GitHub username.
+ * @param {string[]} ownerAffiliations Owner affiliations to filter by.
+ * @param {string | null} pat PAT override or null.
+ * @returns {Promise<import('axios').AxiosResponse | { totalCount: number, nodes: object[] }>} Aggregated repositories, or the errored response.
+ *
+ * @description Supports multi-page fetching if the 'FETCH_MULTI_PAGE_STARS' environment variable is set to true or a limit of fetches.
+ */
+const fetchRepositories = async (username, ownerAffiliations, pat) => {
+  const repositories = { totalCount: 0, nodes: [] };
+  let hasNextPage = true;
+  let endCursor = null;
+  let fetchedPages = 0;
+  while (hasNextPage) {
+    const res = await retryer(
+      reposFetcher,
+      {
+        login: username,
+        after: endCursor,
+        ownerAffiliations,
+      },
+      pat,
+    );
+    if (res.data.errors) {
+      return res;
+    }
+
+    const page = res.data.data.user.repositories;
+    repositories.totalCount = page.totalCount;
+    repositories.nodes.push(...page.nodes);
+
+    // Disable multi page fetching on public Vercel instance due to rate limits.
+    fetchedPages++;
+    const repoNodesWithStars = page.nodes.filter(
+      (node) => node.stargazers.totalCount !== 0,
+    );
+
+    hasNextPage =
+      (getConfig().fetchMultiPageStars === "true" ||
+        getConfig().fetchMultiPageStars > fetchedPages) &&
+      page.nodes.length === repoNodesWithStars.length &&
+      page.pageInfo.hasNextPage;
+
+    endCursor = page.pageInfo.endCursor;
+  }
+
+  return repositories;
 };
 
 /**
@@ -107,8 +184,6 @@ const fetcher = (variables, token) => {
  * @param {string[]} variables.ownerAffiliations The owner affiliations to filter by. Default: OWNER.
  * @param {string | null} variables.pat PAT override or null.
  * @returns {Promise<import('axios').AxiosResponse>} Axios response.
- *
- * @description This function supports multi-page fetching if the 'FETCH_MULTI_PAGE_STARS' environment variable is set to true or a limit of fetches.
  */
 const statsFetcher = async ({
   username,
@@ -119,55 +194,55 @@ const statsFetcher = async ({
   ownerAffiliations,
   pat,
 }) => {
-  let stats;
-  let hasNextPage = true;
-  let endCursor = null;
-  let fetchedPages = 0;
-  while (hasNextPage) {
-    const variables = {
+  const stats = await retryer(
+    countsFetcher,
+    {
       login: username,
-      first: 100,
-      after: endCursor,
       includeMergedPullRequests,
       includeDiscussions,
       includeDiscussionsAnswers,
-      startTime,
-      ownerAffiliations,
-    };
-    let res = await retryer(fetcher, variables, pat);
-    if (res.data.errors) {
-      return res;
-    }
-
-    // Store stats data.
-    const repoNodes = res.data.data.user.repositories.nodes;
-    if (stats) {
-      if (fetchedPages === 1) {
-        // make deep copy of relevant stats fields to avoid altering the cached response object in frontend
-        stats = structuredClone({
-          data: stats.data,
-          statusText: stats.statusText,
-        });
-      }
-      stats.data.data.user.repositories.nodes.push(...repoNodes);
-    } else {
-      stats = res;
-    }
-
-    // Disable multi page fetching on public Vercel instance due to rate limits.
-    fetchedPages++;
-    const repoNodesWithStars = repoNodes.filter(
-      (node) => node.stargazers.totalCount !== 0,
-    );
-
-    hasNextPage =
-      (getConfig().fetchMultiPageStars === "true" ||
-        getConfig().fetchMultiPageStars > fetchedPages) &&
-      repoNodes.length === repoNodesWithStars.length &&
-      res.data.data.user.repositories.pageInfo.hasNextPage;
-
-    endCursor = res.data.data.user.repositories.pageInfo.endCursor;
+    },
+    pat,
+  );
+  if (stats.data.errors) {
+    return stats;
   }
+  const user = stats.data.data.user;
+
+  const commits = await retryer(
+    commitsFetcher,
+    { login: username, startTime },
+    pat,
+  );
+  if (commits.data.errors) {
+    return commits;
+  }
+  user.commits = commits.data.data.user.commits;
+
+  const reviews = await retryer(reviewsFetcher, { login: username }, pat);
+  if (reviews.data.errors) {
+    return reviews;
+  }
+  user.reviews = reviews.data.data.user.reviews;
+
+  const contributed = await retryer(
+    contributedFetcher,
+    { login: username },
+    pat,
+  );
+  user.repositoriesContributedTo = contributed.data.errors
+    ? null
+    : contributed.data.data.user.repositoriesContributedTo;
+
+  const repositories = await fetchRepositories(
+    username,
+    ownerAffiliations,
+    pat,
+  );
+  if (repositories.data?.errors) {
+    return repositories;
+  }
+  user.repositories = repositories;
 
   return stats;
 };
@@ -442,7 +517,9 @@ const fetchStats = async (
     stats.totalDiscussionsAnswered =
       user.repositoryDiscussionComments.totalCount;
   }
-  stats.contributedTo = user.repositoriesContributedTo.totalCount;
+  stats.contributedTo = user.repositoriesContributedTo
+    ? user.repositoriesContributedTo.totalCount
+    : null;
 
   // Retrieve stars while filtering out repositories to be hidden.
   const allExcludedRepos = [
