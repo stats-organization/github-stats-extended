@@ -16,7 +16,7 @@
     "eslint-plugin-jsdoc": "63.0.10",
     "globals": "17.7.0",
     "husky": "9.1.7",
-    "knip": "6.23.0",
+    "knip": "6.26.0",
     "lint-staged": "17.0.8",
     "prettier": "3.9.1",
     "turbo": "2.10.0",
