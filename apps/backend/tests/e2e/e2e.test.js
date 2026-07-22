@@ -17,10 +17,8 @@ const STATS_MOCK_RESPONSE = {
       name: "CodeNinja",
       login: STATS_CARD_USER,
       repositoriesContributedTo: { totalCount: 0 },
-      commits: {
+      contributions: {
         totalCommitContributions: 3,
-      },
-      reviews: {
         totalPullRequestReviewContributions: 0,
       },
       pullRequests: { totalCount: 1 },

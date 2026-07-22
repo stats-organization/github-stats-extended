@@ -230,7 +230,7 @@ const statsFetcher = async ({
   }
 
   // Clone the response before attaching results from separate queries so
-  // cached GraphQL response objects are never mutated.
+  // cached GraphQL response objects are never mutated. Relevant in frontend.
   const stats = structuredClone({
     data: countsResponse.data,
     statusText: countsResponse.statusText,
