@@ -31,7 +31,7 @@ const data_stats = {
       repositoryDiscussions: { totalCount: 10 },
       repositoryDiscussionComments: { totalCount: 40 },
       repositories: {
-        totalCount: 5,
+        totalCount: 3,
         nodes: [
           { name: "test-repo-1", stargazers: { totalCount: 100 } },
           { name: "test-repo-2", stargazers: { totalCount: 100 } },
@@ -80,6 +80,7 @@ const data_repo_zero_stars = {
   data: {
     user: {
       repositories: {
+        totalCount: 5,
         nodes: [
           { name: "test-repo-1", stargazers: { totalCount: 100 } },
           { name: "test-repo-2", stargazers: { totalCount: 100 } },
