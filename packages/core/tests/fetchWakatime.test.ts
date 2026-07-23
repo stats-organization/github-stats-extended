@@ -118,6 +118,7 @@ describe("WakaTime fetcher", () => {
   it("should throw error if username param missing", async () => {
     mock.onGet(/\/https:\/\/wakatime\.com\/api/).reply(404, wakaTimeData);
 
+    // @ts-expect-error testing invalid input
     await expect(fetchWakatimeStats("noone")).rejects.toThrow(
       'Missing params "username" make sure you pass the parameters in URL',
     );

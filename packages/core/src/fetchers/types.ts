@@ -53,6 +53,8 @@ export interface Lang {
   name: string;
   color: string;
   size: number;
+  /** Number of repositories the language appears in. */
+  count: number;
 }
 
 export type TopLangData = Record<string, Lang>;
