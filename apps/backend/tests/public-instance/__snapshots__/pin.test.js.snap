@@ -341,7 +341,7 @@ exports[`Test /api/pin contract > should match the public many-params response s
   
         </g>
       </svg>",
-  "graphqlRequest": "{"query":"\\n      fragment RepoInfo on Repository {\\n        name\\n        nameWithOwner\\n        isPrivate\\n        isArchived\\n        isTemplate\\n        stargazers {\\n          totalCount\\n        }\\n        description\\n        primaryLanguage {\\n          color\\n          id\\n          name\\n        }\\n        forkCount\\n      }\\n      query getRepo($login: String!, $repo: String!) {\\n        user(login: $login) {\\n          repository(name: $repo) {\\n            ...RepoInfo\\n          }\\n        }\\n        organization(login: $login) {\\n          repository(name: $repo) {\\n            ...RepoInfo\\n          }\\n        }\\n      }\\n    ","variables":{"login":"anuraghazra","repo":"convoychat"}}",
+  "graphqlRequest": "{"query":"\\n      fragment RepoInfo on Repository {\\n        name\\n        nameWithOwner\\n        isPrivate\\n        isArchived\\n        isTemplate\\n        stargazerCount\\n        description\\n        primaryLanguage {\\n          color\\n          id\\n          name\\n        }\\n        forkCount\\n      }\\n      query getRepo($login: String!, $repo: String!) {\\n        user(login: $login) {\\n          repository(name: $repo) {\\n            ...RepoInfo\\n          }\\n        }\\n        organization(login: $login) {\\n          repository(name: $repo) {\\n            ...RepoInfo\\n          }\\n        }\\n      }\\n    ","variables":{"login":"anuraghazra","repo":"convoychat"}}",
   "headers": [
     [
       "Cache-Control",

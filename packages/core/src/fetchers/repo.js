@@ -21,9 +21,7 @@ const fetcher = (variables, token) => {
         isPrivate
         isArchived
         isTemplate
-        stargazers {
-          totalCount
-        }
+        stargazerCount
         description
         primaryLanguage {
           color
@@ -128,7 +126,7 @@ const fetchRepo = async (
     return {
       ...repoUserStats,
       ...data.user.repository,
-      starCount: data.user.repository.stargazers.totalCount,
+      starCount: data.user.repository.stargazerCount,
     };
   }
 
@@ -153,7 +151,7 @@ const fetchRepo = async (
     return {
       ...repoUserStats,
       ...data.organization.repository,
-      starCount: data.organization.repository.stargazers.totalCount,
+      starCount: data.organization.repository.stargazerCount,
     };
   }
 

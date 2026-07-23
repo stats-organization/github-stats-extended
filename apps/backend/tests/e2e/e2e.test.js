@@ -29,7 +29,7 @@ const STATS_MOCK_RESPONSE = {
       followers: { totalCount: 0 },
       repositories: {
         totalCount: 1,
-        nodes: [{ name: REPO, stargazers: { totalCount: 1 } }],
+        nodes: [{ name: REPO, stargazerCount: 1 }],
         pageInfo: {
           hasNextPage: false,
           endCursor: "cursor",
@@ -110,9 +110,7 @@ const REPO_MOCK_RESPONSE = {
         isPrivate: false,
         isArchived: false,
         isTemplate: false,
-        stargazers: {
-          totalCount: 1,
-        },
+        stargazerCount: 1,
         description: "Simple cra test repo.",
         primaryLanguage: {
           color: "#f1e05a",

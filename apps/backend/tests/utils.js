@@ -26,9 +26,9 @@ export const data_stats = {
       repositories: {
         totalCount: 3,
         nodes: [
-          { name: "repo-keep-1", stargazers: { totalCount: 1500 } },
-          { name: "repo-exclude-me", stargazers: { totalCount: 9999 } },
-          { name: "repo-keep-2", stargazers: { totalCount: 2600 } },
+          { name: "repo-keep-1", stargazerCount: 1500 },
+          { name: "repo-exclude-me", stargazerCount: 9999 },
+          { name: "repo-keep-2", stargazerCount: 2600 },
         ],
         pageInfo: {
           hasNextPage: false,
@@ -73,9 +73,7 @@ export const data_user = {
         username: "anuraghazra",
         name: "convoychat",
         nameWithOwner: "anuraghazra/convoychat",
-        stargazers: {
-          totalCount: 38000,
-        },
+        stargazerCount: 38000,
         description:
           "Help us take over the world with a deeply customizable React, TypeScript and GraphQL chat app that has enough text to wrap across multiple lines in the repository card.",
         primaryLanguage: {
