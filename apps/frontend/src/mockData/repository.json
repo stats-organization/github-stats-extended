@@ -7,9 +7,7 @@
         "isPrivate": false,
         "isArchived": false,
         "isTemplate": false,
-        "stargazers": {
-          "totalCount": 76994
-        },
+        "stargazerCount": 76994,
         "description": ":zap: Dynamically generated stats for your github readmes",
         "primaryLanguage": {
           "color": "#f1e05a",

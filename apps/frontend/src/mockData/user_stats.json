@@ -36,606 +36,109 @@
       "repositories": {
         "totalCount": 139,
         "nodes": [
-          {
-            "name": "github-readme-stats",
-            "stargazers": {
-              "totalCount": 77025
-            }
-          },
-          {
-            "name": "Verly.js",
-            "stargazers": {
-              "totalCount": 696
-            }
-          },
-          {
-            "name": "anuraghazra.github.io",
-            "stargazers": {
-              "totalCount": 608
-            }
-          },
-          {
-            "name": "anuraghazra",
-            "stargazers": {
-              "totalCount": 376
-            }
-          },
-          {
-            "name": "type-trident",
-            "stargazers": {
-              "totalCount": 359
-            }
-          },
-          {
-            "name": "BugVilla",
-            "stargazers": {
-              "totalCount": 232
-            }
-          },
-          {
-            "name": "convoychat",
-            "stargazers": {
-              "totalCount": 214
-            }
-          },
-          {
-            "name": "CanvasFun",
-            "stargazers": {
-              "totalCount": 211
-            }
-          },
-          {
-            "name": "EvolutionAquerium",
-            "stargazers": {
-              "totalCount": 192
-            }
-          },
-          {
-            "name": "typelevel-parser",
-            "stargazers": {
-              "totalCount": 147
-            }
-          },
-          {
-            "name": "VerlyRangeSlider",
-            "stargazers": {
-              "totalCount": 135
-            }
-          },
-          {
-            "name": "vscode-strip-ts-copy",
-            "stargazers": {
-              "totalCount": 72
-            }
-          },
-          {
-            "name": "react-folder-tree",
-            "stargazers": {
-              "totalCount": 54
-            }
-          },
-          {
-            "name": "Atomic.js",
-            "stargazers": {
-              "totalCount": 53
-            }
-          },
-          {
-            "name": "ToyLang",
-            "stargazers": {
-              "totalCount": 51
-            }
-          },
-          {
-            "name": "design-patterns-everyday",
-            "stargazers": {
-              "totalCount": 46
-            }
-          },
-          {
-            "name": "gatsby",
-            "stargazers": {
-              "totalCount": 36
-            }
-          },
-          {
-            "name": "Slime",
-            "stargazers": {
-              "totalCount": 35
-            }
-          },
-          {
-            "name": "Candy.js",
-            "stargazers": {
-              "totalCount": 34
-            }
-          },
-          {
-            "name": "ShaderExpo",
-            "stargazers": {
-              "totalCount": 33
-            }
-          },
-          {
-            "name": "Nothing",
-            "stargazers": {
-              "totalCount": 32
-            }
-          },
-          {
-            "name": "peerlist-profile-action",
-            "stargazers": {
-              "totalCount": 30
-            }
-          },
-          {
-            "name": "facebook-reaction-animation",
-            "stargazers": {
-              "totalCount": 29
-            }
-          },
-          {
-            "name": "react-stripe-dropdown",
-            "stargazers": {
-              "totalCount": 27
-            }
-          },
-          {
-            "name": "QuickerPoll",
-            "stargazers": {
-              "totalCount": 27
-            }
-          },
-          {
-            "name": "playground-format-on-save",
-            "stargazers": {
-              "totalCount": 24
-            }
-          },
-          {
-            "name": "ParticleBrush",
-            "stargazers": {
-              "totalCount": 23
-            }
-          },
-          {
-            "name": "graphql-oauth",
-            "stargazers": {
-              "totalCount": 21
-            }
-          },
-          {
-            "name": "parasites",
-            "stargazers": {
-              "totalCount": 21
-            }
-          },
-          {
-            "name": "twitter-banner-jokes",
-            "stargazers": {
-              "totalCount": 18
-            }
-          },
-          {
-            "name": "verly-cpp",
-            "stargazers": {
-              "totalCount": 16
-            }
-          },
-          {
-            "name": "gatsby-github-issues-blog",
-            "stargazers": {
-              "totalCount": 16
-            }
-          },
-          {
-            "name": "NikeHyperAce",
-            "stargazers": {
-              "totalCount": 12
-            }
-          },
-          {
-            "name": "rust-particles",
-            "stargazers": {
-              "totalCount": 11
-            }
-          },
-          {
-            "name": "VerletDrawing",
-            "stargazers": {
-              "totalCount": 10
-            }
-          },
-          {
-            "name": "graphql-jwt-auth-test",
-            "stargazers": {
-              "totalCount": 9
-            }
-          },
+          { "name": "github-readme-stats", "stargazerCount": 77025 },
+          { "name": "Verly.js", "stargazerCount": 696 },
+          { "name": "anuraghazra.github.io", "stargazerCount": 608 },
+          { "name": "anuraghazra", "stargazerCount": 376 },
+          { "name": "type-trident", "stargazerCount": 359 },
+          { "name": "BugVilla", "stargazerCount": 232 },
+          { "name": "convoychat", "stargazerCount": 214 },
+          { "name": "CanvasFun", "stargazerCount": 211 },
+          { "name": "EvolutionAquerium", "stargazerCount": 192 },
+          { "name": "typelevel-parser", "stargazerCount": 147 },
+          { "name": "VerlyRangeSlider", "stargazerCount": 135 },
+          { "name": "vscode-strip-ts-copy", "stargazerCount": 72 },
+          { "name": "react-folder-tree", "stargazerCount": 54 },
+          { "name": "Atomic.js", "stargazerCount": 53 },
+          { "name": "ToyLang", "stargazerCount": 51 },
+          { "name": "design-patterns-everyday", "stargazerCount": 46 },
+          { "name": "gatsby", "stargazerCount": 36 },
+          { "name": "Slime", "stargazerCount": 35 },
+          { "name": "Candy.js", "stargazerCount": 34 },
+          { "name": "ShaderExpo", "stargazerCount": 33 },
+          { "name": "Nothing", "stargazerCount": 32 },
+          { "name": "peerlist-profile-action", "stargazerCount": 30 },
+          { "name": "facebook-reaction-animation", "stargazerCount": 29 },
+          { "name": "react-stripe-dropdown", "stargazerCount": 27 },
+          { "name": "QuickerPoll", "stargazerCount": 27 },
+          { "name": "playground-format-on-save", "stargazerCount": 24 },
+          { "name": "ParticleBrush", "stargazerCount": 23 },
+          { "name": "graphql-oauth", "stargazerCount": 21 },
+          { "name": "parasites", "stargazerCount": 21 },
+          { "name": "twitter-banner-jokes", "stargazerCount": 18 },
+          { "name": "verly-cpp", "stargazerCount": 16 },
+          { "name": "gatsby-github-issues-blog", "stargazerCount": 16 },
+          { "name": "NikeHyperAce", "stargazerCount": 12 },
+          { "name": "rust-particles", "stargazerCount": 11 },
+          { "name": "VerletDrawing", "stargazerCount": 10 },
+          { "name": "graphql-jwt-auth-test", "stargazerCount": 9 },
           {
             "name": "anuraghazra.github.io-old-react",
-            "stargazers": {
-              "totalCount": 9
-            }
+            "stargazerCount": 9
           },
-          {
-            "name": "react18-ssr-test",
-            "stargazers": {
-              "totalCount": 8
-            }
-          },
-          {
-            "name": "GyroDodge",
-            "stargazers": {
-              "totalCount": 8
-            }
-          },
-          {
-            "name": "go-phyllotaxis",
-            "stargazers": {
-              "totalCount": 6
-            }
-          },
-          {
-            "name": "graphql-oauth-client",
-            "stargazers": {
-              "totalCount": 6
-            }
-          },
-          {
-            "name": "code-runner-action",
-            "stargazers": {
-              "totalCount": 6
-            }
-          },
-          {
-            "name": "GithubActionsPlayground",
-            "stargazers": {
-              "totalCount": 6
-            }
-          },
-          {
-            "name": "Loader.js",
-            "stargazers": {
-              "totalCount": 6
-            }
-          },
-          {
-            "name": "ts-essentials",
-            "stargazers": {
-              "totalCount": 5
-            }
-          },
-          {
-            "name": "chakra-ui",
-            "stargazers": {
-              "totalCount": 5
-            }
-          },
-          {
-            "name": "text-to-handwriting",
-            "stargazers": {
-              "totalCount": 5
-            }
-          },
-          {
-            "name": "build-your-own-x",
-            "stargazers": {
-              "totalCount": 5
-            }
-          },
-          {
-            "name": "nodejs-dynamic-restapi",
-            "stargazers": {
-              "totalCount": 5
-            }
-          },
-          {
-            "name": "DevYouTubeList",
-            "stargazers": {
-              "totalCount": 5
-            }
-          },
-          {
-            "name": "FlockingBlackHole",
-            "stargazers": {
-              "totalCount": 5
-            }
-          },
-          {
-            "name": "webgpu-boids",
-            "stargazers": {
-              "totalCount": 4
-            }
-          },
-          {
-            "name": "test-githubblock",
-            "stargazers": {
-              "totalCount": 4
-            }
-          },
-          {
-            "name": "renderless-components",
-            "stargazers": {
-              "totalCount": 4
-            }
-          },
-          {
-            "name": "reakit",
-            "stargazers": {
-              "totalCount": 4
-            }
-          },
-          {
-            "name": "micro-open-graph",
-            "stargazers": {
-              "totalCount": 4
-            }
-          },
-          {
-            "name": "rest-and-graphql",
-            "stargazers": {
-              "totalCount": 4
-            }
-          },
-          {
-            "name": "abell-issues-blog",
-            "stargazers": {
-              "totalCount": 4
-            }
-          },
-          {
-            "name": "VanillaMVC",
-            "stargazers": {
-              "totalCount": 4
-            }
-          },
-          {
-            "name": "covid19-sim",
-            "stargazers": {
-              "totalCount": 4
-            }
-          },
-          {
-            "name": "YoutubeDownloader",
-            "stargazers": {
-              "totalCount": 4
-            }
-          },
-          {
-            "name": "verlet.js",
-            "stargazers": {
-              "totalCount": 4
-            }
-          },
-          {
-            "name": "test-github-ts",
-            "stargazers": {
-              "totalCount": 3
-            }
-          },
-          {
-            "name": "tw-dynamic-interpolation",
-            "stargazers": {
-              "totalCount": 3
-            }
-          },
-          {
-            "name": "ts-string-interpolator",
-            "stargazers": {
-              "totalCount": 3
-            }
-          },
-          {
-            "name": "AnuReact",
-            "stargazers": {
-              "totalCount": 3
-            }
-          },
-          {
-            "name": "CanvasBalls",
-            "stargazers": {
-              "totalCount": 3
-            }
-          },
-          {
-            "name": "circleci-test",
-            "stargazers": {
-              "totalCount": 3
-            }
-          },
-          {
-            "name": "gatsby-starter-netlify-cms",
-            "stargazers": {
-              "totalCount": 3
-            }
-          },
-          {
-            "name": "WebGL.js",
-            "stargazers": {
-              "totalCount": 3
-            }
-          },
-          {
-            "name": "test-fork-workflow",
-            "stargazers": {
-              "totalCount": 2
-            }
-          },
-          {
-            "name": "test-codesandbox-projects",
-            "stargazers": {
-              "totalCount": 2
-            }
-          },
-          {
-            "name": "codesandbox-template-astro",
-            "stargazers": {
-              "totalCount": 2
-            }
-          },
-          {
-            "name": "apollo",
-            "stargazers": {
-              "totalCount": 2
-            }
-          },
-          {
-            "name": "api-docs",
-            "stargazers": {
-              "totalCount": 2
-            }
-          },
-          {
-            "name": "Buddies-movie",
-            "stargazers": {
-              "totalCount": 2
-            }
-          },
-          {
-            "name": "2k76",
-            "stargazers": {
-              "totalCount": 2
-            }
-          },
-          {
-            "name": "gatsby-remark-embedder",
-            "stargazers": {
-              "totalCount": 2
-            }
-          },
-          {
-            "name": "weird-hello-worlds",
-            "stargazers": {
-              "totalCount": 2
-            }
-          },
-          {
-            "name": "rn-tabview-test-repro",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "tailwindcss-jit",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "DefinitelyTyped",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "server-components-demo",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "volant-vo",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "react-spectrum",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "webhooks-test",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "react-showdown",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "transcode",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "awake-yet-action",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "bradgarropy.com",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "gatsby-plugin-social-banners",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "Tour360",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "blizard.js",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "keep-a-changelog",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "vulnerabilities",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "harleydavidson",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "awesome-webgl",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "NewtonsInterpolation",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "now-github-starter",
-            "stargazers": {
-              "totalCount": 1
-            }
-          },
-          {
-            "name": "simplerockets",
-            "stargazers": {
-              "totalCount": 1
-            }
-          }
+          { "name": "react18-ssr-test", "stargazerCount": 8 },
+          { "name": "GyroDodge", "stargazerCount": 8 },
+          { "name": "go-phyllotaxis", "stargazerCount": 6 },
+          { "name": "graphql-oauth-client", "stargazerCount": 6 },
+          { "name": "code-runner-action", "stargazerCount": 6 },
+          { "name": "GithubActionsPlayground", "stargazerCount": 6 },
+          { "name": "Loader.js", "stargazerCount": 6 },
+          { "name": "ts-essentials", "stargazerCount": 5 },
+          { "name": "chakra-ui", "stargazerCount": 5 },
+          { "name": "text-to-handwriting", "stargazerCount": 5 },
+          { "name": "build-your-own-x", "stargazerCount": 5 },
+          { "name": "nodejs-dynamic-restapi", "stargazerCount": 5 },
+          { "name": "DevYouTubeList", "stargazerCount": 5 },
+          { "name": "FlockingBlackHole", "stargazerCount": 5 },
+          { "name": "webgpu-boids", "stargazerCount": 4 },
+          { "name": "test-githubblock", "stargazerCount": 4 },
+          { "name": "renderless-components", "stargazerCount": 4 },
+          { "name": "reakit", "stargazerCount": 4 },
+          { "name": "micro-open-graph", "stargazerCount": 4 },
+          { "name": "rest-and-graphql", "stargazerCount": 4 },
+          { "name": "abell-issues-blog", "stargazerCount": 4 },
+          { "name": "VanillaMVC", "stargazerCount": 4 },
+          { "name": "covid19-sim", "stargazerCount": 4 },
+          { "name": "YoutubeDownloader", "stargazerCount": 4 },
+          { "name": "verlet.js", "stargazerCount": 4 },
+          { "name": "test-github-ts", "stargazerCount": 3 },
+          { "name": "tw-dynamic-interpolation", "stargazerCount": 3 },
+          { "name": "ts-string-interpolator", "stargazerCount": 3 },
+          { "name": "AnuReact", "stargazerCount": 3 },
+          { "name": "CanvasBalls", "stargazerCount": 3 },
+          { "name": "circleci-test", "stargazerCount": 3 },
+          { "name": "gatsby-starter-netlify-cms", "stargazerCount": 3 },
+          { "name": "WebGL.js", "stargazerCount": 3 },
+          { "name": "test-fork-workflow", "stargazerCount": 2 },
+          { "name": "test-codesandbox-projects", "stargazerCount": 2 },
+          { "name": "codesandbox-template-astro", "stargazerCount": 2 },
+          { "name": "apollo", "stargazerCount": 2 },
+          { "name": "api-docs", "stargazerCount": 2 },
+          { "name": "Buddies-movie", "stargazerCount": 2 },
+          { "name": "2k76", "stargazerCount": 2 },
+          { "name": "gatsby-remark-embedder", "stargazerCount": 2 },
+          { "name": "weird-hello-worlds", "stargazerCount": 2 },
+          { "name": "rn-tabview-test-repro", "stargazerCount": 1 },
+          { "name": "tailwindcss-jit", "stargazerCount": 1 },
+          { "name": "DefinitelyTyped", "stargazerCount": 1 },
+          { "name": "server-components-demo", "stargazerCount": 1 },
+          { "name": "volant-vo", "stargazerCount": 1 },
+          { "name": "react-spectrum", "stargazerCount": 1 },
+          { "name": "webhooks-test", "stargazerCount": 1 },
+          { "name": "react-showdown", "stargazerCount": 1 },
+          { "name": "transcode", "stargazerCount": 1 },
+          { "name": "awake-yet-action", "stargazerCount": 1 },
+          { "name": "bradgarropy.com", "stargazerCount": 1 },
+          { "name": "gatsby-plugin-social-banners", "stargazerCount": 1 },
+          { "name": "Tour360", "stargazerCount": 1 },
+          { "name": "blizard.js", "stargazerCount": 1 },
+          { "name": "keep-a-changelog", "stargazerCount": 1 },
+          { "name": "vulnerabilities", "stargazerCount": 1 },
+          { "name": "harleydavidson", "stargazerCount": 1 },
+          { "name": "awesome-webgl", "stargazerCount": 1 },
+          { "name": "NewtonsInterpolation", "stargazerCount": 1 },
+          { "name": "now-github-starter", "stargazerCount": 1 },
+          { "name": "simplerockets", "stargazerCount": 1 }
         ],
         "pageInfo": {
           "hasNextPage": true,
