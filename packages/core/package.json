@@ -83,7 +83,7 @@
     "@testing-library/jest-dom": "6.9.1",
     "@uppercod/css-to-object": "1.1.1",
     "axios-mock-adapter": "2.1.0",
-    "js-yaml": "5.2.0",
+    "js-yaml": "5.2.1",
     "jsdom": "catalog:default",
     "vitest": "catalog:default"
   },
