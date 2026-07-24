@@ -8,7 +8,7 @@
     "@eslint/compat": "2.1.0",
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.61.1",
-    "@types/node": "24.13.2",
+    "@types/node": "24.13.3",
     "@vitest/coverage-v8": "catalog:default",
     "eslint": "10.6.0",
     "eslint-import-resolver-typescript": "4.4.5",
@@ -20,7 +20,7 @@
     "lint-staged": "17.0.8",
     "prettier": "3.9.1",
     "turbo": "2.10.0",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "typescript-eslint": "8.62.0",
     "vitest": "catalog:default"
   },
