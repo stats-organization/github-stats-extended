@@ -8,6 +8,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
+    "start": "node express.js",
     "test": "vitest",
     "test:update:snapshot": "vitest -u",
     "test:e2e": "vitest --config vitest.config.e2e.ts",
@@ -17,13 +18,13 @@
   },
   "devDependencies": {
     "axios-mock-adapter": "2.1.0",
-    "express": "5.2.1",
     "jsdom": "catalog:default",
     "vitest": "catalog:default"
   },
   "dependencies": {
     "@stats-organization/github-readme-stats-core": "workspace:^",
     "axios": "catalog:default",
+    "express": "5.2.1",
     "pg": "^8.22.0"
   }
 }

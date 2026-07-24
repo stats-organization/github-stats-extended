@@ -1,0 +1,35 @@
+# Dependencies and build outputs (rebuilt inside the image)
+**/node_modules
+**/build
+**/dist
+**/coverage
+**/.turbo
+
+# Vercel-specific scaffolding, not used in the container image
+**/.vercel
+apps/backend/_dot_vercel_copy
+apps/backend/.vercelignore
+apps/backend/vercel.json
+vercel-preparation.sh
+
+# VCS and tooling
+.git
+.github
+.husky
+.vscode
+.devcontainer
+
+# Local env and logs
+**/.env
+**/.env.*
+**/*.log
+npm-debug.log*
+
+# Docs and misc (not needed at runtime)
+**/*.md
+docs
+
+# The image files themselves
+Dockerfile
+.dockerignore
+docker-compose.yml
