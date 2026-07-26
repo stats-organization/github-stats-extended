@@ -42,7 +42,7 @@ const options: Array<SelectOption> = [
     id: 6,
     label: "Only Languages",
     disabled: false,
-    value: "compact&hide_progress=true",
+    value: "hide_progress",
   },
 ];
 

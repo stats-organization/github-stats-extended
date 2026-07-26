@@ -40,7 +40,11 @@ export function buildCardUrl(
         url = url.username(selectedUserId);
       }
       if (selectedStatsRank !== STATS_DEFAULT_RANK) {
-        url = url.rankIcon(selectedStatsRank.value);
+        if (selectedStatsRank.value === "hide_rank") {
+          url = url.hideRank();
+        } else {
+          url = url.rankIcon(selectedStatsRank.value);
+        }
       }
       if (!showTitle) {
         url = url.hideTitle();
@@ -71,7 +75,11 @@ export function buildCardUrl(
         url = url.username(selectedUserId);
       }
       if (selectedLanguagesLayout !== LANGUAGES_DEFAULT_LAYOUT) {
-        url = url.layout(selectedLanguagesLayout.value);
+        if (selectedLanguagesLayout.value === "hide_progress") {
+          url = url.hideProgress();
+        } else {
+          url = url.layout(selectedLanguagesLayout.value);
+        }
       }
       if (!showTitle) {
         url = url.hideTitle();
@@ -136,7 +144,11 @@ export function buildCardUrl(
         url = url.username(wakatimeUser);
       }
       if (selectedWakatimeLayout !== WAKATIME_DEFAULT_LAYOUT) {
-        url = url.layout(selectedWakatimeLayout.value);
+        if (selectedWakatimeLayout.value === "hide_progress") {
+          url = url.hideProgress().cardWidth(315);
+        } else {
+          url = url.layout(selectedWakatimeLayout.value);
+        }
       }
       if (!showTitle) {
         url = url.hideTitle();

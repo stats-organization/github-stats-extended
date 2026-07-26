@@ -16,11 +16,13 @@ import { CardType } from "./CardType";
  * | hide_title              |   ✓   |     ✓     |     |      |    ✓     |
  * | custom_title            |   ✓   |           |     |      |    ✓     |
  * | rank_icon               |   ✓   |           |     |      |          |
+ * | hide_rank               |   ✓   |           |     |      |          |
  * | show                    |   ✓   |           |     |      |          |
  * | show_icons              |   ✓   |           |     |      |          |
  * | include_all_commits     |   ✓   |           |     |      |          |
  * | hide_values             |       |     ✓     |     |      |          |
  * | layout                  |       |     ✓     |     |      |    ✓     |
+ * | hide_progress           |       |     ✓     |     |      |    ✓     |
  * | langs_count             |       |     ✓     |     |      |    ✓     |
  * | repo                    |       |           |  ✓  |      |          |
  * | description_lines_count |       |           |  ✓  |      |          |
@@ -107,6 +109,9 @@ class StatsCardUrl extends CardUrlBase<StatsCardUrl> {
   rankIcon(v: string) {
     return this.with("rank_icon", v);
   }
+  hideRank(v = true) {
+    return this.with("hide_rank", v);
+  }
   hideTitle(v = true) {
     return this.with("hide_title", v);
   }
@@ -142,6 +147,9 @@ class TopLangsCardUrl extends CardUrlBase<TopLangsCardUrl> {
   }
   layout(v: string) {
     return this.with("layout", v);
+  }
+  hideProgress(v = true) {
+    return this.with("hide_progress", v);
   }
   hideTitle(v = true) {
     return this.with("hide_title", v);
@@ -220,6 +228,9 @@ class WakatimeCardUrl extends CardUrlBase<WakatimeCardUrl> {
   }
   layout(v: string) {
     return this.with("layout", v);
+  }
+  hideProgress(v = true) {
+    return this.with("hide_progress", v);
   }
   hideTitle(v = true) {
     return this.with("hide_title", v);

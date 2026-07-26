@@ -16,7 +16,7 @@ const options: Array<SelectOption> = [
   DEFAULT_OPTION,
   { id: 2, label: "Percentile", value: "percentile", disabled: false },
   { id: 3, label: "GitHub", value: "github", disabled: false },
-  { id: 4, label: "None", value: "default&hide_rank=true", disabled: false },
+  { id: 4, label: "None", value: "hide_rank", disabled: false },
 ];
 
 interface StatsRankSectionProps {
