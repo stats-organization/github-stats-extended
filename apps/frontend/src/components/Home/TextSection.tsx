@@ -1,6 +1,7 @@
 import { clsx } from "clsx";
-import { useEffect, useRef, useState } from "react";
 import type { ClipboardEventHandler, JSX, ReactNode } from "react";
+
+import { useDebouncedField } from "../../hooks/useDebouncedField";
 
 import { Section } from "./Section";
 
@@ -25,29 +26,11 @@ export function TextSection({
   placeholder,
   onPaste,
 }: TextSectionProps): JSX.Element {
-  const [internalValue, setInternalValue] = useState(value);
-  const debounceTimeout = useRef<number | null>(null);
-
-  useEffect(() => {
-    setInternalValue(value);
-  }, [value]);
-
-  useEffect(() => {
-    // Debounce onValueChange
-    if (debounceTimeout.current) {
-      window.clearTimeout(debounceTimeout.current);
-    }
-    if (internalValue === value) {
-      return undefined;
-    }
-    debounceTimeout.current = window.setTimeout(() => {
-      onValueChange(internalValue);
-    }, 700);
-    // return cleanup function:
-    return () => {
-      window.clearTimeout(debounceTimeout.current as number);
-    };
-  }, [internalValue, onValueChange, value]);
+  const { inputValue, setInputValue } = useDebouncedField({
+    value,
+    onValueChange,
+    type: "text",
+  });
 
   return (
     <Section title={title}>
@@ -58,9 +41,9 @@ export function TextSection({
           "border border-base-content/20 rounded px-2 py-1 mt-2 w-3/4 min-w-48 max-w-xl",
           disabled ? "cursor-not-allowed bg-base-200" : "bg-base-100",
         )}
-        value={internalValue}
+        value={inputValue}
         onChange={(e) => {
-          setInternalValue(e.target.value);
+          setInputValue(e.target.value);
         }}
         disabled={disabled}
         placeholder={placeholder}

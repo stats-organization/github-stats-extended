@@ -24,7 +24,7 @@ const options: Array<SelectOption> = [
     id: 3,
     label: "Text Only",
     disabled: false,
-    value: "default&hide_progress=true&card_width=315",
+    value: "hide_progress",
   },
 ];
 

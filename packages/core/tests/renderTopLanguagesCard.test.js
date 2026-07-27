@@ -2,6 +2,7 @@ import { queryAllByTestId, queryByTestId } from "@testing-library/dom";
 import { cssToObject } from "@uppercod/css-to-object";
 import { describe, expect, it } from "vitest";
 
+import topLangsApi from "../src/api/top-langs.js";
 import {
   MIN_CARD_WIDTH,
   calculateCompactLayoutHeight,
@@ -840,7 +841,7 @@ describe("Test renderTopLanguages", () => {
   });
 
   it("should render without rounding", () => {
-    document.body.innerHTML = renderTopLanguages(langs, { border_radius: "0" });
+    document.body.innerHTML = renderTopLanguages(langs, { border_radius: 0 });
     expect(document.querySelector("rect")).toHaveAttribute("rx", "0");
     document.body.innerHTML = renderTopLanguages(langs, {});
     expect(document.querySelector("rect")).toHaveAttribute("rx", "4.5");
@@ -994,4 +995,40 @@ describe("Test renderTopLanguages", () => {
       "circle",
     );
   });
+});
+
+describe("test top-langs API", () => {
+  it("should return a permanent error for an invalid color parameter", async () => {
+    const result = await topLangsApi({
+      username: "user",
+      title_color: "not-a-color",
+    });
+
+    expect(result.status).toBe("error - permanent");
+    expect(result.content).toContain(
+      `Invalid color input for parameter &#34;title_color&#34;`,
+    );
+  });
+});
+
+describe("test renderTopLanguages with languages missing a color", () => {
+  // GitHub's GraphQL `Language.color` is nullable, so a language can reach the
+  // card with `color: null`. It must fall back to the default color instead of
+  // throwing.
+  const langsWithNullColor = {
+    HTML: { color: "#0f0", name: "HTML", size: 200 },
+    Text: { color: null, name: "Text", size: 100 },
+  };
+
+  it.each(["normal", "compact", "donut", "donut-vertical", "pie"])(
+    "should render the %s layout using the default color",
+    (layout) => {
+      expect(() =>
+        renderTopLanguages(langsWithNullColor, { layout }),
+      ).not.toThrow();
+
+      const card = renderTopLanguages(langsWithNullColor, { layout });
+      expect(card).toContain("#858585");
+    },
+  );
 });

@@ -1,4 +1,5 @@
 import { renderGistCard } from "../cards/gist.js";
+import { findInvalidColor } from "../common/color.js";
 import {
   MissingParamError,
   retrieveSecondaryMessage,
@@ -26,12 +27,47 @@ export default async (
   },
   pat = null,
 ) => {
+  const invalidColorInput = findInvalidColor({
+    title_color,
+    icon_color,
+    text_color,
+    bg_color,
+    border_color,
+  });
+  if (invalidColorInput) {
+    return {
+      status: "error - permanent",
+      content: renderError({
+        message: "Something went wrong",
+        secondaryMessage: `Invalid color input for parameter "${invalidColorInput}"`,
+      }),
+    };
+  }
+
   if (locale && !isLocaleAvailable(locale)) {
     return {
       status: "error - permanent",
       content: renderError({
         message: "Something went wrong",
         secondaryMessage: "Language not found",
+        renderOptions: {
+          title_color,
+          text_color,
+          bg_color,
+          border_color,
+          theme,
+        },
+      }),
+    };
+  }
+
+  const safePattern = /^[-\w/.,]+$/;
+  if (id && !safePattern.test(id)) {
+    return {
+      status: "error - permanent",
+      content: renderError({
+        message: "Something went wrong",
+        secondaryMessage: "Gist ID contains unsafe characters",
         renderOptions: {
           title_color,
           text_color,

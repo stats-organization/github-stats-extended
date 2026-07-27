@@ -78,7 +78,7 @@ describe("Test fetchGist", () => {
   it("should fetch gist correctly", async () => {
     mock.onPost("https://api.github.com/graphql").reply(200, gist_data);
 
-    let gist = await fetchGist("bbfce31e0217a3689c8d961a356cb10d");
+    const gist = await fetchGist("bbfce31e0217a3689c8d961a356cb10d");
 
     expect(gist).toStrictEqual({
       name: "countries.json",
@@ -110,6 +110,7 @@ describe("Test fetchGist", () => {
   });
 
   it("should throw error if id is not provided", async () => {
+    // @ts-expect-error testing missing argument
     await expect(fetchGist()).rejects.toThrow(
       'Missing params "id" make sure you pass the parameters in URL',
     );

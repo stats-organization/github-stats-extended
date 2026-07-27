@@ -9,6 +9,8 @@ import {
   DEMO_WAKATIME_USER,
 } from "../../../constants";
 import { CardType } from "../../../models/CardType";
+import { cardUrl } from "../../../models/CardUrl";
+import type { CardUrlBuilder } from "../../../models/CardUrl";
 import { useTheme } from "../../../redux/selectors/themeSelectors";
 import { useUserId } from "../../../redux/selectors/userSelectors";
 
@@ -23,14 +25,12 @@ export function SelectCardStage({
 }: SelectCardStageProps): JSX.Element {
   const userId = useUserId(DEMO_USER);
   const { isDark } = useTheme();
-  // Show dark-themed demo cards in dark mode so they fit the surroundings.
-  const themeParam = isDark ? "&theme=github_dark" : "";
 
   const options = useMemo<
     Array<{
       title: string;
       description: string;
-      demoImageSrc: string;
+      demoCard: CardUrlBuilder;
       cardType: CardType;
     }>
   >(
@@ -38,60 +38,69 @@ export function SelectCardStage({
       {
         title: "GitHub Stats Card",
         description: "your overall GitHub statistics",
-        demoImageSrc: `?username=${userId}&include_all_commits=true${themeParam}`,
+        demoCard: cardUrl(CardType.STATS).username(userId).includeAllCommits(),
         cardType: CardType.STATS,
       },
       {
         title: "Top Languages Card",
         description: "your most frequently used languages",
-        demoImageSrc: `/top-langs?username=${userId}&langs_count=4${themeParam}`,
+        demoCard: cardUrl(CardType.TOP_LANGS).username(userId).langsCount(4),
         cardType: CardType.TOP_LANGS,
       },
       {
         title: "GitHub Extra Pin",
         description:
           "pin more than 6 repositories in your profile using a GitHub profile readme",
-        demoImageSrc: `/pin?repo=${DEMO_REPO}${themeParam}`,
+        demoCard: cardUrl(CardType.PIN).repo(DEMO_REPO),
         cardType: CardType.PIN,
       },
       {
         title: "GitHub Gist Pin",
         description:
           "pin gists in your GitHub profile using a GitHub profile readme",
-        demoImageSrc: `/gist?id=${DEMO_GIST}${themeParam}`,
+        demoCard: cardUrl(CardType.GIST).gistId(DEMO_GIST),
         cardType: CardType.GIST,
       },
       {
         title: "WakaTime Stats Card",
         description: "your coding activity from WakaTime",
-        demoImageSrc: `/wakatime?username=${DEMO_WAKATIME_USER}&langs_count=6&card_width=450${themeParam}`,
+        demoCard: cardUrl(CardType.WAKATIME)
+          .username(DEMO_WAKATIME_USER)
+          .langsCount(6)
+          .cardWidth(450),
         cardType: CardType.WAKATIME,
       },
     ],
-    [userId, themeParam],
+    [userId],
   );
 
   return (
     <div className="w-full flex flex-wrap">
-      {options.map((card) => (
-        <button
-          className="p-2 lg:p-4"
-          key={card.cardType}
-          type="button"
-          onClick={() => {
-            onCardTypeChange(card.cardType);
-          }}
-        >
-          <Card
-            title={card.title}
-            description={card.description}
-            imageSrc={card.demoImageSrc}
-            selected={selectedCardType === card.cardType}
-            fixedSize
-            stage={1}
-          />
-        </button>
-      ))}
+      {options.map((card) => {
+        // Show dark-themed demo cards in dark mode so they fit the surroundings.
+        const demoCard = isDark
+          ? card.demoCard.theme("github_dark")
+          : card.demoCard;
+        return (
+          <button
+            className="p-2 lg:p-4"
+            key={card.cardType}
+            type="button"
+            onClick={() => {
+              onCardTypeChange(card.cardType);
+            }}
+          >
+            <Card
+              title={card.title}
+              description={card.description}
+              card={demoCard}
+              selected={selectedCardType === card.cardType}
+              fixedSize
+              stage={1}
+            />
+          </button>
+        );
+      })}
     </div>
   );
 }

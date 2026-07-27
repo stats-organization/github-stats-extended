@@ -6,6 +6,7 @@ import {
 import { cssToObject } from "@uppercod/css-to-object";
 import { describe, expect, it } from "vitest";
 
+import statsApi from "../src/api/index.js";
 import { renderStatsCard } from "../src/cards/stats.js";
 import { CustomError } from "../src/common/error.js";
 import { themes } from "../src/themes/index.js";
@@ -397,7 +398,7 @@ describe("Test renderStatsCard", () => {
   });
 
   it("should render without rounding", () => {
-    document.body.innerHTML = renderStatsCard(stats, { border_radius: "0" });
+    document.body.innerHTML = renderStatsCard(stats, { border_radius: 0 });
     expect(document.querySelector("rect")).toHaveAttribute("rx", "0");
     document.body.innerHTML = renderStatsCard(stats, {});
     expect(document.querySelector("rect")).toHaveAttribute("rx", "4.5");
@@ -461,6 +462,20 @@ describe("Test renderStatsCard", () => {
         "Could not render stats card.",
         "Either stats or rank are required.",
       ),
+    );
+  });
+});
+
+describe("test stats API", () => {
+  it("should return a permanent error for an invalid color parameter", async () => {
+    const result = await statsApi({
+      username: "user",
+      title_color: "not-a-color",
+    });
+
+    expect(result.status).toBe("error - permanent");
+    expect(result.content).toContain(
+      `Invalid color input for parameter &#34;title_color&#34;`,
     );
   });
 });

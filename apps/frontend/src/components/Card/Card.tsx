@@ -1,13 +1,15 @@
 import { clsx } from "clsx";
 import type { CSSProperties, JSX } from "react";
 
+import type { CardUrlBuilder } from "../../models/CardUrl";
+
 import { CardImage } from "./CardImage";
 import { LIGHT_CARD_BG } from "./themeBackdrop";
 
 interface CardProps {
   title: string;
   description: string;
-  imageSrc: string;
+  card: CardUrlBuilder;
   stage: number;
   selected?: boolean;
   compact?: boolean;
@@ -21,7 +23,7 @@ interface CardProps {
 export const Card = ({
   title,
   description,
-  imageSrc,
+  card,
   stage,
   selected = false,
   compact = false,
@@ -68,7 +70,7 @@ export const Card = ({
       </h2>
       <p className="text-base leading-relaxed mt-2 mb-4">{description}</p>
       <CardImage
-        imageSrc={imageSrc}
+        card={card}
         compact={compact}
         className={clsx({ "flex justify-center": fixedSize })}
         stage={stage}

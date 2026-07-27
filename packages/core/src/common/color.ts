@@ -1,28 +1,84 @@
 import { themes } from "../themes/index.js";
 
+/** Matches a 3-, 4-, 6-, or 8-digit hex color with no leading `#`. */
+const HEX_COLOR =
+  /^([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{4}|[A-Fa-f0-9]{3})$/;
+
 /**
- * Checks if a string is a valid hex color.
+ * Checks if a value is a bare hex color, i.e. hex digits with no `#` prefix
+ * (`"f00"`, `"ffffff"`). This is the form user-supplied color params and
+ * gradient stops arrive in.
  *
- * @param hexColor String to check.
- * @returns True if the given string is a valid hex color.
+ * @param value Value to check.
+ * @returns True if the value is a bare hex color.
  */
-const isValidHexColor = (hexColor: string): boolean => {
-  return new RegExp(
-    /^([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}|[A-Fa-f0-9]{4})$/,
-  ).test(hexColor);
+const isBareHexColor = (value: unknown): boolean => {
+  return typeof value === "string" && HEX_COLOR.test(value);
 };
 
 /**
- * Check if the given string is a valid gradient.
+ * Checks if a value is a `#`-prefixed hex color (`"#f00"`, `"#ffffff"`). This
+ * is the form colors take once resolved by {@link getCardColors}, i.e. right
+ * before they are written into the SVG.
  *
- * @param colors Array of colors.
- * @returns True if the given string is a valid gradient.
+ * @param value Value to check.
+ * @returns True if the value is a `#`-prefixed hex color.
  */
-const isValidGradient = (colors: Array<string>): boolean => {
+const isPrefixedHexColor = (value: unknown): boolean => {
   return (
-    colors.length > 2 &&
-    colors.slice(1).every((color) => isValidHexColor(color))
+    typeof value === "string" &&
+    value.startsWith("#") &&
+    HEX_COLOR.test(value.slice(1))
   );
+};
+
+/**
+ * Checks if the given parts form a valid gradient: a finite numeric angle
+ * followed by at least two bare-hex color stops, e.g. `["90", "f00", "0f0"]`.
+ * The angle is written into the SVG `gradientTransform="rotate(...)"`.
+ *
+ * @param parts Gradient parts: `[angle, ...stops]`.
+ * @returns True if the parts form a valid gradient.
+ */
+const isValidGradient = (parts: Array<string>): boolean => {
+  const [angle, ...stops] = parts;
+  return (
+    stops.length >= 2 &&
+    angle !== undefined &&
+    angle.trim() !== "" &&
+    Number.isFinite(Number(angle)) &&
+    stops.every(isBareHexColor)
+  );
+};
+
+/**
+ * Checks if a string is a valid input for a color or gradient.
+ *
+ * @param color String to check, may be null or undefined.
+ * @returns True if the given string is a valid input.
+ */
+const isValidColorInput = (color: string | null | undefined): boolean => {
+  if (color === null || color === undefined) {
+    return true;
+  }
+  return isValidGradient(color.split(",")) || isBareHexColor(color);
+};
+
+/**
+ * Iterates over a collection of colors inputs and verifies that each is a valid color or gradient.
+ *
+ * @param colors Object whose values are checked as valid color inputs.
+ * @return The first key where the associated input value is not valid. null if all inputs are valid.
+ */
+const findInvalidColor = (
+  colors: Record<string, string | null | undefined>,
+): string | null => {
+  for (const [key, value] of Object.entries(colors)) {
+    if (!isValidColorInput(value)) {
+      return key;
+    }
+  }
+  return null;
 };
 
 /**
@@ -41,7 +97,7 @@ const fallbackColor = (
     return colors;
   }
 
-  if (color !== undefined && isValidHexColor(color)) {
+  if (color !== undefined && isBareHexColor(color)) {
     return `#${color}`;
   }
 
@@ -82,13 +138,13 @@ const getCardColors = ({
   ring_color,
   theme,
 }: {
-  title_color?: string;
-  text_color?: string;
-  icon_color?: string;
-  bg_color?: string;
-  border_color?: string;
-  ring_color?: string;
-  theme?: string;
+  title_color?: string | undefined;
+  text_color?: string | undefined;
+  icon_color?: string | undefined;
+  bg_color?: string | undefined;
+  border_color?: string | undefined;
+  ring_color?: string | undefined;
+  theme?: string | undefined;
 }): CardColors => {
   const defaultTheme = themes.default;
   const isThemeProvided = theme !== undefined && theme in themes;
@@ -146,4 +202,11 @@ const getCardColors = ({
   return { titleColor, iconColor, textColor, bgColor, borderColor, ringColor };
 };
 
-export { fallbackColor, getCardColors };
+export {
+  fallbackColor,
+  getCardColors,
+  findInvalidColor,
+  isValidGradient,
+  isBareHexColor,
+  isPrefixedHexColor,
+};

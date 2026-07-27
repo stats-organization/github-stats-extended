@@ -2,6 +2,7 @@ import { queryByTestId } from "@testing-library/dom";
 import { cssToObject } from "@uppercod/css-to-object";
 import { describe, expect, it } from "vitest";
 
+import gistApi from "../src/api/gist.js";
 import { renderGistCard } from "../src/cards/gist.js";
 import { themes } from "../src/themes/index.js";
 
@@ -11,7 +12,7 @@ import { themes } from "../src/themes/index.js";
 const data = {
   name: "test",
   nameWithOwner: "anuraghazra/test",
-  description: "Small test repository with different Python programs.",
+  description: "Small <b>test</b> repository with different Python programs.",
   language: "Python",
   starsCount: 163,
   forksCount: 19,
@@ -26,7 +27,8 @@ describe("test renderGistCard", () => {
     expect(header).toHaveTextContent("test");
     expect(header).not.toHaveTextContent("anuraghazra");
     expect(document.getElementsByClassName("description")[0]).toHaveTextContent(
-      "Small test repository with different Python programs.",
+      // Between "Python" and "programs" there is a line break caused by: </tspan><tspan dy="1.2em" x="25">
+      "Small <b>test</b> repository with different Pythonprograms.",
     );
     expect(queryByTestId(document.body, "starsCount")).toHaveTextContent("163");
     expect(queryByTestId(document.body, "forksCount")).toHaveTextContent("19");
@@ -74,7 +76,7 @@ describe("test renderGistCard", () => {
       {
         ...data,
         description:
-          "The quick brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet",
+          "The <b>quick</b> brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet",
       },
       { browser_rendering: true },
     );
@@ -82,7 +84,7 @@ describe("test renderGistCard", () => {
     // foreignObject's inner div is what visually truncates the overflow.
     const description = document.getElementsByClassName("description")[0];
     expect(description).toHaveTextContent(
-      "The quick brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet",
+      "The <b>quick</b> brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet",
     );
     expect(
       Number(description.style.getPropertyValue("--lines")),
@@ -240,7 +242,7 @@ describe("test renderGistCard", () => {
 
   it("should render without rounding", () => {
     document.body.innerHTML = renderGistCard(data, {
-      border_radius: "0",
+      border_radius: 0,
     });
     expect(document.querySelector("rect")).toHaveAttribute("rx", "0");
     document.body.innerHTML = renderGistCard(data, {});
@@ -254,6 +256,17 @@ describe("test renderGistCard", () => {
     });
     expect(document.getElementsByClassName("description")[0]).toHaveTextContent(
       "No description provided",
+    );
+  });
+});
+
+describe("test gist API", () => {
+  it("should return permanent error for invalid color input", async () => {
+    const result = await gistApi({ id: "abc123", title_color: "not-a-color" });
+
+    expect(result.status).toBe("error - permanent");
+    expect(result.content).toContain(
+      `Invalid color input for parameter &#34;title_color&#34;`,
     );
   });
 });

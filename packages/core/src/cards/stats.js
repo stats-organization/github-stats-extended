@@ -3,6 +3,7 @@ import { I18n } from "../common/I18n.js";
 import { getCardColors } from "../common/color.js";
 import { CustomError } from "../common/error.js";
 import { kFormatter } from "../common/fmt.js";
+import { encodeHTML } from "../common/html.js";
 import { icons, rankIcon } from "../common/icons.js";
 import { buildSearchFilter, clampValue } from "../common/ops.js";
 import { flexLayout, measureText } from "../common/render.js";
@@ -52,8 +53,10 @@ const LONG_LOCALES = [
 /**
  * Create a stats card text item.
  *
+ * The caller must ensure that the passed `icon` and `link` are properly sanitized!
+ *
  * @param {object} params Object that contains the createTextNode parameters.
- * @param {string} params.icon The icon to display.
+ * @param {string} params.icon The sanitized icon to display.
  * @param {string} params.label The label to display.
  * @param {number} params.value The value to display.
  * @param {string} params.id The id of the stat.
@@ -64,7 +67,7 @@ const LONG_LOCALES = [
  * @param {boolean} params.bold Whether to bold the label.
  * @param {string} params.numberFormat The format of numbers on card.
  * @param {number=} params.numberPrecision The precision of numbers on card.
- * @param {string} params.link Url to link to.
+ * @param {string} params.link Sanitized url to link to.
  * @param {number} params.labelXOffset horizontal offset for label.
  * @returns {string} The stats card text item SVG object.
  */
@@ -83,6 +86,16 @@ const createTextNode = ({
   link,
   labelXOffset = 25,
 }) => {
+  if (!Number.isFinite(labelXOffset)) {
+    throw new Error(`Invalid labelXOffset: "${labelXOffset}"`);
+  }
+  if (!Number.isFinite(shiftValuePos)) {
+    throw new Error(`Invalid shiftValuePos: "${shiftValuePos}"`);
+  }
+  if (!Number.isFinite(index)) {
+    throw new Error(`Invalid index: "${index}"`);
+  }
+
   const precision =
     typeof numberPrecision === "number" && !isNaN(numberPrecision)
       ? clampValue(numberPrecision, 0, 2)
@@ -109,7 +122,7 @@ const createTextNode = ({
       ${iconSvg}
       <text class="stat ${
         bold ? " bold" : "not_bold"
-      }" ${labelOffset} y="12.5">${label}:</text>
+      }" ${labelOffset} y="12.5">${encodeHTML(label)}:</text>
       <text
         class="stat ${bold ? " bold" : "not_bold"}"
         x="${(showIcons ? 140 : 120) + (bold ? 5 : 0) + shiftValuePos}"
@@ -422,13 +435,14 @@ const renderStatsCard = (
   }
 
   let repoFilter = encodeURIComponent(buildSearchFilter(repo, owner));
+  const encodedUsername = encodeURIComponent(username);
   if (show.includes("prs_authored")) {
     STATS.prs_authored = {
       icon: icons.prs,
       label: i18n.t("statcard.prs-authored"),
       value: totalPRsAuthored,
       id: "prs_authored",
-      link: `https://github.com/search?q=${repoFilter}author%3A${username}&amp;type=pullrequests`,
+      link: `https://github.com/search?q=${repoFilter}author%3A${encodedUsername}&amp;type=pullrequests`,
     };
   }
   if (show.includes("prs_commented")) {
@@ -437,7 +451,7 @@ const renderStatsCard = (
       label: i18n.t("statcard.prs-commented"),
       value: totalPRsCommented,
       id: "prs_commented",
-      link: `https://github.com/search?q=${repoFilter}commenter%3A${username}+-author%3A${username}&amp;type=pullrequests`,
+      link: `https://github.com/search?q=${repoFilter}commenter%3A${encodedUsername}+-author%3A${encodedUsername}&amp;type=pullrequests`,
     };
   }
   if (show.includes("prs_reviewed")) {
@@ -446,7 +460,7 @@ const renderStatsCard = (
       label: i18n.t("statcard.prs-reviewed"),
       value: totalPRsReviewed,
       id: "prs_reviewed",
-      link: `https://github.com/search?q=${repoFilter}reviewed-by%3A${username}+-author%3A${username}&amp;type=pullrequests`,
+      link: `https://github.com/search?q=${repoFilter}reviewed-by%3A${encodedUsername}+-author%3A${encodedUsername}&amp;type=pullrequests`,
     };
   }
   if (show.includes("issues_authored")) {
@@ -455,7 +469,7 @@ const renderStatsCard = (
       label: i18n.t("statcard.issues-authored"),
       value: totalIssuesAuthored,
       id: "issues_authored",
-      link: `https://github.com/search?q=${repoFilter}author%3A${username}&amp;type=issues`,
+      link: `https://github.com/search?q=${repoFilter}author%3A${encodedUsername}&amp;type=issues`,
     };
   }
   if (show.includes("issues_commented")) {
@@ -464,7 +478,7 @@ const renderStatsCard = (
       label: i18n.t("statcard.issues-commented"),
       value: totalIssuesCommented,
       id: "issues_commented",
-      link: `https://github.com/search?q=${repoFilter}commenter%3A${username}+-author%3A${username}&amp;type=issues`,
+      link: `https://github.com/search?q=${repoFilter}commenter%3A${encodedUsername}+-author%3A${encodedUsername}&amp;type=issues`,
     };
   }
 

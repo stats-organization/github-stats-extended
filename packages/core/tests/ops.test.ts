@@ -25,7 +25,7 @@ describe("Test ops.js", () => {
     expect(parseBoolean("1")).toBe(undefined);
     expect(parseBoolean("0")).toBe(undefined);
     expect(parseBoolean("")).toBe(undefined);
-    // @ts-ignore
+    // @ts-expect-error testing invalid input
     expect(parseBoolean(undefined)).toBe(undefined);
   });
 
@@ -33,7 +33,7 @@ describe("Test ops.js", () => {
     expect(parseArray("a,b,c")).toEqual(["a", "b", "c"]);
     expect(parseArray("a, b, c")).toEqual(["a", " b", " c"]); // preserves spaces
     expect(parseArray("")).toEqual([]);
-    // @ts-ignore
+    // @ts-expect-error testing invalid input
     expect(parseArray(undefined)).toEqual([]);
   });
 
@@ -43,11 +43,9 @@ describe("Test ops.js", () => {
     expect(clampValue(15, 1, 10)).toBe(10);
 
     // string inputs are coerced numerically by Math.min/Math.max
-    // @ts-ignore
     expect(clampValue("7", 1, 10)).toBe(7);
 
     // non-numeric and NaN fall back to min
-    // @ts-ignore
     expect(clampValue("abc", 1, 10)).toBe(1);
     expect(clampValue(NaN, 2, 5)).toBe(2);
   });
@@ -73,7 +71,7 @@ describe("Test ops.js", () => {
     expect(out.endsWith(" OSS")).toBe(true);
 
     expect(() => parseEmojis("")).toThrow(/parseEmoji/);
-    // @ts-ignore
+    // @ts-expect-error testing missing argument
     expect(() => parseEmojis()).toThrow(/parseEmoji/);
   });
 

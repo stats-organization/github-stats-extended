@@ -1,6 +1,7 @@
 import { queryByTestId } from "@testing-library/dom";
 import { describe, expect, it } from "vitest";
 
+import wakatimeApi from "../src/api/wakatime.js";
 import { renderWakatimeCard } from "../src/cards/wakatime.js";
 
 import { wakaTimeData } from "./fetchWakatime.test.js";
@@ -49,7 +50,7 @@ describe("Test Render WakaTime Card", () => {
 
   it("should render without rounding", () => {
     document.body.innerHTML = renderWakatimeCard(wakaTimeData.data, {
-      border_radius: "0",
+      border_radius: 0,
     });
     expect(document.querySelector("rect")).toHaveAttribute("rx", "0");
     document.body.innerHTML = renderWakatimeCard(wakaTimeData.data, {});
@@ -89,5 +90,26 @@ describe("Test Render WakaTime Card", () => {
       display_format: "percent",
     });
     expect(card).toMatchSnapshot();
+  });
+
+  it("should render correctly with gradient background", () => {
+    const card = renderWakatimeCard(wakaTimeData.data, {
+      theme: "ambient_gradient",
+    });
+    expect(card).toMatchSnapshot();
+  });
+});
+
+describe("test wakatime API", () => {
+  it("should return a permanent error for an invalid color parameter", async () => {
+    const result = await wakatimeApi({
+      username: "user",
+      title_color: "not-a-color",
+    });
+
+    expect(result.status).toBe("error - permanent");
+    expect(result.content).toContain(
+      `Invalid color input for parameter &#34;title_color&#34;`,
+    );
   });
 });

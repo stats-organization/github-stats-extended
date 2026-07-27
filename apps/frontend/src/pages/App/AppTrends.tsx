@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -81,24 +81,20 @@ export function AppTrends() {
     clearAxiosCache();
   }, [userToken]);
 
+  /*
+   * Advance to step 1 only when `isAuthenticated` transitions, so a logged-in user can still navigate back to step 0.
+   * Tracked during render (comparing the previous value) rather than in an effect:
+   * https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+   */
   {
-    /*
-     * This effect must only be executed when `isAuthenticated` changes,
-     * otherwise logged-in user are unable to go back to step 1.
-     */
-    const prevIsAuthenticated = useRef(isAuthenticated);
-
-    useEffect(() => {
-      if (prevIsAuthenticated.current === isAuthenticated) {
-        return;
-      }
-
-      prevIsAuthenticated.current = isAuthenticated;
-
+    const [prevIsAuthenticated, setPrevIsAuthenticated] =
+      useState(isAuthenticated);
+    if (isAuthenticated !== prevIsAuthenticated) {
+      setPrevIsAuthenticated(isAuthenticated);
       if (isAuthenticated && stage === 0) {
         setStage(1);
       }
-    }, [isAuthenticated, stage]);
+    }
   }
 
   useEffect(() => {

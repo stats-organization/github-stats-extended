@@ -94,7 +94,7 @@ Selecting the right scopes for your token is important in case you want to displ
 
 Click on the deploy button to get started!
 
-[![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/stats-organization/github-stats-extended)
+[![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/stats-organization/github-stats-extended&root-directory=apps/backend)
 
 <b>Recommended: Step-by-step guide on setting up your own Vercel instance</b>
 

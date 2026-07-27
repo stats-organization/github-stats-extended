@@ -6,13 +6,14 @@ import { CardImage } from "../../../components/Card/CardImage";
 import { getCardThemeBackdrop } from "../../../components/Card/themeBackdrop";
 import { Button } from "../../../components/Generic/Button";
 import { HOST } from "../../../constants";
+import type { CardUrlBuilder } from "../../../models/CardUrl";
 import { useTheme } from "../../../redux/selectors/themeSelectors";
 
 interface DisplayStageProps {
   filename: string;
   link: string;
   theme: string;
-  themeSuffix: string;
+  card: CardUrlBuilder;
   guestHint: string | null;
 }
 
@@ -20,7 +21,7 @@ export function DisplayStage({
   filename,
   link,
   theme,
-  themeSuffix,
+  card,
   guestHint,
 }: DisplayStageProps): JSX.Element {
   const { isDark } = useTheme();
@@ -39,7 +40,7 @@ export function DisplayStage({
 
   const copyMarkdown = () => {
     void navigator.clipboard.writeText(
-      `[![GitHub Stats](https://${HOST}/api${themeSuffix})](${link})`,
+      `[![GitHub Stats](${card.toApiUrl(HOST)})](${link})`,
     );
     toast.info("Copied to Clipboard!", {
       position: "bottom-right",
@@ -52,7 +53,7 @@ export function DisplayStage({
   };
 
   const copyUrl = () => {
-    void navigator.clipboard.writeText(`https://${HOST}/api${themeSuffix}`);
+    void navigator.clipboard.writeText(card.toApiUrl(HOST));
     toast.info("Copied to Clipboard!", {
       position: "bottom-right",
       autoClose: 1500,
@@ -104,7 +105,7 @@ export function DisplayStage({
           style={{ background: getCardThemeBackdrop(theme, isDark) }}
         >
           <CardImage
-            imageSrc={`${themeSuffix}&disable_animations=true`}
+            card={card.disableAnimations()}
             stage={4}
             className="flex justify-center"
           />

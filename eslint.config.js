@@ -2,12 +2,14 @@ import { fileURLToPath } from "node:url";
 
 import { includeIgnoreFile } from "@eslint/compat";
 import js from "@eslint/js";
+import eslintReact from "@eslint-react/eslint-plugin";
 import { defineConfig } from "eslint/config";
-import { createTypeScriptImportResolver } from "eslint-import-resolver-typescript";
+import {
+  createTypeScriptImportResolver,
+  defaultConditionNames,
+} from "eslint-import-resolver-typescript";
 import { importX } from "eslint-plugin-import-x";
 import { default as jsdoc } from "eslint-plugin-jsdoc";
-import react from "eslint-plugin-react";
-import reactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
 import { default as tseslint } from "typescript-eslint";
 
@@ -26,14 +28,7 @@ export default defineConfig(
             /** Keep in sync with `tsconfig.base.json#customConditions` */
             "@stats/source",
 
-            "types",
-            "import",
-
-            "require",
-            "node",
-            "node-addons",
-            "browser",
-            "default",
+            ...defaultConditionNames,
           ],
         }),
       ],
@@ -176,23 +171,6 @@ export default defineConfig(
   },
   {
     files: ["apps/frontend/**/*.{js,jsx,ts,tsx}"],
-    plugins: {
-      react,
-      "react-hooks": reactHooks,
-    },
-    languageOptions: {
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-    },
-    rules: {
-      "react/jsx-no-undef": "error",
-      "react/jsx-uses-vars": "error",
-      "react/no-array-index-key": "warn",
-      "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn",
-    },
+    ...eslintReact.configs["recommended-typescript"],
   },
 );
