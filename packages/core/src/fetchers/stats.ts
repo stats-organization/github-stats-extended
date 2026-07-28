@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { AxiosResponse } from "axios";
 import githubUsernameRegex from "github-username-regex";
 
 import { calculateRank } from "../calculateRank.js";
@@ -9,6 +10,8 @@ import { request } from "../common/http.js";
 import { logger } from "../common/log.js";
 import { buildSearchFilter, parseOwnerAffiliations } from "../common/ops.js";
 import { retryer } from "../common/retryer.js";
+
+import type { StatsData } from "./types.js";
 
 // GraphQL queries.
 const GRAPHQL_REPOS_FIELD = `
@@ -73,40 +76,79 @@ const GRAPHQL_STATS_QUERY = `
   }
 `;
 
+/** The `user` object returned by the stats GraphQL query. */
+interface StatsUser {
+  name: string | null;
+  login: string;
+  commits: { totalCommitContributions: number };
+  reviews: { totalPullRequestReviewContributions: number };
+  repositoriesContributedTo: { totalCount: number };
+  pullRequests: { totalCount: number };
+  mergedPullRequests: { totalCount: number };
+  openIssues: { totalCount: number };
+  closedIssues: { totalCount: number };
+  followers: { totalCount: number };
+  repositoryDiscussions: { totalCount: number };
+  repositoryDiscussionComments: { totalCount: number };
+  repositories: {
+    totalCount: number;
+    nodes: Array<{ name: string; stargazerCount: number }>;
+    pageInfo: { hasNextPage: boolean; endCursor: string | null };
+  };
+}
+
+/** Shape of `response.data` returned by the stats GraphQL query. */
+interface StatsQueryResponse {
+  data: { user: StatsUser };
+}
+
+/** The subset of the stats response `statsFetcher` returns and threads on. */
+interface StatsFetcherResponse {
+  data: StatsQueryResponse & {
+    errors?: Array<{ type?: string; message?: string }>;
+  };
+  statusText: string;
+}
+
+/** Per-repo/-user counts fetched via the REST search API. */
+interface RepoUserStats {
+  totalPRsAuthored?: number;
+  totalPRsCommented?: number;
+  totalPRsReviewed?: number;
+  totalIssuesAuthored?: number;
+  totalIssuesCommented?: number;
+}
+
 /**
  * Stats fetcher object.
  *
- * @param {object & { after: string | null }} variables Fetcher variables.
- * @param {string} token GitHub token.
- * @returns {Promise<import('axios').AxiosResponse>} Axios response.
+ * @param variables Fetcher variables.
+ * @param token GitHub token.
+ * @returns Axios response.
  */
-const fetcher = (variables, token) => {
-  const query = variables.after ? GRAPHQL_REPOS_QUERY : GRAPHQL_STATS_QUERY;
-  return request(
-    {
-      query,
-      variables,
-    },
-    {
-      Authorization: `bearer ${token}`,
-    },
-  );
+const fetcher = (
+  variables: Record<string, unknown>,
+  token: string,
+): Promise<AxiosResponse> => {
+  const query = variables["after"] ? GRAPHQL_REPOS_QUERY : GRAPHQL_STATS_QUERY;
+  return request({ query, variables }, { Authorization: `bearer ${token}` });
 };
 
 /**
  * Fetch stats information for a given username.
  *
- * @param {object} variables Fetcher variables.
- * @param {string} variables.username GitHub username.
- * @param {boolean} variables.includeMergedPullRequests Include merged pull requests.
- * @param {boolean} variables.includeDiscussions Include discussions.
- * @param {boolean} variables.includeDiscussionsAnswers Include discussions answers.
- * @param {string|undefined} variables.startTime Time to start the count of total commits.
- * @param {string[]} variables.ownerAffiliations The owner affiliations to filter by. Default: OWNER.
- * @param {string | null} variables.pat PAT override or null.
- * @returns {Promise<import('axios').AxiosResponse>} Axios response.
+ * @param variables Fetcher variables.
+ * @param variables.username GitHub username.
+ * @param variables.includeMergedPullRequests Include merged pull requests.
+ * @param variables.includeDiscussions Include discussions.
+ * @param variables.includeDiscussionsAnswers Include discussions answers.
+ * @param variables.startTime Time to start the count of total commits.
+ * @param variables.ownerAffiliations The owner affiliations to filter by. Default: OWNER.
+ * @param variables.pat PAT override or null.
+ * @returns Axios response.
  *
- * @description This function supports multi-page fetching if the 'FETCH_MULTI_PAGE_STARS' environment variable is set to true or a limit of fetches.
+ * @description Supports multi-page fetching when the `FETCH_MULTI_PAGE_STARS`
+ * env variable is `true` or a fetch limit.
  */
 const statsFetcher = async ({
   username,
@@ -116,13 +158,21 @@ const statsFetcher = async ({
   startTime,
   ownerAffiliations,
   pat,
-}) => {
-  let stats;
+}: {
+  username: string;
+  includeMergedPullRequests: boolean;
+  includeDiscussions: boolean;
+  includeDiscussionsAnswers: boolean;
+  startTime: string | undefined;
+  ownerAffiliations: Array<string>;
+  pat: string | null;
+}): Promise<StatsFetcherResponse> => {
+  let stats: StatsFetcherResponse | undefined;
   let hasNextPage = true;
-  let endCursor = null;
+  let endCursor: string | null = null;
   let fetchedPages = 0;
   while (hasNextPage) {
-    const variables = {
+    const variables: Record<string, unknown> = {
       login: username,
       first: 100,
       after: endCursor,
@@ -132,7 +182,7 @@ const statsFetcher = async ({
       startTime,
       ownerAffiliations,
     };
-    let res = await retryer(fetcher, variables, pat);
+    const res = await retryer<StatsQueryResponse>(fetcher, variables, pat);
     if (res.data.errors) {
       return res;
     }
@@ -141,7 +191,7 @@ const statsFetcher = async ({
     const repoNodes = res.data.data.user.repositories.nodes;
     if (stats) {
       if (fetchedPages === 1) {
-        // make deep copy of relevant stats fields to avoid altering the cached response object in frontend
+        // deep copy to avoid mutating the response cached by the frontend
         stats = structuredClone({
           data: stats.data,
           statusText: stats.statusText,
@@ -159,34 +209,42 @@ const statsFetcher = async ({
 
     hasNextPage =
       (getConfig().fetchMultiPageStars === "true" ||
-        getConfig().fetchMultiPageStars > fetchedPages) &&
+        Number(getConfig().fetchMultiPageStars) > fetchedPages) &&
       repoNodes.length === repoNodesWithStars.length &&
       res.data.data.user.repositories.pageInfo.hasNextPage;
 
     endCursor = res.data.data.user.repositories.pageInfo.endCursor;
   }
 
+  if (!stats) {
+    throw new Error("No stats data fetched.");
+  }
   return stats;
 };
 
 /**
- * Fetch total commits using the REST API.
+ * Fetch total items count using the REST search API.
  *
- * @param {object} variables Fetcher variables.
- * @param {string} token GitHub token.
- * @returns {Promise<import('axios').AxiosResponse>} Axios response.
+ * @param variables Fetcher variables.
+ * @param token GitHub token.
+ * @returns Axios response.
  *
  * @see https://developer.github.com/v3/search/#search-commits
  */
-const fetchTotalItems = (variables, token) => {
+const fetchTotalItems = (
+  variables: Record<string, unknown>,
+  token: string,
+): Promise<AxiosResponse> => {
+  const type = String(variables["type"]);
+  const filter = String(variables["filter"]);
+  const repo = variables["repo"] as Array<string> | string;
+  const owner = variables["owner"] as Array<string> | string;
   return axios({
     method: "get",
     url:
-      `https://api.github.com/search/` +
-      variables.type +
-      `?per_page=1&q=` +
-      buildSearchFilter(variables.repo, variables.owner).replaceAll(" ", "+") +
-      variables.filter,
+      `https://api.github.com/search/${type}?per_page=1&q=` +
+      buildSearchFilter(repo, owner).replaceAll(" ", "+") +
+      filter,
     headers: {
       "Content-Type": "application/json",
       Accept: "application/vnd.github.cloak-preview",
@@ -196,31 +254,31 @@ const fetchTotalItems = (variables, token) => {
 };
 
 /**
- * Fetch all the commits for all the repositories of a given username.
+ * Fetch a total count for a given username via the REST search API.
  *
- * @param {string} username GitHub username.
- * @returns {Promise<number>} Total commits.
+ * @param username GitHub username.
+ * @returns Total count.
  *
- * @description Done like this because the GitHub API does not provide a way to fetch all the commits. See
- * #92#issuecomment-661026467 and #211 for more information.
+ * @see #92#issuecomment-661026467 and #211 — the GraphQL API can't return this.
  */
-const totalItemsFetcher = async (username, repo, owner, type, filter, pat) => {
+const totalItemsFetcher = async (
+  username: string,
+  repo: Array<string>,
+  owner: Array<string>,
+  type: string,
+  filter: string,
+  pat: string | null,
+): Promise<number> => {
   if (!githubUsernameRegex.test(username)) {
     logger.log("Invalid username provided.");
     throw new Error("Invalid username provided.");
   }
 
-  let res;
+  let res: AxiosResponse<{ total_count?: number }>;
   try {
-    res = await retryer(
+    res = await retryer<{ total_count?: number }>(
       fetchTotalItems,
-      {
-        login: username,
-        repo,
-        owner,
-        type,
-        filter,
-      },
+      { login: username, repo, owner, type, filter },
       pat,
     );
   } catch (err) {
@@ -229,7 +287,7 @@ const totalItemsFetcher = async (username, repo, owner, type, filter, pat) => {
   }
 
   const totalCount = res.data.total_count;
-  if (isNaN(totalCount)) {
+  if (totalCount === undefined || isNaN(totalCount)) {
     logger.error("GitHub error: " + JSON.stringify(res.data));
     throw new CustomError(
       "Could not fetch data from GitHub REST API.",
@@ -240,17 +298,17 @@ const totalItemsFetcher = async (username, repo, owner, type, filter, pat) => {
 };
 
 const fetchRepoUserStats = async (
-  username,
-  repo,
-  owner,
-  include_prs_authored,
-  include_prs_commented,
-  include_prs_reviewed,
-  include_issues_authored,
-  include_issues_commented,
-  pat,
-) => {
-  let stats = {};
+  username: string,
+  repo: Array<string>,
+  owner: Array<string>,
+  include_prs_authored: boolean,
+  include_prs_commented: boolean,
+  include_prs_reviewed: boolean,
+  include_issues_authored: boolean,
+  include_issues_commented: boolean,
+  pat: string | null,
+): Promise<RepoUserStats> => {
+  const stats: RepoUserStats = {};
   if (include_prs_authored) {
     stats.totalPRsAuthored = await totalItemsFetcher(
       username,
@@ -307,39 +365,31 @@ const fetchRepoUserStats = async (
 /**
  * Fetch stats for a given username.
  *
- * @param {string} username GitHub username.
- * @param {boolean} include_all_commits Include all commits.
- * @param {string[]} exclude_repo Repositories to exclude.
- * @param {boolean} include_merged_pull_requests Include merged pull requests.
- * @param {boolean} include_discussions Include discussions.
- * @param {boolean} include_discussions_answers Include discussions answers.
- * @param {number|undefined} commits_year Year to count total commits
- * @param {string[]} ownerAffiliations Owner affiliations. Default: OWNER.
- * @returns {Promise<import("./types").StatsData>} Stats data.
+ * @returns Stats data.
  */
 const fetchStats = async (
-  username,
+  username: string,
   include_all_commits = false,
-  exclude_repo = [],
+  exclude_repo: Array<string> = [],
   include_merged_pull_requests = false,
   include_discussions = false,
   include_discussions_answers = false,
-  commits_year,
-  repo = [],
-  owner = [],
+  commits_year?: number,
+  repo: Array<string> = [],
+  owner: Array<string> = [],
   include_prs_authored = false,
   include_prs_commented = false,
   include_prs_reviewed = false,
   include_issues_authored = false,
   include_issues_commented = false,
-  ownerAffiliations = [],
-  pat = null,
-) => {
+  ownerAffiliations: Array<string> = [],
+  pat: string | null = null,
+): Promise<StatsData> => {
   if (!username) {
     throw new MissingParamError(["username"]);
   }
 
-  const stats = {
+  const stats: StatsData = {
     name: "",
     totalPRs: 0,
     totalPRsMerged: 0,
@@ -358,32 +408,31 @@ const fetchStats = async (
     totalIssuesCommented: 0,
     rank: { level: "C", percentile: 100 },
   };
-  ownerAffiliations = parseOwnerAffiliations(ownerAffiliations);
+  const affiliations = parseOwnerAffiliations(ownerAffiliations);
 
-  let res = await statsFetcher(
-    {
-      username,
-      includeMergedPullRequests: include_merged_pull_requests,
-      includeDiscussions: include_discussions,
-      includeDiscussionsAnswers: include_discussions_answers,
-      startTime: commits_year ? `${commits_year}-01-01T00:00:00Z` : undefined,
-      ownerAffiliations,
-    },
+  const res = await statsFetcher({
+    username,
+    includeMergedPullRequests: include_merged_pull_requests,
+    includeDiscussions: include_discussions,
+    includeDiscussionsAnswers: include_discussions_answers,
+    startTime: commits_year ? `${commits_year}-01-01T00:00:00Z` : undefined,
+    ownerAffiliations: affiliations,
     pat,
-  );
+  });
 
   // Catch GraphQL errors.
   if (res.data.errors) {
     logger.error(res.data.errors);
-    if (res.data.errors[0].type === "NOT_FOUND") {
+    const firstError = res.data.errors[0];
+    if (firstError?.type === "NOT_FOUND") {
       throw new CustomError(
-        res.data.errors[0].message || "Could not fetch user.",
+        firstError.message || "Could not fetch user.",
         CustomError.USER_NOT_FOUND,
       );
     }
-    if (res.data.errors[0].message) {
+    if (firstError?.message) {
       throw new CustomError(
-        wrapTextMultiline(res.data.errors[0].message, 525, 12)[0],
+        wrapTextMultiline(firstError.message, 525, 12)[0] ?? "",
         res.statusText,
       );
     }
@@ -410,7 +459,7 @@ const fetchStats = async (
   } else {
     stats.totalCommits = user.commits.totalCommitContributions;
   }
-  let repoUserStats = await fetchRepoUserStats(
+  const repoUserStats = await fetchRepoUserStats(
     username,
     repo,
     owner,
@@ -446,15 +495,11 @@ const fetchStats = async (
     ...exclude_repo,
     ...getConfig().excludeRepositories,
   ];
-  let repoToHide = new Set(allExcludedRepos);
+  const repoToHide = new Set(allExcludedRepos);
 
   stats.totalStars = user.repositories.nodes
-    .filter((data) => {
-      return !repoToHide.has(data.name);
-    })
-    .reduce((prev, curr) => {
-      return prev + curr.stargazerCount;
-    }, 0);
+    .filter((data) => !repoToHide.has(data.name))
+    .reduce((prev, curr) => prev + curr.stargazerCount, 0);
 
   stats.rank = calculateRank({
     all_commits: include_all_commits,
