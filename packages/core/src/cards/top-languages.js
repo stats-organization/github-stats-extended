@@ -2,7 +2,7 @@ import { Card } from "../common/Card.js";
 import { I18n } from "../common/I18n.js";
 import {
   fallbackColor,
-  getCardColors,
+  getDualModeColors,
   isPrefixedHexColor,
 } from "../common/color.js";
 import { formatBytes } from "../common/fmt.js";
@@ -882,6 +882,18 @@ const renderTopLanguages = (topLangs, options = {}) => {
     border_color,
     disable_animations,
     stats_format = "percentages",
+    title_color_light,
+    text_color_light,
+    bg_color_light,
+    border_color_light,
+    prog_bar_bg_color_light,
+    theme_light,
+    title_color_dark,
+    text_color_dark,
+    bg_color_dark,
+    border_color_dark,
+    prog_bar_bg_color_dark,
+    theme_dark,
   } = options;
 
   const i18n = new I18n({
@@ -905,13 +917,20 @@ const renderTopLanguages = (topLangs, options = {}) => {
   let height = calculateNormalLayoutHeight(langs.length);
 
   // returns theme based colors with proper overrides and defaults
-  const colors = getCardColors({
-    title_color,
-    text_color,
-    bg_color,
-    border_color,
-    theme,
-  });
+  const { lightColors, darkColors } = getDualModeColors(
+    { title_color, text_color, bg_color, border_color, theme },
+    {
+      title_color_light, text_color_light, bg_color_light,
+      border_color_light, theme_light,
+      title_color_dark, text_color_dark, bg_color_dark,
+      border_color_dark, theme_dark,
+    },
+  );
+  const colors = lightColors;
+  const progBarBgColor = fallbackColor(prog_bar_bg_color, "#ddd");
+  const darkProgBarBgColor = darkColors
+    ? fallbackColor(prog_bar_bg_color_dark ?? prog_bar_bg_color, "#ddd")
+    : null;
 
   let finalLayout;
   if (langs.length === 0) {
@@ -964,7 +983,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
       langs,
       width,
       totalLanguageSize,
-      fallbackColor(prog_bar_bg_color, "#ddd"),
+      progBarBgColor,
       stats_format,
       hide_values,
     );
@@ -977,6 +996,14 @@ const renderTopLanguages = (topLangs, options = {}) => {
     height,
     border_radius,
     colors,
+    darkColors: darkColors
+      ? {
+          titleColor: darkColors.titleColor,
+          textColor: darkColors.textColor,
+          bgColor: darkColors.bgColor,
+          borderColor: darkColors.borderColor,
+        }
+      : null,
   });
 
   if (disable_animations) {
@@ -1027,6 +1054,14 @@ const renderTopLanguages = (topLangs, options = {}) => {
     }
     `,
   );
+
+  if (darkColors) {
+    card.setDarkCSS(`
+      .stat { fill: ${darkColors.textColor}; }
+      .lang-name { fill: ${darkColors.textColor}; }
+      ${darkProgBarBgColor ? `.lang-progress-bg { fill: ${typeof darkProgBarBgColor === "object" ? `url(#gradient-dark)` : darkProgBarBgColor}; }` : ""}
+    `);
+  }
 
   if (layout === "pie" || layout === "donut-vertical") {
     return card.render(finalLayout);

@@ -1,6 +1,6 @@
 import { Card } from "../common/Card.js";
 import { I18n } from "../common/I18n.js";
-import { getCardColors } from "../common/color.js";
+import { getCardColors, getDualModeColors } from "../common/color.js";
 import { CustomError } from "../common/error.js";
 import { kFormatter } from "../common/fmt.js";
 import { encodeHTML } from "../common/html.js";
@@ -327,21 +327,35 @@ const renderStatsCard = (
     disable_animations = false,
     rank_icon = "default",
     show = [],
+    title_color_light,
+    ring_color_light,
+    icon_color_light,
+    text_color_light,
+    bg_color_light,
+    border_color_light,
+    theme_light,
+    title_color_dark,
+    ring_color_dark,
+    icon_color_dark,
+    text_color_dark,
+    bg_color_dark,
+    border_color_dark,
+    theme_dark,
   } = options;
 
   const lheight = parseInt(String(line_height), 10);
 
   // returns theme based colors with proper overrides and defaults
-  const { titleColor, iconColor, textColor, bgColor, borderColor, ringColor } =
-    getCardColors({
-      title_color,
-      text_color,
-      icon_color,
-      bg_color,
-      border_color,
-      ring_color,
-      theme,
-    });
+  const { lightColors, darkColors } = getDualModeColors(
+    { title_color, text_color, icon_color, bg_color, border_color, ring_color, theme },
+    {
+      title_color_light, ring_color_light, icon_color_light,
+      text_color_light, bg_color_light, border_color_light, theme_light,
+      title_color_dark, ring_color_dark, icon_color_dark,
+      text_color_dark, bg_color_dark, border_color_dark, theme_dark,
+    },
+  );
+  const { titleColor, iconColor, textColor, bgColor, borderColor, ringColor } = lightColors;
 
   const apostrophe = /s$/i.test(name.trim()) ? "" : "s";
   const i18n = new I18n({
@@ -600,11 +614,33 @@ const renderStatsCard = (
       bgColor,
       borderColor,
     },
+    darkColors: darkColors
+      ? {
+          titleColor: darkColors.titleColor,
+          textColor: darkColors.textColor,
+          iconColor: darkColors.iconColor,
+          bgColor: darkColors.bgColor,
+          borderColor: darkColors.borderColor,
+        }
+      : null,
   });
 
   card.setHideBorder(hide_border);
   card.setHideTitle(hide_title);
   card.setCSS(cssStyles);
+
+  if (darkColors) {
+    card.setDarkCSS(
+      getStyles({
+        titleColor: darkColors.titleColor,
+        ringColor: darkColors.ringColor,
+        textColor: darkColors.textColor,
+        iconColor: darkColors.iconColor,
+        show_icons,
+        progress,
+      }),
+    );
+  }
 
   if (disable_animations) {
     card.disableAnimations();

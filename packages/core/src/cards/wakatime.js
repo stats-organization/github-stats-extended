@@ -1,6 +1,6 @@
 import { Card } from "../common/Card.js";
 import { I18n } from "../common/I18n.js";
-import { getCardColors, isPrefixedHexColor } from "../common/color.js";
+import { getDualModeColors, isPrefixedHexColor } from "../common/color.js";
 import { encodeHTML } from "../common/html.js";
 import languageColors from "../common/languageColors.json" with { type: "json" };
 import { clampValue, lowercaseTrim } from "../common/ops.js";
@@ -276,6 +276,18 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
     border_color,
     display_format = "time",
     disable_animations,
+    title_color_light,
+    icon_color_light,
+    text_color_light,
+    bg_color_light,
+    border_color_light,
+    theme_light,
+    title_color_dark,
+    icon_color_dark,
+    text_color_dark,
+    bg_color_dark,
+    border_color_dark,
+    theme_dark,
   } = options;
 
   const normalizedWidth = normalizeCardWidth({ value: card_width, layout });
@@ -303,15 +315,16 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
   const langsCount = clampValue(langs_count, 1, langs_count);
 
   // returns theme based colors with proper overrides and defaults
-  const { titleColor, textColor, iconColor, bgColor, borderColor } =
-    getCardColors({
-      title_color,
-      icon_color,
-      text_color,
-      bg_color,
-      border_color,
-      theme,
-    });
+  const { lightColors, darkColors } = getDualModeColors(
+    { title_color, icon_color, text_color, bg_color, border_color, theme },
+    {
+      title_color_light, icon_color_light, text_color_light,
+      bg_color_light, border_color_light, theme_light,
+      title_color_dark, icon_color_dark, text_color_dark,
+      bg_color_dark, border_color_dark, theme_dark,
+    },
+  );
+  const { titleColor, textColor, iconColor, bgColor, borderColor } = lightColors;
 
   const filteredLanguages = languages
     .filter((language) => language.hours || language.minutes)
@@ -447,6 +460,15 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
       bgColor,
       borderColor,
     },
+    darkColors: darkColors
+      ? {
+          titleColor: darkColors.titleColor,
+          textColor: darkColors.textColor,
+          iconColor: darkColors.iconColor,
+          bgColor: darkColors.bgColor,
+          borderColor: darkColors.borderColor,
+        }
+      : null,
   });
 
   if (disable_animations) {
@@ -483,6 +505,13 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
     }
     `,
   );
+
+  if (darkColors) {
+    card.setDarkCSS(`
+      ${getStyles({ titleColor: darkColors.titleColor, textColor: darkColors.textColor })}
+      .lang-name { fill: ${darkColors.textColor} }
+    `);
+  }
 
   return card.render(`
     <svg x="0" y="0" width="100%">
