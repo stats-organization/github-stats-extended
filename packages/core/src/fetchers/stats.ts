@@ -84,12 +84,13 @@ interface StatsUser {
   reviews: { totalPullRequestReviewContributions: number };
   repositoriesContributedTo: { totalCount: number };
   pullRequests: { totalCount: number };
-  mergedPullRequests: { totalCount: number };
+  // conditionally included via @include(if: …), so absent when their flag is off
+  mergedPullRequests?: { totalCount: number };
   openIssues: { totalCount: number };
   closedIssues: { totalCount: number };
   followers: { totalCount: number };
-  repositoryDiscussions: { totalCount: number };
-  repositoryDiscussionComments: { totalCount: number };
+  repositoryDiscussions?: { totalCount: number };
+  repositoryDiscussionComments?: { totalCount: number };
   repositories: {
     totalCount: number;
     nodes: Array<{ name: string; stargazerCount: number }>;
@@ -365,6 +366,22 @@ const fetchRepoUserStats = async (
 /**
  * Fetch stats for a given username.
  *
+ * @param username GitHub username.
+ * @param include_all_commits Include all commits.
+ * @param exclude_repo Repositories to exclude.
+ * @param include_merged_pull_requests Include merged pull requests.
+ * @param include_discussions Include discussions.
+ * @param include_discussions_answers Include discussions answers.
+ * @param commits_year Year to count total commits.
+ * @param repo Repositories to scope the REST search to.
+ * @param owner Owners to scope the REST search to.
+ * @param include_prs_authored Include count of PRs authored.
+ * @param include_prs_commented Include count of PRs commented.
+ * @param include_prs_reviewed Include count of PRs reviewed.
+ * @param include_issues_authored Include count of issues authored.
+ * @param include_issues_commented Include count of issues commented.
+ * @param ownerAffiliations Owner affiliations. Default: OWNER.
+ * @param pat Optional PAT override.
  * @returns Stats data.
  */
 const fetchStats = async (
@@ -474,19 +491,19 @@ const fetchStats = async (
 
   stats.totalPRs = user.pullRequests.totalCount;
   if (include_merged_pull_requests) {
-    stats.totalPRsMerged = user.mergedPullRequests.totalCount;
+    const mergedCount = user.mergedPullRequests?.totalCount ?? 0;
+    stats.totalPRsMerged = mergedCount;
     stats.mergedPRsPercentage =
-      (user.mergedPullRequests.totalCount / user.pullRequests.totalCount) *
-        100 || 0;
+      (mergedCount / user.pullRequests.totalCount) * 100 || 0;
   }
   stats.totalReviews = user.reviews.totalPullRequestReviewContributions;
   stats.totalIssues = user.openIssues.totalCount + user.closedIssues.totalCount;
   if (include_discussions) {
-    stats.totalDiscussionsStarted = user.repositoryDiscussions.totalCount;
+    stats.totalDiscussionsStarted = user.repositoryDiscussions?.totalCount ?? 0;
   }
   if (include_discussions_answers) {
     stats.totalDiscussionsAnswered =
-      user.repositoryDiscussionComments.totalCount;
+      user.repositoryDiscussionComments?.totalCount ?? 0;
   }
   stats.contributedTo = user.repositoriesContributedTo.totalCount;
 
