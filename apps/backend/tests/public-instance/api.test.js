@@ -30,6 +30,11 @@ beforeEach(() => {
   vi.stubEnv("WHITELIST", "");
 
   mock.onPost("https://api.github.com/graphql").reply(200, data_stats);
+  mock
+    .onGet(
+      "https://api.github.com/search/issues?per_page=1&q=author:anuraghazra+type:issue+is:public",
+    )
+    .reply(200, { total_count: 340 });
 });
 
 beforeAll(() => {

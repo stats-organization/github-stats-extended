@@ -53,12 +53,6 @@ const GRAPHQL_STATS_QUERY = `
       mergedPullRequests: pullRequests(states: MERGED) @include(if: $includeMergedPullRequests) {
         totalCount
       }
-      openIssues: issues(states: OPEN) {
-        totalCount
-      }
-      closedIssues: issues(states: CLOSED) {
-        totalCount
-      }
       followers {
         totalCount
       }
@@ -287,7 +281,7 @@ const fetchRepoUserStats = async (
       repo,
       owner,
       "issues",
-      `author:${username}+type:issue`,
+      `author:${username}+type:issue${pat ? "" : "+is:public"}`,
       pat,
     );
   }
@@ -410,6 +404,14 @@ const fetchStats = async (
   } else {
     stats.totalCommits = user.commits.totalCommitContributions;
   }
+  stats.totalIssues = await totalItemsFetcher(
+    username,
+    [],
+    [],
+    "issues",
+    `author:${username}+type:issue${pat ? "" : "+is:public"}`,
+    pat,
+  );
   let repoUserStats = await fetchRepoUserStats(
     username,
     repo,
@@ -431,7 +433,6 @@ const fetchStats = async (
         100 || 0;
   }
   stats.totalReviews = user.reviews.totalPullRequestReviewContributions;
-  stats.totalIssues = user.openIssues.totalCount + user.closedIssues.totalCount;
   if (include_discussions) {
     stats.totalDiscussionsStarted = user.repositoryDiscussions.totalCount;
   }

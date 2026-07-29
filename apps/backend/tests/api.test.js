@@ -54,7 +54,10 @@ beforeEach(() => {
 
 describe("Test /api backend routing", () => {
   it("happy path should pass query params and user PAT, respond with stats content and persist request", async () => {
-    getUserAccessByNameMock.mockResolvedValue({ token: "user-pat" });
+    getUserAccessByNameMock.mockResolvedValue({
+      token: "user-pat",
+      privateAccess: true,
+    });
     apiMock.mockResolvedValue({
       status: "success",
       content: "mock-stats-svg",

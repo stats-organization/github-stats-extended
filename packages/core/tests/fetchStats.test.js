@@ -113,6 +113,11 @@ const mock = new MockAdapter(axios);
 beforeEach(() => {
   process.env.FETCH_MULTI_PAGE_STARS = "false"; // Set to `false` to fetch only one page of stars.
   loadConfigFromEnv();
+  mock
+    .onGet(
+      "https://api.github.com/search/issues?per_page=1&q=author:anuraghazra+type:issue+is:public",
+    )
+    .reply(200, { total_count: 200 });
   mock.onPost("https://api.github.com/graphql").reply((cfg) => {
     let req = JSON.parse(cfg.data);
 
@@ -171,6 +176,11 @@ describe("Test fetchStats", () => {
 
   it("should stop fetching when there are repos with zero stars", async () => {
     mock.reset();
+    mock
+      .onGet(
+        "https://api.github.com/search/issues?per_page=1&q=author:anuraghazra+type:issue+is:public",
+      )
+      .reply(200, { total_count: 200 });
     mock
       .onPost("https://api.github.com/graphql")
       .replyOnce(200, data_stats)
@@ -537,6 +547,35 @@ describe("Test fetchStats", () => {
       totalPRsReviewed: 0,
       rank,
     });
+  });
+
+  it("should fetch authored issues without is:public when a PAT is provided", async () => {
+    mock
+      .onGet(
+        "https://api.github.com/search/issues?per_page=1&q=author:anuraghazra+type:issue",
+      )
+      .reply(200, { total_count: 91 });
+
+    let stats = await fetchStats(
+      "anuraghazra",
+      false,
+      [],
+      false,
+      false,
+      false,
+      undefined,
+      [],
+      [],
+      false,
+      false,
+      false,
+      false,
+      false,
+      [],
+      "private-pat",
+    );
+
+    expect(stats.totalIssues).toBe(91);
   });
 
   it("should return correct data when user don't have any pull requests", async () => {

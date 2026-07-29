@@ -47,7 +47,10 @@ beforeEach(() => {
 
 describe("Test /api/top-langs backend routing", () => {
   it("happy path should pass query params and user PAT, respond with top languages content and persist request", async () => {
-    getUserAccessByNameMock.mockResolvedValue({ token: "user-pat" });
+    getUserAccessByNameMock.mockResolvedValue({
+      token: "user-pat",
+      privateAccess: true,
+    });
     topLangsMock.mockResolvedValue({
       status: "success",
       content: "mock-top-langs-svg",

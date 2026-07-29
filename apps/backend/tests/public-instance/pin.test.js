@@ -87,7 +87,7 @@ describe("Test /api/pin contract", () => {
       .reply(200, { total_count: 3456 });
     mock
       .onGet(
-        "https://api.github.com/search/issues?per_page=1&q=repo:anuraghazra/convoychat+author:anuraghazra+type:issue",
+        "https://api.github.com/search/issues?per_page=1&q=repo:anuraghazra/convoychat+author:anuraghazra+type:issue+is:public",
       )
       .reply(200, { total_count: 4567 });
     mock

@@ -52,7 +52,7 @@ const getUserPat = async (username) => {
   }
 
   const userAccess = await getUserAccessByName(username);
-  if (!userAccess?.token) {
+  if (!userAccess?.token || !userAccess.privateAccess) {
     return null;
   }
 

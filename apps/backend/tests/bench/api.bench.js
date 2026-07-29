@@ -18,10 +18,16 @@ beforeAll(async () => {
   vi.stubEnv("GIST_WHITELIST", "");
   vi.stubEnv("POSTGRES_URL", "");
   vi.stubEnv("WHITELIST", "");
+  vi.stubEnv("PAT_1", "dummyPAT1");
 
   ({ default: router } = await import("../../router.js"));
 
   mock.onPost("https://api.github.com/graphql").reply(200, data_stats);
+  mock
+    .onGet(
+      "https://api.github.com/search/issues?per_page=1&q=author:anuraghazra+type:issue+is:public",
+    )
+    .reply(200, { total_count: 340 });
 });
 
 describe("bench /api", () => {

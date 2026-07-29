@@ -224,6 +224,12 @@ beforeAll(async () => {
 
   mock
     .onGet(
+      `https://api.github.com/search/issues?per_page=1&q=author:${STATS_CARD_USER}+type:issue+is:public`,
+    )
+    .reply(200, { total_count: 1 });
+
+  mock
+    .onGet(
       `https://wakatime.com/api/v1/users/${USER}/stats?is_including_today=true`,
     )
     .reply(200, WAKATIME_MOCK_RESPONSE);
