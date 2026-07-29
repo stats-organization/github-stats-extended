@@ -1,17 +1,23 @@
+import type { AxiosResponse } from "axios";
+
 import { MissingParamError } from "../common/error.js";
 import { request } from "../common/http.js";
 import { retryer } from "../common/retryer.js";
 
 import { fetchRepoUserStats } from "./stats.js";
+import type { RepositoryData } from "./types.js";
 
 /**
  * Repo data fetcher.
  *
- * @param {object} variables Fetcher variables.
- * @param {string} token GitHub token.
- * @returns {Promise<import('axios').AxiosResponse>} The response.
+ * @param variables Fetcher variables.
+ * @param token GitHub token.
+ * @returns The response.
  */
-const fetcher = (variables, token) => {
+const fetcher = (
+  variables: Record<string, unknown>,
+  token: string,
+): Promise<AxiosResponse> => {
   return request(
     {
       query: `
@@ -53,32 +59,55 @@ const fetcher = (variables, token) => {
 
 const urlExample = "/api/pin?username=USERNAME&repo=REPO_NAME";
 
-/**
- * @typedef {import("./types").RepositoryData} RepositoryData Repository data.
- */
+/** A repository as selected by the `RepoInfo` fragment above. */
+interface RepoInfo {
+  name: string;
+  nameWithOwner: string;
+  isPrivate: boolean;
+  isArchived: boolean;
+  isTemplate: boolean;
+  stargazerCount: number;
+  description: string;
+  primaryLanguage: { color: string; id: string; name: string };
+  forkCount: number;
+}
+
+/** Shape of `response.data` returned by the repo query. */
+interface RepoQueryResponse {
+  data: {
+    user: { repository: RepoInfo | null } | null;
+    organization: { repository: RepoInfo | null } | null;
+  };
+}
 
 /**
  * Fetch repository data.
  *
- * @param {string} username GitHub username.
- * @param {string} reponame GitHub repository name.
- * @returns {Promise<RepositoryData>} Repository data.
+ * @param username GitHub username.
+ * @param reponame GitHub repository name.
+ * @param include_prs_authored Include count of PRs authored.
+ * @param include_prs_commented Include count of PRs commented.
+ * @param include_prs_reviewed Include count of PRs reviewed.
+ * @param include_issues_authored Include count of issues authored.
+ * @param include_issues_commented Include count of issues commented.
+ * @param pat Optional PAT override.
+ * @returns Repository data.
  */
 const fetchRepo = async (
-  username,
-  reponame,
+  username: string,
+  reponame: string,
   include_prs_authored = false,
   include_prs_commented = false,
   include_prs_reviewed = false,
   include_issues_authored = false,
   include_issues_commented = false,
-  pat = null,
-) => {
+  pat: string | null = null,
+): Promise<RepositoryData> => {
   let owner = username;
   if (reponame && reponame.includes("/")) {
-    const [parsed_owner, parsed_repo] = reponame.split("/");
-    owner = parsed_owner;
-    reponame = parsed_repo;
+    const [parsedOwner, parsedRepo] = reponame.split("/");
+    owner = parsedOwner ?? "";
+    reponame = parsedRepo ?? "";
   }
 
   if (owner && !username) {
@@ -97,7 +126,11 @@ const fetchRepo = async (
     throw new MissingParamError(["repo"], urlExample);
   }
 
-  let res = await retryer(fetcher, { login: owner, repo: reponame }, pat);
+  const res = await retryer<RepoQueryResponse>(
+    fetcher,
+    { login: owner, repo: reponame },
+    pat,
+  );
 
   const data = res.data.data;
 
@@ -105,14 +138,12 @@ const fetchRepo = async (
     throw new Error("Not found");
   }
 
-  const isUser = data.organization === null && data.user;
-  const isOrg = data.user === null && data.organization;
-
-  if (isUser) {
-    if (!data.user.repository || data.user.repository.isPrivate) {
+  if (data.organization === null && data.user) {
+    const repository = data.user.repository;
+    if (!repository || repository.isPrivate) {
       throw new Error("User Repository Not found");
     }
-    let repoUserStats = await fetchRepoUserStats(
+    const repoUserStats = await fetchRepoUserStats(
       username,
       [owner + "/" + reponame],
       [],
@@ -125,19 +156,17 @@ const fetchRepo = async (
     );
     return {
       ...repoUserStats,
-      ...data.user.repository,
-      starCount: data.user.repository.stargazerCount,
+      ...repository,
+      starCount: repository.stargazerCount,
     };
   }
 
-  if (isOrg) {
-    if (
-      !data.organization.repository ||
-      data.organization.repository.isPrivate
-    ) {
+  if (data.user === null && data.organization) {
+    const repository = data.organization.repository;
+    if (!repository || repository.isPrivate) {
       throw new Error("Organization Repository Not found");
     }
-    let repoUserStats = await fetchRepoUserStats(
+    const repoUserStats = await fetchRepoUserStats(
       username,
       [owner + "/" + reponame],
       [],
@@ -150,8 +179,8 @@ const fetchRepo = async (
     );
     return {
       ...repoUserStats,
-      ...data.organization.repository,
-      starCount: data.organization.repository.stargazerCount,
+      ...repository,
+      starCount: repository.stargazerCount,
     };
   }
 

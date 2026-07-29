@@ -22,11 +22,12 @@ export interface RepositoryData {
   };
   forkCount: number;
   starCount: number;
-  totalPRsAuthored: number;
-  totalPRsCommented: number;
-  totalPRsReviewed: number;
-  totalIssuesAuthored: number;
-  totalIssuesCommented: number;
+  // only present when the matching include_* flag is set (see fetchRepoUserStats)
+  totalPRsAuthored?: number;
+  totalPRsCommented?: number;
+  totalPRsReviewed?: number;
+  totalIssuesAuthored?: number;
+  totalIssuesCommented?: number;
 }
 
 export interface StatsData {
