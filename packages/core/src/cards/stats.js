@@ -1,6 +1,6 @@
 import { Card } from "../common/Card.js";
 import { I18n } from "../common/I18n.js";
-import { getCardColors, getDualModeColors } from "../common/color.js";
+import { getDualModeColors } from "../common/color.js";
 import { CustomError } from "../common/error.js";
 import { kFormatter } from "../common/fmt.js";
 import { encodeHTML } from "../common/html.js";
@@ -311,51 +311,23 @@ const renderStatsCard = (
     include_all_commits = false,
     commits_year,
     line_height = 25,
-    title_color,
-    ring_color,
-    icon_color,
-    text_color,
     text_bold = true,
-    bg_color,
-    theme = "default",
     custom_title,
     border_radius,
-    border_color,
     number_format = "short",
     number_precision,
     locale,
     disable_animations = false,
     rank_icon = "default",
     show = [],
-    title_color_light,
-    ring_color_light,
-    icon_color_light,
-    text_color_light,
-    bg_color_light,
-    border_color_light,
-    theme_light,
-    title_color_dark,
-    ring_color_dark,
-    icon_color_dark,
-    text_color_dark,
-    bg_color_dark,
-    border_color_dark,
-    theme_dark,
   } = options;
 
   const lheight = parseInt(String(line_height), 10);
 
   // returns theme based colors with proper overrides and defaults
-  const { lightColors, darkColors } = getDualModeColors(
-    { title_color, text_color, icon_color, bg_color, border_color, ring_color, theme },
-    {
-      title_color_light, ring_color_light, icon_color_light,
-      text_color_light, bg_color_light, border_color_light, theme_light,
-      title_color_dark, ring_color_dark, icon_color_dark,
-      text_color_dark, bg_color_dark, border_color_dark, theme_dark,
-    },
-  );
-  const { titleColor, iconColor, textColor, bgColor, borderColor, ringColor } = lightColors;
+  const { lightColors, darkColors } = getDualModeColors(options);
+  const { titleColor, iconColor, textColor, bgColor, borderColor, ringColor } =
+    lightColors;
 
   const apostrophe = /s$/i.test(name.trim()) ? "" : "s";
   const i18n = new I18n({

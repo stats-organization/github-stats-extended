@@ -262,32 +262,14 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
     card_width,
     hide,
     line_height = DEFAULT_LINE_HEIGHT,
-    title_color,
-    icon_color,
-    text_color,
-    bg_color,
-    theme = "default",
     hide_progress,
     custom_title,
     locale,
     layout,
     langs_count = languages.length,
     border_radius,
-    border_color,
     display_format = "time",
     disable_animations,
-    title_color_light,
-    icon_color_light,
-    text_color_light,
-    bg_color_light,
-    border_color_light,
-    theme_light,
-    title_color_dark,
-    icon_color_dark,
-    text_color_dark,
-    bg_color_dark,
-    border_color_dark,
-    theme_dark,
   } = options;
 
   const normalizedWidth = normalizeCardWidth({ value: card_width, layout });
@@ -315,16 +297,9 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
   const langsCount = clampValue(langs_count, 1, langs_count);
 
   // returns theme based colors with proper overrides and defaults
-  const { lightColors, darkColors } = getDualModeColors(
-    { title_color, icon_color, text_color, bg_color, border_color, theme },
-    {
-      title_color_light, icon_color_light, text_color_light,
-      bg_color_light, border_color_light, theme_light,
-      title_color_dark, icon_color_dark, text_color_dark,
-      bg_color_dark, border_color_dark, theme_dark,
-    },
-  );
-  const { titleColor, textColor, iconColor, bgColor, borderColor } = lightColors;
+  const { lightColors, darkColors } = getDualModeColors(options);
+  const { titleColor, textColor, iconColor, bgColor, borderColor } =
+    lightColors;
 
   const filteredLanguages = languages
     .filter((language) => language.hours || language.minutes)
@@ -333,11 +308,6 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
   // Calculate the card height depending on how many items there are
   // but if rank circle is visible clamp the minimum height to `150`
   let height = Math.max(45 + (filteredLanguages.length + 1) * lheight, 150);
-
-  const cssStyles = getStyles({
-    titleColor,
-    textColor,
-  });
 
   let finalLayout;
 
@@ -479,7 +449,7 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
   card.setHideTitle(hide_title);
   card.setCSS(
     `
-    ${cssStyles}
+    ${getStyles({ titleColor, textColor })}
     @keyframes slideInAnimation {
       from {
         width: 0;

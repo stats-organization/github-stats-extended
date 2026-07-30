@@ -129,6 +129,7 @@ exports[`Test /api contract > should match the public happy-path response snapsh
     }
   
   
+          
 
           
       /* Animations */
@@ -153,8 +154,13 @@ exports[`Test /api contract > should match the public happy-path response snapsh
         </style>
 
         
+        <defs>
+          
+          
+        </defs>
+        
 
-        <rect data-testid="card-bg" x="0.5" y="0.5" rx="4.5" height="99%" stroke="#e4e2e2" width="449" fill="#fffefe" stroke-opacity="1"/>
+        <rect data-testid="card-bg" class="card-bg" x="0.5" y="0.5" rx="4.5" height="99%" stroke="#e4e2e2" width="449" fill="#fffefe" stroke-opacity="1"/>
 
         
       <g data-testid="card-title" transform="translate(25, 35)">
@@ -299,6 +305,7 @@ exports[`Test /api contract > should match the public many-params response snaps
     }
   
   
+          
 
           
       /* Animations */
@@ -323,8 +330,13 @@ exports[`Test /api contract > should match the public many-params response snaps
         </style>
 
         
+        <defs>
+          
+          
+        </defs>
+        
 
-        <rect data-testid="card-bg" x="0.5" y="0.5" rx="12" height="99%" stroke="#fedcba" width="539" fill="#0f172a" stroke-opacity="1"/>
+        <rect data-testid="card-bg" class="card-bg" x="0.5" y="0.5" rx="12" height="99%" stroke="#fedcba" width="539" fill="#0f172a" stroke-opacity="1"/>
 
         
       <g data-testid="card-title" transform="translate(25, 35)">

@@ -15,7 +15,6 @@ interface CardColors {
   borderColor?: string;
 }
 
-
 class Card {
   width: number;
   height: number;
@@ -203,10 +202,7 @@ class Card {
    * @returns The rendered card gradient.
    */
   renderGradient(): string {
-    const buildGradientDef = (
-      id: string,
-      bgColor: Array<string>,
-    ): string => {
+    const buildGradientDef = (id: string, bgColor: Array<string>): string => {
       const gradients = bgColor.slice(1);
       return `
           <linearGradient
@@ -223,23 +219,28 @@ class Card {
           </linearGradient>`;
     };
 
-    const hasDarkGradient =
-      this.darkColors !== null &&
-      this.darkColors !== undefined &&
-      typeof this.darkColors.bgColor === "object";
-
     const hasLightGradient = typeof this.colors.bgColor === "object";
+    const hasDarkGradient =
+      this.darkColors !== null && typeof this.darkColors.bgColor === "object";
 
-    if (!hasLightGradient && !hasDarkGradient) {
-      return "";
+    if (
+      hasLightGradient &&
+      !isValidGradient(this.colors.bgColor as Array<string>)
+    ) {
+      throw new Error(
+        `Invalid gradient: ${(this.colors.bgColor as Array<string>).join(",")}`,
+      );
     }
-
-    if (hasLightGradient && !isValidGradient(this.colors.bgColor as Array<string>)) {
-      throw new Error(`Invalid gradient: ${(this.colors.bgColor as Array<string>).join(",")}`);
+    if (
+      hasDarkGradient &&
+      this.darkColors &&
+      !isValidGradient(this.darkColors.bgColor as Array<string>)
+    ) {
+      throw new Error(
+        `Invalid dark gradient: ${(this.darkColors.bgColor as Array<string>).join(",")}`,
+      );
     }
-    if (hasDarkGradient && this.darkColors && !isValidGradient(this.darkColors.bgColor as Array<string>)) {
-      throw new Error(`Invalid dark gradient: ${(this.darkColors.bgColor as Array<string>).join(",")}`);
-    }
+    // why is " as Array<string>" necessary *now*?
 
     return `
         <defs>
@@ -281,18 +282,19 @@ class Card {
    * Returns an empty string when no dark colors are set.
    */
   private renderDarkMediaBlock(): string {
-    if (!this.darkColors) return "";
+    if (!this.darkColors) {
+      return "";
+    }
 
-    const dc = this.darkColors;
     const bgFill =
-      typeof dc.bgColor === "object"
+      typeof this.darkColors.bgColor === "object"
         ? "url(#gradient-dark)"
-        : String(dc.bgColor);
+        : String(this.darkColors.bgColor);
 
     return `
           @media (prefers-color-scheme: dark) {
-            .header { fill: ${String(dc.titleColor)}; }
-            .card-bg { fill: ${bgFill}; stroke: ${String(dc.borderColor)}; }
+            .header { fill: ${String(this.darkColors.titleColor)}; }
+            .card-bg { fill: ${bgFill}; stroke: ${String(this.darkColors.borderColor)}; }
             ${this.darkCss}
           }`;
   }
@@ -353,6 +355,7 @@ class Card {
             .header { font-size: 15.5px; }
           }
           ${this.css}
+          ${this.renderDarkMediaBlock()}
 
           ${this.getAnimations()}
           ${
@@ -360,7 +363,6 @@ class Card {
               ? ""
               : `* { animation-duration: 0s !important; animation-delay: 0s !important; }`
           }
-          ${this.renderDarkMediaBlock()}
         </style>
 
         ${this.renderGradient()}

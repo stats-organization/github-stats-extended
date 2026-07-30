@@ -86,10 +86,6 @@ const renderRepoCard = (repo, options = {}) => {
   } = repo;
   const {
     hide_border = false,
-    title_color,
-    icon_color,
-    text_color,
-    bg_color,
     card_width_input,
     show_owner = false,
     browser_rendering = false,
@@ -101,21 +97,8 @@ const renderRepoCard = (repo, options = {}) => {
     username,
     theme = "default_repocard",
     border_radius,
-    border_color,
     locale,
     description_lines_count,
-    title_color_light,
-    icon_color_light,
-    text_color_light,
-    bg_color_light,
-    border_color_light,
-    theme_light,
-    title_color_dark,
-    icon_color_dark,
-    text_color_dark,
-    bg_color_dark,
-    border_color_dark,
-    theme_dark,
   } = options;
 
   const card_width =
@@ -262,15 +245,7 @@ const renderRepoCard = (repo, options = {}) => {
     extraHeight;
 
   // returns theme based colors with proper overrides and defaults
-  const { lightColors, darkColors } = getDualModeColors(
-    { title_color, icon_color, text_color, bg_color, border_color, theme },
-    {
-      title_color_light, icon_color_light, text_color_light,
-      bg_color_light, border_color_light, theme_light,
-      title_color_dark, icon_color_dark, text_color_dark,
-      bg_color_dark, border_color_dark, theme_dark,
-    },
-  );
+  const { lightColors, darkColors } = getDualModeColors({ ...options, theme });
   const colors = lightColors;
 
   const svgLanguage = primaryLanguage

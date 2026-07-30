@@ -114,10 +114,13 @@ interface CardColors {
   bgColor: string | Array<string>;
   borderColor: string;
   ringColor: string;
+  progBarBgColor: string;
 }
 
 /**
- * Input color params shared by all card color functions.
+ * Input color params shared by all card color functions. Not every field is
+ * consumed by every card (e.g. `prog_bar_bg_color` is only used by the
+ * top-languages card's `normal` layout).
  */
 interface ColorInput {
   title_color?: string | undefined;
@@ -126,6 +129,7 @@ interface ColorInput {
   bg_color?: string | undefined;
   border_color?: string | undefined;
   ring_color?: string | undefined;
+  prog_bar_bg_color?: string | undefined;
   theme?: string | undefined;
 }
 
@@ -139,6 +143,7 @@ interface ColorInput {
  * @param props.bg_color Card background color.
  * @param props.border_color Card border color.
  * @param props.ring_color Card ring color.
+ * @param props.prog_bar_bg_color Progress bar background color.
  * @param props.theme Card theme.
  * @returns Card colors.
  */
@@ -149,6 +154,7 @@ const getCardColors = ({
   bg_color,
   border_color,
   ring_color,
+  prog_bar_bg_color,
   theme,
 }: ColorInput): CardColors => {
   const defaultTheme = themes.default;
@@ -172,8 +178,6 @@ const getCardColors = ({
 
   // get the color provided by the user else the theme color
   // finally if both colors are invalid we use the titleColor
-  // NOTE: no built-in theme defines `ring_color`, so it falls back to the title color.
-  const ringColor = fallbackColor(ring_color, titleColor);
   const iconColor = fallbackColor(
     icon_color || selectedTheme.icon_color,
     "#" + defaultTheme.icon_color,
@@ -191,11 +195,16 @@ const getCardColors = ({
     border_color || defaultBorderColor,
     "#" + defaultBorderColor,
   );
+  // no theme defines `ring_color`, so it falls back to the title color.
+  const ringColor = fallbackColor(ring_color, titleColor);
+  // no theme defines `prog_bar_bg_color`, so it falls back to "#ddd".
+  const progBarBgColor = fallbackColor(prog_bar_bg_color, "#ddd");
 
   if (
     typeof titleColor !== "string" ||
     typeof textColor !== "string" ||
     typeof ringColor !== "string" ||
+    typeof progBarBgColor !== "string" ||
     typeof iconColor !== "string" ||
     typeof borderColor !== "string"
   ) {
@@ -204,82 +213,46 @@ const getCardColors = ({
     );
   }
 
-  return { titleColor, iconColor, textColor, bgColor, borderColor, ringColor };
-};
-
-/**
- * Merges light/dark-specific color overrides on top of the base resolved
- * colors, applying the priority: light/dark-specific > general > theme > default.
- *
- * @param base Colors resolved from the general (non-mode-specific) params.
- * @param modeOverrides Mode-specific color params (e.g. `title_color_dark`).
- * @returns Merged colors for that mode.
- */
-const applyModeOverrides = (
-  base: CardColors,
-  modeOverrides: ColorInput,
-): CardColors => {
-  const applyOverride = (
-    overrideValue: string | undefined,
-    baseValue: string,
-  ): string => {
-    if (overrideValue === undefined) return baseValue;
-    const resolved = fallbackColor(overrideValue, baseValue);
-    return typeof resolved === "string" ? resolved : baseValue;
-  };
-
-  const applyBgOverride = (
-    overrideValue: string | undefined,
-    baseValue: string | Array<string>,
-  ): string | Array<string> => {
-    if (overrideValue === undefined) return baseValue;
-    return fallbackColor(overrideValue, baseValue);
-  };
-
-  const titleColor = applyOverride(modeOverrides.title_color, base.titleColor);
-
   return {
     titleColor,
-    iconColor: applyOverride(modeOverrides.icon_color, base.iconColor),
-    textColor: applyOverride(modeOverrides.text_color, base.textColor),
-    bgColor: applyBgOverride(modeOverrides.bg_color, base.bgColor),
-    borderColor: applyOverride(modeOverrides.border_color, base.borderColor),
-    // ring_color_light/dark falls back to the (potentially overridden) title color
-    ringColor: modeOverrides.ring_color !== undefined
-      ? applyOverride(modeOverrides.ring_color, base.ringColor)
-      : modeOverrides.title_color !== undefined
-        ? titleColor
-        : base.ringColor,
+    iconColor,
+    textColor,
+    bgColor,
+    borderColor,
+    ringColor,
+    progBarBgColor,
   };
 };
 
+interface ModeColorParams {
+  title_color_light?: string;
+  title_color_dark?: string;
+  text_color_light?: string;
+  text_color_dark?: string;
+  icon_color_light?: string;
+  icon_color_dark?: string;
+  bg_color_light?: string;
+  bg_color_dark?: string;
+  border_color_light?: string;
+  border_color_dark?: string;
+  ring_color_light?: string;
+  ring_color_dark?: string;
+  theme_light?: string;
+  theme_dark?: string;
+  prog_bar_bg_color_light?: string;
+  prog_bar_bg_color_dark?: string;
+}
+
 /**
- * Returns the color inputs for the dark-mode-specific params, given a set of
- * raw query params that carry `_dark` or `_light` suffixes.
+ * Returns the light- or dark-mode-specific color params, given a set of
+ * raw query params. Also removes the "_light" or "_dark" suffixes.
  *
  * @param params Raw query params with optional `_light` / `_dark` suffixes.
  * @param suffix `"_light"` or `"_dark"`.
  * @returns ColorInput with the suffix stripped, ready for `getCardColors`.
  */
 const extractModeColors = (
-  params: {
-    title_color_light?: string;
-    title_color_dark?: string;
-    text_color_light?: string;
-    text_color_dark?: string;
-    icon_color_light?: string;
-    icon_color_dark?: string;
-    bg_color_light?: string;
-    bg_color_dark?: string;
-    border_color_light?: string;
-    border_color_dark?: string;
-    ring_color_light?: string;
-    ring_color_dark?: string;
-    theme_light?: string;
-    theme_dark?: string;
-    prog_bar_bg_color_light?: string;
-    prog_bar_bg_color_dark?: string;
-  },
+  params: ModeColorParams,
   suffix: "_light" | "_dark",
 ): ColorInput => ({
   title_color: params[`title_color${suffix}`],
@@ -288,6 +261,7 @@ const extractModeColors = (
   bg_color: params[`bg_color${suffix}`],
   border_color: params[`border_color${suffix}`],
   ring_color: params[`ring_color${suffix}`],
+  prog_bar_bg_color: params[`prog_bar_bg_color${suffix}`],
   theme: params[`theme${suffix}`],
 });
 
@@ -302,62 +276,36 @@ const extractModeColors = (
  * When no light/dark-specific params are provided at all, `darkColors` is
  * `null` (caller should skip the @media block entirely).
  *
- * @param general General color params (applied to both modes first).
- * @param modeParams Raw query params containing `_light` / `_dark` suffixed fields.
+ * @param params Raw query params, containing both general and `_light`/`_dark` suffixed colors.
  * @returns `{ lightColors, darkColors }` — darkColors is null when no mode-specific params were given.
  */
 const getDualModeColors = (
-  general: ColorInput,
-  modeParams: Parameters<typeof extractModeColors>[0],
+  params: ColorInput & Parameters<typeof extractModeColors>[0],
 ): { lightColors: CardColors; darkColors: CardColors | null } => {
-  const lightOverrides = extractModeColors(modeParams, "_light");
-  const darkOverrides = extractModeColors(modeParams, "_dark");
+  const lightOverrides = extractModeColors(params, "_light");
+  const darkOverrides = extractModeColors(params, "_dark");
 
-  const hasModeOverrides = Object.values({ ...lightOverrides, ...darkOverrides }).some(
-    (v) => v !== undefined,
-  );
-
-  // Resolve the base set from general params (theme + individual colors)
-  const baseColors = getCardColors(general);
+  const hasModeOverrides = Object.values({
+    ...lightOverrides,
+    ...darkOverrides,
+  }).some((v) => v !== undefined);
 
   if (!hasModeOverrides) {
-    return { lightColors: baseColors, darkColors: null };
+    return { lightColors: getCardColors(params), darkColors: null };
   }
 
-  // For light mode: start from the base, then apply theme_light, then light-specific colors
-  const lightBase = lightOverrides.theme !== undefined
-    ? getCardColors({ ...lightOverrides })
-    : baseColors;
-  const lightColors = applyModeOverrides(lightBase, lightOverrides);
-
-  // For dark mode: start from the base, then apply theme_dark, then dark-specific colors
-  const darkBase = darkOverrides.theme !== undefined
-    ? getCardColors({ ...darkOverrides })
-    : baseColors;
-  const darkColors = applyModeOverrides(darkBase, darkOverrides);
-
-  // Re-apply general color overrides on top of mode-specific bases so that
-  // explicit general params always win.
-  const generalOnlyColors: ColorInput = {
-    title_color: general.title_color,
-    text_color: general.text_color,
-    icon_color: general.icon_color,
-    bg_color: general.bg_color,
-    border_color: general.border_color,
-    ring_color: general.ring_color,
-  };
+  const defined = (obj: ColorInput): ColorInput =>
+    Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== undefined));
 
   return {
-    lightColors: applyModeOverrides(lightColors, generalOnlyColors),
-    darkColors: applyModeOverrides(darkColors, generalOnlyColors),
+    lightColors: getCardColors({ ...params, ...defined(lightOverrides) }),
+    darkColors: getCardColors({ ...params, ...defined(darkOverrides) }),
   };
 };
 
 export {
-  fallbackColor,
   getCardColors,
   getDualModeColors,
-  extractModeColors,
   findInvalidColor,
   isValidGradient,
   isBareHexColor,

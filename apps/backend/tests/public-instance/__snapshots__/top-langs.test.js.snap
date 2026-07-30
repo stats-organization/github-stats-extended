@@ -139,6 +139,7 @@ exports[`Test /api/top-langs contract > should match the public happy-path respo
       animation: growWidthAnimation 0.6s ease-in-out forwards;
     }
     
+          
 
           
       /* Animations */
@@ -163,8 +164,13 @@ exports[`Test /api/top-langs contract > should match the public happy-path respo
         </style>
 
         
+        <defs>
+          
+          
+        </defs>
+        
 
-        <rect data-testid="card-bg" x="0.5" y="0.5" rx="4.5" height="99%" stroke="#e4e2e2" width="299" fill="#fffefe" stroke-opacity="1"/>
+        <rect data-testid="card-bg" class="card-bg" x="0.5" y="0.5" rx="4.5" height="99%" stroke="#e4e2e2" width="299" fill="#fffefe" stroke-opacity="1"/>
 
         
       <g data-testid="card-title" transform="translate(25, 35)">
@@ -315,6 +321,7 @@ exports[`Test /api/top-langs contract > should match the public many-params resp
       animation: growWidthAnimation 0.6s ease-in-out forwards;
     }
     
+          
 
           
       /* Animations */
@@ -339,8 +346,13 @@ exports[`Test /api/top-langs contract > should match the public many-params resp
         </style>
 
         
+        <defs>
+          
+          
+        </defs>
+        
 
-        <rect data-testid="card-bg" x="0.5" y="0.5" rx="4.5" height="99%" stroke="#e4e2e2" width="419" fill="#0f172a" stroke-opacity="0"/>
+        <rect data-testid="card-bg" class="card-bg" x="0.5" y="0.5" rx="4.5" height="99%" stroke="#e4e2e2" width="419" fill="#0f172a" stroke-opacity="0"/>
 
         
 

@@ -63,6 +63,7 @@ exports[`Test Render WakaTime Card > should render correctly 1`] = `
       animation: growWidthAnimation 0.6s ease-in-out forwards;
     }
     
+          
 
           
       /* Animations */
@@ -87,9 +88,15 @@ exports[`Test Render WakaTime Card > should render correctly 1`] = `
         </style>
 
         
+        <defs>
+          
+          
+        </defs>
+        
 
         <rect
           data-testid="card-bg"
+          class="card-bg"
           x="0.5"
           y="0.5"
           rx="4.5"
@@ -239,6 +246,7 @@ exports[`Test Render WakaTime Card > should render correctly with compact layout
       animation: growWidthAnimation 0.6s ease-in-out forwards;
     }
     
+          
 
           
       /* Animations */
@@ -263,9 +271,15 @@ exports[`Test Render WakaTime Card > should render correctly with compact layout
         </style>
 
         
+        <defs>
+          
+          
+        </defs>
+        
 
         <rect
           data-testid="card-bg"
+          class="card-bg"
           x="0.5"
           y="0.5"
           rx="4.5"
@@ -409,6 +423,7 @@ exports[`Test Render WakaTime Card > should render correctly with compact layout
       animation: growWidthAnimation 0.6s ease-in-out forwards;
     }
     
+          
 
           
       /* Animations */
@@ -433,9 +448,15 @@ exports[`Test Render WakaTime Card > should render correctly with compact layout
         </style>
 
         
+        <defs>
+          
+          
+        </defs>
+        
 
         <rect
           data-testid="card-bg"
+          class="card-bg"
           x="0.5"
           y="0.5"
           rx="4.5"
@@ -579,6 +600,7 @@ exports[`Test Render WakaTime Card > should render correctly with gradient backg
       animation: growWidthAnimation 0.6s ease-in-out forwards;
     }
     
+          
 
           
       /* Animations */
@@ -604,6 +626,7 @@ exports[`Test Render WakaTime Card > should render correctly with gradient backg
 
         
         <defs>
+          
           <linearGradient
             id="gradient"
             gradientTransform="rotate(35)"
@@ -611,11 +634,13 @@ exports[`Test Render WakaTime Card > should render correctly with gradient backg
           >
             <stop offset="0%" stop-color="#4158d0" />,<stop offset="50%" stop-color="#c850c0" />,<stop offset="100%" stop-color="#ffcc70" />
           </linearGradient>
+          
         </defs>
         
 
         <rect
           data-testid="card-bg"
+          class="card-bg"
           x="0.5"
           y="0.5"
           rx="4.5"
@@ -765,6 +790,7 @@ exports[`Test Render WakaTime Card > should render correctly with percent displa
       animation: growWidthAnimation 0.6s ease-in-out forwards;
     }
     
+          
 
           
       /* Animations */
@@ -789,9 +815,15 @@ exports[`Test Render WakaTime Card > should render correctly with percent displa
         </style>
 
         
+        <defs>
+          
+          
+        </defs>
+        
 
         <rect
           data-testid="card-bg"
+          class="card-bg"
           x="0.5"
           y="0.5"
           rx="4.5"

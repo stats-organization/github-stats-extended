@@ -17,6 +17,7 @@ describe("getCardColors", () => {
       icon_color: "00f",
       bg_color: "fff",
       border_color: "fff",
+      prog_bar_bg_color: "f0f",
       theme: "dark",
     });
     expect(colors).toStrictEqual({
@@ -26,6 +27,7 @@ describe("getCardColors", () => {
       ringColor: "#0000ff",
       bgColor: "#fff",
       borderColor: "#fff",
+      progBarBgColor: "#f0f",
     });
   });
 
@@ -45,6 +47,7 @@ describe("getCardColors", () => {
       ringColor: "#2f80ed",
       bgColor: "#fff",
       borderColor: "#e4e2e2",
+      progBarBgColor: "#ddd",
     });
   });
 
@@ -59,6 +62,7 @@ describe("getCardColors", () => {
       iconColor: "#79ff97",
       bgColor: "#151515",
       borderColor: "#e4e2e2",
+      progBarBgColor: "#ddd",
     });
   });
 
@@ -78,6 +82,7 @@ describe("getCardColors", () => {
       ringColor: "#f00",
       bgColor: "#fff",
       borderColor: "#fff",
+      progBarBgColor: "#ddd",
     });
   });
 
@@ -92,6 +97,7 @@ describe("getCardColors", () => {
       ringColor: "#2f80ed",
       bgColor: "#fffefe",
       borderColor: "#e4e2e2",
+      progBarBgColor: "#ddd",
     });
   });
 });

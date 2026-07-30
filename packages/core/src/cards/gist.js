@@ -40,41 +40,17 @@ const renderGistCard = (gistData, options = {}) => {
   const { name, nameWithOwner, description, language, starsCount, forksCount } =
     gistData;
   const {
-    title_color,
-    icon_color,
-    text_color,
-    bg_color,
     theme = "default_repocard",
     border_radius,
-    border_color,
     show_owner = false,
     browser_rendering = false,
     hide_border = false,
-    title_color_light,
-    icon_color_light,
-    text_color_light,
-    bg_color_light,
-    border_color_light,
-    theme_light,
-    title_color_dark,
-    icon_color_dark,
-    text_color_dark,
-    bg_color_dark,
-    border_color_dark,
-    theme_dark,
   } = options;
 
   // returns theme based colors with proper overrides and defaults
-  const { lightColors, darkColors } = getDualModeColors(
-    { title_color, icon_color, text_color, bg_color, border_color, theme },
-    {
-      title_color_light, icon_color_light, text_color_light,
-      bg_color_light, border_color_light, theme_light,
-      title_color_dark, icon_color_dark, text_color_dark,
-      bg_color_dark, border_color_dark, theme_dark,
-    },
-  );
-  const { titleColor, textColor, iconColor, bgColor, borderColor } = lightColors;
+  const { lightColors, darkColors } = getDualModeColors({ ...options, theme });
+  const { titleColor, textColor, iconColor, bgColor, borderColor } =
+    lightColors;
 
   const desc = parseEmojis(description || "No description provided");
 
@@ -174,6 +150,7 @@ const renderGistCard = (gistData, options = {}) => {
       bgColor,
       borderColor,
     },
+    // why not just pass darkColors unchanged?
     darkColors: darkColors
       ? {
           titleColor: darkColors.titleColor,
