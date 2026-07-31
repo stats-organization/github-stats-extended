@@ -99,7 +99,6 @@ describe("Test /api/wakatime contract", () => {
       title_color_light: "ff3456",
       title_color_dark: "ff6543",
       text_color: "abcdef",
-      bg_color: "0f172a",
       card_width: "620",
       custom_title: "a custom title",
       layout: "compact",

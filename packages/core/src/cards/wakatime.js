@@ -1,6 +1,6 @@
 import { Card } from "../common/Card.js";
 import { I18n } from "../common/I18n.js";
-import { getDualModeColors, isPrefixedHexColor } from "../common/color.js";
+import { getLightDarkColors, isPrefixedHexColor } from "../common/color.js";
 import { encodeHTML } from "../common/html.js";
 import languageColors from "../common/languageColors.json" with { type: "json" };
 import { clampValue, lowercaseTrim } from "../common/ops.js";
@@ -285,7 +285,7 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
 
   const langsCount = clampValue(langs_count, 1, langs_count);
 
-  const { lightColors, darkColors } = getDualModeColors(options);
+  const { lightColors, darkColors } = getLightDarkColors(options);
   const { titleColor, textColor, iconColor, bgColor, borderColor } =
     lightColors;
 

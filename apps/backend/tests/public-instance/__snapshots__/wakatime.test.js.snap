@@ -421,7 +421,7 @@ exports[`Test /api/wakatime contract > should match the public many-params respo
           
           @media (prefers-color-scheme: dark) {
             .header { fill: #ff6543; }
-            .card-bg { fill: #0f172a; stroke: #fedcba; }
+            .card-bg { fill: #193549; stroke: #fedcba; }
             
       
     .stat {
@@ -473,7 +473,7 @@ exports[`Test /api/wakatime contract > should match the public many-params respo
         </defs>
         
 
-        <rect data-testid="card-bg" class="card-bg" x="0.5" y="0.5" rx="12" height="99%" stroke="#fedcba" width="619" fill="#0f172a" stroke-opacity="1"/>
+        <rect data-testid="card-bg" class="card-bg" x="0.5" y="0.5" rx="12" height="99%" stroke="#fedcba" width="619" fill="#141321" stroke-opacity="1"/>
 
         
       <g data-testid="card-title" transform="translate(25, 35)">

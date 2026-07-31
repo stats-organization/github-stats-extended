@@ -1,6 +1,6 @@
 import { Card } from "../common/Card.js";
 import { I18n } from "../common/I18n.js";
-import { getDualModeColors } from "../common/color.js";
+import { getLightDarkColors } from "../common/color.js";
 import { CustomError } from "../common/error.js";
 import { kFormatter } from "../common/fmt.js";
 import { encodeHTML } from "../common/html.js";
@@ -324,7 +324,7 @@ const renderStatsCard = (
 
   const lheight = parseInt(String(line_height), 10);
 
-  const { lightColors, darkColors } = getDualModeColors(options);
+  const { lightColors, darkColors } = getLightDarkColors(options);
   const { titleColor, iconColor, textColor, bgColor, borderColor, ringColor } =
     lightColors;
 

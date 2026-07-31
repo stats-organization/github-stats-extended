@@ -1,6 +1,6 @@
 import { Card } from "../common/Card.js";
 import { I18n } from "../common/I18n.js";
-import { getDualModeColors, isPrefixedHexColor } from "../common/color.js";
+import { getLightDarkColors, isPrefixedHexColor } from "../common/color.js";
 import { formatBytes } from "../common/fmt.js";
 import { encodeHTML } from "../common/html.js";
 import { chunkArray, clampValue, lowercaseTrim } from "../common/ops.js";
@@ -883,7 +883,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
     : DEFAULT_CARD_WIDTH;
   let height = calculateNormalLayoutHeight(langs.length);
 
-  const { lightColors, darkColors } = getDualModeColors(options);
+  const { lightColors, darkColors } = getLightDarkColors(options);
   const colors = lightColors;
 
   let finalLayout;

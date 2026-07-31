@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   findInvalidColor,
   getCardColors,
-  getDualModeColors,
+  getLightDarkColors,
   isBareHexColor,
   isPrefixedHexColor,
   isValidGradient,
@@ -157,7 +157,7 @@ describe("isValidGradient", () => {
 
 describe("getDualModeColors", () => {
   it("returns darkColors null when no mode-specific params are given", () => {
-    const { lightColors, darkColors } = getDualModeColors({
+    const { lightColors, darkColors } = getLightDarkColors({
       title_color: "f00",
       theme: "cobalt",
     });
@@ -167,7 +167,7 @@ describe("getDualModeColors", () => {
 
   it("lightColors equal base colors when only dark params are given", () => {
     const base = getCardColors({ theme: "cobalt" });
-    const { lightColors } = getDualModeColors({
+    const { lightColors } = getLightDarkColors({
       theme: "cobalt",
       title_color_dark: "0f0",
     });
@@ -175,7 +175,7 @@ describe("getDualModeColors", () => {
   });
 
   it("lightColors use light-specific color override, darkColors use dark-specific", () => {
-    const { lightColors, darkColors } = getDualModeColors({
+    const { lightColors, darkColors } = getLightDarkColors({
       title_color_light: "f00",
       title_color_dark: "0f0",
     });
@@ -185,7 +185,7 @@ describe("getDualModeColors", () => {
 
   it("theme_light sets the light mode base theme independently", () => {
     const radicalColors = getCardColors({ theme: "radical" });
-    const { lightColors, darkColors } = getDualModeColors({
+    const { lightColors, darkColors } = getLightDarkColors({
       theme_light: "radical",
       theme_dark: "cobalt",
     });
@@ -194,7 +194,7 @@ describe("getDualModeColors", () => {
   });
 
   it("mode-specific params win over general color param", () => {
-    const { lightColors, darkColors } = getDualModeColors({
+    const { lightColors, darkColors } = getLightDarkColors({
       title_color: "f00",
       title_color_light: "0f0",
       title_color_dark: "00f",
@@ -204,7 +204,7 @@ describe("getDualModeColors", () => {
   });
 
   it("general theme param is used as base for both modes", () => {
-    const { lightColors, darkColors } = getDualModeColors({
+    const { lightColors, darkColors } = getLightDarkColors({
       theme: "cobalt",
       title_color_dark: "0f0",
     });
@@ -218,12 +218,12 @@ describe("getDualModeColors", () => {
   });
 
   it("ring color follows title color when ring is not set explicitly", () => {
-    const { darkColors } = getDualModeColors({ title_color_dark: "0f0" });
+    const { darkColors } = getLightDarkColors({ title_color_dark: "0f0" });
     expect(darkColors?.ringColor).toBe("#0f0");
   });
 
   it("ring_color_dark can be set independently", () => {
-    const { darkColors } = getDualModeColors({
+    const { darkColors } = getLightDarkColors({
       title_color_dark: "0f0",
       ring_color_dark: "f0f",
     });
@@ -232,7 +232,7 @@ describe("getDualModeColors", () => {
   });
 
   it("prog_bar_bg_color_dark overrides prog bar color for dark mode", () => {
-    const { lightColors, darkColors } = getDualModeColors({
+    const { lightColors, darkColors } = getLightDarkColors({
       prog_bar_bg_color_dark: "333",
       title_color_dark: "fff",
     });
@@ -241,12 +241,12 @@ describe("getDualModeColors", () => {
   });
 
   it("bg gradient works in dark mode", () => {
-    const { darkColors } = getDualModeColors({ bg_color_dark: "90,f00,0f0" });
+    const { darkColors } = getLightDarkColors({ bg_color_dark: "90,f00,0f0" });
     expect(darkColors?.bgColor).toStrictEqual(["90", "f00", "0f0"]);
   });
 
   it("mode-specific theme and color override general", () => {
-    const { lightColors, darkColors } = getDualModeColors({
+    const { lightColors, darkColors } = getLightDarkColors({
       theme: "vue",
       theme_light: "radical",
       theme_dark: "cobalt",

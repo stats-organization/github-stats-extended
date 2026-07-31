@@ -278,7 +278,7 @@ const extractModeColors = (
  * @param params Raw query params, containing both general and `_light`/`_dark` suffixed colors and themes.
  * @returns `{ lightColors, darkColors }`, resolved colors for both light and dark mode
  */
-const getDualModeColors = (
+const getLightDarkColors = (
   params: ColorInput & Parameters<typeof extractModeColors>[0],
 ): { lightColors: CardColors; darkColors: CardColors | null } => {
   const lightOverrides = extractModeColors(params, "_light");
@@ -304,7 +304,7 @@ const getDualModeColors = (
 
 export {
   getCardColors,
-  getDualModeColors,
+  getLightDarkColors,
   findInvalidColor,
   isValidGradient,
   isBareHexColor,

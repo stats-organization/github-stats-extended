@@ -1,6 +1,6 @@
 import { Card } from "../common/Card.js";
 import { I18n } from "../common/I18n.js";
-import { getDualModeColors } from "../common/color.js";
+import { getLightDarkColors } from "../common/color.js";
 import { kFormatter, wrapTextMultiline } from "../common/fmt.js";
 import { encodeHTML } from "../common/html.js";
 import { icons } from "../common/icons.js";
@@ -239,7 +239,7 @@ const renderRepoCard = (repo, options = {}) => {
     descriptionLinesCount * lineHeight +
     extraHeight;
 
-  const { lightColors, darkColors } = getDualModeColors({ ...options, theme });
+  const { lightColors, darkColors } = getLightDarkColors({ ...options, theme });
   const colors = lightColors;
 
   const svgLanguage = primaryLanguage

@@ -1,5 +1,5 @@
 import { default as Card } from "../common/Card.js";
-import { getDualModeColors } from "../common/color.js";
+import { getLightDarkColors } from "../common/color.js";
 import { kFormatter, wrapTextMultiline } from "../common/fmt.js";
 import { encodeHTML } from "../common/html.js";
 import { icons } from "../common/icons.js";
@@ -47,7 +47,7 @@ const renderGistCard = (gistData, options = {}) => {
     hide_border = false,
   } = options;
 
-  const { lightColors, darkColors } = getDualModeColors({ ...options, theme });
+  const { lightColors, darkColors } = getLightDarkColors({ ...options, theme });
   const { titleColor, textColor, iconColor, bgColor, borderColor } =
     lightColors;
 
