@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   findInvalidColor,
   getCardColors,
+  getDualModeColors,
   isBareHexColor,
   isPrefixedHexColor,
   isValidGradient,
@@ -151,6 +152,116 @@ describe("isValidGradient", () => {
     expect(isValidGradient(["Infinity", "f00", "0f0"])).toBe(false); // non-finite angle
     expect(isValidGradient(["-Infinity", "f00", "0f0"])).toBe(false); // non-finite angle
     expect(isValidGradient(["abc", "f00", "0f0"])).toBe(false); // non-numeric angle
+  });
+});
+
+describe("getDualModeColors", () => {
+  it("returns darkColors null when no mode-specific params are given", () => {
+    const { lightColors, darkColors } = getDualModeColors({
+      title_color: "f00",
+      theme: "cobalt",
+    });
+    expect(darkColors).toBeNull();
+    expect(lightColors.titleColor).toBe("#f00");
+  });
+
+  it("lightColors equal base colors when only dark params are given", () => {
+    const base = getCardColors({ theme: "cobalt" });
+    const { lightColors } = getDualModeColors({
+      theme: "cobalt",
+      title_color_dark: "0f0",
+    });
+    expect(lightColors).toStrictEqual(base);
+  });
+
+  it("lightColors use light-specific color override, darkColors use dark-specific", () => {
+    const { lightColors, darkColors } = getDualModeColors({
+      title_color_light: "f00",
+      title_color_dark: "0f0",
+    });
+    expect(lightColors.titleColor).toBe("#f00");
+    expect(darkColors?.titleColor).toBe("#0f0");
+  });
+
+  it("theme_light sets the light mode base theme independently", () => {
+    const radicalColors = getCardColors({ theme: "radical" });
+    const { lightColors, darkColors } = getDualModeColors({
+      theme_light: "radical",
+      theme_dark: "cobalt",
+    });
+    expect(lightColors).toStrictEqual(radicalColors);
+    expect(darkColors).toStrictEqual(getCardColors({ theme: "cobalt" }));
+  });
+
+  it("mode-specific params win over general color param", () => {
+    const { lightColors, darkColors } = getDualModeColors({
+      title_color: "f00",
+      title_color_light: "0f0",
+      title_color_dark: "00f",
+    });
+    expect(lightColors.titleColor).toBe("#0f0");
+    expect(darkColors?.titleColor).toBe("#00f");
+  });
+
+  it("general theme param is used as base for both modes", () => {
+    const { lightColors, darkColors } = getDualModeColors({
+      theme: "cobalt",
+      title_color_dark: "0f0",
+    });
+    // lightColors should come from theme "cobalt" (no light override)
+    expect(lightColors).toStrictEqual(getCardColors({ theme: "cobalt" }));
+    // darkColors should come from theme "cobalt" but with title overridden
+    expect(darkColors?.titleColor).toBe("#0f0");
+    expect(darkColors?.bgColor).toBe(
+      getCardColors({ theme: "cobalt" }).bgColor,
+    );
+  });
+
+  it("ring color follows title color when ring is not set explicitly", () => {
+    const { darkColors } = getDualModeColors({ title_color_dark: "0f0" });
+    expect(darkColors?.ringColor).toBe("#0f0");
+  });
+
+  it("ring_color_dark can be set independently", () => {
+    const { darkColors } = getDualModeColors({
+      title_color_dark: "0f0",
+      ring_color_dark: "f0f",
+    });
+    expect(darkColors?.titleColor).toBe("#0f0");
+    expect(darkColors?.ringColor).toBe("#f0f");
+  });
+
+  it("prog_bar_bg_color_dark overrides prog bar color for dark mode", () => {
+    const { lightColors, darkColors } = getDualModeColors({
+      prog_bar_bg_color_dark: "333",
+      title_color_dark: "fff",
+    });
+    expect(darkColors?.progBarBgColor).toBe("#333");
+    expect(lightColors.progBarBgColor).toBe("#ddd"); // default
+  });
+
+  it("bg gradient works in dark mode", () => {
+    const { darkColors } = getDualModeColors({ bg_color_dark: "90,f00,0f0" });
+    expect(darkColors?.bgColor).toStrictEqual(["90", "f00", "0f0"]);
+  });
+
+  it("mode-specific theme and color override general", () => {
+    const { lightColors, darkColors } = getDualModeColors({
+      theme: "vue",
+      theme_light: "radical",
+      theme_dark: "cobalt",
+      title_color: "f00",
+      title_color_light: "0f0",
+      title_color_dark: "00f",
+    });
+    expect(lightColors.titleColor).toBe("#0f0");
+    expect(darkColors?.titleColor).toBe("#00f");
+    expect(lightColors.bgColor).toBe(
+      getCardColors({ theme: "radical" }).bgColor,
+    );
+    expect(darkColors?.bgColor).toBe(
+      getCardColors({ theme: "cobalt" }).bgColor,
+    );
   });
 });
 

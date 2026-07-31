@@ -20,17 +20,12 @@ const TOTAL_TEXT_WIDTH = 275;
  * Creates the no coding activity SVG node.
  *
  * @param {object} props The function properties.
- * @param {string} props.color No coding activity text color.
  * @param {string} props.text No coding activity translated text.
  * @returns {string} No coding activity SVG node string.
  */
-const noCodingActivityNode = ({ color, text }) => {
-  if (!isPrefixedHexColor(color)) {
-    throw new Error(`Invalid text color: "${color}"`);
-  }
-
+const noCodingActivityNode = ({ text }) => {
   return `
-    <text x="25" y="11" class="stat bold" fill="${color}">${encodeHTML(text)}</text>
+    <text x="25" y="11" class="stat bold">${encodeHTML(text)}</text>
   `;
 };
 
@@ -121,8 +116,6 @@ const createLanguageTextNode = ({ langs, y, display_format, card_width }) => {
  * @param {number} args.index The index of the text node item.
  * @param {number} args.percent Percentage of the text node item.
  * @param {boolean=} args.hideProgress Whether to hide the progress bar.
- * @param {string} args.progressBarColor The color of the progress bar.
- * @param {string} args.progressBarBackgroundColor The color of the progress bar background.
  * @param {number} args.progressBarWidth The width of the progress bar.
  * @returns {string} The text SVG node.
  */
@@ -133,8 +126,6 @@ const createTextNode = ({
   index,
   percent,
   hideProgress,
-  progressBarColor,
-  progressBarBackgroundColor,
   progressBarWidth,
 }) => {
   if (!Number.isFinite(index)) {
@@ -151,11 +142,9 @@ const createTextNode = ({
         x: 110,
         y: 4,
         progress: percent,
-        color: progressBarColor,
         width: progressBarWidth,
         // @ts-ignore
         name: label,
-        progressBarBackgroundColor,
         delay: staggerDelay + 300,
       });
 
@@ -296,7 +285,6 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
 
   const langsCount = clampValue(langs_count, 1, langs_count);
 
-  // returns theme based colors with proper overrides and defaults
   const { lightColors, darkColors } = getDualModeColors(options);
   const { titleColor, textColor, iconColor, bgColor, borderColor } =
     lightColors;
@@ -359,8 +347,6 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
               card_width: normalizedWidth,
             }).join("")
           : noCodingActivityNode({
-              // @ts-ignore
-              color: textColor,
               text: stats.is_coding_activity_visible
                 ? stats.is_other_usage_visible
                   ? i18n.t("wakatimecard.nocodingactivity")
@@ -379,21 +365,12 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
               value: formatLanguageValue({ display_format, lang: language }),
               index,
               percent: language.percent,
-              // @ts-ignore
-              progressBarColor: titleColor,
-              // @ts-ignore
-              progressBarBackgroundColor:
-                textColor === titleColor
-                  ? "#fff0" // transparent
-                  : textColor,
               hideProgress: hide_progress,
               progressBarWidth: normalizedWidth - TOTAL_TEXT_WIDTH,
             });
           })
         : [
             noCodingActivityNode({
-              // @ts-ignore
-              color: textColor,
               text: stats.is_coding_activity_visible
                 ? stats.is_other_usage_visible
                   ? i18n.t("wakatimecard.nocodingactivity")
@@ -430,15 +407,7 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
       bgColor,
       borderColor,
     },
-    darkColors: darkColors
-      ? {
-          titleColor: darkColors.titleColor,
-          textColor: darkColors.textColor,
-          iconColor: darkColors.iconColor,
-          bgColor: darkColors.bgColor,
-          borderColor: darkColors.borderColor,
-        }
-      : null,
+    darkColors,
   });
 
   if (disable_animations) {
@@ -472,14 +441,22 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
     }
     .lang-progress{
       animation: growWidthAnimation 0.6s ease-in-out forwards;
+      fill: ${titleColor};
     }
+    .progress-background { fill: ${textColor === titleColor ? "#fff0" : textColor}; }
     `,
   );
 
   if (darkColors) {
+    const darkProgressBarBgColor =
+      darkColors.textColor === darkColors.titleColor
+        ? "#fff0"
+        : darkColors.textColor;
     card.setDarkCSS(`
       ${getStyles({ titleColor: darkColors.titleColor, textColor: darkColors.textColor })}
       .lang-name { fill: ${darkColors.textColor} }
+      .lang-progress { fill: ${darkColors.titleColor}; }
+      .progress-background { fill: ${darkProgressBarBgColor}; }
     `);
   }
 

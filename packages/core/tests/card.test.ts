@@ -130,7 +130,6 @@ describe("Card", () => {
   });
 
   it("should render with correct colors", () => {
-    // returns theme based colors with proper overrides and defaults
     const { titleColor, textColor, iconColor, bgColor } = getCardColors({
       title_color: "f00",
       icon_color: "0f0",

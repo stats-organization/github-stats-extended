@@ -75,7 +75,6 @@ class Card {
 
     this.border_radius = parseFloat(String(border_radius));
 
-    // returns theme based colors with proper overrides and defaults
     this.colors = colors;
     this.darkColors = darkColors;
     this.title = customTitle === undefined ? defaultTitle : customTitle;
@@ -240,6 +239,7 @@ class Card {
         `Invalid dark gradient: ${(this.darkColors.bgColor as Array<string>).join(",")}`,
       );
     }
+
     // why is " as Array<string>" necessary *now*?
 
     return `

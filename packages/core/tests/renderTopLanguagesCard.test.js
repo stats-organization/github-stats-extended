@@ -497,9 +497,13 @@ describe("Test renderTopLanguages", () => {
 
     const headerStyles = stylesObject[":host"][".header "];
     const langNameStyles = stylesObject[":host"][".lang-name "];
+    const progressBgStyles = stylesObject[":host"][".progress-background "];
 
     expect(headerStyles.fill.trim()).toBe(`#${customColors.title_color}`);
     expect(langNameStyles.fill.trim()).toBe(`#${customColors.text_color}`);
+    expect(progressBgStyles.fill.trim()).toBe(
+      `#${customColors.prog_bar_bg_color}`,
+    );
     expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
       "fill",
       "#252525",
@@ -510,9 +514,6 @@ describe("Test renderTopLanguages", () => {
       "progress-background",
     );
     expect(progressBackgroundNodes.length).toBeGreaterThan(0);
-    progressBackgroundNodes.forEach((el) => {
-      expect(el).toHaveAttribute("fill", "#444");
-    });
   });
 
   it("should render custom colors with themes", () => {

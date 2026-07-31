@@ -324,7 +324,6 @@ const renderStatsCard = (
 
   const lheight = parseInt(String(line_height), 10);
 
-  // returns theme based colors with proper overrides and defaults
   const { lightColors, darkColors } = getDualModeColors(options);
   const { titleColor, iconColor, textColor, bgColor, borderColor, ringColor } =
     lightColors;
@@ -524,14 +523,6 @@ const renderStatsCard = (
 
   // the lower the user's percentile the better
   const progress = 100 - rank.percentile;
-  const cssStyles = getStyles({
-    titleColor,
-    ringColor,
-    textColor,
-    iconColor,
-    show_icons,
-    progress,
-  });
 
   const calculateTextWidth = () => {
     return measureText(
@@ -586,20 +577,21 @@ const renderStatsCard = (
       bgColor,
       borderColor,
     },
-    darkColors: darkColors
-      ? {
-          titleColor: darkColors.titleColor,
-          textColor: darkColors.textColor,
-          iconColor: darkColors.iconColor,
-          bgColor: darkColors.bgColor,
-          borderColor: darkColors.borderColor,
-        }
-      : null,
+    darkColors,
   });
 
   card.setHideBorder(hide_border);
   card.setHideTitle(hide_title);
-  card.setCSS(cssStyles);
+  card.setCSS(
+    getStyles({
+      titleColor,
+      ringColor,
+      textColor,
+      iconColor,
+      show_icons,
+      progress,
+    }),
+  );
 
   if (darkColors) {
     card.setDarkCSS(

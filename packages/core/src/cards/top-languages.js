@@ -215,7 +215,6 @@ const getDisplayValue = (size, percentages, format) => {
  * @param {object} props Function properties.
  * @param {number} props.width The card width
  * @param {string} props.color Color of the programming language.
- * @param {string} props.progBarBgColor Color of the background of progress bar.
  * @param {string} props.name Name of the programming language.
  * @param {number} props.size Size of the programming language.
  * @param {number} props.totalSize Total size of all languages.
@@ -227,7 +226,6 @@ const getDisplayValue = (size, percentages, format) => {
 const createProgressTextNode = ({
   width,
   color,
-  progBarBgColor,
   name,
   size,
   totalSize,
@@ -253,7 +251,6 @@ const createProgressTextNode = ({
         color,
         width: progressWidth,
         progress,
-        progressBarBackgroundColor: progBarBgColor,
         delay: staggerDelay + 300,
       })}
     </g>
@@ -386,7 +383,6 @@ const createDonutLanguagesNode = ({
  * @param {Lang[]} langs Array of programming languages.
  * @param {number} width Card width.
  * @param {number} totalLanguageSize Total size of all languages.
- * @param progBarBgColor Color of the background of progress bar.
  * @param {string} statsFormat Stats format.
  * @param {boolean=} hideValues Whether to hide stats values.
  * @returns {string} Normal layout card SVG object.
@@ -395,7 +391,6 @@ const renderNormalLayout = (
   langs,
   width,
   totalLanguageSize,
-  progBarBgColor,
   statsFormat,
   hideValues,
 ) => {
@@ -410,7 +405,6 @@ const renderNormalLayout = (
         statsFormat,
         hideValues,
         index,
-        progBarBgColor,
       });
     }),
     gap: 40,
@@ -807,20 +801,15 @@ const renderDonutLayout = (
  * Creates the no languages data SVG node.
  *
  * @param {object} props Object with function properties.
- * @param {string} props.color No languages data text color.
  * @param {string} props.text No languages data translated text.
  * @param {Layout | undefined} props.layout Card layout.
  * @returns {string} No languages data SVG node string.
  */
-const noLanguagesDataNode = ({ color, text, layout }) => {
-  if (!isPrefixedHexColor(color)) {
-    throw new Error(`Invalid text color: "${color}"`);
-  }
-
+const noLanguagesDataNode = ({ text, layout }) => {
   return `
     <text x="${
       layout === "pie" || layout === "donut-vertical" ? CARD_PADDING : 0
-    }" y="11" class="stat bold" fill="${color}">${encodeHTML(text)}</text>
+    }" y="11" class="stat bold">${encodeHTML(text)}</text>
   `;
 };
 
@@ -894,7 +883,6 @@ const renderTopLanguages = (topLangs, options = {}) => {
     : DEFAULT_CARD_WIDTH;
   let height = calculateNormalLayoutHeight(langs.length);
 
-  // returns theme based colors with proper overrides and defaults
   const { lightColors, darkColors } = getDualModeColors(options);
   const colors = lightColors;
 
@@ -902,7 +890,6 @@ const renderTopLanguages = (topLangs, options = {}) => {
   if (langs.length === 0) {
     height = COMPACT_LAYOUT_BASE_HEIGHT;
     finalLayout = noLanguagesDataNode({
-      color: colors.textColor,
       text: i18n.t("langcard.nodata"),
       layout,
     });
@@ -949,7 +936,6 @@ const renderTopLanguages = (topLangs, options = {}) => {
       langs,
       width,
       totalLanguageSize,
-      colors.progBarBgColor,
       stats_format,
       hide_values,
     );
@@ -962,15 +948,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
     height,
     border_radius,
     colors,
-    darkColors: darkColors
-      ? {
-          titleColor: darkColors.titleColor,
-          textColor: darkColors.textColor,
-          bgColor: darkColors.bgColor,
-          borderColor: darkColors.borderColor,
-          progBarBgColor: darkColors.progBarBgColor,
-        }
-      : null,
+    darkColors,
   });
 
   if (disable_animations) {
@@ -1019,6 +997,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
     .lang-progress{
       animation: growWidthAnimation 0.6s ease-in-out forwards;
     }
+    .progress-background { fill: ${colors.progBarBgColor}; }
     `,
   );
 
@@ -1026,8 +1005,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
     card.setDarkCSS(`
       .stat { fill: ${darkColors.textColor}; }
       .lang-name { fill: ${darkColors.textColor}; }
-      // need to review this more:
-      ${darkColors.progBarBgColor ? `.lang-progress-bg { fill: ${typeof darkColors.progBarBgColor === "object" ? `url(#gradient-dark)` : darkColors.progBarBgColor}; }` : ""}
+      .progress-background { fill: ${darkColors.progBarBgColor}; }
     `);
   }
 

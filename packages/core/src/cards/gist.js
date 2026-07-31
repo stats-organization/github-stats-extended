@@ -47,7 +47,6 @@ const renderGistCard = (gistData, options = {}) => {
     hide_border = false,
   } = options;
 
-  // returns theme based colors with proper overrides and defaults
   const { lightColors, darkColors } = getDualModeColors({ ...options, theme });
   const { titleColor, textColor, iconColor, bgColor, borderColor } =
     lightColors;
@@ -150,16 +149,7 @@ const renderGistCard = (gistData, options = {}) => {
       bgColor,
       borderColor,
     },
-    // why not just pass darkColors unchanged?
-    darkColors: darkColors
-      ? {
-          titleColor: darkColors.titleColor,
-          textColor: darkColors.textColor,
-          iconColor: darkColors.iconColor,
-          bgColor: darkColors.bgColor,
-          borderColor: darkColors.borderColor,
-        }
-      : null,
+    darkColors,
   });
 
   card.setCSS(`

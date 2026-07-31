@@ -76,8 +76,10 @@ describe("Test /api/gist contract", () => {
     const params = new URLSearchParams({
       id: "happy-gist-id",
       title_color: "123456",
-      icon_color: "ff00aa",
-      text_color: "abcdef",
+      icon_color_light: "ff00aa",
+      icon_color_dark: "aa00ff",
+      text_color_light: "ffabcd",
+      text_color_dark: "abcdef",
       bg_color: "0f172a",
       border_radius: "12",
       border_color: "fedcba",

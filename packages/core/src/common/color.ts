@@ -266,18 +266,17 @@ const extractModeColors = (
 });
 
 /**
- * Returns resolved colors for both light and dark mode given the full set of
- * general, light-specific, and dark-specific color params.
+ * Returns resolved colors for both light and dark mode given all input params.
  *
- * Priority (lowest → highest):
- *   default theme → `theme` param → `theme_light`/`theme_dark` param
- *   → general color params → `*_light`/`*_dark` color params
+ * Priority (lowest -> highest):
+ *   default theme -> `theme` param -> `theme_light`/`theme_dark` param
+ *   -> general color params -> `*_light`/`*_dark` color params
  *
  * When no light/dark-specific params are provided at all, `darkColors` is
- * `null` (caller should skip the @media block entirely).
+ * `null`.
  *
- * @param params Raw query params, containing both general and `_light`/`_dark` suffixed colors.
- * @returns `{ lightColors, darkColors }` — darkColors is null when no mode-specific params were given.
+ * @param params Raw query params, containing both general and `_light`/`_dark` suffixed colors and themes.
+ * @returns `{ lightColors, darkColors }`, resolved colors for both light and dark mode
  */
 const getDualModeColors = (
   params: ColorInput & Parameters<typeof extractModeColors>[0],

@@ -81,7 +81,6 @@ export default async (
         message: "Something went wrong",
         secondaryMessage: "Language not found",
         renderOptions: {
-          // here and in similar places we need to apply more color logic
           title_color,
           text_color,
           bg_color,

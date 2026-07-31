@@ -82,6 +82,7 @@ describe("Test /api/top-langs contract", () => {
       title_color: "123456",
       text_color: "abcdef",
       bg_color: "0f172a",
+      theme_dark: "cobalt",
       layout: "compact",
       langs_count: "3",
       exclude_repo: "repo-hidden",

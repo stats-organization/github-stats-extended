@@ -151,13 +151,25 @@ exports[`Test /api/gist contract > should match the public many-params response 
           }
           
     .description {
-      font: 400 13px 'Segoe UI', Ubuntu, Sans-Serif;fill: #abcdef;
+      font: 400 13px 'Segoe UI', Ubuntu, Sans-Serif;fill: #ffabcd;
       
     }
-    .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: #abcdef }
+    .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: #ffabcd }
     .icon { fill: #ff00aa }
   
           
+          @media (prefers-color-scheme: dark) {
+            .header { fill: #123456; }
+            .card-bg { fill: #0f172a; stroke: #fedcba; }
+            
+      .description {
+        fill: #abcdef;
+        
+      }
+      .gray { fill: #abcdef }
+      .icon { fill: #aa00ff }
+    
+          }
 
           
       /* Animations */

@@ -92,7 +92,12 @@ describe("Test /api/wakatime contract", () => {
 
     const params = new URLSearchParams({
       username: "anuraghazra",
+      theme: "vue",
+      theme_light: "radical",
+      theme_dark: "cobalt",
       title_color: "123456",
+      title_color_light: "ff3456",
+      title_color_dark: "ff6543",
       text_color: "abcdef",
       bg_color: "0f172a",
       card_width: "620",

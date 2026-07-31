@@ -71,9 +71,9 @@ const createLanguageNode = (langName: string, langColor: string): string => {
  * @param params.x X-axis position.
  * @param params.y Y-axis position.
  * @param params.width Width of progress bar.
- * @param params.color Progress color.
+ * @param params.color Optional foreground color as an inline fill fallback.
+ *   When omitted, the color must be set via a `.lang-progress` CSS rule.
  * @param params.progress Progress value.
- * @param params.progressBarBackgroundColor Progress bar bg color.
  * @param params.delay Delay before animation starts.
  * @returns Progress node.
  */
@@ -83,24 +83,17 @@ const createProgressNode = ({
   width,
   color,
   progress,
-  progressBarBackgroundColor,
   delay,
 }: {
   x: number;
   y: number;
   width: number;
-  color: string;
+  color?: string;
   progress: number;
-  progressBarBackgroundColor: string;
   delay: number;
 }): string => {
-  if (!isPrefixedHexColor(color)) {
+  if (color !== undefined && !isPrefixedHexColor(color)) {
     throw new Error(`Invalid progress color: "${color}"`);
-  }
-  if (!isPrefixedHexColor(progressBarBackgroundColor)) {
-    throw new Error(
-      `Invalid progress bar background color: "${progressBarBackgroundColor}"`,
-    );
   }
   if (!Number.isFinite(width)) {
     throw new Error(`Invalid width: "${width}"`);
@@ -119,11 +112,11 @@ const createProgressNode = ({
 
   return `
     <svg width="${width}" x="${x}" y="${y}">
-      <rect data-testid="progress-background" rx="5" ry="5" x="0" y="0" width="${width}" height="8" fill="${progressBarBackgroundColor}"></rect>
+      <rect data-testid="progress-background" class="progress-background" rx="5" ry="5" x="0" y="0" width="${width}" height="8"></rect>
       <svg data-testid="lang-progress" width="${progressPercentage}%">
         <rect
             height="8"
-            fill="${color}"
+            ${color === undefined ? "" : `fill="${color}"`}
             rx="5" ry="5" x="0" y="0"
             class="lang-progress"
             style="animation-delay: ${delay}ms;"
@@ -313,7 +306,6 @@ const renderError = ({
     show_repo_link = true,
   } = renderOptions;
 
-  // returns theme based colors with proper overrides and defaults
   const { titleColor, textColor, bgColor, borderColor } = getCardColors({
     title_color,
     text_color,

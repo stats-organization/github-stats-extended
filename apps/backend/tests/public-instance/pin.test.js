@@ -68,6 +68,32 @@ describe("Test /api/pin contract", () => {
     }).toMatchSnapshot();
   });
 
+  it("should match the public archived-repo response snapshot", async () => {
+    let archived_data_user = structuredClone(data_user);
+    archived_data_user.data.user.repository.isArchived = true;
+
+    mock
+      .onPost("https://api.github.com/graphql")
+      .reply(200, archived_data_user);
+
+    const { default: router } = await import("../../router.js");
+
+    const req = {
+      headers: {},
+      url: "/api/pin?username=anuraghazra&repo=convoychat",
+    };
+    const res = createResponse();
+
+    await router(req, res);
+
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
+  });
+
   it("should match the public many-params response snapshot", async () => {
     mock.onPost("https://api.github.com/graphql").reply(200, data_user);
     mock
@@ -102,9 +128,8 @@ describe("Test /api/pin contract", () => {
       username: "anuraghazra",
       repo: "convoychat",
       title_color: "123456",
-      icon_color: "ff00aa",
-      text_color: "abcdef",
-      bg_color: "0f172a",
+      theme_light: "radical",
+      theme_dark: "cobalt",
       card_width: "560",
       show_owner: "true",
       show: "prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented",
