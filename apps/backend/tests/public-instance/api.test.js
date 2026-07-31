@@ -116,6 +116,31 @@ describe("Test /api contract", () => {
     }).toMatchSnapshot();
   });
 
+  it("should match the gradient-background response snapshot", async () => {
+    const { default: router } = await import("../../router.js");
+
+    const params = new URLSearchParams({
+      username: "anuraghazra",
+      theme_light: "ambient_gradient",
+      bg_color_dark: "45,60A5FA,4ADE80",
+    });
+
+    const req = {
+      headers: {},
+      url: `/api?${params.toString()}`,
+    };
+    const res = createResponse();
+
+    await router(req, res);
+
+    expect(res.end).toHaveBeenCalledOnce();
+
+    expect({
+      headers: res.setHeader.mock.calls,
+      content: normalizeSvg(res.end.mock.calls[0][0]),
+    }).toMatchSnapshot();
+  });
+
   it("should match the public missing-username response snapshot", async () => {
     const { default: router } = await import("../../router.js");
 

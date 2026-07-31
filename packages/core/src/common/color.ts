@@ -118,9 +118,9 @@ interface CardColors {
 }
 
 /**
- * Input color params shared by all card color functions. Not every field is
- * consumed by every card (e.g. `prog_bar_bg_color` is only used by the
- * top-languages card's `normal` layout).
+ * Object with all input color params. Not every field is consumed by every card
+ * (e.g. `prog_bar_bg_color` is only used by the top-languages card's `normal`
+ * layout).
  */
 interface ColorInput {
   title_color?: string | undefined;
@@ -195,9 +195,9 @@ const getCardColors = ({
     border_color || defaultBorderColor,
     "#" + defaultBorderColor,
   );
-  // no theme defines `ring_color`, so it falls back to the title color.
+  // No theme defines `ring_color`, so it falls back to the title color.
   const ringColor = fallbackColor(ring_color, titleColor);
-  // no theme defines `prog_bar_bg_color`, so it falls back to "#ddd".
+  // No theme defines `prog_bar_bg_color`, so it falls back to "#ddd".
   const progBarBgColor = fallbackColor(prog_bar_bg_color, "#ddd");
 
   if (

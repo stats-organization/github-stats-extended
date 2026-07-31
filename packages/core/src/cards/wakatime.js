@@ -443,14 +443,14 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
       animation: growWidthAnimation 0.6s ease-in-out forwards;
       fill: ${titleColor};
     }
-    .progress-background { fill: ${textColor === titleColor ? "#fff0" : textColor}; }
+    .progress-background { fill: ${textColor === titleColor ? "#fff0" /* transparent */ : textColor}; }
     `,
   );
 
   if (darkColors) {
     const darkProgressBarBgColor =
       darkColors.textColor === darkColors.titleColor
-        ? "#fff0"
+        ? "#fff0" // transparent
         : darkColors.textColor;
     card.setDarkCSS(`
       ${getStyles({ titleColor: darkColors.titleColor, textColor: darkColors.textColor })}

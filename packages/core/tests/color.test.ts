@@ -155,7 +155,7 @@ describe("isValidGradient", () => {
   });
 });
 
-describe("getDualModeColors", () => {
+describe("getLightDarkColors", () => {
   it("returns darkColors null when no mode-specific params are given", () => {
     const { lightColors, darkColors } = getLightDarkColors({
       title_color: "f00",
