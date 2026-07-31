@@ -1,18 +1,18 @@
-import { isPrefixedHexColor, isValidGradient } from "./color.js";
+import { getCardColors, isPrefixedHexColor, isValidGradient } from "./color.js";
 import { encodeHTML } from "./html.js";
 import { flexLayout } from "./render.js";
 
 interface CardColors {
   /** Card title color. */
-  titleColor?: string;
+  titleColor: string;
   /** Card text color. */
-  textColor?: string;
+  textColor: string;
   /** Card icon color. */
-  iconColor?: string;
+  iconColor: string;
   /** Card background color. */
-  bgColor?: string | Array<string>;
+  bgColor: string | Array<string>;
   /** Card border color. */
-  borderColor?: string;
+  borderColor: string;
 }
 
 class Card {
@@ -52,7 +52,7 @@ class Card {
     width = 100,
     height = 100,
     border_radius = 4.5,
-    colors = {},
+    colors = getCardColors({}),
     darkColors = null,
     customTitle,
     defaultTitle = "",
@@ -218,34 +218,26 @@ class Card {
           </linearGradient>`;
     };
 
-    const hasLightGradient = typeof this.colors.bgColor === "object";
-    const hasDarkGradient =
-      this.darkColors !== null && typeof this.darkColors.bgColor === "object";
-
     if (
-      hasLightGradient &&
-      !isValidGradient(this.colors.bgColor as Array<string>)
+      typeof this.colors.bgColor === "object" &&
+      !isValidGradient(this.colors.bgColor)
     ) {
-      throw new Error(
-        `Invalid gradient: ${(this.colors.bgColor as Array<string>).join(",")}`,
-      );
+      throw new Error(`Invalid gradient: ${this.colors.bgColor.join(",")}`);
     }
     if (
-      hasDarkGradient &&
       this.darkColors &&
-      !isValidGradient(this.darkColors.bgColor as Array<string>)
+      typeof this.darkColors.bgColor === "object" &&
+      !isValidGradient(this.darkColors.bgColor)
     ) {
       throw new Error(
-        `Invalid dark gradient: ${(this.darkColors.bgColor as Array<string>).join(",")}`,
+        `Invalid dark gradient: ${this.darkColors.bgColor.join(",")}`,
       );
     }
-
-    // why is " as Array<string>" necessary *now*?
 
     return `
         <defs>
-          ${hasLightGradient ? buildGradientDef("gradient", this.colors.bgColor as Array<string>) : ""}
-          ${hasDarkGradient && this.darkColors ? buildGradientDef("gradient-dark", this.darkColors.bgColor as Array<string>) : ""}
+          ${typeof this.colors.bgColor === "object" ? buildGradientDef("gradient", this.colors.bgColor) : ""}
+          ${this.darkColors && typeof this.darkColors.bgColor === "object" ? buildGradientDef("gradient-dark", this.darkColors.bgColor) : ""}
         </defs>
         `;
   }
@@ -289,12 +281,12 @@ class Card {
     const bgFill =
       typeof this.darkColors.bgColor === "object"
         ? "url(#gradient-dark)"
-        : String(this.darkColors.bgColor);
+        : this.darkColors.bgColor;
 
     return `
           @media (prefers-color-scheme: dark) {
-            .header { fill: ${String(this.darkColors.titleColor)}; }
-            .card-bg { fill: ${bgFill}; stroke: ${String(this.darkColors.borderColor)}; }
+            .header { fill: ${this.darkColors.titleColor}; }
+            .card-bg { fill: ${bgFill}; stroke: ${this.darkColors.borderColor}; }
             ${this.darkCss}
           }`;
   }
@@ -309,20 +301,13 @@ class Card {
     if (!Number.isFinite(this.border_radius)) {
       throw new Error(`Invalid border radius: "${this.border_radius}"`);
     }
-    if (
-      this.colors.titleColor !== undefined &&
-      !isPrefixedHexColor(this.colors.titleColor)
-    ) {
+    if (!isPrefixedHexColor(this.colors.titleColor)) {
       throw new Error(`Invalid title color: "${this.colors.titleColor}"`);
     }
-    if (
-      this.colors.borderColor !== undefined &&
-      !isPrefixedHexColor(this.colors.borderColor)
-    ) {
+    if (!isPrefixedHexColor(this.colors.borderColor)) {
       throw new Error(`Invalid border color: "${this.colors.borderColor}"`);
     }
     if (
-      this.colors.bgColor !== undefined &&
       !(typeof this.colors.bgColor === "object"
         ? isValidGradient(this.colors.bgColor)
         : isPrefixedHexColor(this.colors.bgColor))
@@ -347,7 +332,7 @@ class Card {
         <style>
           .header {
             font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
-            fill: ${String(this.colors.titleColor)};
+            fill: ${this.colors.titleColor};
             animation: fadeInAnimation 0.8s ease-in-out forwards;
           }
           @supports(-moz-appearance: auto) {
@@ -374,12 +359,12 @@ class Card {
           y="0.5"
           rx="${this.border_radius}"
           height="99%"
-          stroke="${String(this.colors.borderColor)}"
+          stroke="${this.colors.borderColor}"
           width="${this.width - 1}"
           fill="${
             typeof this.colors.bgColor === "object"
               ? "url(#gradient)"
-              : String(this.colors.bgColor)
+              : this.colors.bgColor
           }"
           stroke-opacity="${this.hideBorder ? 0 : 1}"
         />
