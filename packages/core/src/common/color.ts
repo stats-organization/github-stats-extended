@@ -224,7 +224,7 @@ const getCardColors = ({
   };
 };
 
-interface ModeColorParams {
+interface LightDarkColorParams {
   title_color_light?: string;
   title_color_dark?: string;
   text_color_light?: string;
@@ -251,8 +251,8 @@ interface ModeColorParams {
  * @param suffix `"_light"` or `"_dark"`.
  * @returns ColorInput with the suffix stripped, ready for `getCardColors`.
  */
-const extractModeColors = (
-  params: ModeColorParams,
+const extractLightDarkColors = (
+  params: LightDarkColorParams,
   suffix: "_light" | "_dark",
 ): ColorInput => ({
   title_color: params[`title_color${suffix}`],
@@ -279,10 +279,10 @@ const extractModeColors = (
  * @returns `{ lightColors, darkColors }`, resolved colors for both light and dark mode
  */
 const getLightDarkColors = (
-  params: ColorInput & Parameters<typeof extractModeColors>[0],
+  params: ColorInput & Parameters<typeof extractLightDarkColors>[0],
 ): { lightColors: CardColors; darkColors: CardColors | null } => {
-  const lightOverrides = extractModeColors(params, "_light");
-  const darkOverrides = extractModeColors(params, "_dark");
+  const lightOverrides = extractLightDarkColors(params, "_light");
+  const darkOverrides = extractLightDarkColors(params, "_dark");
 
   const hasModeOverrides = Object.values({
     ...lightOverrides,
