@@ -174,6 +174,14 @@ describe("getLightDarkColors", () => {
     expect(lightColors).toStrictEqual(base);
   });
 
+  it("light theme is respected when no dark params are given", () => {
+    const base = getCardColors({ theme: "cobalt" });
+    const { lightColors } = getLightDarkColors({
+      theme_light: "cobalt",
+    });
+    expect(lightColors).toStrictEqual(base);
+  });
+
   it("lightColors use light-specific color override, darkColors use dark-specific", () => {
     const { lightColors, darkColors } = getLightDarkColors({
       title_color_light: "f00",

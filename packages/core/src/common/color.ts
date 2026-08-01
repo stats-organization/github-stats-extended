@@ -284,10 +284,9 @@ const getLightDarkColors = (
   const lightOverrides = extractLightDarkColors(params, "_light");
   const darkOverrides = extractLightDarkColors(params, "_dark");
 
-  const hasModeOverrides = Object.values({
-    ...lightOverrides,
-    ...darkOverrides,
-  }).some((v) => v !== undefined);
+  const hasModeOverrides =
+    Object.values(lightOverrides).some((v) => v !== undefined) ||
+    Object.values(darkOverrides).some((v) => v !== undefined);
 
   if (!hasModeOverrides) {
     return { lightColors: getCardColors(params), darkColors: null };
