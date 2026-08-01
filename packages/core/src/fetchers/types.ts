@@ -32,9 +32,7 @@ export interface RepoUserStats {
   totalIssuesCommented?: number;
 }
 
-export interface RepositoryData extends RepoInfo, RepoUserStats {
-  stargazerCount: number;
-}
+export type RepositoryData = RepoInfo & RepoUserStats;
 
 export interface StatsData {
   name: string;

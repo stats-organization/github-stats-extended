@@ -44,20 +44,14 @@ describe("Test fetchRepo", () => {
 
     const repo = await fetchRepo("anuraghazra", "convoychat");
 
-    expect(repo).toStrictEqual({
-      ...data_repo.repository,
-      stargazerCount: data_repo.repository.stargazerCount,
-    });
+    expect(repo).toStrictEqual(data_repo.repository);
   });
 
   it("should fetch correct org repo", async () => {
     mock.onPost("https://api.github.com/graphql").reply(200, data_org);
 
     const repo = await fetchRepo("anuraghazra", "convoychat");
-    expect(repo).toStrictEqual({
-      ...data_repo.repository,
-      stargazerCount: data_repo.repository.stargazerCount,
-    });
+    expect(repo).toStrictEqual(data_repo.repository);
   });
 
   it("should throw error if user is found but repo is null", async () => {

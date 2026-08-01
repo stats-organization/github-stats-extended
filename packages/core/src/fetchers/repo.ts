@@ -144,7 +144,6 @@ const fetchRepo = async (
     return {
       ...repoUserStats,
       ...repository,
-      stargazerCount: repository.stargazerCount,
     };
   }
 
@@ -167,7 +166,6 @@ const fetchRepo = async (
     return {
       ...repoUserStats,
       ...repository,
-      stargazerCount: repository.stargazerCount,
     };
   }
 
