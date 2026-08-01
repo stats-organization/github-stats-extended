@@ -16,7 +16,7 @@ const data_repo = {
       id: "MDg6TGFuZ3VhZ2UyODc=",
       name: "TypeScript",
     },
-    starCount: 38000,
+    stargazerCount: 38000,
     forkCount: 100,
   },
 };
@@ -279,7 +279,7 @@ describe("Test renderRepoCard", () => {
   it("should not render star count or fork count if either of the are zero", () => {
     document.body.innerHTML = renderRepoCard({
       ...data_repo.repository,
-      starCount: 0,
+      stargazerCount: 0,
     });
 
     expect(queryByTestId(document.body, "stargazers")).toBeNull();
@@ -287,7 +287,7 @@ describe("Test renderRepoCard", () => {
 
     document.body.innerHTML = renderRepoCard({
       ...data_repo.repository,
-      starCount: 1,
+      stargazerCount: 1,
       forkCount: 0,
     });
 
@@ -296,7 +296,7 @@ describe("Test renderRepoCard", () => {
 
     document.body.innerHTML = renderRepoCard({
       ...data_repo.repository,
-      starCount: 0,
+      stargazerCount: 0,
       forkCount: 0,
     });
 

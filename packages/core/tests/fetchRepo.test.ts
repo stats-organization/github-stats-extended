@@ -46,7 +46,7 @@ describe("Test fetchRepo", () => {
 
     expect(repo).toStrictEqual({
       ...data_repo.repository,
-      starCount: data_repo.repository.stargazerCount,
+      stargazerCount: data_repo.repository.stargazerCount,
     });
   });
 
@@ -56,7 +56,7 @@ describe("Test fetchRepo", () => {
     const repo = await fetchRepo("anuraghazra", "convoychat");
     expect(repo).toStrictEqual({
       ...data_repo.repository,
-      starCount: data_repo.repository.stargazerCount,
+      stargazerCount: data_repo.repository.stargazerCount,
     });
   });
 

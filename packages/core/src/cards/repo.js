@@ -76,7 +76,7 @@ const renderRepoCard = (repo, options = {}) => {
     primaryLanguage,
     isArchived,
     isTemplate,
-    starCount,
+    stargazerCount,
     forkCount,
     totalPRsAuthored,
     totalPRsCommented,
@@ -263,7 +263,7 @@ const renderRepoCard = (repo, options = {}) => {
     ? createLanguageNode(langName, langColor)
     : "";
 
-  const totalStars = kFormatter(starCount);
+  const totalStars = kFormatter(stargazerCount);
   const totalForks = kFormatter(forkCount);
   const svgStars = iconWithLabel(
     icons.star,

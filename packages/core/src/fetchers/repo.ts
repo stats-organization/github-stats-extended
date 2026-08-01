@@ -5,7 +5,7 @@ import { request } from "../common/http.js";
 import { retryer } from "../common/retryer.js";
 
 import { fetchRepoUserStats } from "./stats.js";
-import type { RepositoryData } from "./types.js";
+import type { RepoInfo, RepositoryData } from "./types.js";
 
 /**
  * Repo data fetcher.
@@ -58,19 +58,6 @@ const fetcher = (
 };
 
 const urlExample = "/api/pin?username=USERNAME&repo=REPO_NAME";
-
-/** A repository as selected by the `RepoInfo` fragment above. */
-interface RepoInfo {
-  name: string;
-  nameWithOwner: string;
-  isPrivate: boolean;
-  isArchived: boolean;
-  isTemplate: boolean;
-  stargazerCount: number;
-  description: string;
-  primaryLanguage: { color: string; id: string; name: string };
-  forkCount: number;
-}
 
 /** Shape of `response.data` returned by the repo query. */
 interface RepoQueryResponse {
@@ -157,7 +144,7 @@ const fetchRepo = async (
     return {
       ...repoUserStats,
       ...repository,
-      starCount: repository.stargazerCount,
+      stargazerCount: repository.stargazerCount,
     };
   }
 
@@ -180,7 +167,7 @@ const fetchRepo = async (
     return {
       ...repoUserStats,
       ...repository,
-      starCount: repository.stargazerCount,
+      stargazerCount: repository.stargazerCount,
     };
   }
 

@@ -11,7 +11,7 @@ import { logger } from "../common/log.js";
 import { buildSearchFilter, parseOwnerAffiliations } from "../common/ops.js";
 import { retryer } from "../common/retryer.js";
 
-import type { StatsData } from "./types.js";
+import type { RepoUserStats, StatsData } from "./types.js";
 
 // GraphQL queries.
 const GRAPHQL_REPOS_FIELD = `
@@ -109,15 +109,6 @@ interface StatsFetcherResponse {
     errors?: Array<{ type?: string; message?: string }>;
   };
   statusText: string;
-}
-
-/** Per-repo/-user counts fetched via the REST search API. */
-interface RepoUserStats {
-  totalPRsAuthored?: number;
-  totalPRsCommented?: number;
-  totalPRsReviewed?: number;
-  totalIssuesAuthored?: number;
-  totalIssuesCommented?: number;
 }
 
 /**

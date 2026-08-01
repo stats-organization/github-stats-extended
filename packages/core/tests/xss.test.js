@@ -27,7 +27,7 @@ vi.mock("../src/fetchers/repo.js", () => ({
       id: "<script>alert('xss')</script>",
       name: "<script>alert('xss')</script>",
     },
-    starCount: 38000,
+    stargazerCount: 38000,
     forkCount: 100,
   }),
 }));
