@@ -208,9 +208,7 @@ describe("getLightDarkColors", () => {
       theme: "cobalt",
       title_color_dark: "0f0",
     });
-    // lightColors should come from theme "cobalt" (no light override)
     expect(lightColors).toStrictEqual(getCardColors({ theme: "cobalt" }));
-    // darkColors should come from theme "cobalt" but with title overridden
     expect(darkColors?.titleColor).toBe("#0f0");
     expect(darkColors?.bgColor).toBe(
       getCardColors({ theme: "cobalt" }).bgColor,
