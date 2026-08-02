@@ -65,30 +65,30 @@ Selecting the right scopes for your token is important in case you want to displ
 
 #### Classic token
 
-* Go to [Account -> Settings -> Developer Settings -> Personal access tokens -> Tokens (classic)](https://github.com/settings/tokens).
-    * Click on `Generate new token -> Generate new token (classic)`.
-    * Scopes to select:
-        * repo
-        * read:user
-    * Click on `Generate token` and copy it.
+- Go to [Account -> Settings -> Developer Settings -> Personal access tokens -> Tokens (classic)](https://github.com/settings/tokens).
+  - Click on `Generate new token -> Generate new token (classic)`.
+  - Scopes to select:
+    - repo
+    - read:user
+  - Click on `Generate token` and copy it.
 
 #### Fine-grained token
 
 > [!WARNING]\
 > This limits the scope of commits to public repositories only.
 
-* Go to [Account -> Settings -> Developer Settings -> Personal access tokens -> Fine-grained tokens](https://github.com/settings/personal-access-tokens).
-    * Click on `Generate new token -> Generate new token`.
-    * Enter a token name
-    * Select an expiration date
-    * Select `All repositories`
-    * Scopes to select under `Permissions`:
-        * Commit statuses: read-only
-        * Contents: read-only
-        * Issues: read-only
-        * Metadata: read-only (added automatically when selecting above scopes)
-        * Pull requests: read-only
-    * Click on `Generate token` and copy it.
+- Go to [Account -> Settings -> Developer Settings -> Personal access tokens -> Fine-grained tokens](https://github.com/settings/personal-access-tokens).
+  - Click on `Generate new token -> Generate new token`.
+  - Enter a token name
+  - Select an expiration date
+  - Select `All repositories`
+  - Scopes to select under `Permissions`:
+    - Commit statuses: read-only
+    - Contents: read-only
+    - Issues: read-only
+    - Metadata: read-only (added automatically when selecting above scopes)
+    - Pull requests: read-only
+  - Click on `Generate token` and copy it.
 
 ### On Vercel
 

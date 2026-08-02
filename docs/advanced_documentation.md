@@ -429,13 +429,18 @@ ranking_index = (byte_count ^ size_weight) * (repo_count ^ count_weight)
 
 By default, only the byte count is used for determining the languages percentages shown on the language card (i.e. `size_weight=1` and `count_weight=0`). You can, however, use the `&size_weight=` and `&count_weight=` options to weight the language usage calculation. The values must be positive real numbers. [More details about the algorithm can be found here](https://github.com/anuraghazra/github-readme-stats/issues/1600#issuecomment-1046056305).
 
-*   `&size_weight=1&count_weight=0` - *(default)* Orders by byte count.
-*   `&size_weight=0.5&count_weight=0.5` - *(recommended)* Uses both byte and repo count for ranking
-    *   `&size_weight=0&count_weight=1` - Orders by repo count
+- `&size_weight=1&count_weight=0` - *(default)* Orders by byte count.
+- `&size_weight=0.5&count_weight=0.5` - *(recommended)* Uses both byte and repo count for ranking
+  - `&size_weight=0&count_weight=1` - Orders by repo count
 
 ```md
 ![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&size_weight=0.5&count_weight=0.5)
 ```
+
+If the percentages still look wrong to you, these two comments cover most of the reasons why, and are worth reading before opening an issue:
+
+- <https://github.com/anuraghazra/github-readme-stats/issues/136#issuecomment-665164174>
+- <https://github.com/anuraghazra/github-readme-stats/issues/136#issuecomment-665172181>
 
 ### Exclude individual repositories
 
@@ -452,6 +457,8 @@ You can use `&hide=language1,language2` parameter to hide individual languages.
 ```md
 ![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&hide=javascript,html)
 ```
+
+Language names with spaces or symbols need to be [percent-encoded](#options-2), so Jupyter Notebook becomes `&hide=jupyter%20notebook` and C++ becomes `&hide=c%2B%2B`.
 
 ### Show more languages
 
@@ -514,28 +521,27 @@ You can use the `&stats_format=bytes` option to display the stats in bytes inste
 
 ![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra)
 
-*   Compact layout
+#### Compact layout
 
 ![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=compact)
 
-*   Donut Chart layout
+#### Donut Chart layout
 
 [![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=donut)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=donut)
 
-*   Donut Vertical Chart layout
+#### Donut Vertical Chart layout
 
 [![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=donut-vertical)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=donut-vertical)
 
-*   Pie Chart layout
+#### Pie Chart layout
 
 [![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=pie)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=pie)
 
-*   Hidden progress bars
+#### Hidden progress bars
 
 [![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&hide_progress=true)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&hide_progress=true)
 
-
-*  Display bytes instead of percentage
+#### Display bytes instead of percentage
 
 [![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&stats_format=bytes)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&stats_format=bytes)
 
@@ -580,7 +586,7 @@ You can customize the appearance and behavior of the WakaTime stats card using t
 
 ![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan\&card_width=315\&hide_progress=true)
 
-*   Compact layout
+#### Compact layout
 
 ![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan\&layout=compact)
 
@@ -588,81 +594,81 @@ You can customize the appearance and behavior of the WakaTime stats card using t
 
 ## All Demos
 
-*   Default
+### Default
 
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra)
 
-*   Hiding specific stats
+### Hiding specific stats
 
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&hide=contribs,issues)
 
-*   Showing additional stats
+### Showing additional stats
 
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&show_icons=true\&show=reviews,discussions_started,discussions_answered,prs_merged,prs_merged_percentage,prs_commented,prs_reviewed,issues_commented)
 
-*   Showing stats for a specific repository
+### Showing stats for a specific repository
 
 ![Anurag's GitHub stats for anuraghazra/github-readme-stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&repo=anuraghazra/github-readme-stats\&hide=prs,issues,stars,commits,contribs\&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented\&hide_rank=true\&custom_title=Anurag%27s%20Stats%20for%20github-readme-stats\&card_width=370)
 
-*   Showing stats for a specific organization
+### Showing stats for a specific organization
 
 ![Anurag's GitHub stats for razorpay](https://github-stats-extended.vercel.app/api?username=anuraghazra\&owner=razorpay\&hide=prs,issues,stars,commits,contribs\&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented\&hide_rank=true\&custom_title=Anurag%27s%20Stats%20for%20razorpay\&card_width=370)
 
-*   Showing icons
+### Showing icons
 
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&hide=issues\&show_icons=true)
 
-*   Shows GitHub logo instead rank level
+### Shows GitHub logo instead rank level
 
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&rank_icon=github)
 
-*   Shows user rank percentile instead of rank level
+### Shows user rank percentile instead of rank level
 
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&rank_icon=percentile)
 
-*   Customize Border Color
+### Customize Border Color
 
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&border_color=2e4058)
 
-*   Include All Commits
+### Include All Commits
 
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&include_all_commits=true)
 
-*   Themes
+### Themes
 
 Choose from any of the [default themes](#themes)
 
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&show_icons=true\&theme=radical)
 
-*   Gradient
+### Gradient
 
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&bg_color=30,e96443,904e95\&title_color=fff\&text_color=fff)
 
-*   Customizing stats card
+### Customizing stats card
 
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api/?username=anuraghazra\&show_icons=true\&title_color=fff\&icon_color=79ff97\&text_color=9f9f9f\&bg_color=151515)
 
-*   Setting card locale
+### Setting card locale
 
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api/?username=anuraghazra\&locale=es)
 
-*   Customizing repo card
+### Customizing repo card
 
 ![Customized Card](https://github-stats-extended.vercel.app/api/pin?username=anuraghazra\&repo=github-readme-stats\&title_color=fff\&icon_color=f9f9f9\&text_color=9f9f9f\&bg_color=151515)
 
-*   Gist card
+### Gist card
 
 ![Gist Card](https://github-stats-extended.vercel.app/api/gist?id=bbfce31e0217a3689c8d961a356cb10d)
 
-*   Customizing gist card
+### Customizing gist card
 
 ![Gist Card](https://github-stats-extended.vercel.app/api/gist?id=bbfce31e0217a3689c8d961a356cb10d&theme=calm)
 
-*   Top languages
+### Top languages
 
 ![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra)
 
-*   WakaTime card
+### WakaTime card
 
 ![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan)
 
