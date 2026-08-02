@@ -1,0 +1,66 @@
+# github-stats-extended -- self-hosting via Docker Compose.
+#
+# Minimal usage (no database, cards only):
+#   PAT_1=ghp_your_token docker compose up backend
+#
+# With the optional Postgres backend (enables request analytics, the
+# authenticate/user-access endpoints, and repeat-recent):
+#   PAT_1=ghp_your_token docker compose --profile with-db up
+#
+# All configuration is passed through environment variables. At least one
+# PAT_* variable (a GitHub personal access token) is required to render cards.
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: github-stats-extended:local
+    ports:
+      - "${PORT:-9000}:9000"
+    environment:
+      # --- Required: at least one GitHub token ---
+      PAT_1: ${PAT_1:?set PAT_1 to a GitHub personal access token}
+      # Add more tokens to spread the rate limit (PAT_2, PAT_3, ...):
+      # PAT_2: ${PAT_2:-}
+
+      # --- Optional core configuration (see packages/core config) ---
+      WHITELIST: ${WHITELIST:-}
+      GIST_WHITELIST: ${GIST_WHITELIST:-}
+      EXCLUDE_REPO: ${EXCLUDE_REPO:-}
+      FETCH_MULTI_PAGE_STARS: ${FETCH_MULTI_PAGE_STARS:-}
+
+      # --- Optional Postgres connection. Leave unset to run without a DB. ---
+      # When using the `with-db` profile below, this points at the db service.
+      POSTGRES_URL: ${POSTGRES_URL:-}
+    restart: unless-stopped
+
+  # Variant that wires the backend to the bundled Postgres service.
+  backend-with-db:
+    extends:
+      service: backend
+    profiles: ["with-db"]
+    environment:
+      POSTGRES_URL: postgres://postgres:postgres@db:5432/stats
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17-alpine
+    profiles: ["with-db"]
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: stats
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d stats"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  pgdata:

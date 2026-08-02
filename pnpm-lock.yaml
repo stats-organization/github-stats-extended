@@ -92,6 +92,9 @@ importers:
       axios:
         specifier: catalog:default
         version: 1.18.1
+      express:
+        specifier: 5.2.1
+        version: 5.2.1
       pg:
         specifier: ^8.22.0
         version: 8.22.0
@@ -99,9 +102,6 @@ importers:
       axios-mock-adapter:
         specifier: 2.1.0
         version: 2.1.0(axios@1.18.1)
-      express:
-        specifier: 5.2.1
-        version: 5.2.1
       jsdom:
         specifier: catalog:default
         version: 29.1.1

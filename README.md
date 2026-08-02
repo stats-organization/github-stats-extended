@@ -67,9 +67,9 @@ GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For 
 The [GitHub-Stats-Extended Wizard](https://github-stats-extended.vercel.app/frontend) offers some essential customization options. For more advanced customization check out the [advanced documentation](docs/advanced_documentation.md).
 
 # Run It Yourself
-If you want to run GitHub-Stats-Extended on your own, there are two main deployment options: you can use [github-readme-stats-action](https://github.com/stats-organization/github-readme-stats-action) to generate cards in your own GitHub Actions workflow. Or you can self-host GitHub-Stats-Extended on Vercel.
+If you want to run GitHub-Stats-Extended on your own, there are a few deployment options: you can use [github-readme-stats-action](https://github.com/stats-organization/github-readme-stats-action) to generate cards in your own GitHub Actions workflow, self-host GitHub-Stats-Extended on Vercel, or run it as a container with [Docker](docs/docker.md).
 
-See [Run It Yourself](docs/deploy.md) for detailed instructions.
+See [Run It Yourself](docs/deploy.md) for detailed instructions, or [Running with Docker](docs/docker.md) for the container setup.
 
 # Acknowledgements
 This project is based on [github-readme-stats](https://github.com/anuraghazra/github-readme-stats). On top of that project's functionality GitHub-Stats-Extended adds several new features and improvements. See [Fork Information](docs/fork.md) for a list of changes. The frontend added to GitHub-Stats-Extended is based on [GitHub Trends](https://github.com/avgupta456/github-trends). Big thanks to [@anuraghazra](https://github.com/anuraghazra), [@avgupta456](https://github.com/avgupta456), [@rickstaa](https://github.com/rickstaa), [@qwerty541](https://github.com/qwerty541) and everyone else who worked on these projects! ❤️
