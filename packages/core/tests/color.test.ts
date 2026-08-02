@@ -1,12 +1,17 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  BASE_COLOR_KEYS,
+  COLOR_PARAM_KEYS,
+  THEME_VARIANTS,
   findInvalidColor,
+  findInvalidColorParam,
   getCardColors,
   getLightDarkColors,
   isBareHexColor,
   isPrefixedHexColor,
   isValidGradient,
+  pickColorParams,
 } from "../src/common/color.js";
 
 describe("getCardColors", () => {
@@ -318,5 +323,71 @@ describe("findInvalidColor", () => {
         bg_color: "fff",
       }),
     ).toBe("title_color");
+  });
+});
+
+describe("color param surface", () => {
+  // These names are part of the public URL API: once released they cannot be
+  // renamed without breaking existing cards. Pinned deliberately, so adding or
+  // removing one has to be an explicit decision rather than a side effect.
+  it("accepts exactly these params", () => {
+    expect(COLOR_PARAM_KEYS).toStrictEqual([
+      "title_color",
+      "icon_color",
+      "text_color",
+      "bg_color",
+      "border_color",
+      "ring_color",
+      "prog_bar_bg_color",
+      "theme",
+      "title_color_light",
+      "icon_color_light",
+      "text_color_light",
+      "bg_color_light",
+      "border_color_light",
+      "ring_color_light",
+      "prog_bar_bg_color_light",
+      "theme_light",
+      "title_color_dark",
+      "icon_color_dark",
+      "text_color_dark",
+      "bg_color_dark",
+      "border_color_dark",
+      "ring_color_dark",
+      "prog_bar_bg_color_dark",
+      "theme_dark",
+    ]);
+  });
+
+  it("derives a light and dark variant for every base param", () => {
+    for (const key of BASE_COLOR_KEYS) {
+      for (const variant of THEME_VARIANTS) {
+        expect(COLOR_PARAM_KEYS).toContain(`${key}_${variant}`);
+      }
+    }
+    expect(COLOR_PARAM_KEYS).toHaveLength(
+      BASE_COLOR_KEYS.length * (THEME_VARIANTS.length + 1),
+    );
+  });
+
+  it("picks every accepted param off a query, and nothing else", () => {
+    const query = Object.fromEntries(
+      COLOR_PARAM_KEYS.map((key) => [key, "fff"]),
+    );
+    expect(
+      Object.keys(pickColorParams({ ...query, username: "x" })),
+    ).toStrictEqual([...COLOR_PARAM_KEYS]);
+  });
+
+  it("validates colors but skips theme params", () => {
+    expect(
+      findInvalidColorParam({ theme: "not-a-color", bg_color: "fff" }),
+    ).toBeNull();
+    expect(
+      findInvalidColorParam({ theme_dark: "not-a-color", bg_color: "fff" }),
+    ).toBeNull();
+    expect(findInvalidColorParam({ bg_color_dark: "not-a-color" })).toBe(
+      "bg_color_dark",
+    );
   });
 });
