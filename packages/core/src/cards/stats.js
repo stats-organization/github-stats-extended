@@ -325,8 +325,7 @@ const renderStatsCard = (
   const lheight = parseInt(String(line_height), 10);
 
   const { lightColors, darkColors } = getLightDarkColors(options);
-  const { titleColor, iconColor, textColor, bgColor, borderColor, ringColor } =
-    lightColors;
+  const { titleColor, iconColor, textColor, ringColor } = lightColors;
 
   const apostrophe = /s$/i.test(name.trim()) ? "" : "s";
   const i18n = new I18n({
@@ -570,20 +569,13 @@ const renderStatsCard = (
     width,
     height,
     border_radius,
-    colors: {
-      titleColor,
-      textColor,
-      iconColor,
-      bgColor,
-      borderColor,
-    },
-    darkColors,
+    colors: { light: lightColors, dark: darkColors },
   });
 
   card.setHideBorder(hide_border);
   card.setHideTitle(hide_title);
-  card.setCSS(
-    getStyles({
+  card.setCSS({
+    light: getStyles({
       titleColor,
       ringColor,
       textColor,
@@ -591,20 +583,17 @@ const renderStatsCard = (
       show_icons,
       progress,
     }),
-  );
-
-  if (darkColors) {
-    card.setDarkCSS(
-      getStyles({
-        titleColor: darkColors.titleColor,
-        ringColor: darkColors.ringColor,
-        textColor: darkColors.textColor,
-        iconColor: darkColors.iconColor,
-        show_icons,
-        progress,
-      }),
-    );
-  }
+    dark: darkColors
+      ? getStyles({
+          titleColor: darkColors.titleColor,
+          ringColor: darkColors.ringColor,
+          textColor: darkColors.textColor,
+          iconColor: darkColors.iconColor,
+          show_icons,
+          progress,
+        })
+      : null,
+  });
 
   if (disable_animations) {
     card.disableAnimations();

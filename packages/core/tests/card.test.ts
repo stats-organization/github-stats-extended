@@ -142,11 +142,8 @@ describe("Card", () => {
     const card = new Card({
       height: 200,
       colors: {
-        titleColor,
-        textColor,
-        iconColor,
-        bgColor,
-        borderColor,
+        light: { titleColor, textColor, iconColor, bgColor, borderColor },
+        dark: null,
       },
     });
     document.body.innerHTML = card.render(``);
@@ -175,11 +172,8 @@ describe("Card", () => {
     const card = new Card({
       height: 200,
       colors: {
-        titleColor,
-        textColor,
-        iconColor,
-        bgColor,
-        borderColor,
+        light: { titleColor, textColor, iconColor, bgColor, borderColor },
+        dark: null,
       },
     });
     document.body.innerHTML = card.render(``);

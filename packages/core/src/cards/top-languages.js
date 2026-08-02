@@ -884,7 +884,6 @@ const renderTopLanguages = (topLangs, options = {}) => {
   let height = calculateNormalLayoutHeight(langs.length);
 
   const { lightColors, darkColors } = getLightDarkColors(options);
-  const colors = lightColors;
 
   let finalLayout;
   if (langs.length === 0) {
@@ -947,8 +946,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
     width,
     height,
     border_radius,
-    colors,
-    darkColors,
+    colors: { light: lightColors, dark: darkColors },
   });
 
   if (disable_animations) {
@@ -957,8 +955,8 @@ const renderTopLanguages = (topLangs, options = {}) => {
 
   card.setHideBorder(hide_border);
   card.setHideTitle(hide_title);
-  card.setCSS(
-    `
+  card.setCSS({
+    light: `
     @keyframes slideInAnimation {
       from {
         width: 0;
@@ -976,7 +974,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
       }
     }
     .stat {
-      font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: ${colors.textColor};
+      font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: ${lightColors.textColor};
     }
     @supports(-moz-appearance: auto) {
       /* Selector detects Firefox */
@@ -985,7 +983,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
     .bold { font-weight: 700 }
     .lang-name {
       font: 400 11px "Segoe UI", Ubuntu, Sans-Serif;
-      fill: ${colors.textColor};
+      fill: ${lightColors.textColor};
     }
     .stagger {
       opacity: 0;
@@ -997,17 +995,16 @@ const renderTopLanguages = (topLangs, options = {}) => {
     .lang-progress{
       animation: growWidthAnimation 0.6s ease-in-out forwards;
     }
-    .progress-background { fill: ${colors.progBarBgColor}; }
+    .progress-background { fill: ${lightColors.progBarBgColor}; }
     `,
-  );
-
-  if (darkColors) {
-    card.setDarkCSS(`
+    dark: darkColors
+      ? `
       .stat { fill: ${darkColors.textColor}; }
       .lang-name { fill: ${darkColors.textColor}; }
       .progress-background { fill: ${darkColors.progBarBgColor}; }
-    `);
-  }
+    `
+      : null,
+  });
 
   if (layout === "pie" || layout === "donut-vertical") {
     return card.render(finalLayout);

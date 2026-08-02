@@ -240,7 +240,6 @@ const renderRepoCard = (repo, options = {}) => {
     extraHeight;
 
   const { lightColors, darkColors } = getLightDarkColors({ ...options, theme });
-  const colors = lightColors;
 
   const svgLanguage = primaryLanguage
     ? createLanguageNode(langName, langColor)
@@ -297,24 +296,24 @@ const renderRepoCard = (repo, options = {}) => {
     width: card_width,
     height,
     border_radius,
-    colors,
-    darkColors,
+    colors: { light: lightColors, dark: darkColors },
   });
 
   card.disableAnimations();
   card.setHideBorder(hide_border);
   card.setHideTitle(false);
-  card.setCSS(`
+  card.setCSS({
+    light: `
     .description {
-      font: 400 ${DESCRIPTION_FONT_SIZE}px 'Segoe UI', Ubuntu, Sans-Serif;fill: ${colors.textColor};
-      ${browser_rendering ? wrappedTextStyles(colors.textColor) : ""}
+      font: 400 ${DESCRIPTION_FONT_SIZE}px 'Segoe UI', Ubuntu, Sans-Serif;fill: ${lightColors.textColor};
+      ${browser_rendering ? wrappedTextStyles(lightColors.textColor) : ""}
     }
-    .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${colors.textColor} }
+    .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${lightColors.textColor} }
     .badge { font: 600 11px 'Segoe UI', Ubuntu, Sans-Serif; }
-    .badge rect { opacity: 0.2; stroke: ${colors.textColor} }
-    .badge text { fill: ${colors.textColor} }
+    .badge rect { opacity: 0.2; stroke: ${lightColors.textColor} }
+    .badge text { fill: ${lightColors.textColor} }
 
-    .stat { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${colors.textColor} }
+    .stat { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${lightColors.textColor} }
     .stagger {
       opacity: 0;
       animation: fadeInAnimation 0.3s ease-in-out forwards;
@@ -322,13 +321,12 @@ const renderRepoCard = (repo, options = {}) => {
     .not_bold { font-weight: 400 }
     .bold { font-weight: 700 }
     .icon {
-      fill: ${colors.iconColor};
+      fill: ${lightColors.iconColor};
       display: block;
     }
-  `);
-
-  if (darkColors) {
-    card.setDarkCSS(`
+  `,
+    dark: darkColors
+      ? `
       .description {
         fill: ${darkColors.textColor};
         ${browser_rendering ? wrappedTextStyles(darkColors.textColor) : ""}
@@ -338,8 +336,9 @@ const renderRepoCard = (repo, options = {}) => {
       .badge text { fill: ${darkColors.textColor} }
       .stat { fill: ${darkColors.textColor} }
       .icon { fill: ${darkColors.iconColor}; }
-    `);
-  }
+    `
+      : null,
+  });
 
   return card.render(`
     ${

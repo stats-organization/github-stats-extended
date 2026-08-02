@@ -224,24 +224,10 @@ const getCardColors = ({
   };
 };
 
-interface LightDarkColorParams {
-  title_color_light?: string;
-  title_color_dark?: string;
-  text_color_light?: string;
-  text_color_dark?: string;
-  icon_color_light?: string;
-  icon_color_dark?: string;
-  bg_color_light?: string;
-  bg_color_dark?: string;
-  border_color_light?: string;
-  border_color_dark?: string;
-  ring_color_light?: string;
-  ring_color_dark?: string;
-  theme_light?: string;
-  theme_dark?: string;
-  prog_bar_bg_color_light?: string;
-  prog_bar_bg_color_dark?: string;
-}
+type ThemeVariant = "dark" | "light";
+type LightDarkColorParams = Partial<
+  Record<`${keyof ColorInput}_${ThemeVariant}`, string>
+>;
 
 /**
  * Returns the light- or dark-mode-specific color params, given a set of
@@ -253,7 +239,7 @@ interface LightDarkColorParams {
  */
 const extractLightDarkColors = (
   params: LightDarkColorParams,
-  suffix: "_light" | "_dark",
+  suffix: `_${ThemeVariant}`,
 ): ColorInput => ({
   title_color: params[`title_color${suffix}`],
   text_color: params[`text_color${suffix}`],
@@ -268,18 +254,21 @@ const extractLightDarkColors = (
 /**
  * Returns resolved colors for both light and dark mode given all input params.
  *
- * Priority (lowest -> highest):
- *   default theme -> `theme` param -> `theme_light`/`theme_dark` param
- *   -> general color params -> `*_light`/`*_dark` color params
+ * Each mode resolves independently, then runs the normal `getCardColors` precedence
+ * (explicit color -> theme color -> default theme):
+ *   light: `theme_light ?? theme`, with `*_light` params overriding general ones
+ *   dark:  `theme_dark  ?? theme`, with `*_dark`  params overriding general ones
  *
- * When no light/dark-specific params are provided at all, `darkColors` is
- * `null`.
+ * Anything a mode does not override falls back to the general params,
+ * so a partial override such as `bg_color_dark` alone keeps every other color from the base theme.
+ *
+ * When no `_light` / `_dark` param is provided at all, `darkColors` is `null` and the caller emits no dark-mode block.
  *
  * @param params Raw query params, containing both general and `_light`/`_dark` suffixed colors and themes.
  * @returns `{ lightColors, darkColors }`, resolved colors for both light and dark mode
  */
 const getLightDarkColors = (
-  params: ColorInput & Parameters<typeof extractLightDarkColors>[0],
+  params: ColorInput & LightDarkColorParams,
 ): { lightColors: CardColors; darkColors: CardColors | null } => {
   const lightOverrides = extractLightDarkColors(params, "_light");
   const darkOverrides = extractLightDarkColors(params, "_dark");
@@ -301,10 +290,53 @@ const getLightDarkColors = (
   };
 };
 
+type ColorParams = ColorInput & LightDarkColorParams;
+
+const COLOR_PARAM_KEYS: ReadonlyArray<keyof ColorParams> = [
+  "title_color",
+  "icon_color",
+  "text_color",
+  "bg_color",
+  "border_color",
+  "ring_color",
+  "prog_bar_bg_color",
+  "theme",
+  "title_color_light",
+  "icon_color_light",
+  "text_color_light",
+  "bg_color_light",
+  "border_color_light",
+  "ring_color_light",
+  "prog_bar_bg_color_light",
+  "theme_light",
+  "title_color_dark",
+  "icon_color_dark",
+  "text_color_dark",
+  "bg_color_dark",
+  "border_color_dark",
+  "ring_color_dark",
+  "prog_bar_bg_color_dark",
+  "theme_dark",
+];
+
+/**
+ * Picks all color-related parameters from a query object.
+ *
+ * @param query Raw query parameters.
+ * @returns All color-related parameters.
+ */
+const pickColorParams = (
+  query: Record<string, string | undefined>,
+): ColorParams =>
+  Object.fromEntries(
+    COLOR_PARAM_KEYS.filter((k) => k in query).map((k) => [k, query[k]]),
+  );
+
 export {
   getCardColors,
   getLightDarkColors,
   findInvalidColor,
+  pickColorParams,
   isValidGradient,
   isBareHexColor,
   isPrefixedHexColor,

@@ -1,5 +1,5 @@
 import { renderTopLanguages } from "../cards/top-languages.js";
-import { findInvalidColor } from "../common/color.js";
+import { findInvalidColor, pickColorParams } from "../common/color.js";
 import {
   MissingParamError,
   retrieveSecondaryMessage,
@@ -17,11 +17,6 @@ export default async (
     hide_title,
     hide_border,
     card_width,
-    title_color,
-    text_color,
-    bg_color,
-    prog_bar_bg_color,
-    theme,
     layout,
     langs_count,
     exclude_repo,
@@ -30,44 +25,24 @@ export default async (
     custom_title,
     locale,
     border_radius,
-    border_color,
     role,
     disable_animations,
     hide_progress,
     hide_values,
     stats_format,
-    title_color_light,
-    text_color_light,
-    bg_color_light,
-    border_color_light,
-    prog_bar_bg_color_light,
-    theme_light,
-    title_color_dark,
-    text_color_dark,
-    bg_color_dark,
-    border_color_dark,
-    prog_bar_bg_color_dark,
-    theme_dark,
+    ...remainingParams
   },
   pat = null,
 ) => {
+  const colorParams = pickColorParams(remainingParams);
+
   const invalidColorInput = findInvalidColor({
-    title_color,
-    text_color,
-    bg_color,
-    prog_bar_bg_color,
-    border_color,
-    title_color_light,
-    text_color_light,
-    bg_color_light,
-    border_color_light,
-    prog_bar_bg_color_light,
-    title_color_dark,
-    text_color_dark,
-    bg_color_dark,
-    border_color_dark,
-    prog_bar_bg_color_dark,
+    ...colorParams,
+    theme: undefined,
+    theme_light: undefined,
+    theme_dark: undefined,
   });
+
   if (invalidColorInput) {
     return {
       status: "error - permanent",
@@ -84,13 +59,7 @@ export default async (
       content: renderError({
         message: "Something went wrong",
         secondaryMessage: "Locale not found",
-        renderOptions: {
-          title_color,
-          text_color,
-          bg_color,
-          border_color,
-          theme,
-        },
+        renderOptions: colorParams,
       }),
     };
   }
@@ -102,13 +71,7 @@ export default async (
       content: renderError({
         message: "Something went wrong",
         secondaryMessage: "Username contains unsafe characters",
-        renderOptions: {
-          title_color,
-          text_color,
-          bg_color,
-          border_color,
-          theme,
-        },
+        renderOptions: colorParams,
       }),
     };
   }
@@ -122,13 +85,7 @@ export default async (
       content: renderError({
         message: "Something went wrong",
         secondaryMessage: "Incorrect layout input",
-        renderOptions: {
-          title_color,
-          text_color,
-          bg_color,
-          border_color,
-          theme,
-        },
+        renderOptions: colorParams,
       }),
     };
   }
@@ -142,13 +99,7 @@ export default async (
       content: renderError({
         message: "Something went wrong",
         secondaryMessage: "Incorrect stats_format input",
-        renderOptions: {
-          title_color,
-          text_color,
-          bg_color,
-          border_color,
-          theme,
-        },
+        renderOptions: colorParams,
       }),
     };
   }
@@ -166,37 +117,20 @@ export default async (
     return {
       status: "success",
       content: renderTopLanguages(topLangs, {
+        ...colorParams,
         custom_title,
         hide_title: parseBoolean(hide_title),
         hide_border: parseBoolean(hide_border),
         card_width: parseInt(card_width, 10),
         hide: parseArray(hide),
-        title_color,
-        text_color,
-        bg_color,
-        prog_bar_bg_color,
-        theme,
         layout,
         langs_count,
         border_radius,
-        border_color,
         locale: locale ? locale.toLowerCase() : null,
         disable_animations: parseBoolean(disable_animations),
         hide_progress: parseBoolean(hide_progress),
         hide_values: parseBoolean(hide_values),
         stats_format,
-        title_color_light,
-        text_color_light,
-        bg_color_light,
-        border_color_light,
-        prog_bar_bg_color_light,
-        theme_light,
-        title_color_dark,
-        text_color_dark,
-        bg_color_dark,
-        border_color_dark,
-        prog_bar_bg_color_dark,
-        theme_dark,
       }),
     };
   } catch (err) {
@@ -207,11 +141,7 @@ export default async (
           message: err.message,
           secondaryMessage: retrieveSecondaryMessage(err),
           renderOptions: {
-            title_color,
-            text_color,
-            bg_color,
-            border_color,
-            theme,
+            ...colorParams,
             show_repo_link: !(err instanceof MissingParamError),
           },
         }),
@@ -221,13 +151,7 @@ export default async (
       status: "error - temporary",
       content: renderError({
         message: "An unknown error occurred",
-        renderOptions: {
-          title_color,
-          text_color,
-          bg_color,
-          border_color,
-          theme,
-        },
+        renderOptions: colorParams,
       }),
     };
   }

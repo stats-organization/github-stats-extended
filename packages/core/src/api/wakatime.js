@@ -1,5 +1,5 @@
 import { renderWakatimeCard } from "../cards/wakatime.js";
-import { findInvalidColor } from "../common/color.js";
+import { findInvalidColor, pickColorParams } from "../common/color.js";
 import {
   MissingParamError,
   retrieveSecondaryMessage,
@@ -12,14 +12,9 @@ import { isLocaleAvailable } from "../translations.js";
 // @ts-ignore
 export default async ({
   username,
-  title_color,
-  icon_color,
   hide_border,
   card_width,
   line_height,
-  text_color,
-  bg_color,
-  theme,
   hide_title,
   hide_progress,
   custom_title,
@@ -29,38 +24,17 @@ export default async ({
   hide,
   api_domain,
   border_radius,
-  border_color,
   display_format,
   disable_animations,
-  title_color_light,
-  icon_color_light,
-  text_color_light,
-  bg_color_light,
-  border_color_light,
-  theme_light,
-  title_color_dark,
-  icon_color_dark,
-  text_color_dark,
-  bg_color_dark,
-  border_color_dark,
-  theme_dark,
+  ...remainingParams
 }) => {
+  const colorParams = pickColorParams(remainingParams);
+
   const invalidColorInput = findInvalidColor({
-    title_color,
-    icon_color,
-    text_color,
-    bg_color,
-    border_color,
-    title_color_light,
-    icon_color_light,
-    text_color_light,
-    bg_color_light,
-    border_color_light,
-    title_color_dark,
-    icon_color_dark,
-    text_color_dark,
-    bg_color_dark,
-    border_color_dark,
+    ...colorParams,
+    theme: undefined,
+    theme_light: undefined,
+    theme_dark: undefined,
   });
   if (invalidColorInput) {
     return {
@@ -78,13 +52,7 @@ export default async ({
       content: renderError({
         message: "Something went wrong",
         secondaryMessage: "Language not found",
-        renderOptions: {
-          title_color,
-          text_color,
-          bg_color,
-          border_color,
-          theme,
-        },
+        renderOptions: colorParams,
       }),
     };
   }
@@ -96,13 +64,7 @@ export default async ({
       content: renderError({
         message: "Something went wrong",
         secondaryMessage: "Username contains unsafe characters",
-        renderOptions: {
-          title_color,
-          text_color,
-          bg_color,
-          border_color,
-          theme,
-        },
+        renderOptions: colorParams,
       }),
     };
   }
@@ -113,37 +75,20 @@ export default async ({
     return {
       status: "success",
       content: renderWakatimeCard(stats, {
+        ...colorParams,
         custom_title,
         hide_title: parseBoolean(hide_title),
         hide_border: parseBoolean(hide_border),
         card_width: parseInt(card_width, 10),
         hide: parseArray(hide),
         line_height,
-        title_color,
-        icon_color,
-        text_color,
-        bg_color,
-        theme,
         hide_progress,
         border_radius,
-        border_color,
         locale: locale ? locale.toLowerCase() : null,
         layout,
         langs_count,
         display_format,
         disable_animations: parseBoolean(disable_animations),
-        title_color_light,
-        icon_color_light,
-        text_color_light,
-        bg_color_light,
-        border_color_light,
-        theme_light,
-        title_color_dark,
-        icon_color_dark,
-        text_color_dark,
-        bg_color_dark,
-        border_color_dark,
-        theme_dark,
       }),
     };
   } catch (err) {
@@ -154,11 +99,7 @@ export default async ({
           message: err.message,
           secondaryMessage: retrieveSecondaryMessage(err),
           renderOptions: {
-            title_color,
-            text_color,
-            bg_color,
-            border_color,
-            theme,
+            ...colorParams,
             show_repo_link: !(err instanceof MissingParamError),
           },
         }),
@@ -168,13 +109,7 @@ export default async ({
       status: "error - temporary",
       content: renderError({
         message: "An unknown error occurred",
-        renderOptions: {
-          title_color,
-          text_color,
-          bg_color,
-          border_color,
-          theme,
-        },
+        renderOptions: colorParams,
       }),
     };
   }

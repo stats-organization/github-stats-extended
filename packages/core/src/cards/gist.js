@@ -48,8 +48,7 @@ const renderGistCard = (gistData, options = {}) => {
   } = options;
 
   const { lightColors, darkColors } = getLightDarkColors({ ...options, theme });
-  const { titleColor, textColor, iconColor, bgColor, borderColor } =
-    lightColors;
+  const { textColor, iconColor } = lightColors;
 
   const desc = parseEmojis(description || "No description provided");
 
@@ -142,35 +141,29 @@ const renderGistCard = (gistData, options = {}) => {
     width: CARD_DEFAULT_WIDTH,
     height,
     border_radius,
-    colors: {
-      titleColor,
-      textColor,
-      iconColor,
-      bgColor,
-      borderColor,
-    },
-    darkColors,
+    colors: { light: lightColors, dark: darkColors },
   });
 
-  card.setCSS(`
+  card.setCSS({
+    light: `
     .description {
       font: 400 ${DESCRIPTION_FONT_SIZE}px 'Segoe UI', Ubuntu, Sans-Serif;fill: ${textColor};
       ${browser_rendering ? wrappedTextStyles(textColor) : ""}
     }
     .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${textColor} }
     .icon { fill: ${iconColor} }
-  `);
-
-  if (darkColors) {
-    card.setDarkCSS(`
+  `,
+    dark: darkColors
+      ? `
       .description {
         fill: ${darkColors.textColor};
         ${browser_rendering ? wrappedTextStyles(darkColors.textColor) : ""}
       }
       .gray { fill: ${darkColors.textColor} }
       .icon { fill: ${darkColors.iconColor} }
-    `);
-  }
+    `
+      : null,
+  });
 
   card.setHideBorder(hide_border);
 

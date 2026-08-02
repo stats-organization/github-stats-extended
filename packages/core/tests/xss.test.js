@@ -161,6 +161,20 @@ describe("XSS prevention - stats API", () => {
     "border_color",
     "rank_icon",
     "show",
+    "title_color_light",
+    "ring_color_light",
+    "icon_color_light",
+    "text_color_light",
+    "bg_color_light",
+    "border_color_light",
+    "theme_light",
+    "title_color_dark",
+    "ring_color_dark",
+    "icon_color_dark",
+    "text_color_dark",
+    "bg_color_dark",
+    "border_color_dark",
+    "theme_dark",
   ];
 
   const testCases = apiParamNames.flatMap((param) =>
@@ -218,6 +232,18 @@ describe("XSS prevention - top-langs API", () => {
     "hide_progress",
     "hide_values",
     "stats_format",
+    "title_color_light",
+    "text_color_light",
+    "bg_color_light",
+    "border_color_light",
+    "prog_bar_bg_color_light",
+    "theme_light",
+    "title_color_dark",
+    "text_color_dark",
+    "bg_color_dark",
+    "border_color_dark",
+    "prog_bar_bg_color_dark",
+    "theme_dark",
   ];
 
   const testCases = apiParamNames.flatMap((param) =>
@@ -271,6 +297,18 @@ describe("XSS prevention - pin API", () => {
     "border_radius",
     "border_color",
     "description_lines_count",
+    "title_color_light",
+    "icon_color_light",
+    "text_color_light",
+    "bg_color_light",
+    "border_color_light",
+    "theme_light",
+    "title_color_dark",
+    "icon_color_dark",
+    "text_color_dark",
+    "bg_color_dark",
+    "border_color_dark",
+    "theme_dark",
   ];
 
   const testCases = apiParamNames.flatMap((param) =>
@@ -316,6 +354,18 @@ describe("XSS prevention - gist API", () => {
     "show_owner",
     "browser_rendering",
     "hide_border",
+    "title_color_light",
+    "icon_color_light",
+    "text_color_light",
+    "bg_color_light",
+    "border_color_light",
+    "theme_light",
+    "title_color_dark",
+    "icon_color_dark",
+    "text_color_dark",
+    "bg_color_dark",
+    "border_color_dark",
+    "theme_dark",
   ];
 
   const testCases = apiParamNames.flatMap((param) =>
@@ -370,6 +420,18 @@ describe("XSS prevention - wakatime API", () => {
     "border_color",
     "display_format",
     "disable_animations",
+    "title_color_light",
+    "icon_color_light",
+    "text_color_light",
+    "bg_color_light",
+    "border_color_light",
+    "theme_light",
+    "title_color_dark",
+    "icon_color_dark",
+    "text_color_dark",
+    "bg_color_dark",
+    "border_color_dark",
+    "theme_dark",
   ];
 
   const testCases = apiParamNames.flatMap((param) =>

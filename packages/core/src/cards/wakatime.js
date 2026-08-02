@@ -286,8 +286,7 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
   const langsCount = clampValue(langs_count, 1, langs_count);
 
   const { lightColors, darkColors } = getLightDarkColors(options);
-  const { titleColor, textColor, iconColor, bgColor, borderColor } =
-    lightColors;
+  const { titleColor, textColor } = lightColors;
 
   const filteredLanguages = languages
     .filter((language) => language.hours || language.minutes)
@@ -400,14 +399,7 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
     width: normalizedWidth,
     height,
     border_radius,
-    colors: {
-      titleColor,
-      textColor,
-      iconColor,
-      bgColor,
-      borderColor,
-    },
-    darkColors,
+    colors: { light: lightColors, dark: darkColors },
   });
 
   if (disable_animations) {
@@ -416,8 +408,8 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
 
   card.setHideBorder(hide_border);
   card.setHideTitle(hide_title);
-  card.setCSS(
-    `
+  card.setCSS({
+    light: `
     ${getStyles({ titleColor, textColor })}
     @keyframes slideInAnimation {
       from {
@@ -445,20 +437,15 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
     }
     .progress-background { fill: ${textColor === titleColor ? "#fff0" /* transparent */ : textColor}; }
     `,
-  );
-
-  if (darkColors) {
-    const darkProgressBarBgColor =
-      darkColors.textColor === darkColors.titleColor
-        ? "#fff0" // transparent
-        : darkColors.textColor;
-    card.setDarkCSS(`
+    dark: darkColors
+      ? `
       ${getStyles({ titleColor: darkColors.titleColor, textColor: darkColors.textColor })}
       .lang-name { fill: ${darkColors.textColor} }
       .lang-progress { fill: ${darkColors.titleColor}; }
-      .progress-background { fill: ${darkProgressBarBgColor}; }
-    `);
-  }
+      .progress-background { fill: ${darkColors.textColor === darkColors.titleColor ? "#fff0" /* transparent */ : darkColors.textColor}; }
+    `
+      : null,
+  });
 
   return card.render(`
     <svg x="0" y="0" width="100%">
