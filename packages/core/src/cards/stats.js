@@ -102,7 +102,7 @@ const createTextNode = ({
       : undefined;
   const kValue =
     numberFormat.toLowerCase() === "long" || id === "prs_merged_percentage"
-      ? value
+      ? value.toLocaleString()
       : kFormatter(value, precision);
   const staggerDelay = (index + 3) * 150;
 
