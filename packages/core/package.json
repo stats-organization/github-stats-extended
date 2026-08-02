@@ -75,7 +75,7 @@
     "bench": "vitest bench --run --config vitest.config.bench.ts",
     "lint": "eslint",
     "typecheck": "tsc -p tsconfig.typecheck.json",
-    "theme-readme-gen": "node scripts/generate-theme-doc",
+    "generate-theme-readme": "node scripts/generate-theme-readme",
     "generate-langs-json": "node scripts/generate-langs-json"
   },
   "devDependencies": {

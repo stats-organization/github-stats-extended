@@ -1,6 +1,6 @@
 import fs from "fs";
 
-import { themes } from "../src/themes/index.js";
+import { themes } from "../src/themes/index.ts";
 
 const TARGET_FILE = "./src/themes/README.md";
 const REPO_CARD_LINKS_FLAG = "<!-- REPO_CARD_LINKS -->";
