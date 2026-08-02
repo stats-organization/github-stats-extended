@@ -100,14 +100,14 @@ Click on the deploy button to get started!
 
 1. Go to [vercel.com](https://vercel.com/).
 2. Click on `Log in`.
-    ![](https://files.catbox.moe/pcxk33.png)
+   ![](https://files.catbox.moe/pcxk33.png)
 3. Sign in with GitHub by pressing `Continue with GitHub`.
-    ![](https://files.catbox.moe/b9oxey.png)
+   ![](https://files.catbox.moe/b9oxey.png)
 4. Sign in to GitHub and allow access to all repositories if prompted.
 5. Fork this repo.
 6. Go back to your [Vercel dashboard](https://vercel.com/dashboard).
 7. To import a project, click the `Add New...` button and select the `Project` option.
-    ![](https://files.catbox.moe/3n76fh.png)
+   ![](https://files.catbox.moe/3n76fh.png)
 8. Search for the forked Git Repository and import it by clicking the `Import` button.
 9. Create a Personal Access Token (PAT) as described in the [previous section](#first-step-get-your-personal-access-token-pat).
 10. Add the PAT as an environment variable named `PAT_1` (as shown).

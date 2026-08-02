@@ -26,7 +26,7 @@ This project is the [extended, actively maintained successor](docs/fork.md) of [
 - Change the `?username=` value to your GitHub username.
 - Done!
 
------------------------
+---
 
 As more comfortable alternative, use the [GitHub-Stats-Extended Wizard](https://github-stats-extended.vercel.app/frontend) to create your custom stats card. Copy the generated markdown code and paste it into your [GitHub profile README](https://docs.github.com/en/account-and-profile/how-tos/profile-customization/managing-your-profile-readme#adding-a-profile-readme). Done!
 

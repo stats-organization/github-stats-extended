@@ -1,5 +1,7 @@
 import fs from "fs";
 
+import { format, resolveConfig } from "prettier";
+
 import { themes } from "../src/themes/index.ts";
 
 const TARGET_FILE = "./src/themes/README.md";
@@ -103,4 +105,12 @@ const buildReadme = () => {
     .join("\n");
 };
 
-fs.writeFileSync(TARGET_FILE, buildReadme());
+const prettierConfig = await resolveConfig(TARGET_FILE);
+
+fs.writeFileSync(
+  TARGET_FILE,
+  await format(buildReadme(), {
+    ...prettierConfig,
+    parser: "markdown",
+  }),
+);

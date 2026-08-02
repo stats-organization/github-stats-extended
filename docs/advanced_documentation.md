@@ -1,6 +1,7 @@
 # Advanced Customization
 
 ## Table of Contents
+
 - [GitHub Stats Card](#github-stats-card)
 - [GitHub Extra Pins](#github-extra-pins)
 - [GitHub Gist Pins](#github-gist-pins)
@@ -52,6 +53,7 @@ To compute your stats for only a specific repository, you can pass a query param
 (Some of these mentioned items are similar to other items which are included by default, e.g. `issues_authored` is similar to `issues`. The difference is how these values are fetched - [via GraphQL or via REST API](https://github.com/anuraghazra/github-readme-stats/discussions/1770#number-of-commits-is-incorrect). The default items use GraphQL, but filtering by repository works better via REST API.)
 
 Alternatively, you can use the `role` parameter to specify a comma-separated list of [roles](https://docs.github.com/en/graphql/reference/enums#repositoryaffiliation). The stats will include all repositories in which the user has the specified role. By default, only repositories where the user is OWNER will be included, but you could e.g. set `&role=OWNER,ORGANIZATION_MEMBER,COLLABORATOR`. The `role` parameter is supported by all items except the following: `commits` (when used with `&include_all_commits=true`), `prs_authored`, `prs_commented`, `prs_reviewed`, `issues_authored` and `issues_commented`.
+
 ### Showing commits count for specified year
 
 You can specify a year and fetch only the commits that were made in that year by passing `&commits_year=YYYY` to the parameter.
@@ -80,8 +82,8 @@ You can look at a preview for [all available themes](../packages/core/src/themes
 
 #### Responsive Card Theme
 
-[![Anurag's GitHub stats-Dark](https://github-stats-extended.vercel.app/api?username=anuraghazra\&show_icons=true\&theme=dark#gh-dark-mode-only)](https://github.com/stats-organization/github-stats-extended#responsive-card-theme#gh-dark-mode-only)
-[![Anurag's GitHub stats-Light](https://github-stats-extended.vercel.app/api?username=anuraghazra\&show_icons=true\&theme=default#gh-light-mode-only)](https://github.com/stats-organization/github-stats-extended#responsive-card-theme#gh-light-mode-only)
+[![Anurag's GitHub stats-Dark](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark#gh-dark-mode-only)](https://github.com/stats-organization/github-stats-extended#responsive-card-theme#gh-dark-mode-only)
+[![Anurag's GitHub stats-Light](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=default#gh-light-mode-only)](https://github.com/stats-organization/github-stats-extended#responsive-card-theme#gh-light-mode-only)
 
 Since GitHub will re-upload the cards and serve them from their [CDN](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-anonymized-urls), we can not infer the browser/GitHub theme on the server side. There are, however, four methods you can use to create dynamics themes on the client side.
 
@@ -92,10 +94,15 @@ You can use [GitHub's new media feature](https://github.blog/changelog/2022-05-1
 ```html
 <picture>
   <source
-      srcset="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark"
-      media="(prefers-color-scheme: dark)"
+    srcset="
+      https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark
+    "
+    media="(prefers-color-scheme: dark)"
   />
-  <img src="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true" /> <!-- light mode -->
+  <img
+    src="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true"
+  />
+  <!-- light mode -->
 </picture>
 ```
 
@@ -124,8 +131,8 @@ You can use [GitHub's theme context](https://github.blog/changelog/2021-11-24-sp
 <details>
 <summary>:eyes: Show example</summary>
 
-[![Anurag's GitHub stats-Dark](https://github-stats-extended.vercel.app/api?username=anuraghazra\&show_icons=true\&theme=dark#gh-dark-mode-only)](https://github.com/stats-organization/github-stats-extended#gh-dark-mode-only)
-[![Anurag's GitHub stats-Light](https://github-stats-extended.vercel.app/api?username=anuraghazra\&show_icons=true\&theme=default#gh-light-mode-only)](https://github.com/stats-organization/github-stats-extended#gh-light-mode-only)
+[![Anurag's GitHub stats-Dark](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark#gh-dark-mode-only)](https://github.com/stats-organization/github-stats-extended#gh-dark-mode-only)
+[![Anurag's GitHub stats-Light](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=default#gh-light-mode-only)](https://github.com/stats-organization/github-stats-extended#gh-light-mode-only)
 
 </details>
 
@@ -140,7 +147,7 @@ We have included a `transparent` theme that has a transparent background. This t
 <details>
 <summary>:eyes: Show example</summary>
 
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&show_icons=true\&theme=transparent)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=transparent)
 
 </details>
 
@@ -155,7 +162,7 @@ You can use the `bg_color` parameter to make any of [the available themes](../pa
 <details>
 <summary>:eyes: Show example</summary>
 
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&show_icons=true\&bg_color=00000000)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&bg_color=00000000)
 
 </details>
 
@@ -165,18 +172,18 @@ You can customize the appearance of all your cards however you wish with URL par
 
 #### Common Options
 
-| Name | Description | Type | Default value |
-| --- | --- | --- | --- |
-| `title_color` | Card's title color. | string (hex color) | `2f80ed` |
-| `text_color` | Body text color. | string (hex color) | `434d58` |
-| `icon_color` | Icons color if available. | string (hex color) | `4c71f2` |
-| `border_color` | Card's border color. Does not apply when `hide_border` is enabled. | string (hex color) | `e4e2e2` |
-| `bg_color` | Card's background color. | string (hex color or a gradient in the form of *angle,start,end*) | `fffefe` |
-| `hide_border` | Hides the card's border. | boolean | `false` |
-| `theme` | Name of the theme, choose from [all available themes](../packages/core/src/themes/README.md). | enum | `default` |
-| `cache_seconds` | Sets the cache header manually (min: 21600, max: 86400). | integer | `21600` |
-| `locale` | Sets the language in the card, you can check full list of available locales [here](#available-locales). | enum | `en` |
-| `border_radius` | Corner rounding on the card. | number | `4.5` |
+| Name            | Description                                                                                             | Type                                                              | Default value |
+| --------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | ------------- |
+| `title_color`   | Card's title color.                                                                                     | string (hex color)                                                | `2f80ed`      |
+| `text_color`    | Body text color.                                                                                        | string (hex color)                                                | `434d58`      |
+| `icon_color`    | Icons color if available.                                                                               | string (hex color)                                                | `4c71f2`      |
+| `border_color`  | Card's border color. Does not apply when `hide_border` is enabled.                                      | string (hex color)                                                | `e4e2e2`      |
+| `bg_color`      | Card's background color.                                                                                | string (hex color or a gradient in the form of _angle,start,end_) | `fffefe`      |
+| `hide_border`   | Hides the card's border.                                                                                | boolean                                                           | `false`       |
+| `theme`         | Name of the theme, choose from [all available themes](../packages/core/src/themes/README.md).           | enum                                                              | `default`     |
+| `cache_seconds` | Sets the cache header manually (min: 21600, max: 86400).                                                | integer                                                           | `21600`       |
+| `locale`        | Sets the language in the card, you can check full list of available locales [here](#available-locales). | enum                                                              | `en`          |
+| `border_radius` | Corner rounding on the card.                                                                            | number                                                            | `4.5`         |
 
 > [!WARNING]
 > We use caching to decrease the load on our servers (see <https://github.com/anuraghazra/github-readme-stats/issues/1471#issuecomment-1271551425>). Cards generated by [https://github-stats-extended.vercel.app/](https://github-stats-extended.vercel.app/frontend) are cached for a few hours or days, depending on server load. If you want the data on your cards to be updated more often you can [deploy your own instance](deploy.md) and set [environment variable](deploy.md#available-environment-variables) `CACHE_SECONDS` to a value of your choosing. Or you can use the [GitHub Action workflow](https://github.com/stats-organization/github-readme-stats-action).
@@ -194,65 +201,65 @@ Here is a list of all available locales:
 <table>
 <tr><td>
 
-| Code | Locale |
-| --- | --- |
-| `ar` | Arabic |
-| `az` | Azerbaijani |
-| `be` | Belarusian |
-| `bn` | Bengali |
-| `bg` | Bulgarian |
-| `my` | Burmese |
-| `ca` | Catalan |
-| `cn` | Chinese |
+| Code    | Locale           |
+| ------- | ---------------- |
+| `ar`    | Arabic           |
+| `az`    | Azerbaijani      |
+| `be`    | Belarusian       |
+| `bn`    | Bengali          |
+| `bg`    | Bulgarian        |
+| `my`    | Burmese          |
+| `ca`    | Catalan          |
+| `cn`    | Chinese          |
 | `zh-tw` | Chinese (Taiwan) |
-| `cs` | Czech |
-| `nl` | Dutch |
-| `en` | English |
-| `fil` | Filipino |
-| `fi` | Finnish |
-| `fr` | French |
-| `de` | German |
+| `cs`    | Czech            |
+| `nl`    | Dutch            |
+| `en`    | English          |
+| `fil`   | Filipino         |
+| `fi`    | Finnish          |
+| `fr`    | French           |
+| `de`    | German           |
 
 </td><td>
 
-| Code | Locale |
-| --- | --- |
-| `el` | Greek |
-| `he` | Hebrew |
-| `hi` | Hindi |
-| `hu` | Hungarian |
-| `id` | Indonesian |
-| `it` | Italian |
-| `ja` | Japanese |
-| `kr` | Korean |
-| `ml` | Malayalam |
-| `np` | Nepali |
-| `no` | Norwegian |
-| `fa` | Persian (Farsi) |
-| `pl` | Polish |
-| `pt-br` | Portuguese (Brazil) |
+| Code    | Locale                |
+| ------- | --------------------- |
+| `el`    | Greek                 |
+| `he`    | Hebrew                |
+| `hi`    | Hindi                 |
+| `hu`    | Hungarian             |
+| `id`    | Indonesian            |
+| `it`    | Italian               |
+| `ja`    | Japanese              |
+| `kr`    | Korean                |
+| `ml`    | Malayalam             |
+| `np`    | Nepali                |
+| `no`    | Norwegian             |
+| `fa`    | Persian (Farsi)       |
+| `pl`    | Polish                |
+| `pt-br` | Portuguese (Brazil)   |
 | `pt-pt` | Portuguese (Portugal) |
-| `ro` | Romanian |
+| `ro`    | Romanian              |
 
 </td><td>
 
-| Code | Locale |
-| --- | --- |
-| `ru` | Russian |
-| `sa` | Sanskrit |
-| `sr` | Serbian (Cyrillic) |
-| `sr-latn` | Serbian (Latin) |
-| `sk` | Slovak |
-| `es` | Spanish |
-| `sw` | Swahili |
-| `se` | Swedish |
-| `ta` | Tamil |
-| `th` | Thai |
-| `tr` | Turkish |
-| `uk-ua` | Ukrainian |
-| `ur` | Urdu |
-| `uz` | Uzbek |
-| `vi` | Vietnamese |
+| Code      | Locale             |
+| --------- | ------------------ |
+| `ru`      | Russian            |
+| `sa`      | Sanskrit           |
+| `sr`      | Serbian (Cyrillic) |
+| `sr-latn` | Serbian (Latin)    |
+| `sk`      | Slovak             |
+| `es`      | Spanish            |
+| `sw`      | Swahili            |
+| `se`      | Swedish            |
+| `ta`      | Tamil              |
+| `th`      | Thai               |
+| `tr`      | Turkish            |
+| `uk-ua`   | Ukrainian          |
+| `ur`      | Urdu               |
+| `uz`      | Uzbek              |
+| `vi`      | Vietnamese         |
 
 </td></tr>
 </table>
@@ -261,28 +268,28 @@ If we don't support your language, please consider contributing! You can find mo
 
 #### Stats Card Exclusive Options
 
-| Name | Description | Type | Default value |
-| --- | --- | --- | --- |
-| `hide` | Hides the [specified items](#hiding-individual-stats) from stats. | string (comma-separated values) | `null` |
-| `hide_title` | Hides the title of your stats card. | boolean | `false` |
-| `card_width` | Sets the card's width manually. | number | `500px  (approx.)` |
-| `hide_rank` | Hides the rank and automatically resizes the card width. | boolean | `false` |
-| `rank_icon` | Shows alternative rank icon (i.e. `github`, `percentile` or `default`). | enum | `default` |
-| `show_icons` | Shows icons near all stats. | boolean | `false` |
-| `include_all_commits` | Count total commits instead of just the current year commits. | boolean | `false` |
-| `line_height` | Sets the line height between text. | integer | `25` |
-| `exclude_repo` | Excludes specified repositories. Affects only the count for "Total Stars Earned". | string (comma-separated values) | `null` |
-| `repo` | Count only stats from the specified repositories. Affects only [certain items](#filtering-by-repository-and-owner). | string (comma-separated values) | `null` |
-| `owner` | Count only stats from the specified organizations or users. Affects only [certain items](#filtering-by-repository-and-owner). | string (comma-separated values) | `null` |
-| `role` | Include repositories where the user has one of the specified [roles](https://docs.github.com/en/graphql/reference/enums#repositoryaffiliation) (OWNER, ORGANIZATION_MEMBER, COLLABORATOR). | string (comma-separated values) | `OWNER` |
-| `custom_title` | Sets a custom title for the card. | string | `<username> GitHub Stats` |
-| `text_bold` | Uses bold text. | boolean | `true` |
-| `disable_animations` | Disables all animations in the card. | boolean | `false` |
-| `ring_color` | Color of the rank circle. | string (hex color) | `2f80ed` |
-| `number_format` | Switches between two available formats for displaying the card values: `short` (i.e. `6.6k`) and `long` (i.e. `6626`). | enum | `short` |
-| `number_precision` | Enforce the number of digits after the decimal point for `short` number format. Must be an integer between 0 and 2. Will be ignored for `long` number format. | integer (0, 1 or 2) | `null` |
-| `show` | Shows [additional items](#showing-additional-individual-stats) on stats card (i.e. `reviews`, `discussions_started`, `discussions_answered`, `prs_merged` or `prs_merged_percentage`. And the following, which support the `repo` and `owner` filters: `prs_authored`, `prs_commented`, `prs_reviewed`, `issues_authored` or `issues_commented`). | string (comma-separated values) | `null` |
-| `commits_year` | Filters and counts only commits made in the specified year. | integer _(YYYY)_ | `<current year> (one year to date)` |
+| Name                  | Description                                                                                                                                                                                                                                                                                                                                       | Type                            | Default value                       |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | ----------------------------------- |
+| `hide`                | Hides the [specified items](#hiding-individual-stats) from stats.                                                                                                                                                                                                                                                                                 | string (comma-separated values) | `null`                              |
+| `hide_title`          | Hides the title of your stats card.                                                                                                                                                                                                                                                                                                               | boolean                         | `false`                             |
+| `card_width`          | Sets the card's width manually.                                                                                                                                                                                                                                                                                                                   | number                          | `500px  (approx.)`                  |
+| `hide_rank`           | Hides the rank and automatically resizes the card width.                                                                                                                                                                                                                                                                                          | boolean                         | `false`                             |
+| `rank_icon`           | Shows alternative rank icon (i.e. `github`, `percentile` or `default`).                                                                                                                                                                                                                                                                           | enum                            | `default`                           |
+| `show_icons`          | Shows icons near all stats.                                                                                                                                                                                                                                                                                                                       | boolean                         | `false`                             |
+| `include_all_commits` | Count total commits instead of just the current year commits.                                                                                                                                                                                                                                                                                     | boolean                         | `false`                             |
+| `line_height`         | Sets the line height between text.                                                                                                                                                                                                                                                                                                                | integer                         | `25`                                |
+| `exclude_repo`        | Excludes specified repositories. Affects only the count for "Total Stars Earned".                                                                                                                                                                                                                                                                 | string (comma-separated values) | `null`                              |
+| `repo`                | Count only stats from the specified repositories. Affects only [certain items](#filtering-by-repository-and-owner).                                                                                                                                                                                                                               | string (comma-separated values) | `null`                              |
+| `owner`               | Count only stats from the specified organizations or users. Affects only [certain items](#filtering-by-repository-and-owner).                                                                                                                                                                                                                     | string (comma-separated values) | `null`                              |
+| `role`                | Include repositories where the user has one of the specified [roles](https://docs.github.com/en/graphql/reference/enums#repositoryaffiliation) (OWNER, ORGANIZATION_MEMBER, COLLABORATOR).                                                                                                                                                        | string (comma-separated values) | `OWNER`                             |
+| `custom_title`        | Sets a custom title for the card.                                                                                                                                                                                                                                                                                                                 | string                          | `<username> GitHub Stats`           |
+| `text_bold`           | Uses bold text.                                                                                                                                                                                                                                                                                                                                   | boolean                         | `true`                              |
+| `disable_animations`  | Disables all animations in the card.                                                                                                                                                                                                                                                                                                              | boolean                         | `false`                             |
+| `ring_color`          | Color of the rank circle.                                                                                                                                                                                                                                                                                                                         | string (hex color)              | `2f80ed`                            |
+| `number_format`       | Switches between two available formats for displaying the card values: `short` (i.e. `6.6k`) and `long` (i.e. `6626`).                                                                                                                                                                                                                            | enum                            | `short`                             |
+| `number_precision`    | Enforce the number of digits after the decimal point for `short` number format. Must be an integer between 0 and 2. Will be ignored for `long` number format.                                                                                                                                                                                     | integer (0, 1 or 2)             | `null`                              |
+| `show`                | Shows [additional items](#showing-additional-individual-stats) on stats card (i.e. `reviews`, `discussions_started`, `discussions_answered`, `prs_merged` or `prs_merged_percentage`. And the following, which support the `repo` and `owner` filters: `prs_authored`, `prs_commented`, `prs_reviewed`, `issues_authored` or `issues_commented`). | string (comma-separated values) | `null`                              |
+| `commits_year`        | Filters and counts only commits made in the specified year.                                                                                                                                                                                                                                                                                       | integer _(YYYY)_                | `<current year> (one year to date)` |
 
 > [!WARNING]
 > Custom title should be URI-escaped, as specified in [Percent Encoding](https://en.wikipedia.org/wiki/Percent-encoding) (i.e: `Anurag's GitHub Stats` should become `Anurag%27s%20GitHub%20Stats`). You can use [urlencoder.org](https://www.urlencoder.org/) to help you do this automatically.
@@ -290,7 +297,7 @@ If we don't support your language, please consider contributing! You can find mo
 > [!NOTE]
 > When hide\_rank=`true`, the minimum card width is 270 px + the title length and padding.
 
-***
+---
 
 ## GitHub Extra Pins
 
@@ -312,33 +319,33 @@ Endpoint: `api/pin?username=anuraghazra&repo=type-trident`
 
 You can customize the appearance and behavior of the pinned repository card using the [common options](#common-options) and exclusive options listed in the table below.
 
-| Name | Description | Type | Default value |
-| --- | --- | --- | --- |
-| `show_owner` | Shows the repo's owner name. | boolean | `false` |
-| `browser_rendering` | Compute text wrapping of repository description natively in the browser, instead of computing it server-side. | boolean | `false` |
-| `description_lines_count` | Manually set the number of lines for the description. Specified value will be clamped between 1 and 3. If this parameter is not specified, the number of lines will be automatically adjusted according to the actual length of the description. | number | `null` |
-| `card_width` | Sets the card's width manually. | number | `400px  (approx.)` |
-| `show_icons` | Shows icons near all stats enabled via `show`. | boolean | `true` |
-| `line_height` | Sets the line height between stats enabled via `show`. | integer | `22` |
-| `text_bold` | Uses bold text for all stats enabled via `show`. | boolean | `false` |
-| `number_format` | Switches between two available formats for displaying the numbers for all stats enabled via `show`: `short` (i.e. `6.6k`) and `long` (i.e. `6626`). | enum | `short` |
-| `show` | Shows [additional items](#showing-additional-individual-stats) on stats card (i.e. `prs_authored`, `prs_commented`, `prs_reviewed`, `issues_authored` or `issues_commented`). | string (comma-separated values) | `null` |
+| Name                      | Description                                                                                                                                                                                                                                      | Type                            | Default value      |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------- | ------------------ |
+| `show_owner`              | Shows the repo's owner name.                                                                                                                                                                                                                     | boolean                         | `false`            |
+| `browser_rendering`       | Compute text wrapping of repository description natively in the browser, instead of computing it server-side.                                                                                                                                    | boolean                         | `false`            |
+| `description_lines_count` | Manually set the number of lines for the description. Specified value will be clamped between 1 and 3. If this parameter is not specified, the number of lines will be automatically adjusted according to the actual length of the description. | number                          | `null`             |
+| `card_width`              | Sets the card's width manually.                                                                                                                                                                                                                  | number                          | `400px  (approx.)` |
+| `show_icons`              | Shows icons near all stats enabled via `show`.                                                                                                                                                                                                   | boolean                         | `true`             |
+| `line_height`             | Sets the line height between stats enabled via `show`.                                                                                                                                                                                           | integer                         | `22`               |
+| `text_bold`               | Uses bold text for all stats enabled via `show`.                                                                                                                                                                                                 | boolean                         | `false`            |
+| `number_format`           | Switches between two available formats for displaying the numbers for all stats enabled via `show`: `short` (i.e. `6.6k`) and `long` (i.e. `6626`).                                                                                              | enum                            | `short`            |
+| `show`                    | Shows [additional items](#showing-additional-individual-stats) on stats card (i.e. `prs_authored`, `prs_commented`, `prs_reviewed`, `issues_authored` or `issues_commented`).                                                                    | string (comma-separated values) | `null`             |
 
 ### Demo
 
-![Readme Card](https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra\&repo=github-readme-stats)
+![Readme Card](https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats)
 
 Use [show\_owner](#options) query option to include the repo's owner username:
 
-![Readme Card](https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra\&repo=github-readme-stats\&show_owner=true)
+![Readme Card](https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats&show_owner=true)
 
 Use [show](#options) query option to display the user's contributions to the repository:
 
-![Readme Card](https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra\&repo=github-readme-stats\&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented)
+![Readme Card](https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented)
 
 You can also specify the `repo` parameter in the form `<user_or_organization>/<repository>` to pin a repository from any user or organization, not just your own. This allows you to showcase repositories you contributed to, regardless of ownership.
 
-![Readme Card](https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra\&repo=statykjs/statyk\&show_owner=true\&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented)
+![Readme Card](https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=statykjs/statyk&show_owner=true&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented)
 
 ## GitHub Gist Pins
 
@@ -358,10 +365,10 @@ Endpoint: `api/gist?id=bbfce31e0217a3689c8d961a356cb10d`
 
 You can customize the appearance and behavior of the gist card using the [common options](#common-options) and exclusive options listed in the table below.
 
-| Name | Description | Type | Default value |
-| --- | --- | --- | --- |
-| `show_owner` | Shows the gist's owner name. | boolean | `false` |
-| `browser_rendering` | Compute text wrapping of gist description natively in the browser, instead of computing it server-side. | boolean | `false` |
+| Name                | Description                                                                                             | Type    | Default value |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ------- | ------------- |
+| `show_owner`        | Shows the gist's owner name.                                                                            | boolean | `false`       |
+| `browser_rendering` | Compute text wrapping of gist description natively in the browser, instead of computing it server-side. | boolean | `false`       |
 
 ### Demo
 
@@ -369,7 +376,7 @@ You can customize the appearance and behavior of the gist card using the [common
 
 Use [show\_owner](#options-1) query option to include the gist's owner username
 
-![Gist Card](https://github-stats-extended.vercel.app/api/gist?id=bbfce31e0217a3689c8d961a356cb10d\&show_owner=true)
+![Gist Card](https://github-stats-extended.vercel.app/api/gist?id=bbfce31e0217a3689c8d961a356cb10d&show_owner=true)
 
 ## Top Languages Card
 
@@ -398,23 +405,23 @@ Endpoint: `api/top-langs?username=anuraghazra`
 
 You can customize the appearance and behavior of the top languages card using the [common options](#common-options) and exclusive options listed in the table below.
 
-| Name | Description | Type | Default value |
-| --- | --- | --- | --- |
-| `hide` | Hides the [specified languages](#hide-individual-languages) from card. | string (comma-separated values) | `null` |
-| `hide_title` | Hides the title of your card. | boolean | `false` |
-| `layout` | Switches between five available layouts `normal` & `compact` & `donut` & `donut-vertical` & `pie`. | enum | `normal` |
-| `card_width` | Sets the card's width manually. | number | `300` |
-| `langs_count` | Shows more languages on the card, between 1-20. | integer | `5` for `normal` and `donut`, `6` for other layouts |
-| `exclude_repo` | Excludes specified repositories. | string (comma-separated values) | `null` |
-| `role` | Include repositories where the user has one of the specified [roles](https://docs.github.com/en/graphql/reference/enums#repositoryaffiliation) (OWNER, ORGANIZATION_MEMBER, COLLABORATOR). | string (comma-separated values) | `OWNER` |
-| `custom_title` | Sets a custom title for the card. | string | `Most Used Languages` |
-| `disable_animations` | Disables all animations in the card. | boolean | `false` |
-| `prog_bar_bg_color` | Background color of the bars. (Applies only to `normal` layout.) | string (hex color) | `#ddd` |
-| `hide_progress` | Uses the compact layout option, hides percentages, and removes the bars. | boolean | `false` |
-| `hide_values` | Hides language percentages or bytes while keeping the progress bars or chart. | boolean | `false` |
-| `size_weight` | Configures language stats algorithm (see [Language stats algorithm](#language-stats-algorithm)). | integer | `1` |
-| `count_weight` | Configures language stats algorithm (see [Language stats algorithm](#language-stats-algorithm)). | integer | `0` |
-| `stats_format` | Switches between two available formats for language's stats `percentages` and `bytes`. | enum | `percentages` |
+| Name                 | Description                                                                                                                                                                                | Type                            | Default value                                       |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------- | --------------------------------------------------- |
+| `hide`               | Hides the [specified languages](#hide-individual-languages) from card.                                                                                                                     | string (comma-separated values) | `null`                                              |
+| `hide_title`         | Hides the title of your card.                                                                                                                                                              | boolean                         | `false`                                             |
+| `layout`             | Switches between five available layouts `normal` & `compact` & `donut` & `donut-vertical` & `pie`.                                                                                         | enum                            | `normal`                                            |
+| `card_width`         | Sets the card's width manually.                                                                                                                                                            | number                          | `300`                                               |
+| `langs_count`        | Shows more languages on the card, between 1-20.                                                                                                                                            | integer                         | `5` for `normal` and `donut`, `6` for other layouts |
+| `exclude_repo`       | Excludes specified repositories.                                                                                                                                                           | string (comma-separated values) | `null`                                              |
+| `role`               | Include repositories where the user has one of the specified [roles](https://docs.github.com/en/graphql/reference/enums#repositoryaffiliation) (OWNER, ORGANIZATION_MEMBER, COLLABORATOR). | string (comma-separated values) | `OWNER`                                             |
+| `custom_title`       | Sets a custom title for the card.                                                                                                                                                          | string                          | `Most Used Languages`                               |
+| `disable_animations` | Disables all animations in the card.                                                                                                                                                       | boolean                         | `false`                                             |
+| `prog_bar_bg_color`  | Background color of the bars. (Applies only to `normal` layout.)                                                                                                                           | string (hex color)              | `#ddd`                                              |
+| `hide_progress`      | Uses the compact layout option, hides percentages, and removes the bars.                                                                                                                   | boolean                         | `false`                                             |
+| `hide_values`        | Hides language percentages or bytes while keeping the progress bars or chart.                                                                                                              | boolean                         | `false`                                             |
+| `size_weight`        | Configures language stats algorithm (see [Language stats algorithm](#language-stats-algorithm)).                                                                                           | integer                         | `1`                                                 |
+| `count_weight`       | Configures language stats algorithm (see [Language stats algorithm](#language-stats-algorithm)).                                                                                           | integer                         | `0`                                                 |
+| `stats_format`       | Switches between two available formats for language's stats `percentages` and `bytes`.                                                                                                     | enum                            | `percentages`                                       |
 
 > [!WARNING]
 > Language names and custom title should be URI-escaped, as specified in [Percent Encoding](https://en.wikipedia.org/wiki/Percent-encoding) (i.e: `c++` should become `c%2B%2B`, `jupyter notebook` should become `jupyter%20notebook`, `Most Used Languages` should become `Most%20Used%20Languages`, etc.) You can use [urlencoder.org](https://www.urlencoder.org/) to help you do this automatically.
@@ -424,13 +431,13 @@ You can customize the appearance and behavior of the top languages card using th
 We use the following algorithm to calculate the languages percentages on the language card:
 
 ```js
-ranking_index = (byte_count ^ size_weight) * (repo_count ^ count_weight)
+ranking_index = (byte_count ^ size_weight) * (repo_count ^ count_weight);
 ```
 
 By default, only the byte count is used for determining the languages percentages shown on the language card (i.e. `size_weight=1` and `count_weight=0`). You can, however, use the `&size_weight=` and `&count_weight=` options to weight the language usage calculation. The values must be positive real numbers. [More details about the algorithm can be found here](https://github.com/anuraghazra/github-readme-stats/issues/1600#issuecomment-1046056305).
 
-- `&size_weight=1&count_weight=0` - *(default)* Orders by byte count.
-- `&size_weight=0.5&count_weight=0.5` - *(recommended)* Uses both byte and repo count for ranking
+- `&size_weight=1&count_weight=0` - _(default)_ Orders by byte count.
+- `&size_weight=0.5&count_weight=0.5` - _(recommended)_ Uses both byte and repo count for ranking
   - `&size_weight=0&count_weight=1` - Orders by repo count
 
 ```md
@@ -516,34 +523,33 @@ You can use the `&stats_format=bytes` option to display the stats in bytes inste
 ![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&stats_format=bytes)
 ```
 
-
 ### Demo
 
 ![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra)
 
 #### Compact layout
 
-![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=compact)
+![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&layout=compact)
 
 #### Donut Chart layout
 
-[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=donut)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=donut)
+[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&layout=donut)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&layout=donut)
 
 #### Donut Vertical Chart layout
 
-[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=donut-vertical)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=donut-vertical)
+[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&layout=donut-vertical)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&layout=donut-vertical)
 
 #### Pie Chart layout
 
-[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=pie)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&layout=pie)
+[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&layout=pie)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&layout=pie)
 
 #### Hidden progress bars
 
-[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&hide_progress=true)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&hide_progress=true)
+[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&hide_progress=true)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&hide_progress=true)
 
 #### Display bytes instead of percentage
 
-[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&stats_format=bytes)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra\&stats_format=bytes)
+[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&stats_format=bytes)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&stats_format=bytes)
 
 ## WakaTime Stats Card
 
@@ -563,19 +569,19 @@ Change the `?username=` value to your [WakaTime](https://wakatime.com) username.
 
 You can customize the appearance and behavior of the WakaTime stats card using the [common options](#common-options) and exclusive options listed in the table below.
 
-| Name | Description | Type | Default value |
-| --- | --- | --- | --- |
-| `hide` | Hides the languages specified from the card. | string (comma-separated values) | `null` |
-| `hide_title` | Hides the title of your card. | boolean | `false` |
-| `card_width` | Sets the card's width manually. | number | `495` |
-| `line_height` | Sets the line height between text. | integer | `25` |
-| `hide_progress` | Hides the progress bar and percentage. | boolean | `false` |
-| `custom_title` | Sets a custom title for the card. | string | `WakaTime Stats` |
-| `layout` | Switches between two available layouts `default` & `compact`. | enum | `default` |
-| `langs_count` | Limits the number of languages on the card, defaults to all reported languages. | integer | `null` |
-| `api_domain` | Sets a custom API domain for the card, e.g. to use services like [Hakatime](https://github.com/mujx/hakatime) or [Wakapi](https://github.com/muety/wakapi) | string | `wakatime.com` |
-| `display_format` | Sets the WakaTime stats display format. Choose `time` to display time-based stats or `percent` to show percentages. | enum | `time` |
-| `disable_animations` | Disables all animations in the card. | boolean | `false` |
+| Name                 | Description                                                                                                                                                | Type                            | Default value    |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | ---------------- |
+| `hide`               | Hides the languages specified from the card.                                                                                                               | string (comma-separated values) | `null`           |
+| `hide_title`         | Hides the title of your card.                                                                                                                              | boolean                         | `false`          |
+| `card_width`         | Sets the card's width manually.                                                                                                                            | number                          | `495`            |
+| `line_height`        | Sets the line height between text.                                                                                                                         | integer                         | `25`             |
+| `hide_progress`      | Hides the progress bar and percentage.                                                                                                                     | boolean                         | `false`          |
+| `custom_title`       | Sets a custom title for the card.                                                                                                                          | string                          | `WakaTime Stats` |
+| `layout`             | Switches between two available layouts `default` & `compact`.                                                                                              | enum                            | `default`        |
+| `langs_count`        | Limits the number of languages on the card, defaults to all reported languages.                                                                            | integer                         | `null`           |
+| `api_domain`         | Sets a custom API domain for the card, e.g. to use services like [Hakatime](https://github.com/mujx/hakatime) or [Wakapi](https://github.com/muety/wakapi) | string                          | `wakatime.com`   |
+| `display_format`     | Sets the WakaTime stats display format. Choose `time` to display time-based stats or `percent` to show percentages.                                        | enum                            | `time`           |
+| `disable_animations` | Disables all animations in the card.                                                                                                                       | boolean                         | `false`          |
 
 > [!WARNING]
 > Custom title should be URI-escaped, as specified in [Percent Encoding](https://en.wikipedia.org/wiki/Percent-encoding) (i.e: `WakaTime Stats` should become `WakaTime%20Stats`). You can use [urlencoder.org](https://www.urlencoder.org/) to help you do this automatically.
@@ -584,13 +590,13 @@ You can customize the appearance and behavior of the WakaTime stats card using t
 
 ![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan)
 
-![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan\&card_width=315\&hide_progress=true)
+![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan&card_width=315&hide_progress=true)
 
 #### Compact layout
 
-![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan\&layout=compact)
+![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan&layout=compact)
 
-***
+---
 
 ## All Demos
 
@@ -600,61 +606,61 @@ You can customize the appearance and behavior of the WakaTime stats card using t
 
 ### Hiding specific stats
 
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&hide=contribs,issues)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&hide=contribs,issues)
 
 ### Showing additional stats
 
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&show_icons=true\&show=reviews,discussions_started,discussions_answered,prs_merged,prs_merged_percentage,prs_commented,prs_reviewed,issues_commented)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&show=reviews,discussions_started,discussions_answered,prs_merged,prs_merged_percentage,prs_commented,prs_reviewed,issues_commented)
 
 ### Showing stats for a specific repository
 
-![Anurag's GitHub stats for anuraghazra/github-readme-stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&repo=anuraghazra/github-readme-stats\&hide=prs,issues,stars,commits,contribs\&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented\&hide_rank=true\&custom_title=Anurag%27s%20Stats%20for%20github-readme-stats\&card_width=370)
+![Anurag's GitHub stats for anuraghazra/github-readme-stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&repo=anuraghazra/github-readme-stats&hide=prs,issues,stars,commits,contribs&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented&hide_rank=true&custom_title=Anurag%27s%20Stats%20for%20github-readme-stats&card_width=370)
 
 ### Showing stats for a specific organization
 
-![Anurag's GitHub stats for razorpay](https://github-stats-extended.vercel.app/api?username=anuraghazra\&owner=razorpay\&hide=prs,issues,stars,commits,contribs\&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented\&hide_rank=true\&custom_title=Anurag%27s%20Stats%20for%20razorpay\&card_width=370)
+![Anurag's GitHub stats for razorpay](https://github-stats-extended.vercel.app/api?username=anuraghazra&owner=razorpay&hide=prs,issues,stars,commits,contribs&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented&hide_rank=true&custom_title=Anurag%27s%20Stats%20for%20razorpay&card_width=370)
 
 ### Showing icons
 
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&hide=issues\&show_icons=true)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&hide=issues&show_icons=true)
 
 ### Shows GitHub logo instead rank level
 
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&rank_icon=github)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&rank_icon=github)
 
 ### Shows user rank percentile instead of rank level
 
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&rank_icon=percentile)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&rank_icon=percentile)
 
 ### Customize Border Color
 
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&border_color=2e4058)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&border_color=2e4058)
 
 ### Include All Commits
 
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&include_all_commits=true)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&include_all_commits=true)
 
 ### Themes
 
 Choose from any of the [default themes](#themes)
 
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&show_icons=true\&theme=radical)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=radical)
 
 ### Gradient
 
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra\&bg_color=30,e96443,904e95\&title_color=fff\&text_color=fff)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&bg_color=30,e96443,904e95&title_color=fff&text_color=fff)
 
 ### Customizing stats card
 
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api/?username=anuraghazra\&show_icons=true\&title_color=fff\&icon_color=79ff97\&text_color=9f9f9f\&bg_color=151515)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api/?username=anuraghazra&show_icons=true&title_color=fff&icon_color=79ff97&text_color=9f9f9f&bg_color=151515)
 
 ### Setting card locale
 
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api/?username=anuraghazra\&locale=es)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api/?username=anuraghazra&locale=es)
 
 ### Customizing repo card
 
-![Customized Card](https://github-stats-extended.vercel.app/api/pin?username=anuraghazra\&repo=github-readme-stats\&title_color=fff\&icon_color=f9f9f9\&text_color=9f9f9f\&bg_color=151515)
+![Customized Card](https://github-stats-extended.vercel.app/api/pin?username=anuraghazra&repo=github-readme-stats&title_color=fff&icon_color=f9f9f9&text_color=9f9f9f&bg_color=151515)
 
 ### Gist card
 
@@ -672,7 +678,7 @@ Choose from any of the [default themes](#themes)
 
 ![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan)
 
-***
+---
 
 ## Quick Tip (Align The Cards)
 
@@ -682,10 +688,20 @@ By default, GitHub does not lay out the cards side by side. To do that, you can 
 
 ```html
 <a href="https://github-stats-extended.vercel.app/api?username=anuraghazra">
-  <img height=200 align="center" src="https://github-stats-extended.vercel.app/api?username=anuraghazra" />
+  <img
+    height="200"
+    align="center"
+    src="https://github-stats-extended.vercel.app/api?username=anuraghazra"
+  />
 </a>
-<a href="https://github-stats-extended.vercel.app/api/top-langs?username=anuraghazra&layout=compact&langs_count=8&card_width=320">
-  <img height=200 align="center" src="https://github-stats-extended.vercel.app/api/top-langs?username=anuraghazra&layout=compact&langs_count=8&card_width=320" />
+<a
+  href="https://github-stats-extended.vercel.app/api/top-langs?username=anuraghazra&layout=compact&langs_count=8&card_width=320"
+>
+  <img
+    height="200"
+    align="center"
+    src="https://github-stats-extended.vercel.app/api/top-langs?username=anuraghazra&layout=compact&langs_count=8&card_width=320"
+  />
 </a>
 ```
 
@@ -705,10 +721,16 @@ By default, GitHub does not lay out the cards side by side. To do that, you can 
 
 ```html
 <a href="https://github.com/anuraghazra/github-readme-stats">
-  <img align="center" src="https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats" />
+  <img
+    align="center"
+    src="https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats"
+  />
 </a>
 <a href="https://github.com/anuraghazra/convoychat">
-  <img align="center" src="https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=convoychat" />
+  <img
+    align="center"
+    src="https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=convoychat"
+  />
 </a>
 ```
 
@@ -723,4 +745,3 @@ By default, GitHub does not lay out the cards side by side. To do that, you can 
 </a>
 
 </details>
-
