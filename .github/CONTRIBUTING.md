@@ -20,7 +20,7 @@ pnpm run lint       # eslint
 pnpm run typecheck  # tsc
 ```
 
-The **Backend E2E test** in CI compares the cards your branch renders against the ones served by the preview deployment, which is still on the last commit merged to main.
+The **Backend E2E test** in CI compares the cards your branch renders against the ones served by the preview deployment, which is still on the last commit merged to master.
 So if your PR changes card output at all, that job goes red until the preview catches up.
 It's marked `continue-on-error`, so it won't block your PR, but do open it and check the diff is only what you expected.
 
