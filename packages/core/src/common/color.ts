@@ -118,20 +118,33 @@ interface CardColors {
 }
 
 /**
+ * Every color param a card accepts, before any `_light` / `_dark` suffix.
+ *
+ * Single source of truth: the param types and {@link COLOR_PARAM_KEYS} are all
+ * derived from this, so adding a param here is enough.
+ */
+const BASE_COLOR_KEYS = [
+  "title_color",
+  "icon_color",
+  "text_color",
+  "bg_color",
+  "border_color",
+  "ring_color",
+  "prog_bar_bg_color",
+  "theme",
+] as const;
+
+const THEME_VARIANTS = ["light", "dark"] as const;
+
+type BaseColorKey = (typeof BASE_COLOR_KEYS)[number];
+type ThemeVariant = (typeof THEME_VARIANTS)[number];
+
+/**
  * Object with all input color params. Not every field is consumed by every card
  * (e.g. `prog_bar_bg_color` is only used by the top-languages card's `normal`
  * layout).
  */
-interface ColorInput {
-  title_color?: string | undefined;
-  text_color?: string | undefined;
-  icon_color?: string | undefined;
-  bg_color?: string | undefined;
-  border_color?: string | undefined;
-  ring_color?: string | undefined;
-  prog_bar_bg_color?: string | undefined;
-  theme?: string | undefined;
-}
+type ColorInput = Partial<Record<BaseColorKey, string | undefined>>;
 
 /**
  * Returns theme based colors with proper overrides and defaults.
@@ -224,9 +237,8 @@ const getCardColors = ({
   };
 };
 
-type ThemeVariant = "dark" | "light";
 type LightDarkColorParams = Partial<
-  Record<`${keyof ColorInput}_${ThemeVariant}`, string>
+  Record<`${BaseColorKey}_${ThemeVariant}`, string | undefined>
 >;
 
 /**
@@ -240,16 +252,10 @@ type LightDarkColorParams = Partial<
 const extractLightDarkColors = (
   params: LightDarkColorParams,
   suffix: `_${ThemeVariant}`,
-): ColorInput => ({
-  title_color: params[`title_color${suffix}`],
-  text_color: params[`text_color${suffix}`],
-  icon_color: params[`icon_color${suffix}`],
-  bg_color: params[`bg_color${suffix}`],
-  border_color: params[`border_color${suffix}`],
-  ring_color: params[`ring_color${suffix}`],
-  prog_bar_bg_color: params[`prog_bar_bg_color${suffix}`],
-  theme: params[`theme${suffix}`],
-});
+): ColorInput =>
+  Object.fromEntries(
+    BASE_COLOR_KEYS.map((key) => [key, params[`${key}${suffix}`]]),
+  );
 
 /**
  * Returns resolved colors for both light and dark mode given all input params.
@@ -293,30 +299,10 @@ const getLightDarkColors = (
 type ColorParams = ColorInput & LightDarkColorParams;
 
 const COLOR_PARAM_KEYS: ReadonlyArray<keyof ColorParams> = [
-  "title_color",
-  "icon_color",
-  "text_color",
-  "bg_color",
-  "border_color",
-  "ring_color",
-  "prog_bar_bg_color",
-  "theme",
-  "title_color_light",
-  "icon_color_light",
-  "text_color_light",
-  "bg_color_light",
-  "border_color_light",
-  "ring_color_light",
-  "prog_bar_bg_color_light",
-  "theme_light",
-  "title_color_dark",
-  "icon_color_dark",
-  "text_color_dark",
-  "bg_color_dark",
-  "border_color_dark",
-  "ring_color_dark",
-  "prog_bar_bg_color_dark",
-  "theme_dark",
+  ...BASE_COLOR_KEYS,
+  ...THEME_VARIANTS.flatMap((variant) =>
+    BASE_COLOR_KEYS.map((key) => `${key}_${variant}` as const),
+  ),
 ];
 
 /**
@@ -332,12 +318,43 @@ const pickColorParams = (
     COLOR_PARAM_KEYS.filter((k) => k in query).map((k) => [k, query[k]]),
   );
 
+/** Params naming a theme rather than holding a color value. */
+const THEME_PARAM_KEYS: ReadonlyArray<keyof ColorParams> = [
+  "theme",
+  ...THEME_VARIANTS.map((variant) => `theme_${variant}` as const),
+];
+
+/**
+ * Finds the first color param holding an invalid color.
+ *
+ * Theme params are skipped: they name a theme, and an unknown name falls back
+ * to the default rather than being an error.
+ *
+ * @param params Color params, as returned by {@link pickColorParams}.
+ * @returns The first invalid param name, or null if all are valid.
+ */
+const findInvalidColorParam = (params: ColorParams): string | null =>
+  findInvalidColor(
+    Object.fromEntries(
+      Object.entries(params).filter(
+        ([key]) => !THEME_PARAM_KEYS.includes(key as keyof ColorParams),
+      ),
+    ),
+  );
+
 export {
   getCardColors,
   getLightDarkColors,
   findInvalidColor,
+  findInvalidColorParam,
   pickColorParams,
   isValidGradient,
   isBareHexColor,
   isPrefixedHexColor,
+
+  // Not re-exported from the package index: internal,
+  // exposed so tests can pin the accepted param list.
+  BASE_COLOR_KEYS,
+  THEME_VARIANTS,
+  COLOR_PARAM_KEYS,
 };

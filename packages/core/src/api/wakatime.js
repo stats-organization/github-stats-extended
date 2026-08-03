@@ -1,5 +1,5 @@
 import { renderWakatimeCard } from "../cards/wakatime.js";
-import { findInvalidColor, pickColorParams } from "../common/color.js";
+import { findInvalidColorParam, pickColorParams } from "../common/color.js";
 import {
   MissingParamError,
   retrieveSecondaryMessage,
@@ -30,12 +30,7 @@ export default async ({
 }) => {
   const colorParams = pickColorParams(remainingParams);
 
-  const invalidColorInput = findInvalidColor({
-    ...colorParams,
-    theme: undefined,
-    theme_light: undefined,
-    theme_dark: undefined,
-  });
+  const invalidColorInput = findInvalidColorParam(colorParams);
   if (invalidColorInput) {
     return {
       status: "error - permanent",
