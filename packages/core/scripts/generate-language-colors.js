@@ -1,7 +1,7 @@
 import fs from "fs";
 
 import axios from "axios";
-import { default as jsYaml } from "js-yaml";
+import * as jsYaml from "js-yaml";
 import * as prettier from "prettier";
 
 const LANGS_FILEPATH = "./src/common/languageColors.json";

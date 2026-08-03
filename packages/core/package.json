@@ -76,7 +76,7 @@
     "lint": "eslint",
     "typecheck": "tsc -p tsconfig.typecheck.json",
     "generate-theme-readme": "node scripts/generate-theme-readme",
-    "generate-langs-json": "node scripts/generate-langs-json"
+    "generate-language-colors": "node scripts/generate-language-colors"
   },
   "devDependencies": {
     "@testing-library/dom": "10.4.1",

@@ -14,18 +14,8 @@ on:
     - cron: "0 0 */30 * *"
 
 permissions:
-  actions: read
-  checks: read
   contents: write
-  deployments: read
-  issues: read
-  discussions: read
-  packages: read
-  pages: read
   pull-requests: write
-  repository-projects: read
-  security-events: read
-  statuses: read
 
 jobs:
   update-languages:
@@ -33,7 +23,7 @@ jobs:
       github.repository == 'anuraghazra/github-readme-stats' ||
       github.repository == 'stats-organization/github-readme-stats' ||
       github.repository == 'stats-organization/github-stats-extended'
-    name: Update supported languages
+    name: Generate Language Colors
     runs-on: ubuntu-latest
 
     steps:
@@ -44,17 +34,17 @@ jobs:
         uses: ./.github/actions/install-dependencies
 
       - name: Run update-languages-json.js script
-        run: pnpm --filter ./packages/core/ run generate-langs-json
+        run: pnpm --filter ./packages/core/ run generate-language-colors
 
       - name: Create Pull Request if upstream language file is changed
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
-          commit-message: "feat(backend): update languages JSON"
+          commit-message: "feat(core): update language colors"
           branch: "update_langs/patch"
           delete-branch: true
-          title: Update languages JSON
-          body: "The
-            [update-langs](https://github.com/stats-organization/github-stats-extended/actions/workflows/update-langs.yml)
-            action found new/updated languages in the [upstream languages JSON
-            file](https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml)."
+          title: Update languages colors
+          body: >-
+            The [generate-language-colors](https://github.com/stats-organization/github-stats-extended/actions/workflows/generate-language-colors.yml)
+            workflow detected changes in the [upstream languages JSON
+            file](https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml) and regenerated the local language colors JSON file.
           labels: "ci"
