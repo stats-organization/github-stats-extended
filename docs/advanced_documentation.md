@@ -91,18 +91,15 @@ Since GitHub will re-upload the cards and serve them from their [CDN](https://do
 
 You can use [GitHub's new media feature](https://github.blog/changelog/2022-05-19-specify-theme-context-for-images-in-markdown-beta/) in HTML to specify whether to display images for light or dark themes. This is done using the HTML `<picture>` element in combination with the `prefers-color-scheme` media feature.
 
+<!-- prettier-ignore -->
 ```html
 <picture>
   <source
-    srcset="
-      https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark
-    "
+    srcset="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark"
     media="(prefers-color-scheme: dark)"
   />
-  <img
-    src="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true"
-  />
   <!-- light mode -->
+  <img src="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true" />
 </picture>
 ```
 
@@ -111,10 +108,11 @@ You can use [GitHub's new media feature](https://github.blog/changelog/2022-05-1
 
 <picture>
   <source
-      srcset="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark"
-      media="(prefers-color-scheme: dark)"
+    srcset="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark"
+    media="(prefers-color-scheme: dark)"
   />
-  <img src="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true" /> <!-- light mode -->
+  <!-- light mode -->
+  <img src="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true" />
 </picture>
 
 </details>
@@ -686,6 +684,7 @@ By default, GitHub does not lay out the cards side by side. To do that, you can 
 
 ### Stats and top languages cards
 
+<!-- prettier-ignore -->
 ```html
 <a href="https://github-stats-extended.vercel.app/api?username=anuraghazra">
   <img
@@ -694,9 +693,7 @@ By default, GitHub does not lay out the cards side by side. To do that, you can 
     src="https://github-stats-extended.vercel.app/api?username=anuraghazra"
   />
 </a>
-<a
-  href="https://github-stats-extended.vercel.app/api/top-langs?username=anuraghazra&layout=compact&langs_count=8&card_width=320"
->
+<a href="https://github-stats-extended.vercel.app/api/top-langs?username=anuraghazra&layout=compact&langs_count=8&card_width=320">
   <img
     height="200"
     align="center"
@@ -709,10 +706,18 @@ By default, GitHub does not lay out the cards side by side. To do that, you can 
 <summary>:eyes: Show example</summary>
 
 <a href="https://github-stats-extended.vercel.app/api?username=anuraghazra">
-  <img height=200 align="center" src="https://github-stats-extended.vercel.app/api?username=anuraghazra" />
+  <img
+    height="200"
+    align="center"
+    src="https://github-stats-extended.vercel.app/api?username=anuraghazra"
+  />
 </a>
 <a href="https://github-stats-extended.vercel.app/api/top-langs?username=anuraghazra&layout=compact&langs_count=8&card_width=320">
-  <img height=200 align="center" src="https://github-stats-extended.vercel.app/api/top-langs?username=anuraghazra&layout=compact&langs_count=8&card_width=320" />
+  <img
+    height="200"
+    align="center"
+    src="https://github-stats-extended.vercel.app/api/top-langs?username=anuraghazra&layout=compact&langs_count=8&card_width=320"
+  />
 </a>
 
 </details>
