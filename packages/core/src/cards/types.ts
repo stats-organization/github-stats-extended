@@ -1,4 +1,6 @@
-type ThemeNames = keyof typeof import("../themes/index.ts");
+import type { themes } from "../themes/index.js";
+
+type ThemeNames = keyof typeof themes;
 type RankIcon = "default" | "github" | "percentile";
 
 interface CommonOptions {
@@ -36,13 +38,13 @@ export type RepoCardOptions = CommonOptions & {
   show_owner: boolean;
   browser_rendering: boolean;
   description_lines_count: number;
-  card_width_input;
+  card_width_input: number;
   show: Array<string>;
   show_icons: boolean;
   number_format: string;
   text_bold: boolean;
   line_height: number | string;
-  username;
+  username: string;
 };
 
 export type TopLangOptions = CommonOptions & {

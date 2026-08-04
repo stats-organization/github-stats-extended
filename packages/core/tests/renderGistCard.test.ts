@@ -4,12 +4,10 @@ import { describe, expect, it } from "vitest";
 
 import gistApi from "../src/api/gist.js";
 import { renderGistCard } from "../src/cards/gist.js";
+import type { GistData } from "../src/fetchers/types.js";
 import { themes } from "../src/themes/index.js";
 
-/**
- * @type {import("../src/fetchers/gist").GistData}
- */
-const data = {
+const data: GistData = {
   name: "test",
   nameWithOwner: "anuraghazra/test",
   description: "Small <b>test</b> repository with different Python programs.",
@@ -22,11 +20,11 @@ describe("test renderGistCard", () => {
   it("should render correctly", () => {
     document.body.innerHTML = renderGistCard(data);
 
-    const [header] = document.getElementsByClassName("header");
+    const header = document.querySelector(".header");
 
     expect(header).toHaveTextContent("test");
     expect(header).not.toHaveTextContent("anuraghazra");
-    expect(document.getElementsByClassName("description")[0]).toHaveTextContent(
+    expect(document.querySelector(".description")).toHaveTextContent(
       // Between "Python" and "programs" there is a line break caused by: </tspan><tspan dy="1.2em" x="25">
       "Small <b>test</b> repository with different Pythonprograms.",
     );
@@ -43,7 +41,7 @@ describe("test renderGistCard", () => {
 
   it("should display username in title if show_owner is true", () => {
     document.body.innerHTML = renderGistCard(data, { show_owner: true });
-    const [header] = document.getElementsByClassName("header");
+    const header = document.querySelector(".header");
     expect(header).toHaveTextContent("anuraghazra/test");
   });
 
@@ -52,7 +50,7 @@ describe("test renderGistCard", () => {
       ...data,
       name: "some-really-long-repo-name-for-test-purposes",
     });
-    const [header] = document.getElementsByClassName("header");
+    const header = document.querySelector(".header");
     expect(header).toHaveTextContent("some-really-long-repo-name-for-test...");
   });
 
@@ -62,13 +60,13 @@ describe("test renderGistCard", () => {
       description:
         "The quick brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet",
     });
-    expect(
-      document.getElementsByClassName("description")[0].children[0].textContent,
-    ).toBe("The quick brown fox jumps over the lazy dog is an");
-
-    expect(
-      document.getElementsByClassName("description")[0].children[1].textContent,
-    ).toBe("English-language pangram—a sentence that contains all of");
+    const lines = document.querySelectorAll(".description tspan");
+    expect(lines[0]?.textContent).toBe(
+      "The quick brown fox jumps over the lazy dog is an",
+    );
+    expect(lines[1]?.textContent).toBe(
+      "English-language pangram—a sentence that contains all of",
+    );
   });
 
   it("should respect browser_rendering=true", () => {
@@ -82,12 +80,12 @@ describe("test renderGistCard", () => {
     );
     // The full description stays in the DOM; the CSS line-clamp on the
     // foreignObject's inner div is what visually truncates the overflow.
-    const description = document.getElementsByClassName("description")[0];
+    const description = document.querySelector<HTMLElement>(".description");
     expect(description).toHaveTextContent(
       "The <b>quick</b> brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet",
     );
     expect(
-      Number(description.style.getPropertyValue("--lines")),
+      Number(description?.style.getPropertyValue("--lines")),
     ).toBeGreaterThan(0);
   });
 
@@ -96,7 +94,7 @@ describe("test renderGistCard", () => {
       ...data,
       description: "Small text should not trim",
     });
-    expect(document.getElementsByClassName("description")[0]).toHaveTextContent(
+    expect(document.querySelector(".description")).toHaveTextContent(
       "Small text should not trim",
     );
   });
@@ -106,7 +104,7 @@ describe("test renderGistCard", () => {
       ...data,
       description: "This is a test gist description with :heart: emoji.",
     });
-    expect(document.getElementsByClassName("description")[0]).toHaveTextContent(
+    expect(document.querySelector(".description")).toHaveTextContent(
       "This is a test gist description with ❤️ emoji.",
     );
   });
@@ -124,15 +122,18 @@ describe("test renderGistCard", () => {
     });
 
     const styleTag = document.querySelector("style");
-    const stylesObject = cssToObject(styleTag.innerHTML);
+    const stylesObject = cssToObject(styleTag?.innerHTML ?? "");
 
-    const headerClassStyles = stylesObject[":host"][".header "];
-    const descClassStyles = stylesObject[":host"][".description "];
-    const iconClassStyles = stylesObject[":host"][".icon "];
+    const host = stylesObject[":host"];
+    const headerClassStyles = host?.[".header "];
+    const descClassStyles = host?.[".description "];
+    const iconClassStyles = host?.[".icon "];
 
-    expect(headerClassStyles.fill.trim()).toBe(`#${customColors.title_color}`);
-    expect(descClassStyles.fill.trim()).toBe(`#${customColors.text_color}`);
-    expect(iconClassStyles.fill.trim()).toBe(`#${customColors.icon_color}`);
+    const { title_color, text_color, icon_color } = customColors;
+
+    expect(headerClassStyles?.["fill"]?.trim()).toBe(`#${title_color}`);
+    expect(descClassStyles?.["fill"]?.trim()).toBe(`#${text_color}`);
+    expect(iconClassStyles?.["fill"]?.trim()).toBe(`#${icon_color}`);
     expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
       "fill",
       "#252525",
@@ -140,26 +141,28 @@ describe("test renderGistCard", () => {
   });
 
   it("should render with all the themes", () => {
-    Object.keys(themes).forEach((name) => {
+    Object.entries(themes).forEach(([name, themeData]) => {
       document.body.innerHTML = renderGistCard(data, {
-        theme: name,
+        theme: name as keyof typeof themes,
       });
 
       const styleTag = document.querySelector("style");
-      const stylesObject = cssToObject(styleTag.innerHTML);
+      const stylesObject = cssToObject(styleTag?.innerHTML ?? "");
 
-      const headerClassStyles = stylesObject[":host"][".header "];
-      const descClassStyles = stylesObject[":host"][".description "];
-      const iconClassStyles = stylesObject[":host"][".icon "];
+      const host = stylesObject[":host"];
+      const headerClassStyles = host?.[".header "];
+      const descClassStyles = host?.[".description "];
+      const iconClassStyles = host?.[".icon "];
 
-      expect(headerClassStyles.fill.trim()).toBe(
-        `#${themes[name].title_color}`,
-      );
-      expect(descClassStyles.fill.trim()).toBe(`#${themes[name].text_color}`);
-      expect(iconClassStyles.fill.trim()).toBe(`#${themes[name].icon_color}`);
+      const { title_color, text_color, icon_color, bg_color } = themeData;
+
+      expect(headerClassStyles?.["fill"]?.trim()).toBe(`#${title_color}`);
+      expect(descClassStyles?.["fill"]?.trim()).toBe(`#${text_color}`);
+      expect(iconClassStyles?.["fill"]?.trim()).toBe(`#${icon_color}`);
+
       const backgroundElement = queryByTestId(document.body, "card-bg");
-      const backgroundElementFill = backgroundElement.getAttribute("fill");
-      expect([`#${themes[name].bg_color}`, "url(#gradient)"]).toContain(
+      const backgroundElementFill = backgroundElement?.getAttribute("fill");
+      expect([`#${bg_color}`, "url(#gradient)"]).toContain(
         backgroundElementFill,
       );
     });
@@ -172,15 +175,20 @@ describe("test renderGistCard", () => {
     });
 
     const styleTag = document.querySelector("style");
-    const stylesObject = cssToObject(styleTag.innerHTML);
+    const stylesObject = cssToObject(styleTag?.innerHTML ?? "");
 
-    const headerClassStyles = stylesObject[":host"][".header "];
-    const descClassStyles = stylesObject[":host"][".description "];
-    const iconClassStyles = stylesObject[":host"][".icon "];
+    const host = stylesObject[":host"];
+    const headerClassStyles = host?.[".header "];
+    const descClassStyles = host?.[".description "];
+    const iconClassStyles = host?.[".icon "];
 
-    expect(headerClassStyles.fill.trim()).toBe("#5a0");
-    expect(descClassStyles.fill.trim()).toBe(`#${themes.radical.text_color}`);
-    expect(iconClassStyles.fill.trim()).toBe(`#${themes.radical.icon_color}`);
+    expect(headerClassStyles?.["fill"]?.trim()).toBe("#5a0");
+    expect(descClassStyles?.["fill"]?.trim()).toBe(
+      `#${themes.radical.text_color}`,
+    );
+    expect(iconClassStyles?.["fill"]?.trim()).toBe(
+      `#${themes.radical.icon_color}`,
+    );
     expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
       "fill",
       `#${themes.radical.bg_color}`,
@@ -195,20 +203,24 @@ describe("test renderGistCard", () => {
     });
 
     const styleTag = document.querySelector("style");
-    const stylesObject = cssToObject(styleTag.innerHTML);
+    const stylesObject = cssToObject(styleTag?.innerHTML ?? "");
 
-    const headerClassStyles = stylesObject[":host"][".header "];
-    const descClassStyles = stylesObject[":host"][".description "];
-    const iconClassStyles = stylesObject[":host"][".icon "];
+    const host = stylesObject[":host"];
+    const headerClassStyles = host?.[".header "];
+    const descClassStyles = host?.[".description "];
+    const iconClassStyles = host?.[".icon "];
 
-    expect(headerClassStyles.fill.trim()).toBe(
-      `#${themes.default.title_color}`,
-    );
-    expect(descClassStyles.fill.trim()).toBe(`#${themes.default.text_color}`);
-    expect(iconClassStyles.fill.trim()).toBe(`#${themes.radical.icon_color}`);
+    // invalid overrides fall back to the default theme; the un-overridden
+    // icon/bg come from the requested `radical` theme
+    const { title_color, text_color } = themes.default;
+    const { icon_color, bg_color } = themes.radical;
+
+    expect(headerClassStyles?.["fill"]?.trim()).toBe(`#${title_color}`);
+    expect(descClassStyles?.["fill"]?.trim()).toBe(`#${text_color}`);
+    expect(iconClassStyles?.["fill"]?.trim()).toBe(`#${icon_color}`);
     expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
       "fill",
-      `#${themes.radical.bg_color}`,
+      `#${bg_color}`,
     );
   });
 
@@ -252,9 +264,9 @@ describe("test renderGistCard", () => {
   it("should fallback to default description", () => {
     document.body.innerHTML = renderGistCard({
       ...data,
-      description: undefined,
+      description: null,
     });
-    expect(document.getElementsByClassName("description")[0]).toHaveTextContent(
+    expect(document.querySelector(".description")).toHaveTextContent(
       "No description provided",
     );
   });
@@ -262,7 +274,12 @@ describe("test renderGistCard", () => {
 
 describe("test gist API", () => {
   it("should return permanent error for invalid color input", async () => {
-    const result = await gistApi({ id: "abc123", title_color: "not-a-color" });
+    const result = await gistApi(
+      // api handler accepts a partial options object at runtime
+      { id: "abc123", title_color: "not-a-color" } as Parameters<
+        typeof gistApi
+      >[0],
+    );
 
     expect(result.status).toBe("error - permanent");
     expect(result.content).toContain(

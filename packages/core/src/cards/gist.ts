@@ -14,6 +14,9 @@ import {
   wrappedTextNode,
   wrappedTextStyles,
 } from "../common/render.js";
+import type { GistData } from "../fetchers/types.js";
+
+import type { GistCardOptions } from "./types.js";
 
 const ICON_SIZE = 16;
 const CARD_DEFAULT_WIDTH = 400;
@@ -25,18 +28,16 @@ const DESCRIPTION_LINE_HEIGHT_PX = 16;
 const DESCRIPTION_MAX_LINES = 10;
 
 /**
- * @typedef {import('./types').GistCardOptions} GistCardOptions Gist card options.
- * @typedef {import('../fetchers/types').GistData} GistData Gist data.
- */
-
-/**
  * Render gist card.
  *
- * @param {GistData} gistData Gist data.
- * @param {Partial<GistCardOptions>} options Gist card options.
- * @returns {string} Gist card.
+ * @param gistData Gist data.
+ * @param options Gist card options.
+ * @returns Gist card.
  */
-const renderGistCard = (gistData, options = {}) => {
+const renderGistCard = (
+  gistData: GistData,
+  options: Partial<GistCardOptions> = {},
+): string => {
   const { name, nameWithOwner, description, language, starsCount, forksCount } =
     gistData;
   const {
@@ -52,7 +53,8 @@ const renderGistCard = (gistData, options = {}) => {
 
   const desc = parseEmojis(description || "No description provided");
 
-  let descriptionLines, descriptionSvg;
+  let descriptionLines: number;
+  let descriptionSvg: string;
   if (browser_rendering) {
     // The browser performs the actual text wrapping inside the foreignObject;
     // we only estimate the line count server-side so the SVG can reserve enough
@@ -115,8 +117,8 @@ const renderGistCard = (gistData, options = {}) => {
   );
 
   const languageName = language || "Unspecified";
-  // @ts-ignore
-  const languageColor = languageColors[languageName] || "#858585";
+  const languageColor =
+    (languageColors as Record<string, string>)[languageName] || "#858585";
 
   const svgLanguage = createLanguageNode(languageName, languageColor);
 
