@@ -16,7 +16,7 @@ import {
 } from "../common/render.js";
 import type { GistData } from "../fetchers/types.js";
 
-import type { GistCardOptions } from "./types.js";
+import type { CommonOptions } from "./types.js";
 
 const ICON_SIZE = 16;
 const CARD_DEFAULT_WIDTH = 400;
@@ -26,6 +26,11 @@ const DESCRIPTION_BOX_WIDTH = CARD_DEFAULT_WIDTH - 2 * X_OFFSET;
 const DESCRIPTION_FONT_SIZE = 13;
 const DESCRIPTION_LINE_HEIGHT_PX = 16;
 const DESCRIPTION_MAX_LINES = 10;
+
+interface GistCardOptions extends CommonOptions {
+  show_owner: boolean;
+  browser_rendering: boolean;
+}
 
 /**
  * Render gist card.

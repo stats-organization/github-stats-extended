@@ -14,9 +14,11 @@ import {
   wrappedTextNode,
   wrappedTextStyles,
 } from "../common/render.js";
+import type { RepositoryData } from "../fetchers/types.js";
 import { repoCardLocales } from "../translations.js";
 
 import { createTextNode } from "./stats.js";
+import type { CommonOptions } from "./types.js";
 
 const ICON_SIZE = 16;
 const CARD_DEFAULT_WIDTH = 400;
@@ -25,13 +27,36 @@ const DESCRIPTION_FONT_SIZE = 13;
 const DESCRIPTION_LINE_HEIGHT_PX = 16;
 const DESCRIPTION_MAX_LINES = 3;
 
+interface RepoCardOptions extends CommonOptions {
+  show_owner: boolean;
+  browser_rendering: boolean;
+  description_lines_count: number;
+  card_width_input: number;
+  show: Array<string>;
+  show_icons: boolean;
+  number_format: string;
+  text_bold: boolean;
+  line_height: number | string;
+  username: string;
+}
+
+interface RepoStatItem {
+  icon: string;
+  label: string;
+  value: number | undefined;
+  id: string;
+  link: string;
+  unitSymbol?: string;
+}
+
 /**
  * Retrieves the repository description and wraps it to fit the card width.
  *
- * @param {string} label The repository description.
- * @returns {string} Wrapped repo description SVG object.
+ * @param label The repository description.
+ * @param xOffset Horizontal offset of the badge.
+ * @returns Wrapped repo description SVG object.
  */
-const getBadgeSVG = (label, xOffset = 0) => {
+const getBadgeSVG = (label: string, xOffset = 0): string => {
   if (!Number.isFinite(xOffset)) {
     throw new Error(`Invalid xOffset: "${xOffset}"`);
   }
@@ -52,18 +77,16 @@ const getBadgeSVG = (label, xOffset = 0) => {
 };
 
 /**
- * @typedef {import("../fetchers/types").RepositoryData} RepositoryData Repository data.
- * @typedef {import("./types").RepoCardOptions} RepoCardOptions Repo card options.
- */
-
-/**
  * Renders repository card details.
  *
- * @param {RepositoryData} repo Repository data.
- * @param {Partial<RepoCardOptions>} options Card options.
- * @returns {string} Repository card SVG object.
+ * @param repo Repository data.
+ * @param options Card options.
+ * @returns Repository card SVG object.
  */
-const renderRepoCard = (repo, options = {}) => {
+const renderRepoCard = (
+  repo: RepositoryData,
+  options: Partial<RepoCardOptions> = {},
+): string => {
   const {
     name,
     nameWithOwner,
@@ -108,11 +131,11 @@ const renderRepoCard = (repo, options = {}) => {
     translations: repoCardLocales,
   });
 
-  let repoFilter = encodeURIComponent(buildSearchFilter([nameWithOwner], []));
-  const encodedUsername = encodeURIComponent(username);
-  const STATS = {};
+  const repoFilter = encodeURIComponent(buildSearchFilter([nameWithOwner], []));
+  const encodedUsername = encodeURIComponent(username ?? "");
+  const STATS: Record<string, RepoStatItem> = {};
   if (show.includes("prs_authored")) {
-    STATS.prs_authored = {
+    STATS["prs_authored"] = {
       icon: icons.prs,
       label: i18n.t("repocard.prs-authored"),
       value: totalPRsAuthored,
@@ -121,7 +144,7 @@ const renderRepoCard = (repo, options = {}) => {
     };
   }
   if (show.includes("prs_commented")) {
-    STATS.prs_commented = {
+    STATS["prs_commented"] = {
       icon: icons.comments,
       label: i18n.t("repocard.prs-commented"),
       value: totalPRsCommented,
@@ -130,7 +153,7 @@ const renderRepoCard = (repo, options = {}) => {
     };
   }
   if (show.includes("prs_reviewed")) {
-    STATS.prs_reviewed = {
+    STATS["prs_reviewed"] = {
       icon: icons.reviews,
       label: i18n.t("repocard.prs-reviewed"),
       value: totalPRsReviewed,
@@ -139,7 +162,7 @@ const renderRepoCard = (repo, options = {}) => {
     };
   }
   if (show.includes("issues_authored")) {
-    STATS.issues_authored = {
+    STATS["issues_authored"] = {
       icon: icons.issues,
       label: i18n.t("repocard.issues-authored"),
       value: totalIssuesAuthored,
@@ -148,7 +171,7 @@ const renderRepoCard = (repo, options = {}) => {
     };
   }
   if (show.includes("issues_commented")) {
-    STATS.issues_commented = {
+    STATS["issues_commented"] = {
       icon: icons.discussions_started,
       label: i18n.t("repocard.issues-commented"),
       value: totalIssuesCommented,
@@ -157,20 +180,20 @@ const renderRepoCard = (repo, options = {}) => {
     };
   }
 
-  const statItems = Object.keys(STATS).map((key, index) =>
+  const statItems = Object.values(STATS).map((stat, index) =>
     // create the text nodes, and pass index so that we can calculate the line spacing
     createTextNode({
-      icon: STATS[key].icon,
-      label: STATS[key].label,
-      value: STATS[key].value,
-      id: STATS[key].id,
-      unitSymbol: STATS[key].unitSymbol,
+      icon: stat.icon,
+      label: stat.label,
+      value: stat.value ?? 0,
+      id: stat.id,
+      unitSymbol: stat.unitSymbol,
       index,
       showIcons: show_icons,
       shiftValuePos: 14.01,
       bold: text_bold,
       numberFormat: number_format,
-      link: STATS[key].link,
+      link: stat.link,
       labelXOffset: 23,
     }),
   );
@@ -183,7 +206,8 @@ const renderRepoCard = (repo, options = {}) => {
   const desc = parseEmojis(description || "No description provided");
   const descriptionBoxWidth = card_width - 2 * X_OFFSET;
 
-  let descriptionLinesCount, descriptionSvg;
+  let descriptionLinesCount: number;
+  let descriptionSvg: string;
   if (browser_rendering) {
     // The browser performs the actual text wrapping inside the foreignObject;
     // we only estimate the line count server-side so the SVG can reserve enough
@@ -270,7 +294,7 @@ const renderRepoCard = (repo, options = {}) => {
     gap: 25,
   }).join("");
 
-  let extraRows = [];
+  const extraRows: Array<string> = [];
   for (let i = 0; i < statItems.length; i += 2) {
     extraRows.push(
       flexLayout({
@@ -343,14 +367,12 @@ const renderRepoCard = (repo, options = {}) => {
   return card.render(`
     ${
       isTemplate
-        ? // @ts-ignore
-          getBadgeSVG(
+        ? getBadgeSVG(
             i18n.t("repocard.template"),
             card_width - CARD_DEFAULT_WIDTH,
           )
         : isArchived
-          ? // @ts-ignore
-            getBadgeSVG(
+          ? getBadgeSVG(
               i18n.t("repocard.archived"),
               card_width - CARD_DEFAULT_WIDTH,
             )

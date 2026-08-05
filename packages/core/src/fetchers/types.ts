@@ -14,12 +14,12 @@ export interface RepoInfo {
   isArchived: boolean;
   isTemplate: boolean;
   stargazerCount: number;
-  description: string;
+  description: string | null;
   primaryLanguage: {
-    color: string;
-    id: string;
-    name: string;
-  };
+    color: string | null;
+    id?: string;
+    name: string | null;
+  } | null;
   forkCount: number;
 }
 

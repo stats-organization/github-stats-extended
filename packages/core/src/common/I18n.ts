@@ -16,7 +16,8 @@ class I18n<Translations extends Record<string, Record<string, string>>> {
     locale,
     translations,
   }: {
-    locale?: string;
+    // `| undefined`: card callers forward possibly-undefined query options
+    locale?: string | undefined;
     translations: Translations;
   }) {
     this.locale = locale || FALLBACK_LOCALE;

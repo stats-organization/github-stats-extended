@@ -3,7 +3,7 @@ import type { themes } from "../themes/index.js";
 type ThemeNames = keyof typeof themes;
 type RankIcon = "default" | "github" | "percentile";
 
-interface CommonOptions {
+export interface CommonOptions {
   title_color: string;
   icon_color: string;
   text_color: string;
@@ -15,7 +15,7 @@ interface CommonOptions {
   hide_border: boolean;
 }
 
-export type StatCardOptions = CommonOptions & {
+export interface StatCardOptions extends CommonOptions {
   hide: Array<string>;
   show_icons: boolean;
   hide_title: boolean;
@@ -32,22 +32,9 @@ export type StatCardOptions = CommonOptions & {
   text_bold: boolean;
   rank_icon: RankIcon;
   show: Array<string>;
-};
+}
 
-export type RepoCardOptions = CommonOptions & {
-  show_owner: boolean;
-  browser_rendering: boolean;
-  description_lines_count: number;
-  card_width_input: number;
-  show: Array<string>;
-  show_icons: boolean;
-  number_format: string;
-  text_bold: boolean;
-  line_height: number | string;
-  username: string;
-};
-
-export type TopLangOptions = CommonOptions & {
+export interface TopLangOptions extends CommonOptions {
   hide_title: boolean;
   card_width: number;
   hide: Array<string>;
@@ -59,9 +46,9 @@ export type TopLangOptions = CommonOptions & {
   hide_values: boolean;
   prog_bar_bg_color: string;
   stats_format: "percentages" | "bytes";
-};
+}
 
-export type WakaTimeOptions = CommonOptions & {
+export interface WakaTimeOptions extends CommonOptions {
   hide_title: boolean;
   hide: Array<string>;
   card_width: number;
@@ -72,9 +59,4 @@ export type WakaTimeOptions = CommonOptions & {
   langs_count: number;
   display_format: "time" | "percent";
   disable_animations: boolean;
-};
-
-export type GistCardOptions = CommonOptions & {
-  show_owner: boolean;
-  browser_rendering: boolean;
-};
+}
