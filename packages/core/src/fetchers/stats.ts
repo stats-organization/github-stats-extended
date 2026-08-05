@@ -487,7 +487,14 @@ const fetchStats = async (
     stats.mergedPRsPercentage =
       (mergedCount / user.pullRequests.totalCount) * 100 || 0;
   }
-  stats.totalReviews = user.reviews.totalPullRequestReviewContributions;
+  stats.totalReviews = await totalItemsFetcher(
+    username,
+    repo,
+    owner,
+    "issues",
+    `reviewed-by:${username}+type:pr`,
+    pat,
+  );
   stats.totalIssues = user.openIssues.totalCount + user.closedIssues.totalCount;
   if (include_discussions) {
     stats.totalDiscussionsStarted = user.repositoryDiscussions?.totalCount ?? 0;

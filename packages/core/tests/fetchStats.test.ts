@@ -49,6 +49,15 @@ const data_stats = {
 const data_year2003 = structuredClone(data_stats);
 data_year2003.data.user.commits.totalCommitContributions = 428;
 
+const data_all_time_reviews = structuredClone(data_stats);
+data_all_time_reviews.data.user.reviews.totalPullRequestReviewContributions = 2;
+
+const mockReviewedPrsSearch = (totalCount = 50) => {
+  mock
+    .onGet(/https:\/\/api\.github\.com\/search\/issues\?per_page=1&q=reviewed-by:.+\+type:pr/)
+    .reply(200, { total_count: totalCount });
+};
+
 const data_without_pull_requests = {
   data: {
     user: {
@@ -127,6 +136,7 @@ beforeEach(() => {
       req.query.includes("totalCommitContributions") ? data_stats : data_repo,
     ];
   });
+  mockReviewedPrsSearch();
 });
 
 afterEach(() => {
@@ -168,6 +178,18 @@ describe("Test fetchStats", () => {
     });
   });
 
+  it("should use the all-time reviewed pull request count", async () => {
+    mock.reset();
+    mock
+      .onPost("https://api.github.com/graphql")
+      .reply(200, data_all_time_reviews);
+    mockReviewedPrsSearch(22);
+
+    let stats = await fetchStats("Andrej123456789");
+
+    expect(stats.totalReviews).toBe(22);
+  });
+
   it("should stop fetching when there are repos with zero stars", async () => {
     mock.reset();
     mock
@@ -175,6 +197,7 @@ describe("Test fetchStats", () => {
       .replyOnce(200, data_stats)
       .onPost("https://api.github.com/graphql")
       .replyOnce(200, data_repo_zero_stars);
+    mockReviewedPrsSearch();
 
     const stats = await fetchStats("anuraghazra");
     const rank = calculateRank({
