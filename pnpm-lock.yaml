@@ -127,8 +127,8 @@ importers:
         specifier: catalog:default
         version: 1.18.1
       axios-cache-interceptor:
-        specifier: ^1.12.0
-        version: 1.12.0(axios@1.18.1)
+        specifier: ^1.12.1
+        version: 1.12.1(axios@1.18.1)
       daisyui:
         specifier: ^5.6.18
         version: 5.6.18
@@ -1316,8 +1316,8 @@ packages:
   asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
 
-  axios-cache-interceptor@1.12.0:
-    resolution: {integrity: sha512-15XuJkdeJmQo/HY2b0xx3zim8DMx7Nu+G8R4z6OG2VZLtbIDnsfn4qZsLLvkPfK4SVNRzXnoG4jPR7dqdQznRA==}
+  axios-cache-interceptor@1.12.1:
+    resolution: {integrity: sha512-0CMA7US/V9tLfJzZyxY5NBzRKvWBkOXeNJLGO1XB/B8xglp36Kdvt72i2Xr3JVrYyhWEGayUFzsSs6piHZadCw==}
     engines: {node: '>=12'}
     peerDependencies:
       axios: ^1
@@ -3740,7 +3740,7 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  axios-cache-interceptor@1.12.0(axios@1.18.1):
+  axios-cache-interceptor@1.12.1(axios@1.18.1):
     dependencies:
       axios: 1.18.1
       cache-parser: 1.2.6
