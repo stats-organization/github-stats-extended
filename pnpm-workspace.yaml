@@ -15,15 +15,16 @@ catalog:
   vitest: 4.1.10
 
 overrides:
-  # @tailwindcss/node pins lightningcss exactly while vite floats on ^1.32.0.
-  # Drop this once @tailwindcss/node pins a version vite also resolves to.
+  # @tailwindcss/node pins lightningcss exactly while vite floats on ^1.32.0, so a cold re-resolve installs both.
+  # Updates against the existing lockfile keep 1.32.0 either way, so this only guards re-resolution.
+  # Enforced by scripts/assert-deduped.ts; drop it there too once @tailwindcss/node pins a version vite also resolves to.
   "vite>lightningcss": 1.32.0
 
 # Deliberately stricter than pnpm 11's 1440 default (7 days vs 1)
 minimumReleaseAge: 10080
 
-# Match the repo convention of exact version pins
-savePrefix: ""
+# Reject a version with weaker publish trust evidence than an earlier one.
+trustPolicy: no-downgrade
 
 # Fail on unmet peers and on a Node version outside `engines`, instead of warning
 strictPeerDependencies: true
