@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.base.json",
+  "include": ["scripts"],
+  "compilerOptions": {
+    "noEmit": true,
+    "customConditions": [],
+    // Base config sets `types: []`; these scripts run on node
+    "types": ["node"]
+  }
+}
