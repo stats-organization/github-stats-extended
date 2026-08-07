@@ -2,10 +2,10 @@ packages:
   - apps/*
   - packages/*
 
-allowBuilds:
-  "@swc/core": true
-  esbuild: true
-  unrs-resolver: true
+onlyBuiltDependencies:
+  - "@swc/core"
+  - esbuild
+  - unrs-resolver
 
 catalog:
   "@vitest/coverage-v8": 4.1.10
