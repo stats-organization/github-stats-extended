@@ -1,6 +1,6 @@
 # Run It Yourself
 
-We cache generated cards for a few hours to avoid potential rate-limiting in the GitHub API or on Vercel. If you want to set your own cache duration or you want to include private contributions in your stats without granting our hosted version of GitHub-Stats-Extended access to your private contributions, you can run GitHub-Stats-Extended on your own.
+We cache generated cards for a few hours or days to avoid potential rate-limiting in the GitHub API or on Vercel. If you want to set your own cache duration or you want to include private contributions in your stats without granting our hosted version of GitHub-Stats-Extended access to your private contributions, you can run GitHub-Stats-Extended on your own.
 
 GitHub Actions is the simplest setup with static SVGs stored in your repo but less frequent updates, while self-hosting GitHub-Stats-Extended on Vercel takes more work and can serve fresher stats (with caching).
 
@@ -104,7 +104,7 @@ Click on the deploy button to get started!
 3. Sign in with GitHub by pressing `Continue with GitHub`.
    ![](https://files.catbox.moe/b9oxey.png)
 4. Sign in to GitHub and allow access to all repositories if prompted.
-5. Fork this repo.
+5. Fork this repo. Disable "Copy the `master` branch only".
 6. Go back to your [Vercel dashboard](https://vercel.com/dashboard).
 7. To import a project, click the `Add New...` button and select the `Project` option.
    ![](https://files.catbox.moe/3n76fh.png)
@@ -120,10 +120,11 @@ Click on the deploy button to get started!
     3. Now you can make the variable `Sensitive` by checking the checkbox.
        ![](https://files.catbox.moe/mla5no.jpg)
 11. As `Root directory` select the `apps/backend` folder.
-12. Click deploy, and you're good to go. See your domains to use the API!
-13. optional: add an SQL database; by using e.g. the ["Nile" integration](https://vercel.com/marketplace/nile) or by manually setting the environment variable `POSTGRES_URL`
-14. optional: [create your own OAuth App](https://github.com/settings/developers) and set environment variables `OAUTH_REDIRECT_URI`, `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` on Vercel accordingly
-15. optional: set the environment variable `TURBO_PLATFORM_ENV_DISABLED` to `true` to disable the build-time warning from [turbo](https://turborepo.dev/) about environment variables missing from "turbo.json" - This warning is not relevant in our project.
+12. Click deploy. See your domains to use the API.
+13. In your Vercel project's settings, go to Environments → Production and change the branch tracking from "master" to "release". ("master" contains unreleased, potentially unstable code, while "release" contains the latest stable release.) Then go to "Deployments" → "..." button → "Create Deployment", select "release" and click "Deploy to production".
+14. optional: add an SQL database; by using e.g. the ["Nile" integration](https://vercel.com/marketplace/nile) or by manually setting the environment variable `POSTGRES_URL`
+15. optional: [create your own OAuth App](https://github.com/settings/developers) and set environment variables `OAUTH_REDIRECT_URI`, `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` on Vercel accordingly
+16. optional: set the environment variable `TURBO_PLATFORM_ENV_DISABLED` to `true` to disable the build-time warning from [turbo](https://turborepo.dev/) about environment variables missing from "turbo.json" - This warning is not relevant in our project.
 
 ### Available environment variables
 
