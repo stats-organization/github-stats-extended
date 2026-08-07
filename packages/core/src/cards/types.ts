@@ -1,7 +1,6 @@
 import type { themes } from "../themes/index.js";
 
 type ThemeNames = keyof typeof themes;
-type RankIcon = "default" | "github" | "percentile";
 
 export interface CommonOptions {
   title_color: string;
@@ -13,25 +12,6 @@ export interface CommonOptions {
   border_color: string;
   locale: string;
   hide_border: boolean;
-}
-
-export interface StatCardOptions extends CommonOptions {
-  hide: Array<string>;
-  show_icons: boolean;
-  hide_title: boolean;
-  card_width: number;
-  hide_rank: boolean;
-  include_all_commits: boolean;
-  commits_year: number;
-  line_height: number | string;
-  custom_title: string;
-  disable_animations: boolean;
-  number_format: string;
-  number_precision: number;
-  ring_color: string;
-  text_bold: boolean;
-  rank_icon: RankIcon;
-  show: Array<string>;
 }
 
 export interface TopLangOptions extends CommonOptions {

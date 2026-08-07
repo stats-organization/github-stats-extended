@@ -62,7 +62,7 @@ class Card {
     // `| undefined`: card callers forward possibly-undefined query options
     border_radius?: number | undefined;
     colors?: { light: CardColors; dark: CardColors | null };
-    customTitle?: string;
+    customTitle?: string | undefined;
     defaultTitle?: string;
     titlePrefixIcon?: string;
   }) {

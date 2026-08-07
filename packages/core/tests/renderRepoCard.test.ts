@@ -1,4 +1,4 @@
-import { queryByTestId } from "@testing-library/dom";
+import { screen } from "@testing-library/dom";
 import { cssToObject } from "@uppercod/css-to-object";
 import { describe, expect, it } from "vitest";
 
@@ -37,12 +37,10 @@ describe("Test renderRepoCard", () => {
       // no space between "Chat" and "App" because there's a line break there
       "Help us take over the world! React + TS + GraphQL ChatApp",
     );
-    expect(queryByTestId(document.body, "stargazers")).toHaveTextContent("38k");
-    expect(queryByTestId(document.body, "forkcount")).toHaveTextContent("100");
-    expect(queryByTestId(document.body, "lang-name")).toHaveTextContent(
-      "TypeScript",
-    );
-    expect(queryByTestId(document.body, "lang-color")).toHaveAttribute(
+    expect(screen.queryByTestId("stargazers")).toHaveTextContent("38k");
+    expect(screen.queryByTestId("forkcount")).toHaveTextContent("100");
+    expect(screen.queryByTestId("lang-name")).toHaveTextContent("TypeScript");
+    expect(screen.queryByTestId("lang-color")).toHaveAttribute(
       "fill",
       "#2b7489",
     );
@@ -142,22 +140,17 @@ describe("Test renderRepoCard", () => {
       primaryLanguage: null,
     });
 
-    expect(queryByTestId(document.body, "primary-lang")).toBeNull();
+    expect(screen.queryByTestId("primary-lang")).toBeNull();
 
     document.body.innerHTML = renderRepoCard({
       ...data_repo.repository,
       primaryLanguage: { color: null, name: null },
     });
 
-    expect(queryByTestId(document.body, "primary-lang")).toBeInTheDocument();
-    expect(queryByTestId(document.body, "lang-color")).toHaveAttribute(
-      "fill",
-      "#333",
-    );
+    expect(screen.queryByTestId("primary-lang")).toBeInTheDocument();
+    expect(screen.queryByTestId("lang-color")).toHaveAttribute("fill", "#333");
 
-    expect(queryByTestId(document.body, "lang-name")).toHaveTextContent(
-      "Unspecified",
-    );
+    expect(screen.queryByTestId("lang-name")).toHaveTextContent("Unspecified");
   });
 
   it("should render default colors properly", () => {
@@ -174,10 +167,7 @@ describe("Test renderRepoCard", () => {
     expect(headerClassStyles?.["fill"]?.trim()).toBe("#2f80ed");
     expect(descClassStyles?.["fill"]?.trim()).toBe("#434d58");
     expect(iconClassStyles?.["fill"]?.trim()).toBe("#586069");
-    expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
-      "fill",
-      "#fffefe",
-    );
+    expect(screen.queryByTestId("card-bg")).toHaveAttribute("fill", "#fffefe");
   });
 
   it("should render custom colors properly", () => {
@@ -205,10 +195,7 @@ describe("Test renderRepoCard", () => {
     expect(headerClassStyles?.["fill"]?.trim()).toBe(`#${title_color}`);
     expect(descClassStyles?.["fill"]?.trim()).toBe(`#${text_color}`);
     expect(iconClassStyles?.["fill"]?.trim()).toBe(`#${icon_color}`);
-    expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
-      "fill",
-      "#252525",
-    );
+    expect(screen.queryByTestId("card-bg")).toHaveAttribute("fill", "#252525");
   });
 
   it("should render with all the themes", () => {
@@ -231,7 +218,7 @@ describe("Test renderRepoCard", () => {
       expect(descClassStyles?.["fill"]?.trim()).toBe(`#${text_color}`);
       expect(iconClassStyles?.["fill"]?.trim()).toBe(`#${icon_color}`);
 
-      const backgroundElement = queryByTestId(document.body, "card-bg");
+      const backgroundElement = screen.queryByTestId("card-bg");
       const backgroundElementFill = backgroundElement?.getAttribute("fill");
       expect([`#${bg_color}`, "url(#gradient)"]).toContain(
         backgroundElementFill,
@@ -260,7 +247,7 @@ describe("Test renderRepoCard", () => {
     expect(iconClassStyles?.["fill"]?.trim()).toBe(
       `#${themes.radical.icon_color}`,
     );
-    expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
+    expect(screen.queryByTestId("card-bg")).toHaveAttribute(
       "fill",
       `#${themes.radical.bg_color}`,
     );
@@ -289,7 +276,7 @@ describe("Test renderRepoCard", () => {
     expect(headerClassStyles?.["fill"]?.trim()).toBe(`#${title_color}`);
     expect(descClassStyles?.["fill"]?.trim()).toBe(`#${text_color}`);
     expect(iconClassStyles?.["fill"]?.trim()).toBe(`#${icon_color}`);
-    expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
+    expect(screen.queryByTestId("card-bg")).toHaveAttribute(
       "fill",
       `#${bg_color}`,
     );
@@ -301,8 +288,8 @@ describe("Test renderRepoCard", () => {
       stargazerCount: 0,
     });
 
-    expect(queryByTestId(document.body, "stargazers")).toBeNull();
-    expect(queryByTestId(document.body, "forkcount")).toBeInTheDocument();
+    expect(screen.queryByTestId("stargazers")).toBeNull();
+    expect(screen.queryByTestId("forkcount")).toBeInTheDocument();
 
     document.body.innerHTML = renderRepoCard({
       ...data_repo.repository,
@@ -310,8 +297,8 @@ describe("Test renderRepoCard", () => {
       forkCount: 0,
     });
 
-    expect(queryByTestId(document.body, "stargazers")).toBeInTheDocument();
-    expect(queryByTestId(document.body, "forkcount")).toBeNull();
+    expect(screen.queryByTestId("stargazers")).toBeInTheDocument();
+    expect(screen.queryByTestId("forkcount")).toBeNull();
 
     document.body.innerHTML = renderRepoCard({
       ...data_repo.repository,
@@ -319,8 +306,8 @@ describe("Test renderRepoCard", () => {
       forkCount: 0,
     });
 
-    expect(queryByTestId(document.body, "stargazers")).toBeNull();
-    expect(queryByTestId(document.body, "forkcount")).toBeNull();
+    expect(screen.queryByTestId("stargazers")).toBeNull();
+    expect(screen.queryByTestId("forkcount")).toBeNull();
   });
 
   it("should render badges", () => {
@@ -329,20 +316,20 @@ describe("Test renderRepoCard", () => {
       isArchived: true,
     });
 
-    expect(queryByTestId(document.body, "badge")).toHaveTextContent("Archived");
+    expect(screen.queryByTestId("badge")).toHaveTextContent("Archived");
 
     document.body.innerHTML = renderRepoCard({
       ...data_repo.repository,
       isTemplate: true,
     });
-    expect(queryByTestId(document.body, "badge")).toHaveTextContent("Template");
+    expect(screen.queryByTestId("badge")).toHaveTextContent("Template");
   });
 
   it("should not render template", () => {
     document.body.innerHTML = renderRepoCard({
       ...data_repo.repository,
     });
-    expect(queryByTestId(document.body, "badge")).toBeNull();
+    expect(screen.queryByTestId("badge")).toBeNull();
   });
 
   it("should render translated badges", () => {
@@ -356,7 +343,7 @@ describe("Test renderRepoCard", () => {
       },
     );
 
-    expect(queryByTestId(document.body, "badge")).toHaveTextContent("已归档");
+    expect(screen.queryByTestId("badge")).toHaveTextContent("已归档");
 
     document.body.innerHTML = renderRepoCard(
       {
@@ -367,7 +354,7 @@ describe("Test renderRepoCard", () => {
         locale: "cn",
       },
     );
-    expect(queryByTestId(document.body, "badge")).toHaveTextContent("模板");
+    expect(screen.queryByTestId("badge")).toHaveTextContent("模板");
   });
 
   it("should render without rounding", () => {

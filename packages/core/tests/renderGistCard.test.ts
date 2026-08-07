@@ -1,4 +1,4 @@
-import { queryByTestId } from "@testing-library/dom";
+import { screen } from "@testing-library/dom";
 import { cssToObject } from "@uppercod/css-to-object";
 import { describe, expect, it } from "vitest";
 
@@ -28,12 +28,10 @@ describe("test renderGistCard", () => {
       // Between "Python" and "programs" there is a line break caused by: </tspan><tspan dy="1.2em" x="25">
       "Small <b>test</b> repository with different Pythonprograms.",
     );
-    expect(queryByTestId(document.body, "starsCount")).toHaveTextContent("163");
-    expect(queryByTestId(document.body, "forksCount")).toHaveTextContent("19");
-    expect(queryByTestId(document.body, "lang-name")).toHaveTextContent(
-      "Python",
-    );
-    expect(queryByTestId(document.body, "lang-color")).toHaveAttribute(
+    expect(screen.queryByTestId("starsCount")).toHaveTextContent("163");
+    expect(screen.queryByTestId("forksCount")).toHaveTextContent("19");
+    expect(screen.queryByTestId("lang-name")).toHaveTextContent("Python");
+    expect(screen.queryByTestId("lang-color")).toHaveAttribute(
       "fill",
       "#3572A5",
     );
@@ -134,10 +132,7 @@ describe("test renderGistCard", () => {
     expect(headerClassStyles?.["fill"]?.trim()).toBe(`#${title_color}`);
     expect(descClassStyles?.["fill"]?.trim()).toBe(`#${text_color}`);
     expect(iconClassStyles?.["fill"]?.trim()).toBe(`#${icon_color}`);
-    expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
-      "fill",
-      "#252525",
-    );
+    expect(screen.queryByTestId("card-bg")).toHaveAttribute("fill", "#252525");
   });
 
   it("should render with all the themes", () => {
@@ -160,7 +155,7 @@ describe("test renderGistCard", () => {
       expect(descClassStyles?.["fill"]?.trim()).toBe(`#${text_color}`);
       expect(iconClassStyles?.["fill"]?.trim()).toBe(`#${icon_color}`);
 
-      const backgroundElement = queryByTestId(document.body, "card-bg");
+      const backgroundElement = screen.queryByTestId("card-bg");
       const backgroundElementFill = backgroundElement?.getAttribute("fill");
       expect([`#${bg_color}`, "url(#gradient)"]).toContain(
         backgroundElementFill,
@@ -189,7 +184,7 @@ describe("test renderGistCard", () => {
     expect(iconClassStyles?.["fill"]?.trim()).toBe(
       `#${themes.radical.icon_color}`,
     );
-    expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
+    expect(screen.queryByTestId("card-bg")).toHaveAttribute(
       "fill",
       `#${themes.radical.bg_color}`,
     );
@@ -218,7 +213,7 @@ describe("test renderGistCard", () => {
     expect(headerClassStyles?.["fill"]?.trim()).toBe(`#${title_color}`);
     expect(descClassStyles?.["fill"]?.trim()).toBe(`#${text_color}`);
     expect(iconClassStyles?.["fill"]?.trim()).toBe(`#${icon_color}`);
-    expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
+    expect(screen.queryByTestId("card-bg")).toHaveAttribute(
       "fill",
       `#${bg_color}`,
     );
@@ -230,8 +225,8 @@ describe("test renderGistCard", () => {
       starsCount: 0,
     });
 
-    expect(queryByTestId(document.body, "starsCount")).toBeNull();
-    expect(queryByTestId(document.body, "forksCount")).toBeInTheDocument();
+    expect(screen.queryByTestId("starsCount")).toBeNull();
+    expect(screen.queryByTestId("forksCount")).toBeInTheDocument();
 
     document.body.innerHTML = renderGistCard({
       ...data,
@@ -239,8 +234,8 @@ describe("test renderGistCard", () => {
       forksCount: 0,
     });
 
-    expect(queryByTestId(document.body, "starsCount")).toBeInTheDocument();
-    expect(queryByTestId(document.body, "forksCount")).toBeNull();
+    expect(screen.queryByTestId("starsCount")).toBeInTheDocument();
+    expect(screen.queryByTestId("forksCount")).toBeNull();
 
     document.body.innerHTML = renderGistCard({
       ...data,
@@ -248,8 +243,8 @@ describe("test renderGistCard", () => {
       forksCount: 0,
     });
 
-    expect(queryByTestId(document.body, "starsCount")).toBeNull();
-    expect(queryByTestId(document.body, "forksCount")).toBeNull();
+    expect(screen.queryByTestId("starsCount")).toBeNull();
+    expect(screen.queryByTestId("forksCount")).toBeNull();
   });
 
   it("should render without rounding", () => {

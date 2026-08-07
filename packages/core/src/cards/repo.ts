@@ -8,6 +8,7 @@ import { buildSearchFilter, clampValue, parseEmojis } from "../common/ops.js";
 import {
   countWrappedLines,
   createLanguageNode,
+  createTextNode,
   flexLayout,
   iconWithLabel,
   measureText,
@@ -17,7 +18,6 @@ import {
 import type { RepositoryData } from "../fetchers/types.js";
 import { repoCardLocales } from "../translations.js";
 
-import { createTextNode } from "./stats.js";
 import type { CommonOptions } from "./types.js";
 
 const ICON_SIZE = 16;

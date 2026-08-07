@@ -1,9 +1,12 @@
 const FALLBACK_LOCALE = "en";
 
+/** A map of translation keys to per-locale strings. */
+type TranslationsMap = Record<string, Record<string, string>>;
+
 /**
  * I18n translation class.
  */
-class I18n<Translations extends Record<string, Record<string, string>>> {
+class I18n<Translations extends TranslationsMap = TranslationsMap> {
   locale: string;
   translations: Translations;
 

@@ -2,12 +2,13 @@ import { Card } from "../common/Card.js";
 import { I18n } from "../common/I18n.js";
 import { getLightDarkColors } from "../common/color.js";
 import { CustomError } from "../common/error.js";
-import { kFormatter } from "../common/fmt.js";
-import { encodeHTML } from "../common/html.js";
 import { icons, rankIcon } from "../common/icons.js";
 import { buildSearchFilter, clampValue } from "../common/ops.js";
-import { flexLayout, measureText } from "../common/render.js";
+import { createTextNode, flexLayout, measureText } from "../common/render.js";
+import type { StatsData } from "../fetchers/types.js";
 import { statCardLocales, wakatimeCardLocales } from "../translations.js";
+
+import type { CommonOptions } from "./types.js";
 
 const CARD_MIN_WIDTH = 287;
 const CARD_DEFAULT_WIDTH = 287;
@@ -16,12 +17,39 @@ const RANK_CARD_DEFAULT_WIDTH = 450;
 const RANK_ONLY_CARD_MIN_WIDTH = 290;
 const RANK_ONLY_CARD_DEFAULT_WIDTH = 290;
 
-/**
- * Long locales that need more space for text. Keep sorted alphabetically.
- *
- * @type {(keyof typeof wakatimeCardLocales["wakatimecard.title"])[]}
- */
-const LONG_LOCALES = [
+type RankIcon = "default" | "github" | "percentile";
+
+interface StatCardOptions extends CommonOptions {
+  hide: Array<string>;
+  show_icons: boolean;
+  hide_title: boolean;
+  card_width: number;
+  hide_rank: boolean;
+  include_all_commits: boolean;
+  commits_year: number;
+  line_height: number | string;
+  custom_title: string;
+  disable_animations: boolean;
+  number_format: string;
+  number_precision: number;
+  ring_color: string;
+  text_bold: boolean;
+  rank_icon: RankIcon;
+  show: Array<string>;
+}
+
+/** Meta data for a stat, used to build its text node and accessibility label. */
+interface StatItem {
+  icon: string;
+  label: string;
+  value: number | string;
+  id: string;
+  unitSymbol?: string;
+  link?: string;
+}
+
+/** Long locales that need more space for text. Keep sorted alphabetically. */
+const LONG_LOCALES: Array<string> = [
   "az",
   "bg",
   "cs",
@@ -51,98 +79,12 @@ const LONG_LOCALES = [
 ];
 
 /**
- * Create a stats card text item.
- *
- * The caller must ensure that the passed `icon` and `link` are properly sanitized!
- *
- * @param {object} params Object that contains the createTextNode parameters.
- * @param {string} params.icon The sanitized icon to display.
- * @param {string} params.label The label to display.
- * @param {number} params.value The value to display.
- * @param {string} params.id The id of the stat.
- * @param {string=} params.unitSymbol The unit symbol of the stat.
- * @param {number} params.index The index of the stat.
- * @param {boolean} params.showIcons Whether to show icons.
- * @param {number} params.shiftValuePos Number of pixels the value has to be shifted to the right.
- * @param {boolean} params.bold Whether to bold the label.
- * @param {string} params.numberFormat The format of numbers on card.
- * @param {number=} params.numberPrecision The precision of numbers on card.
- * @param {string} params.link Sanitized url to link to.
- * @param {number} params.labelXOffset horizontal offset for label.
- * @returns {string} The stats card text item SVG object.
- */
-const createTextNode = ({
-  icon,
-  label,
-  value,
-  id,
-  unitSymbol,
-  index,
-  showIcons,
-  shiftValuePos,
-  bold,
-  numberFormat,
-  numberPrecision,
-  link,
-  labelXOffset = 25,
-}) => {
-  if (!Number.isFinite(labelXOffset)) {
-    throw new Error(`Invalid labelXOffset: "${labelXOffset}"`);
-  }
-  if (!Number.isFinite(shiftValuePos)) {
-    throw new Error(`Invalid shiftValuePos: "${shiftValuePos}"`);
-  }
-  if (!Number.isFinite(index)) {
-    throw new Error(`Invalid index: "${index}"`);
-  }
-
-  const precision =
-    typeof numberPrecision === "number" && !isNaN(numberPrecision)
-      ? clampValue(numberPrecision, 0, 2)
-      : undefined;
-  const kValue =
-    numberFormat.toLowerCase() === "long" || id === "prs_merged_percentage"
-      ? value
-      : kFormatter(value, precision);
-  const staggerDelay = (index + 3) * 150;
-
-  const labelOffset = showIcons ? `x="${labelXOffset}"` : "";
-  const iconSvg = showIcons
-    ? `
-    <svg data-testid="icon" class="icon" viewBox="0 0 16 16" version="1.1" width="16" height="16">
-      ${icon}
-    </svg>
-  `
-    : "";
-  return (
-    `
-    <g class="stagger" style="animation-delay: ${staggerDelay}ms" transform="translate(25, 0)">` +
-    (link ? `<a href="${link}">` : "") +
-    `
-      ${iconSvg}
-      <text class="stat ${
-        bold ? " bold" : "not_bold"
-      }" ${labelOffset} y="12.5">${encodeHTML(label)}:</text>
-      <text
-        class="stat ${bold ? " bold" : "not_bold"}"
-        x="${(showIcons ? 140 : 120) + (bold ? 5 : 0) + shiftValuePos}"
-        y="12.5"
-        data-testid="${id}"
-      >${kValue}${unitSymbol ? ` ${unitSymbol}` : ""}</text>` +
-    (link ? "</a>" : "") +
-    `
-    </g>
-  `
-  );
-};
-
-/**
  * Calculates progress along the boundary of the circle, i.e. its circumference.
  *
- * @param {number} value The rank value to calculate progress for.
- * @returns {number} Progress value.
+ * @param value The rank value to calculate progress for.
+ * @returns Progress value.
  */
-const calculateCircleProgress = (value) => {
+const calculateCircleProgress = (value: number): number => {
   const radius = 40;
   const c = Math.PI * (radius * 2);
 
@@ -160,10 +102,11 @@ const calculateCircleProgress = (value) => {
  * Retrieves the animation to display progress along the circumference of circle
  * from the beginning to the given value in a clockwise direction.
  *
- * @param {{progress: number}} progress The progress value to animate to.
- * @returns {string} Progress animation css.
+ * @param props The props object.
+ * @param props.progress The progress value to animate to.
+ * @returns Progress animation css.
  */
-const getProgressAnimation = ({ progress }) => {
+const getProgressAnimation = ({ progress }: { progress: number }): string => {
   return `
     @keyframes rankAnimation {
       from {
@@ -179,24 +122,27 @@ const getProgressAnimation = ({ progress }) => {
 /**
  * Retrieves CSS styles for a card.
  *
- * @param {Object} colors The colors to use for the card.
- * @param {string} colors.titleColor The title color.
- * @param {string} colors.textColor The text color.
- * @param {string} colors.iconColor The icon color.
- * @param {string} colors.ringColor The ring color.
- * @param {boolean} colors.show_icons Whether to show icons.
- * @param {number} colors.progress The progress value to animate to.
- * @returns {string} Card CSS styles.
+ * @param colors The colors to use for the card.
+ * @param colors.textColor The text color.
+ * @param colors.iconColor The icon color.
+ * @param colors.ringColor The ring color.
+ * @param colors.show_icons Whether to show icons.
+ * @param colors.progress The progress value to animate to.
+ * @returns Card CSS styles.
  */
 const getStyles = ({
-  // eslint-disable-next-line no-unused-vars
-  titleColor,
   textColor,
   iconColor,
   ringColor,
   show_icons,
   progress,
-}) => {
+}: {
+  textColor: string;
+  iconColor: string;
+  ringColor: string;
+  show_icons: boolean;
+  progress: number;
+}): string => {
   return `
     .stat {
       font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: ${textColor};
@@ -251,12 +197,16 @@ const getStyles = ({
 /**
  * Return the label for commits according to the selected options
  *
- * @param {boolean} include_all_commits Option to include all years
- * @param {number|undefined} commits_year Option to include only selected year
- * @param {I18n} i18n The I18n instance.
- * @returns {string} The label corresponding to the options.
+ * @param include_all_commits Option to include all years
+ * @param commits_year Option to include only selected year
+ * @param i18n The I18n instance.
+ * @returns The label corresponding to the options.
  */
-const getTotalCommitsYearLabel = (include_all_commits, commits_year, i18n) =>
+const getTotalCommitsYearLabel = (
+  include_all_commits: boolean,
+  commits_year: number | undefined,
+  i18n: I18n,
+): string =>
   include_all_commits
     ? ""
     : commits_year
@@ -264,24 +214,22 @@ const getTotalCommitsYearLabel = (include_all_commits, commits_year, i18n) =>
       : ` (${i18n.t("wakatimecard.lastyear")})`;
 
 /**
- * @typedef {import('../fetchers/types').StatsData} StatsData
- * @typedef {import('./types').StatCardOptions} StatCardOptions
- */
-
-/**
  * Renders the stats card.
  *
- * @param {StatsData} stats The stats data.
- * @param {Partial<StatCardOptions>} options The card options.
- * @returns {string} The stats card SVG object.
+ * @param stats The stats data.
+ * @param options The card options.
+ * @param username GitHub username, used to build stat search links.
+ * @param repo Repositories to scope the search links to.
+ * @param owner Owners to scope the search links to.
+ * @returns The stats card SVG object.
  */
 const renderStatsCard = (
-  stats,
-  options = {},
-  username,
-  repo = [],
-  owner = [],
-) => {
+  stats: StatsData,
+  options: Partial<StatCardOptions> = {},
+  username?: string,
+  repo: Array<string> = [],
+  owner: Array<string> = [],
+): string => {
   const {
     name,
     totalStars,
@@ -325,7 +273,7 @@ const renderStatsCard = (
   const lheight = parseInt(String(line_height), 10);
 
   const { lightColors, darkColors } = getLightDarkColors(options);
-  const { titleColor, iconColor, textColor, ringColor } = lightColors;
+  const { iconColor, textColor, ringColor } = lightColors;
 
   const apostrophe = /s$/i.test(name.trim()) ? "" : "s";
   const i18n = new I18n({
@@ -337,15 +285,15 @@ const renderStatsCard = (
   });
 
   // Meta data for creating text nodes with createTextNode function
-  const STATS = {};
+  const STATS: Record<string, StatItem> = {};
 
-  STATS.stars = {
+  STATS["stars"] = {
     icon: icons.star,
     label: i18n.t("statcard.totalstars"),
     value: totalStars,
     id: "stars",
   };
-  STATS.commits = {
+  STATS["commits"] = {
     icon: icons.commits,
     label: `${i18n.t("statcard.commits")}${getTotalCommitsYearLabel(
       include_all_commits,
@@ -355,7 +303,7 @@ const renderStatsCard = (
     value: totalCommits,
     id: "commits",
   };
-  STATS.prs = {
+  STATS["prs"] = {
     icon: icons.prs,
     label: i18n.t("statcard.prs"),
     value: totalPRs,
@@ -363,7 +311,7 @@ const renderStatsCard = (
   };
 
   if (show.includes("prs_merged")) {
-    STATS.prs_merged = {
+    STATS["prs_merged"] = {
       icon: icons.prs_merged,
       label: i18n.t("statcard.prs-merged"),
       value: totalPRsMerged,
@@ -372,11 +320,11 @@ const renderStatsCard = (
   }
 
   if (show.includes("prs_merged_percentage")) {
-    STATS.prs_merged_percentage = {
+    STATS["prs_merged_percentage"] = {
       icon: icons.prs_merged_percentage,
       label: i18n.t("statcard.prs-merged-percentage"),
       value: mergedPRsPercentage.toFixed(
-        typeof number_precision === "number" && !isNaN(number_precision)
+        number_precision !== undefined && Number.isFinite(number_precision)
           ? clampValue(number_precision, 0, 2)
           : 2,
       ),
@@ -386,7 +334,7 @@ const renderStatsCard = (
   }
 
   if (show.includes("reviews")) {
-    STATS.reviews = {
+    STATS["reviews"] = {
       icon: icons.reviews,
       label: i18n.t("statcard.reviews"),
       value: totalReviews,
@@ -394,7 +342,7 @@ const renderStatsCard = (
     };
   }
 
-  STATS.issues = {
+  STATS["issues"] = {
     icon: icons.issues,
     label: i18n.t("statcard.issues"),
     value: totalIssues,
@@ -402,7 +350,7 @@ const renderStatsCard = (
   };
 
   if (show.includes("discussions_started")) {
-    STATS.discussions_started = {
+    STATS["discussions_started"] = {
       icon: icons.discussions_started,
       label: i18n.t("statcard.discussions-started"),
       value: totalDiscussionsStarted,
@@ -410,7 +358,7 @@ const renderStatsCard = (
     };
   }
   if (show.includes("discussions_answered")) {
-    STATS.discussions_answered = {
+    STATS["discussions_answered"] = {
       icon: icons.discussions_answered,
       label: i18n.t("statcard.discussions-answered"),
       value: totalDiscussionsAnswered,
@@ -418,10 +366,10 @@ const renderStatsCard = (
     };
   }
 
-  let repoFilter = encodeURIComponent(buildSearchFilter(repo, owner));
-  const encodedUsername = encodeURIComponent(username);
+  const repoFilter = encodeURIComponent(buildSearchFilter(repo, owner));
+  const encodedUsername = encodeURIComponent(username ?? "");
   if (show.includes("prs_authored")) {
-    STATS.prs_authored = {
+    STATS["prs_authored"] = {
       icon: icons.prs,
       label: i18n.t("statcard.prs-authored"),
       value: totalPRsAuthored,
@@ -430,7 +378,7 @@ const renderStatsCard = (
     };
   }
   if (show.includes("prs_commented")) {
-    STATS.prs_commented = {
+    STATS["prs_commented"] = {
       icon: icons.comments,
       label: i18n.t("statcard.prs-commented"),
       value: totalPRsCommented,
@@ -439,7 +387,7 @@ const renderStatsCard = (
     };
   }
   if (show.includes("prs_reviewed")) {
-    STATS.prs_reviewed = {
+    STATS["prs_reviewed"] = {
       icon: icons.reviews,
       label: i18n.t("statcard.prs-reviewed"),
       value: totalPRsReviewed,
@@ -448,7 +396,7 @@ const renderStatsCard = (
     };
   }
   if (show.includes("issues_authored")) {
-    STATS.issues_authored = {
+    STATS["issues_authored"] = {
       icon: icons.issues,
       label: i18n.t("statcard.issues-authored"),
       value: totalIssuesAuthored,
@@ -457,7 +405,7 @@ const renderStatsCard = (
     };
   }
   if (show.includes("issues_commented")) {
-    STATS.issues_commented = {
+    STATS["issues_commented"] = {
       icon: icons.discussions_started,
       label: i18n.t("statcard.issues-commented"),
       value: totalIssuesCommented,
@@ -466,45 +414,40 @@ const renderStatsCard = (
     };
   }
 
-  STATS.contribs = {
+  STATS["contribs"] = {
     icon: icons.contribs,
     label: i18n.t("statcard.contribs"),
     value: contributedTo,
     id: "contribs",
   };
 
-  // @ts-ignore
   const isLongLocale = locale ? LONG_LOCALES.includes(locale) : false;
 
   // check if all used labels are short
-  const longLabels =
-    Object.keys(STATS)
-      .filter((key) => !hide.includes(key))
-      .filter((key) => STATS[key].label.length > 18).length > 0;
+  const longLabels = Object.entries(STATS)
+    .filter(([key]) => !hide.includes(key))
+    .some(([, stat]) => stat.label.length > 18);
 
   // filter out hidden stats defined by user & create the text nodes
-  const statItems = Object.keys(STATS)
-    .filter((key) => !hide.includes(key))
-    .map((key, index) => {
-      // @ts-ignore
-      const stats = STATS[key];
-
-      // create the text nodes, and pass index so that we can calculate the line spacing
-      return createTextNode({
-        icon: stats.icon,
-        label: stats.label,
-        value: stats.value,
-        id: stats.id,
-        unitSymbol: stats.unitSymbol,
+  const statItems = Object.entries(STATS)
+    .filter(([key]) => !hide.includes(key))
+    // pass index so that we can calculate the line spacing
+    .map(([, stat], index) =>
+      createTextNode({
+        icon: stat.icon,
+        label: stat.label,
+        value: stat.value,
+        id: stat.id,
+        unitSymbol: stat.unitSymbol,
         index,
         showIcons: show_icons,
         shiftValuePos: 29.01 + (longLabels ? 50 : 0) + (isLongLocale ? 50 : 0),
         bold: text_bold,
         numberFormat: number_format,
         numberPrecision: number_precision,
-        link: STATS[key].link,
-      });
-    });
+        link: stat.link,
+      }),
+    );
 
   if (statItems.length === 0 && hide_rank) {
     throw new CustomError(
@@ -515,7 +458,7 @@ const renderStatsCard = (
 
   // Calculate the card height depending on how many items there are
   // but if rank circle is visible clamp the minimum height to `150`
-  let height = Math.max(
+  const height = Math.max(
     45 + (statItems.length + 1) * lheight,
     hide_rank ? 0 : statItems.length ? 150 : 180,
   );
@@ -555,7 +498,7 @@ const renderStatsCard = (
       : statItems.length
         ? RANK_CARD_DEFAULT_WIDTH
         : RANK_ONLY_CARD_DEFAULT_WIDTH) + iconWidth;
-  let width = card_width
+  const width = card_width
     ? isNaN(card_width)
       ? Math.max(defaultCardWidth, minCardWidth)
       : card_width
@@ -576,7 +519,6 @@ const renderStatsCard = (
   card.setHideTitle(hide_title);
   card.setCSS({
     light: getStyles({
-      titleColor,
       ringColor,
       textColor,
       iconColor,
@@ -585,7 +527,6 @@ const renderStatsCard = (
     }),
     dark: darkColors
       ? getStyles({
-          titleColor: darkColors.titleColor,
           ringColor: darkColors.ringColor,
           textColor: darkColors.textColor,
           iconColor: darkColors.iconColor,
@@ -607,9 +548,9 @@ const renderStatsCard = (
    * width < RANK_CARD_DEFAULT_WIDTH: The left and right padding will be enlarged
    *   equally from a certain minimum at RANK_CARD_MIN_WIDTH.
    *
-   * @returns {number} - Rank circle translation value.
+   * @returns Rank circle translation value.
    */
-  const calculateRankXTranslation = () => {
+  const calculateRankXTranslation = (): number => {
     if (statItems.length) {
       const minXTranslation = RANK_CARD_MIN_WIDTH + iconWidth - 70;
       if (width > RANK_CARD_DEFAULT_WIDTH) {
@@ -633,24 +574,22 @@ const renderStatsCard = (
         <circle class="rank-circle-rim" cx="-10" cy="8" r="40" />
         <circle class="rank-circle" cx="-10" cy="8" r="40" />
         <g class="rank-text">
-          ${rankIcon(rank_icon, rank?.level, rank?.percentile)}
+          ${rankIcon(rank_icon, rank.level, rank.percentile)}
         </g>
       </g>`;
 
   // Accessibility Labels
-  const labels = Object.keys(STATS)
-    .filter((key) => !hide.includes(key))
-    .map((key) => {
-      // @ts-ignore
-      const stats = STATS[key];
+  const labels = Object.entries(STATS)
+    .filter(([key]) => !hide.includes(key))
+    .map(([key, stat]) => {
       if (key === "commits") {
         return `${i18n.t("statcard.commits")} ${getTotalCommitsYearLabel(
           include_all_commits,
           commits_year,
           i18n,
-        )} : ${stats.value}`;
+        )} : ${stat.value}`;
       }
-      return `${stats.label}: ${stats.value}`;
+      return `${stat.label}: ${stat.value}`;
     })
     .join(", ");
 
@@ -671,4 +610,4 @@ const renderStatsCard = (
   `);
 };
 
-export { renderStatsCard, createTextNode };
+export { renderStatsCard };
