@@ -1,4 +1,5 @@
 import { themes } from "../themes/index.js";
+import type { ThemeName } from "../themes/index.js";
 
 /** Matches a 3-, 4-, 6-, or 8-digit hex color with no leading `#`. */
 const HEX_COLOR =
@@ -174,7 +175,7 @@ const getCardColors = ({
   const isThemeProvided = theme !== undefined && theme in themes;
 
   const selectedTheme = isThemeProvided
-    ? themes[theme as keyof typeof themes]
+    ? themes[theme as ThemeName]
     : defaultTheme;
 
   const defaultBorderColor =

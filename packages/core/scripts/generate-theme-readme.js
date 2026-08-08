@@ -64,11 +64,25 @@ const createTableItem = ({ link, label, isRepoCard }) => {
   return `\`${label}\` ![${link}][${link}${isRepoCard ? "_repo" : ""}]`;
 };
 
+const allThemeNames = Object.keys(themes);
+
+// Some themes come in pairs: `X_repocard` for the repo and gist cards, `X` for
+// the stats, top languages and WakaTime cards. Each table lists only its own
+// variant.
+//
+// Keep in sync with the theme lists in `apps/frontend/src/pages/Home/stages/Theme.tsx`,
+// which splits the picker by the same rule.
+const repoCardThemes = allThemeNames.filter(
+  (name) => !allThemeNames.includes(`${name}_repocard`),
+);
+
+const nonRepoCardThemes = allThemeNames.filter(
+  (name) => !name.endsWith("_repocard"),
+);
+
 const generateTable = ({ isRepoCard }) => {
   const rows = [];
-  const themesFiltered = Object.keys(themes).filter(
-    (name) => name !== (isRepoCard ? "default" : "default_repocard"),
-  );
+  const themesFiltered = isRepoCard ? repoCardThemes : nonRepoCardThemes;
 
   for (let i = 0; i < themesFiltered.length; i += 3) {
     const one = themesFiltered[i];

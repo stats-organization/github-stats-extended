@@ -1,3 +1,4 @@
+import type { ThemeName } from "@stats-organization/github-readme-stats-core";
 import { themes } from "@stats-organization/github-readme-stats-core";
 import type { JSX } from "react";
 
@@ -10,6 +11,9 @@ import type { CardUrlBuilder } from "../../../models/CardUrl";
 import { useTheme } from "../../../redux/selectors/themeSelectors";
 
 const excludedThemes = [
+  "default",
+  "default_repocard",
+  "github_dark",
   "merko",
   "blue-green",
   "gotham",
@@ -18,29 +22,51 @@ const excludedThemes = [
   "holi",
 ];
 
+const allThemeNames = Object.keys(themes) as Array<ThemeName>;
+
 // Light themes first, adaptive themes in the middle, dark themes last.
-const themeList = Object.keys(themes)
-  .filter((myTheme) => !excludedThemes.includes(myTheme))
-  .sort((a, b) => getThemeSortRank(a) - getThemeSortRank(b));
+const forPicker = (names: ReadonlyArray<ThemeName>) =>
+  names
+    .filter((name) => !excludedThemes.includes(name))
+    .sort((a, b) => getThemeSortRank(a) - getThemeSortRank(b));
+
+// Some themes come in pairs: `X_repocard` for the repo and gist cards, `X` for
+// the stats, top languages and WakaTime cards. Each side offers only its own
+// variant, so the theme Home.tsx starts on is always one of the entries here.
+//
+// Keep in sync with `generateTable` in `packages/core/scripts/generate-theme-readme.js`,
+// which splits the theme README tables by the same rule.
+const repoCardThemes = forPicker(
+  allThemeNames.filter(
+    (name) => !allThemeNames.includes(`${name}_repocard` as ThemeName),
+  ),
+);
+
+const nonRepoCardThemes = forPicker(
+  allThemeNames.filter((name) => !name.endsWith("_repocard")),
+);
 
 interface ThemeStageProps {
   card: CardUrlBuilder;
   theme: string;
+  isRepoCard: boolean;
   onThemeChange: (theme: string) => void;
 }
 
 export function ThemeStage({
   theme,
   card,
+  isRepoCard,
   onThemeChange,
 }: ThemeStageProps): JSX.Element {
   const { isDark } = useTheme();
+  const themeList = isRepoCard ? repoCardThemes : nonRepoCardThemes;
 
   return (
     <>
       <div className="flex flex-wrap">
         {themeList.map((myTheme) => {
-          const themeColors = themes[myTheme as keyof typeof themes];
+          const themeColors = themes[myTheme];
           return (
             <button
               className="p-2 lg:p-4"

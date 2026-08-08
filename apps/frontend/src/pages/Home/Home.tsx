@@ -34,6 +34,17 @@ interface HomeScreenProps {
   setStage: (stageIndex: StageIndex) => void;
 }
 
+function getDefaultTheme(isDark: boolean, isRepoCard: boolean): string {
+  if (isRepoCard) {
+    return isDark ? "dark_github_repocard" : "light_github_repocard";
+  }
+  return isDark ? "dark_github" : "light_github";
+}
+
+function isRepoCard(selectedCard: CardType): boolean {
+  return selectedCard === CardType.PIN || selectedCard === CardType.GIST;
+}
+
 export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -66,7 +77,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
   }
 
   const { isDark } = useTheme();
-  const [theme, setTheme] = useState(isDark ? "dark" : "default");
+  const [theme, setTheme] = useState(() => getDefaultTheme(isDark, false));
 
   const handleCardTypeChange = (cardType: CardType) => {
     if (cardType === CardType.TOP_LANGS) {
@@ -83,12 +94,8 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
       }));
     }
 
-    if (theme === "default" || theme === "default_repocard") {
-      if (cardType === CardType.PIN || cardType === CardType.GIST) {
-        setTheme("default_repocard");
-      } else {
-        setTheme("default");
-      }
+    if (theme === getDefaultTheme(isDark, isRepoCard(selectedCard))) {
+      setTheme(getDefaultTheme(isDark, isRepoCard(cardType)));
     }
 
     setSelectedCard(cardType);
@@ -107,19 +114,14 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
 
   // Preview builder for the customize stage, dark-themed to match the surroundings.
   const customizeCardBuilder = useMemo(
-    () => (isDark ? cardBuilder.theme("github_dark") : cardBuilder),
-    [cardBuilder, isDark],
+    () => cardBuilder.theme(getDefaultTheme(isDark, isRepoCard(selectedCard))),
+    [cardBuilder, isDark, selectedCard],
   );
 
   // for stage four
-  const isRepoCard =
-    selectedCard === CardType.PIN || selectedCard === CardType.GIST;
-  const defaultTheme = isRepoCard ? "default_repocard" : "default";
-  const isDefaultTheme = theme === defaultTheme;
-
   const themeBuilder = useMemo(
-    () => (isDefaultTheme ? cardBuilder : cardBuilder.theme(theme)),
-    [cardBuilder, isDefaultTheme, theme],
+    () => cardBuilder.theme(theme),
+    [cardBuilder, theme],
   );
 
   // for stage five
@@ -252,6 +254,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
             <ThemeStage
               card={cardBuilder}
               theme={theme}
+              isRepoCard={isRepoCard(selectedCard)}
               onThemeChange={(theme) => {
                 setTheme(theme);
                 setStage(4);
