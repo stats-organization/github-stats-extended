@@ -1,3 +1,9 @@
+# `packageManager` in package.json is deliberately held at pnpm 10.
+# Vercel does not support pnpm 11 yet, and deploying with it makes every request fail at runtime.
+# See https://github.com/stats-organization/github-stats-extended/pull/459
+#
+# Re-check Vercel's supported package managers before updating again:
+# https://vercel.com/docs/package-managers#supported-package-managers
 packages:
   - apps/*
   - packages/*
