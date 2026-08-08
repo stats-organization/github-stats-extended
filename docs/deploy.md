@@ -126,9 +126,20 @@ Click on the deploy button to get started!
     1. In your Vercel project settings, go to `Environments → Production` and change the tracked branch from `master` to `release`.
     2. Go to `Deployments → ... → Create Deployment`, select `release` and click `Deploy to production`.
 14. See your domains to use the API!
-15. optional: add an SQL database; by using e.g. the ["Nile" integration](https://vercel.com/marketplace/nile) or by manually setting the environment variable `POSTGRES_URL`
-16. optional: [create your own OAuth App](https://github.com/settings/developers) and set environment variables `OAUTH_REDIRECT_URI`, `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` on Vercel accordingly
-17. optional: set the environment variable `TURBO_PLATFORM_ENV_DISABLED` to `true` to disable the build-time warning from [turbo](https://turborepo.dev/) about environment variables missing from "turbo.json" - This warning is not relevant in our project.
+
+### Optional steps
+
+#### Add an SQL database
+
+Add an SQL database, either through an integration such as ["Nile"](https://vercel.com/marketplace/nile), or by manually setting the environment variable `POSTGRES_URL`.
+
+#### Use your own OAuth App
+
+[Create your own OAuth App](https://github.com/settings/developers) and set the environment variables `OAUTH_REDIRECT_URI`, `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` on Vercel accordingly.
+
+#### Silence the turbo build warning
+
+Set the environment variable `TURBO_PLATFORM_ENV_DISABLED` to `true` to disable the build-time warning from [turbo](https://turborepo.dev/) about environment variables missing from `turbo.json`. This warning is not relevant in our project.
 
 ### Available environment variables
 
