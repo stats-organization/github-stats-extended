@@ -7,7 +7,7 @@
     "@eslint-react/eslint-plugin": "5.17.1",
     "@eslint/compat": "2.1.0",
     "@eslint/js": "10.0.1",
-    "@playwright/test": "1.61.1",
+    "@playwright/test": "1.62.1",
     "@types/node": "24.13.3",
     "@vitest/coverage-v8": "catalog:default",
     "eslint": "10.7.0",
