@@ -65,8 +65,8 @@ Selecting the right scopes for your token is important in case you want to displ
 
 #### Classic token
 
-- Go to [Account -> Settings -> Developer Settings -> Personal access tokens -> Tokens (classic)](https://github.com/settings/tokens).
-  - Click on `Generate new token -> Generate new token (classic)`.
+- Go to [Account → Settings → Developer Settings → Personal access tokens → Tokens (classic)](https://github.com/settings/tokens).
+  - Click on `Generate new token → Generate new token (classic)`.
   - Scopes to select:
     - repo
     - read:user
@@ -77,8 +77,8 @@ Selecting the right scopes for your token is important in case you want to displ
 > [!WARNING]\
 > This limits the scope of commits to public repositories only.
 
-- Go to [Account -> Settings -> Developer Settings -> Personal access tokens -> Fine-grained tokens](https://github.com/settings/personal-access-tokens).
-  - Click on `Generate new token -> Generate new token`.
+- Go to [Account → Settings → Developer Settings → Personal access tokens → Fine-grained tokens](https://github.com/settings/personal-access-tokens).
+  - Click on `Generate new token → Generate new token`.
   - Enter a token name
   - Select an expiration date
   - Select `All repositories`
@@ -120,11 +120,26 @@ Click on the deploy button to get started!
     3. Now you can make the variable `Sensitive` by checking the checkbox.
        ![](https://files.catbox.moe/mla5no.jpg)
 11. As `Root directory` select the `apps/backend` folder.
-12. Click deploy. See your domains to use the API.
-13. In your Vercel project's settings, go to Environments → Production and change the branch tracking from "master" to "release". ("master" contains unreleased, potentially unstable code, while "release" contains the latest stable release.) Then go to "Deployments" → "..." button → "Create Deployment", select "release" and click "Deploy to production".
-14. optional: add an SQL database; by using e.g. the ["Nile" integration](https://vercel.com/marketplace/nile) or by manually setting the environment variable `POSTGRES_URL`
-15. optional: [create your own OAuth App](https://github.com/settings/developers) and set environment variables `OAUTH_REDIRECT_URI`, `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` on Vercel accordingly
-16. optional: set the environment variable `TURBO_PLATFORM_ENV_DISABLED` to `true` to disable the build-time warning from [turbo](https://turborepo.dev/) about environment variables missing from "turbo.json" - This warning is not relevant in our project.
+12. Click deploy.
+13. Point your Vercel project at the `release` branch instead of `master`.  
+    `master` contains unreleased, potentially unstable code, while `release` contains the latest stable release.
+    1. In your Vercel project settings, go to `Environments → Production` and change the tracked branch from `master` to `release`.
+    2. Go to `Deployments → ... → Create Deployment`, select `release` and click `Deploy to production`.
+14. See your domains to use the API!
+
+### Optional steps
+
+#### Add an SQL database
+
+Add an SQL database, either through an integration such as ["Nile"](https://vercel.com/marketplace/nile), or by manually setting the environment variable `POSTGRES_URL`.
+
+#### Use your own OAuth App
+
+[Create your own OAuth App](https://github.com/settings/developers) and set the environment variables `OAUTH_REDIRECT_URI`, `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` on Vercel accordingly.
+
+#### Silence the turbo build warning
+
+Set the environment variable `TURBO_PLATFORM_ENV_DISABLED` to `true` to disable the build-time warning from [turbo](https://turborepo.dev/) about environment variables missing from `turbo.json`. This warning is not relevant in our project.
 
 ### Available environment variables
 
