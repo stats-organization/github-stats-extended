@@ -23,3 +23,4 @@ export { default as wakatime } from "./api/wakatime.js";
 export { getConfig, loadConfigFromEnv } from "./common/config.js";
 
 export { themes } from "./themes/index.js";
+export type { ThemeName } from "./themes/index.js";

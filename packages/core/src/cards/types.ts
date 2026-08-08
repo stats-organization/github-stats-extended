@@ -1,6 +1,5 @@
-import type { themes } from "../themes/index.js";
+import type { ThemeName } from "../themes/index.js";
 
-type ThemeNames = keyof typeof themes;
 type RankIcon = "default" | "github" | "percentile";
 
 interface CommonOptions {
@@ -8,7 +7,7 @@ interface CommonOptions {
   icon_color: string;
   text_color: string;
   bg_color: string;
-  theme: ThemeNames;
+  theme: ThemeName;
   border_radius: number;
   border_color: string;
   locale: string;

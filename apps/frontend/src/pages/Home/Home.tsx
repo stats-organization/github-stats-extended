@@ -252,6 +252,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
             <ThemeStage
               card={cardBuilder}
               theme={theme}
+              isRepoCard={isRepoCard}
               onThemeChange={(theme) => {
                 setTheme(theme);
                 setStage(4);
