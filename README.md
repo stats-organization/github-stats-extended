@@ -5,82 +5,34 @@
 <a href="https://github-stats-extended.vercel.app/api?username=anuraghazra"><img src="https://github-stats-extended.vercel.app/api?username=anuraghazra"></a>
 </div>
 
-This project is the [extended, actively maintained successor](docs/fork.md) of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats). It generates [various stats cards](#card-types), e.g. about your GitHub contributions, your top languages, etc. You can [customize](#advanced-customization) the cards via multiple parameters.
-
-## Table of Contents
-
-- [Quick Start](#quick-start)
-- [Migration from github-readme-stats](#migration-from-github-readme-stats)
-- [Card Types](#card-types)
-- [Advanced Customization](#advanced-customization)
-- [Run It Yourself](#run-it-yourself)
-- [Acknowledgements](#acknowledgements)
-- [Contributing](#contributing)
+This project is the [extended, actively maintained successor](docs/fork.md) of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats). It generates stats cards about your GitHub contributions, your top languages and more, all customizable through a large set of parameters.
 
 ## Quick Start
 
-- Copy and paste this into your markdown:
-  ```markdown
-  [![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra)](https://github.com/stats-organization/github-stats-extended)
-  ```
-- Change the `?username=` value to your GitHub username.
-- Done!
+Copy and paste this into your markdown, then change the `?username=` value to your GitHub username:
 
----
-
-As more comfortable alternative, use the [GitHub-Stats-Extended Wizard](https://github-stats-extended.vercel.app/frontend) to create your custom stats card. Copy the generated markdown code and paste it into your [GitHub profile README](https://docs.github.com/en/account-and-profile/how-tos/profile-customization/managing-your-profile-readme#adding-a-profile-readme). Done!
-
-## Migration from github-readme-stats
-
-To migrate from [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) you only need to change the domain from `github-readme-stats.vercel.app` to `github-stats-extended.vercel.app`:
-
-```diff
-- https://github-readme-stats.vercel.app/api?username=octocat&theme=radical
-+ https://github-stats-extended.vercel.app/api?username=octocat&theme=radical
+```markdown
+[![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra)](https://github.com/stats-organization/github-stats-extended)
 ```
 
-GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For more details see [Compatibility Notes](docs/fork.md#compatibility-notes).
+As a more comfortable alternative, use the [card wizard](https://github-stats-extended.vercel.app/frontend) to configure your card visually and copy the generated markdown.
 
-## Card Types
+## Documentation
 
-- Show your GitHub statistics:
+The full documentation is served by the deployment it describes, so every sample it shows is rendered by the version that is actually running:
 
-  ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra)
+**[github-stats-extended.vercel.app/frontend/docs](https://github-stats-extended.vercel.app/frontend/docs)**
 
-- ...your top languages...:
-
-  ![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&langs_count=4)
-
-- ...and development time:
-
-  [![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan&langs_count=6)](https://wakatime.com/@alan)
-
-- Pin more than 6 repos in your GitHub profile:
-
-  [![Readme Card](https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats)](https://github.com/anuraghazra/github-readme-stats)
-
-- Pin Gists in your GitHub profile:
-
-  [![Gist Card](https://github-stats-extended.vercel.app/api/gist?id=bbfce31e0217a3689c8d961a356cb10d)](https://gist.github.com/Yizack/bbfce31e0217a3689c8d961a356cb10d)
-
-- Customize all the cards:
-
-  [![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api/?username=anuraghazra&show_icons=true&theme=calm&rank_icon=github&include_all_commits=true&custom_title=Anurag's+Stats&disable_animations=true&number_format=long&show=prs_merged_percentage,prs_reviewed)](https://github-stats-extended.vercel.app/api/?username=anuraghazra&show_icons=true&theme=calm&rank_icon=github&include_all_commits=true&custom_title=Anurag's+Stats&disable_animations=true&number_format=long&show=prs_merged_percentage,prs_reviewed)
-
-## Advanced Customization
-
-The [GitHub-Stats-Extended Wizard](https://github-stats-extended.vercel.app/frontend) offers some essential customization options. For more advanced customization check out the [advanced documentation](docs/advanced_documentation.md).
-
-## Run It Yourself
-
-If you want to run GitHub-Stats-Extended on your own, there are two main deployment options: you can use [github-readme-stats-action](https://github.com/stats-organization/github-readme-stats-action) to generate cards in your own GitHub Actions workflow. Or you can self-host GitHub-Stats-Extended on Vercel.
-
-See [Run It Yourself](docs/deploy.md) for detailed instructions.
+- [Overview](docs/index.md) — card types, quick start and migration from github-readme-stats.
+- [Advanced Customization](docs/advanced_documentation.md) — every parameter the cards accept.
+- [Available Themes](packages/core/src/themes/README.md) — the built-in themes.
+- [Run It Yourself](docs/deploy.md) — GitHub Actions or a self-hosted Vercel deployment.
+- [Fork Information](docs/fork.md) — what this project adds on top of github-readme-stats.
 
 ## Acknowledgements
 
-This project is based on [github-readme-stats](https://github.com/anuraghazra/github-readme-stats). On top of that project's functionality GitHub-Stats-Extended adds several new features and improvements. See [Fork Information](docs/fork.md) for a list of changes. The frontend added to GitHub-Stats-Extended is based on [GitHub Trends](https://github.com/avgupta456/github-trends). Big thanks to [@anuraghazra](https://github.com/anuraghazra), [@avgupta456](https://github.com/avgupta456), [@rickstaa](https://github.com/rickstaa), [@qwerty541](https://github.com/qwerty541) and everyone else who worked on these projects! ❤️
+This project is based on [github-readme-stats](https://github.com/anuraghazra/github-readme-stats), and the card wizard on [GitHub Trends](https://github.com/avgupta456/github-trends). Big thanks to [@anuraghazra](https://github.com/anuraghazra), [@avgupta456](https://github.com/avgupta456), [@rickstaa](https://github.com/rickstaa), [@qwerty541](https://github.com/qwerty541) and everyone else who worked on these projects! ❤️
 
 ## Contributing
 
-Contributions are welcome!
+Contributions are welcome! See [CONTRIBUTING.md](.github/CONTRIBUTING.md) to get started.

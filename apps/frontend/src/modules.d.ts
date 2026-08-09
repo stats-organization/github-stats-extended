@@ -5,6 +5,13 @@ declare module "*.png" {
   export default img;
 }
 
+// Documentation markdown, compiled to HTML at build time by `vite-plugin-markdown`.
+// https://github.com/hmsk/vite-plugin-markdown#type-declarations
+declare module "*.md" {
+  const html: string;
+  export { html };
+}
+
 // This package doesn't have a @types counter part
 declare module "save-svg-as-png" {
   const saveSvgAsPng: (

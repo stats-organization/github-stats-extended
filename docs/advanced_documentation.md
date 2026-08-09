@@ -104,7 +104,7 @@ You can use [GitHub's new media feature](https://github.blog/changelog/2022-05-1
 ```
 
 <details>
-<summary>:eyes: Show example</summary>
+<summary>👀 Show example</summary>
 
 <picture>
   <source
@@ -127,7 +127,7 @@ You can use [GitHub's theme context](https://github.blog/changelog/2021-11-24-sp
 ```
 
 <details>
-<summary>:eyes: Show example</summary>
+<summary>👀 Show example</summary>
 
 [![Anurag's GitHub stats-Dark](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark#gh-dark-mode-only)](https://github.com/stats-organization/github-stats-extended#gh-dark-mode-only)
 [![Anurag's GitHub stats-Light](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=default#gh-light-mode-only)](https://github.com/stats-organization/github-stats-extended#gh-light-mode-only)
@@ -143,7 +143,7 @@ We have included a `transparent` theme that has a transparent background. This t
 ```
 
 <details>
-<summary>:eyes: Show example</summary>
+<summary>👀 Show example</summary>
 
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=transparent)
 
@@ -158,7 +158,7 @@ You can use the `bg_color` parameter to make any of [the available themes](../pa
 ```
 
 <details>
-<summary>:eyes: Show example</summary>
+<summary>👀 Show example</summary>
 
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&bg_color=00000000)
 
@@ -703,7 +703,7 @@ By default, GitHub does not lay out the cards side by side. To do that, you can 
 ```
 
 <details>
-<summary>:eyes: Show example</summary>
+<summary>👀 Show example</summary>
 
 <a href="https://github-stats-extended.vercel.app/api?username=anuraghazra">
   <img
@@ -740,7 +740,7 @@ By default, GitHub does not lay out the cards side by side. To do that, you can 
 ```
 
 <details>
-<summary>:eyes: Show example</summary>
+<summary>👀 Show example</summary>
 
 <a href="https://github.com/anuraghazra/github-readme-stats">
   <img align="center" src="https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats" />

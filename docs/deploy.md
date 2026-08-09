@@ -74,7 +74,7 @@ Selecting the right scopes for your token is important in case you want to displ
 
 #### Fine-grained token
 
-> [!WARNING]\
+> [!WARNING]
 > This limits the scope of commits to public repositories only.
 
 - Go to [Account → Settings → Developer Settings → Personal access tokens → Fine-grained tokens](https://github.com/settings/personal-access-tokens).

@@ -1,0 +1,196 @@
+/*
+ * Typography for the rendered markdown. Scoped to `.docs-content` because the
+ * markdown produces bare tags with no classes of their own, and written against
+ * the DaisyUI theme variables so it follows the theme picker like the rest of
+ * the app.
+ */
+
+.docs-content {
+  line-height: 1.7;
+  overflow-wrap: break-word;
+}
+
+.docs-content > :first-child {
+  margin-top: 0;
+}
+
+.docs-content h1,
+.docs-content h2,
+.docs-content h3,
+.docs-content h4 {
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 2rem 0 0.75rem;
+  scroll-margin-top: 1rem;
+}
+
+.docs-content h1 {
+  font-size: 2rem;
+}
+.docs-content h2 {
+  font-size: 1.5rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--color-base-300);
+}
+.docs-content h3 {
+  font-size: 1.2rem;
+}
+
+.docs-content p,
+.docs-content ul,
+.docs-content ol,
+.docs-content blockquote,
+.docs-content pre,
+.docs-content table {
+  margin: 0.9rem 0;
+}
+
+.docs-content ul,
+.docs-content ol {
+  padding-left: 1.5rem;
+}
+.docs-content ul {
+  list-style: disc;
+}
+.docs-content ol {
+  list-style: decimal;
+}
+.docs-content li + li {
+  margin-top: 0.35rem;
+}
+
+.docs-content a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.docs-content a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/*
+ * Per-heading link, appended by `transformDocHtml`. Hidden until the heading is
+ * hovered or the link itself is focused, so it stays available to the keyboard
+ * without cluttering the page.
+ */
+.docs-content .heading-anchor {
+  margin-left: 0.4rem;
+  font-weight: 400;
+  text-decoration: none;
+  opacity: 0;
+}
+.docs-content :is(h2, h3, h4):hover .heading-anchor,
+.docs-content .heading-anchor:focus-visible {
+  opacity: 1;
+}
+
+.docs-content code {
+  background-color: color-mix(
+    in oklab,
+    var(--color-base-content),
+    transparent 90%
+  );
+  border-radius: 0.25rem;
+  padding: 0.15em 0.35em;
+  font-size: 0.9em;
+}
+
+.docs-content pre {
+  background-color: var(--color-base-200);
+  border: 1px solid var(--color-base-300);
+  border-radius: 0.5rem;
+  padding: 0.9rem 1rem;
+  /* Long command lines and YAML samples scroll instead of widening the page. */
+  overflow-x: auto;
+}
+.docs-content pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.875rem;
+}
+
+.docs-content blockquote {
+  border-left: 4px solid var(--color-primary);
+  padding: 0.1rem 0 0.1rem 1rem;
+  opacity: 0.9;
+}
+
+/*
+ * GitHub alerts (`> [!NOTE]`, `> [!WARNING]`, …). Styled against the DaisyUI
+ * theme variables rather than the plugin's own stylesheet, which hard-codes
+ * GitHub's palette and would ignore the theme picker. `--alert-color` is set
+ * per severity below and drives the border, title and icon together.
+ */
+.docs-content .markdown-alert {
+  --alert-color: var(--color-info);
+  border-left: 4px solid var(--alert-color);
+  background-color: color-mix(in oklab, var(--alert-color), transparent 92%);
+  border-radius: 0 0.375rem 0.375rem 0;
+  padding: 0.75rem 1rem;
+  margin: 1.1rem 0;
+}
+
+.docs-content .markdown-alert > :first-child {
+  margin-top: 0;
+}
+.docs-content .markdown-alert > :last-child {
+  margin-bottom: 0;
+}
+
+.docs-content .markdown-alert-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--alert-color);
+  margin-bottom: 0.35rem;
+}
+
+/* The plugin inlines an octicon, which inherits the title colour. */
+.docs-content .markdown-alert-title svg {
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.docs-content .markdown-alert-note {
+  --alert-color: var(--color-info);
+}
+.docs-content .markdown-alert-tip {
+  --alert-color: var(--color-success);
+}
+.docs-content .markdown-alert-important {
+  --alert-color: var(--color-primary);
+}
+.docs-content .markdown-alert-warning {
+  --alert-color: var(--color-warning);
+}
+.docs-content .markdown-alert-caution {
+  --alert-color: var(--color-error);
+}
+
+.docs-content table {
+  border-collapse: collapse;
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+}
+.docs-content th,
+.docs-content td {
+  border: 1px solid var(--color-base-300);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.docs-content th {
+  background-color: var(--color-base-200);
+}
+
+.docs-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+.docs-content hr {
+  border: 0;
+  border-top: 1px solid var(--color-base-300);
+  margin: 2rem 0;
+}
