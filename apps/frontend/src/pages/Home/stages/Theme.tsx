@@ -11,7 +11,7 @@ import { CardCategory } from "../../../models/CardType";
 import type { CardUrlBuilder } from "../../../models/CardUrl";
 import { useTheme } from "../../../redux/selectors/themeSelectors";
 
-const excludedThemes = [
+const excludedThemes: Array<ThemeName> = [
   "default",
   "default_repocard",
   "github_dark",
