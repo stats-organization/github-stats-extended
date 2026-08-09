@@ -13,7 +13,11 @@ import {
   DEMO_USER,
   DEMO_WAKATIME_USER,
 } from "../../../constants";
-import { CardType } from "../../../models/CardType";
+import {
+  CATEGORY_BY_CARD_TYPE,
+  CardCategory,
+  CardType,
+} from "../../../models/CardType";
 import type { CardUrlBuilder } from "../../../models/CardUrl";
 import type { StageIndex } from "../../../models/Stage";
 import { useIsAuthenticated } from "../../../redux/selectors/userSelectors";
@@ -367,7 +371,7 @@ export function CustomizeStage({
             }}
           />
         )}
-        {(cardType === CardType.PIN || cardType === CardType.GIST) && (
+        {CATEGORY_BY_CARD_TYPE[cardType] === CardCategory.REPO && (
           <CheckboxSection
             title="Show Owner?"
             text="Shows the repo owner's name next to the repo name."
