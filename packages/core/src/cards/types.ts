@@ -14,20 +14,6 @@ export interface CommonOptions {
   hide_border: boolean;
 }
 
-export interface TopLangOptions extends CommonOptions {
-  hide_title: boolean;
-  card_width: number;
-  hide: Array<string>;
-  layout: "compact" | "normal" | "donut" | "donut-vertical" | "pie";
-  custom_title: string;
-  langs_count: number;
-  disable_animations: boolean;
-  hide_progress: boolean;
-  hide_values: boolean;
-  prog_bar_bg_color: string;
-  stats_format: "percentages" | "bytes";
-}
-
 export interface WakaTimeOptions extends CommonOptions {
   hide_title: boolean;
   hide: Array<string>;

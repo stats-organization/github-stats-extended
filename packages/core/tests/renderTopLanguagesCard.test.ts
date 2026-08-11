@@ -1,4 +1,4 @@
-import { queryAllByTestId, queryByTestId } from "@testing-library/dom";
+import { screen } from "@testing-library/dom";
 import { cssToObject } from "@uppercod/css-to-object";
 import { describe, expect, it } from "vitest";
 
@@ -21,55 +21,50 @@ import {
   renderTopLanguages,
   trimTopLanguages,
 } from "../src/cards/top-languages.js";
+import type { TopLangData } from "../src/fetchers/types.js";
 import { themes } from "../src/themes/index.js";
 
 import { approxNumber } from "./utils.js";
 
 const langs = {
-  HTML: {
-    color: "#0f0",
-    name: "HTML",
-    size: 200,
-  },
-  javascript: {
-    color: "#0ff",
-    name: "javascript",
-    size: 200,
-  },
-  css: {
-    color: "#ff0",
-    name: "css",
-    size: 100,
-  },
-};
+  HTML: { color: "#0f0", name: "HTML", size: 200, count: 1 },
+  javascript: { color: "#0ff", name: "javascript", size: 200, count: 1 },
+  css: { color: "#ff0", name: "css", size: 100, count: 1 },
+} satisfies TopLangData;
 
 /**
  * Retrieve number array from SVG path definition string.
  *
- * @param {string} d SVG path definition string.
- * @returns {number[]} Resulting numbers array.
+ * @param d SVG path definition string.
+ * @returns Resulting numbers array.
  */
-const getNumbersFromSvgPathDefinitionAttribute = (d) => {
+const getNumbersFromSvgPathDefinitionAttribute = (d: string): Array<number> => {
   return d
     .split(" ")
-    .filter((x) => !isNaN(x))
+    .filter((x) => !isNaN(Number(x)))
     .map((x) => parseFloat(x));
 };
 
 /**
  * Retrieve the language percentage from the donut chart SVG.
  *
- * @param {string} d The SVG path element.
- * @param {number} centerX The center X coordinate of the donut chart.
- * @param {number} centerY The center Y coordinate of the donut chart.
- * @returns {number} The percentage of the language.
+ * @param d The SVG path element.
+ * @param centerX The center X coordinate of the donut chart.
+ * @param centerY The center Y coordinate of the donut chart.
+ * @returns The percentage of the language.
  */
-const langPercentFromDonutLayoutSvg = (d, centerX, centerY) => {
+const langPercentFromDonutLayoutSvg = (
+  d: string,
+  centerX: number,
+  centerY: number,
+): number => {
   const dTmp = getNumbersFromSvgPathDefinitionAttribute(d);
   const endAngle =
-    cartesianToPolar(centerX, centerY, dTmp[0], dTmp[1]).angleInDegrees + 90;
+    cartesianToPolar(centerX, centerY, dTmp[0] ?? 0, dTmp[1] ?? 0)
+      .angleInDegrees + 90;
   let startAngle =
-    cartesianToPolar(centerX, centerY, dTmp[7], dTmp[8]).angleInDegrees + 90;
+    cartesianToPolar(centerX, centerY, dTmp[7] ?? 0, dTmp[8] ?? 0)
+      .angleInDegrees + 90;
   if (startAngle > endAngle) {
     startAngle -= 360;
   }
@@ -79,38 +74,42 @@ const langPercentFromDonutLayoutSvg = (d, centerX, centerY) => {
 /**
  * Calculate language percentage for donut vertical chart SVG.
  *
- * @param {number} partLength Length of current chart part..
- * @param {number} totalCircleLength Total length of circle.
- * @returns {number} Chart part percentage.
+ * @param partLength Length of current chart part.
+ * @param totalCircleLength Total length of circle.
+ * @returns Chart part percentage.
  */
 const langPercentFromDonutVerticalLayoutSvg = (
-  partLength,
-  totalCircleLength,
-) => {
+  partLength: number,
+  totalCircleLength: number,
+): number => {
   return (partLength / totalCircleLength) * 100;
 };
 
 /**
  * Retrieve the language percentage from the pie chart SVG.
  *
- * @param {string} d The SVG path element.
- * @param {number} centerX The center X coordinate of the pie chart.
- * @param {number} centerY The center Y coordinate of the pie chart.
- * @returns {number} The percentage of the language.
+ * @param d The SVG path element.
+ * @param centerX The center X coordinate of the pie chart.
+ * @param centerY The center Y coordinate of the pie chart.
+ * @returns The percentage of the language.
  */
-const langPercentFromPieLayoutSvg = (d, centerX, centerY) => {
+const langPercentFromPieLayoutSvg = (
+  d: string,
+  centerX: number,
+  centerY: number,
+): number => {
   const dTmp = getNumbersFromSvgPathDefinitionAttribute(d);
   const startAngle = cartesianToPolar(
     centerX,
     centerY,
-    dTmp[2],
-    dTmp[3],
+    dTmp[2] ?? 0,
+    dTmp[3] ?? 0,
   ).angleInDegrees;
-  let endAngle = cartesianToPolar(
+  const endAngle = cartesianToPolar(
     centerX,
     centerY,
-    dTmp[9],
-    dTmp[10],
+    dTmp[9] ?? 0,
+    dTmp[10] ?? 0,
   ).angleInDegrees;
   return ((endAngle - startAngle) / 360) * 100;
 };
@@ -373,53 +372,37 @@ describe("Test renderTopLanguages", () => {
   it("should render correctly", () => {
     document.body.innerHTML = renderTopLanguages(langs);
 
-    expect(queryByTestId(document.body, "header")).toHaveTextContent(
+    expect(screen.queryByTestId("header")).toHaveTextContent(
       "Most Used Languages",
     );
 
-    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML",
-    );
-    expect(queryAllByTestId(document.body, "lang-name")[1]).toHaveTextContent(
-      "javascript",
-    );
-    expect(queryAllByTestId(document.body, "lang-name")[2]).toHaveTextContent(
-      "css",
-    );
-    expect(queryAllByTestId(document.body, "lang-progress")[0]).toHaveAttribute(
-      "width",
-      "40%",
-    );
-    expect(queryAllByTestId(document.body, "lang-progress")[1]).toHaveAttribute(
-      "width",
-      "40%",
-    );
-    expect(queryAllByTestId(document.body, "lang-progress")[2]).toHaveAttribute(
-      "width",
-      "20%",
-    );
+    const langNames = screen.queryAllByTestId("lang-name");
+    expect(langNames[0]).toHaveTextContent("HTML");
+    expect(langNames[1]).toHaveTextContent("javascript");
+    expect(langNames[2]).toHaveTextContent("css");
+
+    const progresses = screen.queryAllByTestId("lang-progress");
+    expect(progresses[0]).toHaveAttribute("width", "40%");
+    expect(progresses[1]).toHaveAttribute("width", "40%");
+    expect(progresses[2]).toHaveAttribute("width", "20%");
   });
 
   it("should hide languages when hide is passed", () => {
     document.body.innerHTML = renderTopLanguages(langs, {
       hide: ["HTML"],
     });
-    expect(queryAllByTestId(document.body, "lang-name")[0]).toBeInTheDocument(
-      "javascript",
-    );
-    expect(queryAllByTestId(document.body, "lang-name")[1]).toBeInTheDocument(
-      "css",
-    );
-    expect(queryAllByTestId(document.body, "lang-name")[2]).not.toBeDefined();
+    let langNames = screen.queryAllByTestId("lang-name");
+    expect(langNames[0]).toBeInTheDocument();
+    expect(langNames[1]).toBeInTheDocument();
+    expect(langNames[2]).not.toBeDefined();
 
     // multiple languages passed
     document.body.innerHTML = renderTopLanguages(langs, {
       hide: ["HTML", "css"],
     });
-    expect(queryAllByTestId(document.body, "lang-name")[0]).toBeInTheDocument(
-      "javascript",
-    );
-    expect(queryAllByTestId(document.body, "lang-name")[1]).not.toBeDefined();
+    langNames = screen.queryAllByTestId("lang-name");
+    expect(langNames[0]).toBeInTheDocument();
+    expect(langNames[1]).not.toBeDefined();
   });
 
   it("should resize the height correctly depending on langs", () => {
@@ -433,6 +416,7 @@ describe("Test renderTopLanguages", () => {
           color: "#ff0",
           name: "python",
           size: 100,
+          count: 1,
         },
       },
       {},
@@ -468,17 +452,15 @@ describe("Test renderTopLanguages", () => {
     document.body.innerHTML = renderTopLanguages(langs);
 
     const styleTag = document.querySelector("style");
-    const stylesObject = cssToObject(styleTag.textContent);
+    const stylesObject = cssToObject(styleTag?.textContent ?? "");
 
-    const headerStyles = stylesObject[":host"][".header "];
-    const langNameStyles = stylesObject[":host"][".lang-name "];
+    const host = stylesObject[":host"];
+    const headerStyles = host?.[".header "];
+    const langNameStyles = host?.[".lang-name "];
 
-    expect(headerStyles.fill.trim()).toBe("#2f80ed");
-    expect(langNameStyles.fill.trim()).toBe("#434d58");
-    expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
-      "fill",
-      "#fffefe",
-    );
+    expect(headerStyles?.["fill"]?.trim()).toBe("#2f80ed");
+    expect(langNameStyles?.["fill"]?.trim()).toBe("#434d58");
+    expect(screen.queryByTestId("card-bg")).toHaveAttribute("fill", "#fffefe");
   });
 
   it("should render custom colors properly", () => {
@@ -493,24 +475,21 @@ describe("Test renderTopLanguages", () => {
     document.body.innerHTML = renderTopLanguages(langs, { ...customColors });
 
     const styleTag = document.querySelector("style");
-    const stylesObject = cssToObject(styleTag.innerHTML);
+    const stylesObject = cssToObject(styleTag?.innerHTML ?? "");
 
-    const headerStyles = stylesObject[":host"][".header "];
-    const langNameStyles = stylesObject[":host"][".lang-name "];
-    const progressBgStyles = stylesObject[":host"][".progress-background "];
+    const host = stylesObject[":host"];
+    const headerStyles = host?.[".header "];
+    const langNameStyles = host?.[".lang-name "];
+    const progressBgStyles = host?.[".progress-background "];
 
-    expect(headerStyles.fill.trim()).toBe(`#${customColors.title_color}`);
-    expect(langNameStyles.fill.trim()).toBe(`#${customColors.text_color}`);
-    expect(progressBgStyles.fill.trim()).toBe(
-      `#${customColors.prog_bar_bg_color}`,
-    );
-    expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
-      "fill",
-      "#252525",
-    );
+    const { title_color, text_color, prog_bar_bg_color } = customColors;
 
-    const progressBackgroundNodes = queryAllByTestId(
-      document.body,
+    expect(headerStyles?.["fill"]?.trim()).toBe(`#${title_color}`);
+    expect(langNameStyles?.["fill"]?.trim()).toBe(`#${text_color}`);
+    expect(progressBgStyles?.["fill"]?.trim()).toBe(`#${prog_bar_bg_color}`);
+    expect(screen.queryByTestId("card-bg")).toHaveAttribute("fill", "#252525");
+
+    const progressBackgroundNodes = screen.queryAllByTestId(
       "progress-background",
     );
     expect(progressBackgroundNodes.length).toBeGreaterThan(0);
@@ -523,36 +502,40 @@ describe("Test renderTopLanguages", () => {
     });
 
     const styleTag = document.querySelector("style");
-    const stylesObject = cssToObject(styleTag.innerHTML);
+    const stylesObject = cssToObject(styleTag?.innerHTML ?? "");
 
-    const headerStyles = stylesObject[":host"][".header "];
-    const langNameStyles = stylesObject[":host"][".lang-name "];
+    const host = stylesObject[":host"];
+    const headerStyles = host?.[".header "];
+    const langNameStyles = host?.[".lang-name "];
 
-    expect(headerStyles.fill.trim()).toBe("#5a0");
-    expect(langNameStyles.fill.trim()).toBe(`#${themes.radical.text_color}`);
-    expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
+    expect(headerStyles?.["fill"]?.trim()).toBe("#5a0");
+    expect(langNameStyles?.["fill"]?.trim()).toBe(
+      `#${themes.radical.text_color}`,
+    );
+    expect(screen.queryByTestId("card-bg")).toHaveAttribute(
       "fill",
       `#${themes.radical.bg_color}`,
     );
   });
 
   it("should render with all the themes", () => {
-    Object.keys(themes).forEach((name) => {
+    Object.entries(themes).forEach(([name, themeData]) => {
       document.body.innerHTML = renderTopLanguages(langs, {
-        theme: name,
+        theme: name as keyof typeof themes,
       });
 
       const styleTag = document.querySelector("style");
-      const stylesObject = cssToObject(styleTag.innerHTML);
+      const stylesObject = cssToObject(styleTag?.innerHTML ?? "");
 
-      const headerStyles = stylesObject[":host"][".header "];
-      const langNameStyles = stylesObject[":host"][".lang-name "];
+      const host = stylesObject[":host"];
+      const headerStyles = host?.[".header "];
+      const langNameStyles = host?.[".lang-name "];
 
-      expect(headerStyles.fill.trim()).toBe(`#${themes[name].title_color}`);
-      expect(langNameStyles.fill.trim()).toBe(`#${themes[name].text_color}`);
-      const backgroundElement = queryByTestId(document.body, "card-bg");
-      const backgroundElementFill = backgroundElement.getAttribute("fill");
-      expect([`#${themes[name].bg_color}`, "url(#gradient)"]).toContain(
+      expect(headerStyles?.["fill"]?.trim()).toBe(`#${themeData.title_color}`);
+      expect(langNameStyles?.["fill"]?.trim()).toBe(`#${themeData.text_color}`);
+      const backgroundElement = screen.queryByTestId("card-bg");
+      const backgroundElementFill = backgroundElement?.getAttribute("fill");
+      expect([`#${themeData.bg_color}`, "url(#gradient)"]).toContain(
         backgroundElementFill,
       );
     });
@@ -561,83 +544,59 @@ describe("Test renderTopLanguages", () => {
   it("should render with layout compact", () => {
     document.body.innerHTML = renderTopLanguages(langs, { layout: "compact" });
 
-    expect(queryByTestId(document.body, "header")).toHaveTextContent(
+    expect(screen.queryByTestId("header")).toHaveTextContent(
       "Most Used Languages",
     );
 
-    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML 40.00%",
-    );
-    expect(queryAllByTestId(document.body, "lang-progress")[0]).toHaveAttribute(
-      "width",
-      "100",
-    );
+    const langNames = screen.queryAllByTestId("lang-name");
+    const progresses = screen.queryAllByTestId("lang-progress");
 
-    expect(queryAllByTestId(document.body, "lang-name")[1]).toHaveTextContent(
-      "javascript 40.00%",
-    );
-    expect(queryAllByTestId(document.body, "lang-progress")[1]).toHaveAttribute(
-      "width",
-      "100",
-    );
+    expect(langNames[0]).toHaveTextContent("HTML 40.00%");
+    expect(progresses[0]).toHaveAttribute("width", "100");
 
-    expect(queryAllByTestId(document.body, "lang-name")[2]).toHaveTextContent(
-      "css 20.00%",
-    );
-    expect(queryAllByTestId(document.body, "lang-progress")[2]).toHaveAttribute(
-      "width",
-      "50",
-    );
+    expect(langNames[1]).toHaveTextContent("javascript 40.00%");
+    expect(progresses[1]).toHaveAttribute("width", "100");
+
+    expect(langNames[2]).toHaveTextContent("css 20.00%");
+    expect(progresses[2]).toHaveAttribute("width", "50");
   });
 
   it("should render with layout donut", () => {
     document.body.innerHTML = renderTopLanguages(langs, { layout: "donut" });
 
-    expect(queryByTestId(document.body, "header")).toHaveTextContent(
+    expect(screen.queryByTestId("header")).toHaveTextContent(
       "Most Used Languages",
     );
 
-    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML 40.00%",
-    );
-    expect(queryAllByTestId(document.body, "lang-donut")[0]).toHaveAttribute(
-      "size",
-      "40",
-    );
+    const langNames = screen.queryAllByTestId("lang-name");
+    const donuts = screen.queryAllByTestId("lang-donut");
+
+    expect(langNames[0]).toHaveTextContent("HTML 40.00%");
+    expect(donuts[0]).toHaveAttribute("size", "40");
     const d = getNumbersFromSvgPathDefinitionAttribute(
-      queryAllByTestId(document.body, "lang-donut")[0].getAttribute("d"),
+      donuts[0]?.getAttribute("d") ?? "",
     );
-    const center = { x: d[7], y: d[7] };
+    const center = { x: d[7] ?? 0, y: d[7] ?? 0 };
     const HTMLLangPercent = langPercentFromDonutLayoutSvg(
-      queryAllByTestId(document.body, "lang-donut")[0].getAttribute("d"),
+      donuts[0]?.getAttribute("d") ?? "",
       center.x,
       center.y,
     );
     expect(HTMLLangPercent).toBeCloseTo(40);
 
-    expect(queryAllByTestId(document.body, "lang-name")[1]).toHaveTextContent(
-      "javascript 40.00%",
-    );
-    expect(queryAllByTestId(document.body, "lang-donut")[1]).toHaveAttribute(
-      "size",
-      "40",
-    );
+    expect(langNames[1]).toHaveTextContent("javascript 40.00%");
+    expect(donuts[1]).toHaveAttribute("size", "40");
     const javascriptLangPercent = langPercentFromDonutLayoutSvg(
-      queryAllByTestId(document.body, "lang-donut")[1].getAttribute("d"),
+      donuts[1]?.getAttribute("d") ?? "",
       center.x,
       center.y,
     );
     expect(javascriptLangPercent).toBeCloseTo(40);
 
-    expect(queryAllByTestId(document.body, "lang-name")[2]).toHaveTextContent(
-      "css 20.00%",
-    );
-    expect(queryAllByTestId(document.body, "lang-donut")[2]).toHaveAttribute(
-      "size",
-      "20",
-    );
+    expect(langNames[2]).toHaveTextContent("css 20.00%");
+    expect(donuts[2]).toHaveAttribute("size", "20");
     const cssLangPercent = langPercentFromDonutLayoutSvg(
-      queryAllByTestId(document.body, "lang-donut")[2].getAttribute("d"),
+      donuts[2]?.getAttribute("d") ?? "",
       center.x,
       center.y,
     );
@@ -650,17 +609,13 @@ describe("Test renderTopLanguages", () => {
       { HTML: langs.HTML },
       { layout: "donut" },
     );
-    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
+    const singleDonuts = screen.queryAllByTestId("lang-donut");
+    expect(screen.queryAllByTestId("lang-name")[0]).toHaveTextContent(
       "HTML 100.00%",
     );
-    expect(queryAllByTestId(document.body, "lang-donut")[0]).toHaveAttribute(
-      "size",
-      "100",
-    );
-    expect(queryAllByTestId(document.body, "lang-donut")).toHaveLength(1);
-    expect(queryAllByTestId(document.body, "lang-donut")[0].tagName).toBe(
-      "circle",
-    );
+    expect(singleDonuts[0]).toHaveAttribute("size", "100");
+    expect(singleDonuts).toHaveLength(1);
+    expect(singleDonuts[0]?.tagName).toBe("circle");
   });
 
   it("should render with layout donut vertical", () => {
@@ -668,64 +623,40 @@ describe("Test renderTopLanguages", () => {
       layout: "donut-vertical",
     });
 
-    expect(queryByTestId(document.body, "header")).toHaveTextContent(
+    expect(screen.queryByTestId("header")).toHaveTextContent(
       "Most Used Languages",
     );
 
-    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML 40.00%",
-    );
-    expect(queryAllByTestId(document.body, "lang-donut")[0]).toHaveAttribute(
-      "size",
-      "40",
-    );
+    const langNames = screen.queryAllByTestId("lang-name");
+    const donuts = screen.queryAllByTestId("lang-donut");
 
-    const totalCircleLength = queryAllByTestId(
-      document.body,
-      "lang-donut",
-    )[0].getAttribute("stroke-dasharray");
+    expect(langNames[0]).toHaveTextContent("HTML 40.00%");
+    expect(donuts[0]).toHaveAttribute("size", "40");
+
+    const totalCircleLength = Number(
+      donuts[0]?.getAttribute("stroke-dasharray"),
+    );
 
     const HTMLLangPercent = langPercentFromDonutVerticalLayoutSvg(
-      queryAllByTestId(document.body, "lang-donut")[1].getAttribute(
-        "stroke-dashoffset",
-      ) -
-        queryAllByTestId(document.body, "lang-donut")[0].getAttribute(
-          "stroke-dashoffset",
-        ),
+      Number(donuts[1]?.getAttribute("stroke-dashoffset")) -
+        Number(donuts[0]?.getAttribute("stroke-dashoffset")),
       totalCircleLength,
     );
     expect(HTMLLangPercent).toBeCloseTo(40);
 
-    expect(queryAllByTestId(document.body, "lang-name")[1]).toHaveTextContent(
-      "javascript 40.00%",
-    );
-    expect(queryAllByTestId(document.body, "lang-donut")[1]).toHaveAttribute(
-      "size",
-      "40",
-    );
+    expect(langNames[1]).toHaveTextContent("javascript 40.00%");
+    expect(donuts[1]).toHaveAttribute("size", "40");
     const javascriptLangPercent = langPercentFromDonutVerticalLayoutSvg(
-      queryAllByTestId(document.body, "lang-donut")[2].getAttribute(
-        "stroke-dashoffset",
-      ) -
-        queryAllByTestId(document.body, "lang-donut")[1].getAttribute(
-          "stroke-dashoffset",
-        ),
+      Number(donuts[2]?.getAttribute("stroke-dashoffset")) -
+        Number(donuts[1]?.getAttribute("stroke-dashoffset")),
       totalCircleLength,
     );
     expect(javascriptLangPercent).toBeCloseTo(40);
 
-    expect(queryAllByTestId(document.body, "lang-name")[2]).toHaveTextContent(
-      "css 20.00%",
-    );
-    expect(queryAllByTestId(document.body, "lang-donut")[2]).toHaveAttribute(
-      "size",
-      "20",
-    );
+    expect(langNames[2]).toHaveTextContent("css 20.00%");
+    expect(donuts[2]).toHaveAttribute("size", "20");
     const cssLangPercent = langPercentFromDonutVerticalLayoutSvg(
-      totalCircleLength -
-        queryAllByTestId(document.body, "lang-donut")[2].getAttribute(
-          "stroke-dashoffset",
-        ),
+      totalCircleLength - Number(donuts[2]?.getAttribute("stroke-dashoffset")),
       totalCircleLength,
     );
     expect(cssLangPercent).toBeCloseTo(20);
@@ -738,23 +669,17 @@ describe("Test renderTopLanguages", () => {
       { HTML: langs.HTML },
       { layout: "donut-vertical" },
     );
-    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
+    const donuts = screen.queryAllByTestId("lang-donut");
+    expect(screen.queryAllByTestId("lang-name")[0]).toHaveTextContent(
       "HTML 100.00%",
     );
-    expect(queryAllByTestId(document.body, "lang-donut")[0]).toHaveAttribute(
-      "size",
-      "100",
+    expect(donuts[0]).toHaveAttribute("size", "100");
+    const totalCircleLength = Number(
+      donuts[0]?.getAttribute("stroke-dasharray"),
     );
-    const totalCircleLength = queryAllByTestId(
-      document.body,
-      "lang-donut",
-    )[0].getAttribute("stroke-dasharray");
 
     const HTMLLangPercent = langPercentFromDonutVerticalLayoutSvg(
-      totalCircleLength -
-        queryAllByTestId(document.body, "lang-donut")[0].getAttribute(
-          "stroke-dashoffset",
-        ),
+      totalCircleLength - Number(donuts[0]?.getAttribute("stroke-dashoffset")),
       totalCircleLength,
     );
     expect(HTMLLangPercent).toBeCloseTo(100);
@@ -763,52 +688,40 @@ describe("Test renderTopLanguages", () => {
   it("should render with layout pie", () => {
     document.body.innerHTML = renderTopLanguages(langs, { layout: "pie" });
 
-    expect(queryByTestId(document.body, "header")).toHaveTextContent(
+    expect(screen.queryByTestId("header")).toHaveTextContent(
       "Most Used Languages",
     );
 
-    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML 40.00%",
-    );
-    expect(queryAllByTestId(document.body, "lang-pie")[0]).toHaveAttribute(
-      "size",
-      "40",
-    );
+    const langNames = screen.queryAllByTestId("lang-name");
+    const pies = screen.queryAllByTestId("lang-pie");
+
+    expect(langNames[0]).toHaveTextContent("HTML 40.00%");
+    expect(pies[0]).toHaveAttribute("size", "40");
 
     const d = getNumbersFromSvgPathDefinitionAttribute(
-      queryAllByTestId(document.body, "lang-pie")[0].getAttribute("d"),
+      pies[0]?.getAttribute("d") ?? "",
     );
-    const center = { x: d[0], y: d[1] };
+    const center = { x: d[0] ?? 0, y: d[1] ?? 0 };
     const HTMLLangPercent = langPercentFromPieLayoutSvg(
-      queryAllByTestId(document.body, "lang-pie")[0].getAttribute("d"),
+      pies[0]?.getAttribute("d") ?? "",
       center.x,
       center.y,
     );
     expect(HTMLLangPercent).toBeCloseTo(40);
 
-    expect(queryAllByTestId(document.body, "lang-name")[1]).toHaveTextContent(
-      "javascript 40.00%",
-    );
-    expect(queryAllByTestId(document.body, "lang-pie")[1]).toHaveAttribute(
-      "size",
-      "40",
-    );
+    expect(langNames[1]).toHaveTextContent("javascript 40.00%");
+    expect(pies[1]).toHaveAttribute("size", "40");
     const javascriptLangPercent = langPercentFromPieLayoutSvg(
-      queryAllByTestId(document.body, "lang-pie")[1].getAttribute("d"),
+      pies[1]?.getAttribute("d") ?? "",
       center.x,
       center.y,
     );
     expect(javascriptLangPercent).toBeCloseTo(40);
 
-    expect(queryAllByTestId(document.body, "lang-name")[2]).toHaveTextContent(
-      "css 20.00%",
-    );
-    expect(queryAllByTestId(document.body, "lang-pie")[2]).toHaveAttribute(
-      "size",
-      "20",
-    );
+    expect(langNames[2]).toHaveTextContent("css 20.00%");
+    expect(pies[2]).toHaveAttribute("size", "20");
     const cssLangPercent = langPercentFromPieLayoutSvg(
-      queryAllByTestId(document.body, "lang-pie")[2].getAttribute("d"),
+      pies[2]?.getAttribute("d") ?? "",
       center.x,
       center.y,
     );
@@ -821,24 +734,18 @@ describe("Test renderTopLanguages", () => {
       { HTML: langs.HTML },
       { layout: "pie" },
     );
-    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
+    const singlePies = screen.queryAllByTestId("lang-pie");
+    expect(screen.queryAllByTestId("lang-name")[0]).toHaveTextContent(
       "HTML 100.00%",
     );
-    expect(queryAllByTestId(document.body, "lang-pie")[0]).toHaveAttribute(
-      "size",
-      "100",
-    );
-    expect(queryAllByTestId(document.body, "lang-pie")).toHaveLength(1);
-    expect(queryAllByTestId(document.body, "lang-pie")[0].tagName).toBe(
-      "circle",
-    );
+    expect(singlePies[0]).toHaveAttribute("size", "100");
+    expect(singlePies).toHaveLength(1);
+    expect(singlePies[0]?.tagName).toBe("circle");
   });
 
   it("should render a translated title", () => {
     document.body.innerHTML = renderTopLanguages(langs, { locale: "cn" });
-    expect(document.getElementsByClassName("header")[0].textContent).toBe(
-      "最常用的语言",
-    );
+    expect(document.querySelector(".header")?.textContent).toBe("最常用的语言");
   });
 
   it("should render without rounding", () => {
@@ -853,7 +760,7 @@ describe("Test renderTopLanguages", () => {
       langs_count: 1,
     };
     document.body.innerHTML = renderTopLanguages(langs, { ...options });
-    expect(queryAllByTestId(document.body, "lang-name").length).toBe(
+    expect(screen.queryAllByTestId("lang-name").length).toBe(
       options.langs_count,
     );
   });
@@ -864,14 +771,14 @@ describe("Test renderTopLanguages", () => {
       langs_count: 2,
     };
     document.body.innerHTML = renderTopLanguages(langs, { ...options });
-    expect(queryAllByTestId(document.body, "lang-name").length).toBe(
+    expect(screen.queryAllByTestId("lang-name").length).toBe(
       options.langs_count,
     );
   });
 
   it('should show "No languages data." message instead of empty card when nothing to show', () => {
     document.body.innerHTML = renderTopLanguages({});
-    expect(document.querySelector(".stat").textContent).toBe(
+    expect(document.querySelector(".stat")?.textContent).toBe(
       "No languages data.",
     );
   });
@@ -882,34 +789,20 @@ describe("Test renderTopLanguages", () => {
       stats_format: "percentages",
     });
 
-    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML 40.00%",
-    );
-
-    expect(queryAllByTestId(document.body, "lang-name")[1]).toHaveTextContent(
-      "javascript 40.00%",
-    );
-
-    expect(queryAllByTestId(document.body, "lang-name")[2]).toHaveTextContent(
-      "css 20.00%",
-    );
+    let langNames = screen.queryAllByTestId("lang-name");
+    expect(langNames[0]).toHaveTextContent("HTML 40.00%");
+    expect(langNames[1]).toHaveTextContent("javascript 40.00%");
+    expect(langNames[2]).toHaveTextContent("css 20.00%");
 
     document.body.innerHTML = renderTopLanguages(langs, {
       layout: "compact",
       stats_format: "bytes",
     });
 
-    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML 200.0 B",
-    );
-
-    expect(queryAllByTestId(document.body, "lang-name")[1]).toHaveTextContent(
-      "javascript 200.0 B",
-    );
-
-    expect(queryAllByTestId(document.body, "lang-name")[2]).toHaveTextContent(
-      "css 100.0 B",
-    );
+    langNames = screen.queryAllByTestId("lang-name");
+    expect(langNames[0]).toHaveTextContent("HTML 200.0 B");
+    expect(langNames[1]).toHaveTextContent("javascript 200.0 B");
+    expect(langNames[2]).toHaveTextContent("css 100.0 B");
   });
 
   it("should hide stats values when hide_values is true (compact layout)", () => {
@@ -918,13 +811,9 @@ describe("Test renderTopLanguages", () => {
       hide_values: true,
     });
 
-    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML",
-    );
-
-    expect(queryAllByTestId(document.body, "lang-name")[1]).toHaveTextContent(
-      "javascript",
-    );
+    const langNames = screen.queryAllByTestId("lang-name");
+    expect(langNames[0]).toHaveTextContent("HTML");
+    expect(langNames[1]).toHaveTextContent("javascript");
   });
 
   it("should hide stats values when hide_values is true (normal layout)", () => {
@@ -932,11 +821,9 @@ describe("Test renderTopLanguages", () => {
       hide_values: true,
     });
 
-    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML",
-    );
-
-    expect(queryAllByTestId(document.body, "lang-name").length).toBe(3);
+    const langNames = screen.queryAllByTestId("lang-name");
+    expect(langNames[0]).toHaveTextContent("HTML");
+    expect(langNames.length).toBe(3);
   });
 
   it("should hide stats values when hide_values is true (donut layout)", () => {
@@ -945,15 +832,10 @@ describe("Test renderTopLanguages", () => {
       hide_values: true,
     });
 
-    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML",
-    );
-    expect(queryAllByTestId(document.body, "lang-name")[1]).toHaveTextContent(
-      "javascript",
-    );
-    expect(queryAllByTestId(document.body, "lang-name")[2]).toHaveTextContent(
-      "css",
-    );
+    const langNames = screen.queryAllByTestId("lang-name");
+    expect(langNames[0]).toHaveTextContent("HTML");
+    expect(langNames[1]).toHaveTextContent("javascript");
+    expect(langNames[2]).toHaveTextContent("css");
   });
 
   it("should hide stats values when hide_values is true (pie layout)", () => {
@@ -962,16 +844,11 @@ describe("Test renderTopLanguages", () => {
       hide_values: true,
     });
 
-    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML",
-    );
-    expect(queryAllByTestId(document.body, "lang-name")[1]).toHaveTextContent(
-      "javascript",
-    );
-    expect(queryAllByTestId(document.body, "lang-name")[2]).toHaveTextContent(
-      "css",
-    );
-    expect(queryAllByTestId(document.body, "lang-pie")[0]).toHaveAttribute(
+    let langNames = screen.queryAllByTestId("lang-name");
+    expect(langNames[0]).toHaveTextContent("HTML");
+    expect(langNames[1]).toHaveTextContent("javascript");
+    expect(langNames[2]).toHaveTextContent("css");
+    expect(screen.queryAllByTestId("lang-pie")[0]).toHaveAttribute(
       "size",
       "40",
     );
@@ -984,26 +861,23 @@ describe("Test renderTopLanguages", () => {
       },
     );
 
-    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML",
-    );
-    expect(queryAllByTestId(document.body, "lang-pie")).toHaveLength(1);
-    expect(queryAllByTestId(document.body, "lang-pie")[0]).toHaveAttribute(
-      "size",
-      "100",
-    );
-    expect(queryAllByTestId(document.body, "lang-pie")[0].tagName).toBe(
-      "circle",
-    );
+    langNames = screen.queryAllByTestId("lang-name");
+    const pies = screen.queryAllByTestId("lang-pie");
+    expect(langNames[0]).toHaveTextContent("HTML");
+    expect(pies).toHaveLength(1);
+    expect(pies[0]).toHaveAttribute("size", "100");
+    expect(pies[0]?.tagName).toBe("circle");
   });
 });
 
 describe("test top-langs API", () => {
   it("should return a permanent error for an invalid color parameter", async () => {
-    const result = await topLangsApi({
-      username: "user",
-      title_color: "not-a-color",
-    });
+    const result = await topLangsApi(
+      // api handler accepts a partial options object at runtime
+      { username: "user", title_color: "not-a-color" } as Parameters<
+        typeof topLangsApi
+      >[0],
+    );
 
     expect(result.status).toBe("error - permanent");
     expect(result.content).toContain(
@@ -1017,11 +891,11 @@ describe("test renderTopLanguages with languages missing a color", () => {
   // card with `color: null`. It must fall back to the default color instead of
   // throwing.
   const langsWithNullColor = {
-    HTML: { color: "#0f0", name: "HTML", size: 200 },
-    Text: { color: null, name: "Text", size: 100 },
-  };
+    HTML: { color: "#0f0", name: "HTML", size: 200, count: 1 },
+    Text: { color: null, name: "Text", size: 100, count: 1 },
+  } satisfies TopLangData;
 
-  it.each(["normal", "compact", "donut", "donut-vertical", "pie"])(
+  it.each(["normal", "compact", "donut", "donut-vertical", "pie"] as const)(
     "should render the %s layout using the default color",
     (layout) => {
       expect(() =>
