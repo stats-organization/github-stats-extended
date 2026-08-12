@@ -319,15 +319,19 @@ describe("Test renderTopLanguages helper functions", () => {
   });
 
   it("trimTopLanguages", () => {
-    expect(trimTopLanguages([])).toStrictEqual({
+    expect(trimTopLanguages({}, 5)).toStrictEqual({
       langs: [],
       totalLanguageSize: 0,
     });
-    expect(trimTopLanguages([langs.javascript])).toStrictEqual({
-      langs: [langs.javascript],
-      totalLanguageSize: 200,
-    });
-    expect(trimTopLanguages([langs.javascript, langs.HTML], 5)).toStrictEqual({
+    expect(trimTopLanguages({ javascript: langs.javascript }, 5)).toStrictEqual(
+      {
+        langs: [langs.javascript],
+        totalLanguageSize: 200,
+      },
+    );
+    expect(
+      trimTopLanguages({ javascript: langs.javascript, HTML: langs.HTML }, 5),
+    ).toStrictEqual({
       langs: [langs.javascript, langs.HTML],
       totalLanguageSize: 400,
     });
