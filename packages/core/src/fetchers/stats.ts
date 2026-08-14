@@ -16,10 +16,12 @@ import {
   UserReposDocument,
 } from "../graphql/generated/stats.js";
 import type {
+  RepoNodeFragment,
   UserInfoQuery,
   UserInfoQueryVariables,
+  UserReposQuery,
+  UserReposQueryVariables,
 } from "../graphql/generated/stats.js";
-import type { GraphQLDocument } from "../graphql/graphqlDocument.js";
 
 import type { RepoUserStats, StatsData } from "./types.js";
 
@@ -39,15 +41,19 @@ type StatsFetcherResponse = Pick<
 const fetcher = (
   variables: UserInfoQueryVariables,
   token: string,
-): Promise<GraphQLResponse<UserInfoQuery>> => {
-  // pages after the first refetch only `repositories`, a subset of the stats query
-  const document = (
-    variables.after ? UserReposDocument : UserInfoDocument
-  ) as GraphQLDocument<UserInfoQuery, UserInfoQueryVariables>;
-  return httpGraphQLRequest(document, variables, {
+): Promise<GraphQLResponse<UserInfoQuery>> =>
+  httpGraphQLRequest(UserInfoDocument, variables, {
     Authorization: `bearer ${token}`,
   });
-};
+
+/** Fetcher for the pages after the first, which only need `repositories`. */
+const reposFetcher = (
+  variables: UserReposQueryVariables,
+  token: string,
+): Promise<GraphQLResponse<UserReposQuery>> =>
+  httpGraphQLRequest(UserReposDocument, variables, {
+    Authorization: `bearer ${token}`,
+  });
 
 /**
  * Fetch stats information for a given username.
@@ -82,58 +88,67 @@ const statsFetcher = async ({
   ownerAffiliations: UserInfoQueryVariables["ownerAffiliations"];
   pat: string | null;
 }): Promise<StatsFetcherResponse> => {
-  let stats: StatsFetcherResponse | undefined;
-  let hasNextPage = true;
-  let endCursor: string | null = null;
-  let fetchedPages = 0;
-  while (hasNextPage) {
-    const variables: UserInfoQueryVariables = {
-      login: username,
-      after: endCursor,
-      includeMergedPullRequests,
-      includeDiscussions,
-      includeDiscussionsAnswers,
-      startTime,
-      ownerAffiliations,
-    };
-    const res = await retryer(fetcher, variables, pat);
-    if (res.data.errors) {
-      return res;
-    }
+  const variables: UserInfoQueryVariables = {
+    login: username,
+    after: null,
+    includeMergedPullRequests,
+    includeDiscussions,
+    includeDiscussionsAnswers,
+    startTime,
+    ownerAffiliations,
+  };
 
-    // Store stats data.
-    const repositories = res.data.data.user?.repositories;
-    const repoNodes = repositories?.nodes ?? [];
-    if (stats) {
-      if (fetchedPages === 1) {
-        // deep copy to avoid mutating the response cached by the frontend
-        stats = structuredClone({
-          data: stats.data,
-          statusText: stats.statusText,
-        });
-      }
-      stats.data.data.user?.repositories.nodes?.push(...repoNodes);
-    } else {
-      stats = res;
-    }
+  // only the first request carries the stats themselves
+  let stats: StatsFetcherResponse = await retryer(fetcher, variables, pat);
+  if (stats.data.errors) {
+    return stats;
+  }
 
-    fetchedPages++;
-    const repoNodesWithStars = repoNodes.filter(
-      (node) => node?.stargazerCount !== 0,
+  const pageLimit = getConfig().fetchMultiPageStars;
+
+  const extraRepoNodes: Array<RepoNodeFragment | null> = [];
+  let pageRepositories = stats.data.data.user?.repositories;
+  let previousCursor: string | null = null;
+  let fetchedPages = 1;
+  while (
+    fetchedPages < pageLimit &&
+    // an unstarred repo on the page means the starred ones are exhausted
+    !pageRepositories?.nodes?.some((node) => node?.stargazerCount === 0) &&
+    pageRepositories?.pageInfo.hasNextPage
+  ) {
+    const after = pageRepositories.pageInfo.endCursor;
+    // a null or non-advancing cursor would refetch the same page forever
+    if (after === null || after === previousCursor) {
+      break;
+    }
+    previousCursor = after;
+
+    const page = await retryer(
+      reposFetcher,
+      { login: username, after, ownerAffiliations },
+      pat,
     );
+    if (page.data.errors) {
+      return {
+        data: { ...stats.data, errors: page.data.errors },
+        statusText: page.statusText,
+      };
+    }
 
-    hasNextPage =
-      (getConfig().fetchMultiPageStars === "true" ||
-        Number(getConfig().fetchMultiPageStars) > fetchedPages) &&
-      repoNodes.length === repoNodesWithStars.length &&
-      !!repositories?.pageInfo.hasNextPage;
-
-    endCursor = repositories?.pageInfo.endCursor ?? null;
+    pageRepositories = page.data.data.user?.repositories;
+    extraRepoNodes.push(...(pageRepositories?.nodes ?? []));
+    fetchedPages++;
   }
 
-  if (!stats) {
-    throw new Error("No stats data fetched.");
+  if (extraRepoNodes.length > 0) {
+    // deep copy to avoid mutating the response cached by the frontend
+    stats = structuredClone({
+      data: stats.data,
+      statusText: stats.statusText,
+    });
+    stats.data.data.user?.repositories.nodes?.push(...extraRepoNodes);
   }
+
   return stats;
 };
 
@@ -174,7 +189,9 @@ const fetchTotalItems = (
  * @param username GitHub username.
  * @returns Total count.
  *
- * @see #92#issuecomment-661026467 and #211 — the GraphQL API can't return this.
+ * The GraphQL API can't return this.
+ * @see https://github.com/anuraghazra/github-readme-stats/issues/92#issuecomment-661026467
+ * @see https://github.com/anuraghazra/github-readme-stats/pull/211
  */
 const totalItemsFetcher = async (
   username: string,

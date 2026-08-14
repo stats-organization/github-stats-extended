@@ -9,7 +9,8 @@ interface Config {
   whitelist: Array<string> | undefined;
   gistWhitelist: Array<string> | undefined;
   excludeRepositories: Array<string>;
-  fetchMultiPageStars: string | undefined;
+  /** Max pages of starred repos to fetch; `Infinity` means every page, `1` only the first. */
+  fetchMultiPageStars: number;
   pats: Array<PersonalAccessToken>;
 }
 
@@ -17,11 +18,19 @@ interface Config {
  * @param value Comma-separated string.
  * @returns Parsed string values.
  */
-const parseCsv = (value: string | undefined): Array<string> | undefined => {
-  if (!value) {
-    return undefined;
+const parseCsv = (value: string | undefined): Array<string> | undefined =>
+  value ? value.split(",") : undefined;
+
+/**
+ * @param value Raw `FETCH_MULTI_PAGE_STARS` value.
+ * @returns Page limit: `"true"` means every page, a positive number caps the pages, anything else means one.
+ */
+const parseFetchMultiPageStars = (value: string | undefined): number => {
+  if (value === "true") {
+    return Infinity;
   }
-  return value.split(",");
+  const limit = Number(value);
+  return limit > 0 ? limit : 1;
 };
 
 /**
@@ -45,37 +54,21 @@ const getDefaultEnv = (): Env => {
   return processEnv ?? {};
 };
 
-/**
- * @param config (Partial) config values to normalize.
- * @returns Normalized config object with defaults applied.
- */
-const normalizeConfig = (config: Partial<Config> = {}): Config => {
-  return {
-    whitelist: config.whitelist,
-    gistWhitelist: config.gistWhitelist,
-    excludeRepositories: config.excludeRepositories ?? [],
-    fetchMultiPageStars: config.fetchMultiPageStars,
-    pats: config.pats ?? [],
-  };
-};
-
 let currentConfig: Config;
 
 /**
  * @param env Environment variables used to build the runtime config.
  */
 export const loadConfigFromEnv = (env: Env = getDefaultEnv()): void => {
-  const whitelist = parseCsv(env["WHITELIST"]);
-  const gistWhitelist = parseCsv(env["GIST_WHITELIST"]);
-  const excludeRepositories = parseCsv(env["EXCLUDE_REPO"]) ?? [];
-
-  currentConfig = normalizeConfig({
-    whitelist,
-    gistWhitelist,
-    excludeRepositories,
-    fetchMultiPageStars: env["FETCH_MULTI_PAGE_STARS"],
+  currentConfig = {
+    whitelist: parseCsv(env["WHITELIST"]),
+    gistWhitelist: parseCsv(env["GIST_WHITELIST"]),
+    excludeRepositories: parseCsv(env["EXCLUDE_REPO"]) ?? [],
+    fetchMultiPageStars: parseFetchMultiPageStars(
+      env["FETCH_MULTI_PAGE_STARS"],
+    ),
     pats: parsePATsFromEnv(env),
-  });
+  };
 };
 
 loadConfigFromEnv();

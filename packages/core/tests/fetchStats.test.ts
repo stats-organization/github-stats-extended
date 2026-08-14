@@ -76,6 +76,11 @@ const data_repo = {
   },
 };
 
+const data_repo_more_pages = structuredClone(data_repo);
+data_repo_more_pages.data.user.repositories.pageInfo.hasNextPage = true;
+// distinct from data_stats' cursor so the chaining assertion can see advancement
+data_repo_more_pages.data.user.repositories.pageInfo.endCursor = "cursor-2";
+
 const data_repo_zero_stars = {
   data: {
     user: {
@@ -111,7 +116,7 @@ const error = {
 const mock = new MockAdapter(axios);
 
 beforeEach(() => {
-  process.env["FETCH_MULTI_PAGE_STARS"] = "false"; // Set to `false` to fetch only one page of stars.
+  vi.stubEnv("FETCH_MULTI_PAGE_STARS", "false"); // Set to `false` to fetch only one page of stars.
   loadConfigFromEnv();
   mock.onPost("https://api.github.com/graphql").reply((cfg) => {
     const req = JSON.parse(cfg.data as string) as {
@@ -131,6 +136,7 @@ beforeEach(() => {
 
 afterEach(() => {
   mock.reset();
+  vi.unstubAllEnvs();
 });
 
 describe("Test fetchStats", () => {
@@ -317,7 +323,7 @@ describe("Test fetchStats", () => {
   });
 
   it("should fetch two pages of stars if 'FETCH_MULTI_PAGE_STARS' env variable is set to `true`", async () => {
-    process.env["FETCH_MULTI_PAGE_STARS"] = "true";
+    vi.stubEnv("FETCH_MULTI_PAGE_STARS", "true");
     loadConfigFromEnv();
 
     const stats = await fetchStats("anuraghazra");
@@ -354,7 +360,7 @@ describe("Test fetchStats", () => {
   });
 
   it("should fetch one page of stars if 'FETCH_MULTI_PAGE_STARS' env variable is set to `false`", async () => {
-    process.env["FETCH_MULTI_PAGE_STARS"] = "false";
+    vi.stubEnv("FETCH_MULTI_PAGE_STARS", "false");
     loadConfigFromEnv();
 
     const stats = await fetchStats("anuraghazra");
@@ -391,7 +397,7 @@ describe("Test fetchStats", () => {
   });
 
   it("should fetch one page of stars if 'FETCH_MULTI_PAGE_STARS' env variable is not set", async () => {
-    process.env["FETCH_MULTI_PAGE_STARS"] = undefined;
+    vi.stubEnv("FETCH_MULTI_PAGE_STARS", undefined);
     loadConfigFromEnv();
 
     const stats = await fetchStats("anuraghazra");
@@ -425,6 +431,51 @@ describe("Test fetchStats", () => {
       totalIssuesCommented: 0,
       rank,
     });
+  });
+
+  it("should fetch at most 'FETCH_MULTI_PAGE_STARS' pages when it is a number", async () => {
+    vi.stubEnv("FETCH_MULTI_PAGE_STARS", "3");
+    loadConfigFromEnv();
+    mock.reset();
+    mock
+      .onPost("https://api.github.com/graphql")
+      .replyOnce(200, data_stats)
+      .onPost("https://api.github.com/graphql")
+      .replyOnce(200, data_repo_more_pages)
+      .onPost("https://api.github.com/graphql")
+      .replyOnce(200, data_repo_more_pages)
+      // a fourth page is available but must not be requested
+      .onPost("https://api.github.com/graphql")
+      .replyOnce(200, data_repo);
+
+    const stats = await fetchStats("anuraghazra");
+
+    // the stats page plus two repo pages, even though every page has a next one
+    expect(mock.history.post).toHaveLength(3);
+    expect(stats.totalStars).toBe(500);
+    // each page is requested with the cursor the previous one returned
+    const cursors = mock.history.post.map(
+      (req) =>
+        (JSON.parse(req.data as string) as { variables: { after: unknown } })
+          .variables.after,
+    );
+    expect(cursors).toStrictEqual([null, "cursor", "cursor-2"]);
+  });
+
+  it("should throw when a page after the first returns an error", async () => {
+    vi.stubEnv("FETCH_MULTI_PAGE_STARS", "true");
+    loadConfigFromEnv();
+    mock.reset();
+    mock
+      .onPost("https://api.github.com/graphql")
+      .replyOnce(200, data_stats)
+      .onPost("https://api.github.com/graphql")
+      .replyOnce(200, error);
+
+    await expect(fetchStats("anuraghazra")).rejects.toThrow(
+      "Could not resolve to a User with the login of 'noname'.",
+    );
+    expect(mock.history.post).toHaveLength(2);
   });
 
   it("should not fetch additional stats data when it not requested", async () => {

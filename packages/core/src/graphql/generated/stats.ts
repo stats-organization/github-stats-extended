@@ -5,6 +5,8 @@ type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 import type * as Types from "./common.js";
 
 import { graphqlDocument } from "../graphqlDocument.js";
+export type RepoNodeFragment = { name: string; stargazerCount: number };
+
 export type RepoStarsFragment = {
   repositories: {
     totalCount: number;
@@ -87,14 +89,17 @@ fragment RepoStars on User {
   ) {
     totalCount
     nodes {
-      name
-      stargazerCount
+      ...RepoNode
     }
     pageInfo {
       hasNextPage
       endCursor
     }
   }
+}
+fragment RepoNode on Repository {
+  name
+  stargazerCount
 }`);
 
 export const UserInfoDocument = graphqlDocument<
@@ -150,12 +155,15 @@ fragment RepoStars on User {
   ) {
     totalCount
     nodes {
-      name
-      stargazerCount
+      ...RepoNode
     }
     pageInfo {
       hasNextPage
       endCursor
     }
   }
+}
+fragment RepoNode on Repository {
+  name
+  stargazerCount
 }`);
