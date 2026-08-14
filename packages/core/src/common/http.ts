@@ -12,24 +12,25 @@ type GraphQLResponse<TResult> = AxiosResponse<{
 }>;
 
 /**
- * Send a GraphQL request to the GitHub API.
- *
- * @param document Generated query document; carries its result and variable types.
- * @param variables Variables the query declares.
- * @param headers Request headers.
- * @returns Request response.
+ * @param document Generated query document.
+ * @param scheme `Authorization` scheme for the token.
+ * @returns A fetcher `retryer` can drive.
  */
-const httpGraphQLRequest = <TResult, TVariables>(
+const createGraphQLFetcher = <TResult, TVariables>(
   document: GraphQLDocument<TResult, TVariables>,
-  variables: TVariables,
-  headers: NonNullable<AxiosRequestConfig["headers"]>,
-): Promise<GraphQLResponse<TResult>> => {
-  return axios({
-    url: GITHUB_GRAPHQL_API,
-    method: "post",
-    headers,
-    data: { query: document.text, variables },
-  });
+  scheme: "bearer" | "token",
+) => {
+  return (
+    variables: TVariables,
+    token: string,
+  ): Promise<GraphQLResponse<TResult>> => {
+    return axios({
+      url: GITHUB_GRAPHQL_API,
+      method: "post",
+      headers: { Authorization: `${scheme} ${token}` },
+      data: { query: document.text, variables },
+    });
+  };
 };
 
 /** Body of a GraphQL request sent to the GitHub API. */
@@ -47,7 +48,7 @@ interface GraphQLRequest {
  * @param headers Request headers.
  * @returns Request response.
  *
- * @description Superseded by {@link httpGraphQLRequest}.
+ * @description Superseded by {@link createGraphQLFetcher}.
  * Still used by the backend status endpoints for their own `rateLimit` query,
  * and part of this package's published API.
  *
@@ -66,5 +67,5 @@ const request = (
   });
 };
 
-export { httpGraphQLRequest, request };
+export { createGraphQLFetcher, request };
 export type { GraphQLResponse };

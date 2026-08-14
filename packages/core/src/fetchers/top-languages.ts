@@ -1,36 +1,19 @@
 import { getConfig } from "../common/config.js";
 import { CustomError, MissingParamError } from "../common/error.js";
 import { wrapTextMultiline } from "../common/fmt.js";
-import { httpGraphQLRequest } from "../common/http.js";
-import type { GraphQLResponse } from "../common/http.js";
+import { createGraphQLFetcher } from "../common/http.js";
 import { logger } from "../common/log.js";
 import { parseOwnerAffiliations } from "../common/ops.js";
 import { retryer } from "../common/retryer.js";
 import { TopLanguagesDocument } from "../graphql/generated/top-languages.js";
 import type {
   TopLanguageFragment,
-  TopLanguagesQuery,
-  TopLanguagesQueryVariables,
   TopLanguagesRepositoryFragment,
 } from "../graphql/generated/top-languages.js";
 
 import type { Lang, TopLangData } from "./types.js";
 
-/**
- * Top languages fetcher object.
- *
- * @param variables Fetcher variables.
- * @param token GitHub token.
- * @returns Languages fetcher response.
- */
-const fetcher = (
-  variables: TopLanguagesQueryVariables,
-  token: string,
-): Promise<GraphQLResponse<TopLanguagesQuery>> => {
-  return httpGraphQLRequest(TopLanguagesDocument, variables, {
-    Authorization: `token ${token}`,
-  });
-};
+const fetcher = createGraphQLFetcher(TopLanguagesDocument, "token");
 
 /**
  * Fetch top languages for a given username.

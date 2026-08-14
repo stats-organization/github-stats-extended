@@ -1,31 +1,12 @@
 import { MissingParamError } from "../common/error.js";
-import { httpGraphQLRequest } from "../common/http.js";
-import type { GraphQLResponse } from "../common/http.js";
+import { createGraphQLFetcher } from "../common/http.js";
 import { retryer } from "../common/retryer.js";
 import { GistInfoDocument } from "../graphql/generated/gist.js";
-import type {
-  GistFileInfoFragment,
-  GistInfoQuery,
-  GistInfoQueryVariables,
-} from "../graphql/generated/gist.js";
+import type { GistFileInfoFragment } from "../graphql/generated/gist.js";
 
 import type { GistData } from "./types.js";
 
-/**
- * Gist data fetcher.
- *
- * @param variables Fetcher variables.
- * @param token GitHub token.
- * @returns The response.
- */
-const fetcher = (
-  variables: GistInfoQueryVariables,
-  token: string,
-): Promise<GraphQLResponse<GistInfoQuery>> => {
-  return httpGraphQLRequest(GistInfoDocument, variables, {
-    Authorization: `token ${token}`,
-  });
-};
+const fetcher = createGraphQLFetcher(GistInfoDocument, "token");
 
 /**
  * This function calculates the primary language of a gist by files size.

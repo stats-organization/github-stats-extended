@@ -6,7 +6,7 @@ import { calculateRank } from "../calculateRank.js";
 import { getConfig } from "../common/config.js";
 import { CustomError, MissingParamError } from "../common/error.js";
 import { wrapTextMultiline } from "../common/fmt.js";
-import { httpGraphQLRequest } from "../common/http.js";
+import { createGraphQLFetcher } from "../common/http.js";
 import type { GraphQLResponse } from "../common/http.js";
 import { logger } from "../common/log.js";
 import { buildSearchFilter, parseOwnerAffiliations } from "../common/ops.js";
@@ -19,8 +19,6 @@ import type {
   RepoNodeFragment,
   UserInfoQuery,
   UserInfoQueryVariables,
-  UserReposQuery,
-  UserReposQueryVariables,
 } from "../graphql/generated/stats.js";
 
 import type { RepoUserStats, StatsData } from "./types.js";
@@ -31,29 +29,9 @@ type StatsFetcherResponse = Pick<
   "data" | "statusText"
 >;
 
-/**
- * Stats fetcher object.
- *
- * @param variables Fetcher variables.
- * @param token GitHub token.
- * @returns Axios response.
- */
-const fetcher = (
-  variables: UserInfoQueryVariables,
-  token: string,
-): Promise<GraphQLResponse<UserInfoQuery>> =>
-  httpGraphQLRequest(UserInfoDocument, variables, {
-    Authorization: `bearer ${token}`,
-  });
-
+const fetcher = createGraphQLFetcher(UserInfoDocument, "bearer");
 /** Fetcher for the pages after the first, which only need `repositories`. */
-const reposFetcher = (
-  variables: UserReposQueryVariables,
-  token: string,
-): Promise<GraphQLResponse<UserReposQuery>> =>
-  httpGraphQLRequest(UserReposDocument, variables, {
-    Authorization: `bearer ${token}`,
-  });
+const reposFetcher = createGraphQLFetcher(UserReposDocument, "bearer");
 
 /**
  * Fetch stats information for a given username.
@@ -66,7 +44,7 @@ const reposFetcher = (
  * @param variables.startTime Time to start the count of total commits.
  * @param variables.ownerAffiliations The owner affiliations to filter by. Default: OWNER.
  * @param variables.pat PAT override or null.
- * @returns Axios response.
+ * @returns The stats response, with every fetched page's repos merged in.
  *
  * @description Supports multi-page fetching when the `FETCH_MULTI_PAGE_STARS`
  * env variable is `true` or a fetch limit.
@@ -88,18 +66,20 @@ const statsFetcher = async ({
   ownerAffiliations: UserInfoQueryVariables["ownerAffiliations"];
   pat: string | null;
 }): Promise<StatsFetcherResponse> => {
-  const variables: UserInfoQueryVariables = {
-    login: username,
-    after: null,
-    includeMergedPullRequests,
-    includeDiscussions,
-    includeDiscussionsAnswers,
-    startTime,
-    ownerAffiliations,
-  };
-
   // only the first request carries the stats themselves
-  let stats: StatsFetcherResponse = await retryer(fetcher, variables, pat);
+  let stats: StatsFetcherResponse = await retryer(
+    fetcher,
+    {
+      login: username,
+      after: null,
+      includeMergedPullRequests,
+      includeDiscussions,
+      includeDiscussionsAnswers,
+      startTime,
+      ownerAffiliations,
+    },
+    pat,
+  );
   if (stats.data.errors) {
     return stats;
   }

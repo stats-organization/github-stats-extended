@@ -1,31 +1,12 @@
 import { MissingParamError } from "../common/error.js";
-import { httpGraphQLRequest } from "../common/http.js";
-import type { GraphQLResponse } from "../common/http.js";
+import { createGraphQLFetcher } from "../common/http.js";
 import { retryer } from "../common/retryer.js";
 import { GetRepoDocument } from "../graphql/generated/repo.js";
-import type {
-  GetRepoQuery,
-  GetRepoQueryVariables,
-} from "../graphql/generated/repo.js";
 
 import { fetchRepoUserStats } from "./stats.js";
 import type { RepositoryData } from "./types.js";
 
-/**
- * Repo data fetcher.
- *
- * @param variables Fetcher variables.
- * @param token GitHub token.
- * @returns The response.
- */
-const fetcher = (
-  variables: GetRepoQueryVariables,
-  token: string,
-): Promise<GraphQLResponse<GetRepoQuery>> => {
-  return httpGraphQLRequest(GetRepoDocument, variables, {
-    Authorization: `token ${token}`,
-  });
-};
+const fetcher = createGraphQLFetcher(GetRepoDocument, "token");
 
 const urlExample = "/api/pin?username=USERNAME&repo=REPO_NAME";
 
