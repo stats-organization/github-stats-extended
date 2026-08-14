@@ -76,10 +76,12 @@ const data_repo = {
   },
 };
 
-const data_repo_more_pages = structuredClone(data_repo);
-data_repo_more_pages.data.user.repositories.pageInfo.hasNextPage = true;
+const data_repo_page2 = structuredClone(data_repo);
+data_repo_page2.data.user.repositories.pageInfo.hasNextPage = true;
 // distinct from data_stats' cursor so the chaining assertion can see advancement
-data_repo_more_pages.data.user.repositories.pageInfo.endCursor = "cursor-2";
+data_repo_page2.data.user.repositories.pageInfo.endCursor = "cursor-2";
+const data_repo_page3 = structuredClone(data_repo_page2);
+data_repo_page3.data.user.repositories.pageInfo.endCursor = "cursor-3";
 
 const data_repo_zero_stars = {
   data: {
@@ -441,9 +443,9 @@ describe("Test fetchStats", () => {
       .onPost("https://api.github.com/graphql")
       .replyOnce(200, data_stats)
       .onPost("https://api.github.com/graphql")
-      .replyOnce(200, data_repo_more_pages)
+      .replyOnce(200, data_repo_page2)
       .onPost("https://api.github.com/graphql")
-      .replyOnce(200, data_repo_more_pages)
+      .replyOnce(200, data_repo_page3)
       // a fourth page is available but must not be requested
       .onPost("https://api.github.com/graphql")
       .replyOnce(200, data_repo);
