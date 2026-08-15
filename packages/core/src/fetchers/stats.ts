@@ -6,12 +6,12 @@ import { calculateRank } from "../calculateRank.js";
 import { getConfig } from "../common/config.js";
 import { CustomError, MissingParamError } from "../common/error.js";
 import { wrapTextMultiline } from "../common/fmt.js";
-import { request } from "../common/http.js";
 import { createGraphQLFetcher } from "../common/http.js";
 import type { GraphQLResponse } from "../common/http.js";
 import { logger } from "../common/log.js";
 import { buildSearchFilter, parseOwnerAffiliations } from "../common/ops.js";
 import { retryer } from "../common/retryer.js";
+import { buildContributionsDocument } from "../graphql/contributionsDocument.js";
 import {
   UserInfoDocument,
   UserReposDocument,
@@ -20,7 +20,6 @@ import type {
   RepoNodeFragment,
   UserInfoQuery,
   UserInfoQueryVariables,
-  YearContributionsFragment,
 } from "../graphql/generated/stats.js";
 
 import type { RepoUserStats, StatsData } from "./types.js";
@@ -276,10 +275,6 @@ const fetchRepoUserStats = async (
   return stats;
 };
 
-interface ContributionsQuery {
-  user: Record<string, YearContributionsFragment> | null;
-}
-
 /**
  * Fetch all-time contributions by building a single GraphQL query
  * for all the given years.
@@ -296,37 +291,32 @@ const fetchTotalContributions = async (
     return 0;
   }
 
-  const yearFields = years
-    .map(
-      (year) =>
-        // without the "to" field, 2024-01-01 would be included for year=2023
-        `year_${year}: contributionsCollection(from: "${year}-01-01T00:00:00Z", to: "${year}-12-31T23:59:59Z") { contributionCalendar { totalContributions } }`,
-    )
-    .join("\n");
-
-  const query = `
-    query userContributions($login: String!) {
-      user(login: $login) {
-        ${yearFields}
-      }
-    }
-  `;
-
-  const contributionsFetcher = (
-    variables: Record<string, unknown>,
-    token: string,
-  ): Promise<GraphQLResponse<ContributionsQuery>> => {
-    return request(
-      { query, variables },
-      { Authorization: `bearer ${token}` },
-    ) as Promise<GraphQLResponse<ContributionsQuery>>;
-  };
+  const contributionsFetcher = createGraphQLFetcher(
+    buildContributionsDocument(years),
+    "bearer",
+  );
 
   const contribRes = await retryer(
     contributionsFetcher,
     { login: username },
     pat,
   );
+
+  if (contribRes.data.errors) {
+    logger.error(contribRes.data.errors);
+    const firstError = contribRes.data.errors[0];
+    if (firstError?.message) {
+      throw new CustomError(
+        wrapTextMultiline(firstError.message, 525, 12)[0] ?? "",
+        contribRes.statusText,
+      );
+    }
+    throw new CustomError(
+      "Something went wrong while trying to retrieve the contributions data using the GraphQL API.",
+      CustomError.GRAPHQL_ERROR,
+    );
+  }
+
   const user = contribRes.data.data.user;
   if (!user) {
     return 0;
