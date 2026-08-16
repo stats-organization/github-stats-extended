@@ -32,18 +32,16 @@ describe("Test renderStatsCard", () => {
   it("should render correctly", () => {
     document.body.innerHTML = renderStatsCard(stats);
 
-    expect(document.querySelector(".header")?.textContent).toBe(
+    expect(document.querySelector(".header")).toHaveTextContent(
       "Anurag Hazra's GitHub Stats",
     );
 
-    expect(document.body.querySelector("svg")?.getAttribute("height")).toBe(
-      "195",
-    );
-    expect(screen.getByTestId("stars").textContent).toBe("100");
-    expect(screen.getByTestId("commits").textContent).toBe("200");
-    expect(screen.getByTestId("issues").textContent).toBe("300");
-    expect(screen.getByTestId("prs").textContent).toBe("400");
-    expect(screen.getByTestId("contribs").textContent).toBe("500");
+    expect(document.querySelector("svg")).toHaveAttribute("height", "195");
+    expect(screen.getByTestId("stars")).toHaveTextContent("100");
+    expect(screen.getByTestId("commits")).toHaveTextContent("200");
+    expect(screen.getByTestId("issues")).toHaveTextContent("300");
+    expect(screen.getByTestId("prs")).toHaveTextContent("400");
+    expect(screen.getByTestId("contribs")).toHaveTextContent("500");
     expect(screen.queryByTestId("card-bg")).toBeInTheDocument();
     expect(screen.queryByTestId("rank-circle")).toBeInTheDocument();
 
@@ -62,13 +60,13 @@ describe("Test renderStatsCard", () => {
   it("should have proper name apostrophe", () => {
     document.body.innerHTML = renderStatsCard({ ...stats, name: "Anil Das" });
 
-    expect(document.querySelector(".header")?.textContent).toBe(
+    expect(document.querySelector(".header")).toHaveTextContent(
       "Anil Das' GitHub Stats",
     );
 
     document.body.innerHTML = renderStatsCard({ ...stats, name: "Felix" });
 
-    expect(document.querySelector(".header")?.textContent).toBe(
+    expect(document.querySelector(".header")).toHaveTextContent(
       "Felix's GitHub Stats",
     );
   });
@@ -78,20 +76,23 @@ describe("Test renderStatsCard", () => {
       hide: ["issues", "prs", "contribs"],
     });
 
-    expect(document.body.querySelector("svg")?.getAttribute("height")).toBe(
-      "150",
-    ); // height should be 150 because we clamped it.
+    // height should be 150 because we clamped it.
+    expect(document.querySelector("svg")).toHaveAttribute("height", "150");
 
-    expect(screen.queryByTestId("stars")).toBeDefined();
-    expect(screen.queryByTestId("commits")).toBeDefined();
-    expect(screen.queryByTestId("issues")).toBeNull();
-    expect(screen.queryByTestId("prs")).toBeNull();
-    expect(screen.queryByTestId("contribs")).toBeNull();
-    expect(screen.queryByTestId("reviews")).toBeNull();
-    expect(screen.queryByTestId("discussions_started")).toBeNull();
-    expect(screen.queryByTestId("discussions_answered")).toBeNull();
-    expect(screen.queryByTestId("prs_merged")).toBeNull();
-    expect(screen.queryByTestId("prs_merged_percentage")).toBeNull();
+    expect(screen.queryByTestId("stars")).toBeInTheDocument();
+    expect(screen.queryByTestId("commits")).toBeInTheDocument();
+    expect(screen.queryByTestId("issues")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("prs")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("contribs")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("reviews")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("discussions_started")).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("discussions_answered"),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByTestId("prs_merged")).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("prs_merged_percentage"),
+    ).not.toBeInTheDocument();
   });
 
   it("should show additional stats", () => {
@@ -105,20 +106,18 @@ describe("Test renderStatsCard", () => {
       ],
     });
 
-    expect(document.body.querySelector("svg")?.getAttribute("height")).toBe(
-      "320",
-    );
+    expect(document.querySelector("svg")).toHaveAttribute("height", "320");
 
-    expect(screen.queryByTestId("stars")).toBeDefined();
-    expect(screen.queryByTestId("commits")).toBeDefined();
-    expect(screen.queryByTestId("issues")).toBeDefined();
-    expect(screen.queryByTestId("prs")).toBeDefined();
-    expect(screen.queryByTestId("contribs")).toBeDefined();
-    expect(screen.queryByTestId("reviews")).toBeDefined();
-    expect(screen.queryByTestId("discussions_started")).toBeDefined();
-    expect(screen.queryByTestId("discussions_answered")).toBeDefined();
-    expect(screen.queryByTestId("prs_merged")).toBeDefined();
-    expect(screen.queryByTestId("prs_merged_percentage")).toBeDefined();
+    expect(screen.queryByTestId("stars")).toBeInTheDocument();
+    expect(screen.queryByTestId("commits")).toBeInTheDocument();
+    expect(screen.queryByTestId("issues")).toBeInTheDocument();
+    expect(screen.queryByTestId("prs")).toBeInTheDocument();
+    expect(screen.queryByTestId("contribs")).toBeInTheDocument();
+    expect(screen.queryByTestId("reviews")).toBeInTheDocument();
+    expect(screen.queryByTestId("discussions_started")).toBeInTheDocument();
+    expect(screen.queryByTestId("discussions_answered")).toBeInTheDocument();
+    expect(screen.queryByTestId("prs_merged")).toBeInTheDocument();
+    expect(screen.queryByTestId("prs_merged_percentage")).toBeInTheDocument();
   });
 
   it("should hide_rank", () => {
@@ -334,8 +333,8 @@ describe("Test renderStatsCard", () => {
     });
 
     const stars = screen.getByTestId("stars");
-    expect(screen.queryAllByTestId("icon")[0]).toBeDefined();
-    expect(stars).toBeDefined();
+    expect(screen.queryAllByTestId("icon")[0]).toBeInTheDocument();
+    expect(stars).toBeInTheDocument();
     // the label
     expect(stars.previousElementSibling).toHaveAttribute("x", "25");
   });
@@ -344,8 +343,8 @@ describe("Test renderStatsCard", () => {
     document.body.innerHTML = renderStatsCard(stats, { show_icons: false });
 
     const stars = screen.getByTestId("stars");
-    expect(screen.queryAllByTestId("icon")[0]).not.toBeDefined();
-    expect(stars).toBeDefined();
+    expect(screen.queryAllByTestId("icon")).toHaveLength(0);
+    expect(stars).toBeInTheDocument();
     // the label
     expect(stars.previousElementSibling).not.toHaveAttribute("x");
   });
@@ -355,7 +354,8 @@ describe("Test renderStatsCard", () => {
       hide_rank: true,
     });
 
-    expect(document.body.querySelector("svg")?.getAttribute("width")).toBe(
+    expect(document.querySelector("svg")).toHaveAttribute(
+      "width",
       "299.9666657447815",
     );
   });
@@ -366,41 +366,39 @@ describe("Test renderStatsCard", () => {
       custom_title: "Hello world",
     });
 
-    expect(document.body.querySelector("svg")?.getAttribute("width")).toBe(
-      "287",
-    );
+    expect(document.querySelector("svg")).toHaveAttribute("width", "287");
   });
 
   it("should render translations", () => {
     document.body.innerHTML = renderStatsCard(stats, { locale: "cn" });
-    expect(document.querySelector(".header")?.textContent).toBe(
+    expect(document.querySelector(".header")).toHaveTextContent(
       "Anurag Hazra 的 GitHub 统计数据",
     );
     expect(
       document.querySelector(
         'g[transform="translate(0, 0)"]>.stagger>.stat.bold',
-      )?.textContent,
-    ).toMatchInlineSnapshot(`"获标星数:"`);
+      ),
+    ).toHaveTextContent("获标星数:");
     expect(
       document.querySelector(
         'g[transform="translate(0, 25)"]>.stagger>.stat.bold',
-      )?.textContent,
-    ).toMatchInlineSnapshot(`"累计提交总数 (去年):"`);
+      ),
+    ).toHaveTextContent("累计提交总数 (去年):");
     expect(
       document.querySelector(
         'g[transform="translate(0, 50)"]>.stagger>.stat.bold',
-      )?.textContent,
-    ).toMatchInlineSnapshot(`"发起的 PR 总数:"`);
+      ),
+    ).toHaveTextContent("发起的 PR 总数:");
     expect(
       document.querySelector(
         'g[transform="translate(0, 75)"]>.stagger>.stat.bold',
-      )?.textContent,
-    ).toMatchInlineSnapshot(`"提出的 issue 总数:"`);
+      ),
+    ).toHaveTextContent("提出的 issue 总数:");
     expect(
       document.querySelector(
         'g[transform="translate(0, 100)"]>.stagger>.stat.bold',
-      )?.textContent,
-    ).toMatchInlineSnapshot(`"贡献的项目数（去年）:"`);
+      ),
+    ).toHaveTextContent("贡献的项目数（去年）:");
   });
 
   it("should render without rounding", () => {
@@ -414,44 +412,44 @@ describe("Test renderStatsCard", () => {
     stats.totalCommits = 1999;
 
     document.body.innerHTML = renderStatsCard(stats);
-    expect(screen.getByTestId("commits").textContent).toBe("2k");
+    expect(screen.getByTestId("commits")).toHaveTextContent("2k");
     document.body.innerHTML = renderStatsCard(stats, { number_format: "long" });
-    expect(screen.getByTestId("commits").textContent).toBe("1999");
+    expect(screen.getByTestId("commits")).toHaveTextContent("1999");
     document.body.innerHTML = renderStatsCard(stats, { number_precision: 2 });
-    expect(screen.getByTestId("commits").textContent).toBe("2.00k");
+    expect(screen.getByTestId("commits")).toHaveTextContent("2.00k");
     document.body.innerHTML = renderStatsCard(stats, {
       number_format: "long",
       number_precision: 2,
     });
-    expect(screen.getByTestId("commits").textContent).toBe("1999");
+    expect(screen.getByTestId("commits")).toHaveTextContent("1999");
   });
 
   it("should render default rank icon with level A+", () => {
     document.body.innerHTML = renderStatsCard(stats, {
       rank_icon: "default",
     });
-    const levelRankIcon = screen.getByTestId("level-rank-icon");
-    expect(levelRankIcon).toBeDefined();
-    expect(levelRankIcon.textContent.trim()).toBe("A+");
+    expect(screen.getByTestId("level-rank-icon")).toHaveTextContent("A+");
   });
 
   it("should render github rank icon", () => {
     document.body.innerHTML = renderStatsCard(stats, {
       rank_icon: "github",
     });
-    expect(screen.queryByTestId("github-rank-icon")).toBeDefined();
+    expect(screen.queryByTestId("github-rank-icon")).toBeInTheDocument();
   });
 
   it("should show the rank percentile", () => {
     document.body.innerHTML = renderStatsCard(stats, {
       rank_icon: "percentile",
     });
-    const percentileTopHeader = screen.getByTestId("percentile-top-header");
-    expect(percentileTopHeader).toBeDefined();
-    expect(percentileTopHeader.textContent.trim()).toBe("Top");
-    expect(screen.queryByTestId("rank-percentile-text")).toBeDefined();
-    expect(screen.getByTestId("percentile-rank-value").textContent.trim()).toBe(
-      stats.rank.percentile.toFixed(1) + "%",
+    expect(screen.getByTestId("percentile-top-header")).toHaveTextContent(
+      "Top",
+    );
+
+    const percentileRankValue = screen.getByTestId("percentile-rank-value");
+    expect(percentileRankValue).toHaveClass("rank-percentile-text");
+    expect(percentileRankValue).toHaveTextContent(
+      `${stats.rank.percentile.toFixed(1)}%`,
     );
   });
 

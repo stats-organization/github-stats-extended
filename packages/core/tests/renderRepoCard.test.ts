@@ -61,7 +61,7 @@ describe("Test renderRepoCard", () => {
       name: "some-really-long-repo-name-for-test-purposes",
     });
 
-    expect(document.querySelector(".header")?.textContent).toBe(
+    expect(document.querySelector(".header")).toHaveTextContent(
       "some-really-long-repo-name-for-test...",
     );
   });
@@ -74,10 +74,10 @@ describe("Test renderRepoCard", () => {
     });
 
     const lines = document.querySelectorAll(".description tspan");
-    expect(lines[0]?.textContent).toBe(
+    expect(lines[0]).toHaveTextContent(
       "The quick brown fox jumps over the lazy dog is an",
     );
-    expect(lines[1]?.textContent).toBe(
+    expect(lines[1]).toHaveTextContent(
       "English-language pangram—a sentence that contains all of",
     );
 
@@ -109,7 +109,7 @@ describe("Test renderRepoCard", () => {
     expect(description).toHaveTextContent(
       "The quick brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet",
     );
-    expect(description?.style.getPropertyValue("--lines")).toBe("3");
+    expect(description).toHaveStyle({ "--lines": "3" });
 
     // Short descriptions should leave the full text visible without clamping.
     document.body.innerHTML = renderRepoCard({

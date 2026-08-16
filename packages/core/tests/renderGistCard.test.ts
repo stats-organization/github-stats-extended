@@ -59,10 +59,10 @@ describe("test renderGistCard", () => {
         "The quick brown fox jumps over the lazy dog is an English-language pangram—a sentence that contains all of the letters of the English alphabet",
     });
     const lines = document.querySelectorAll(".description tspan");
-    expect(lines[0]?.textContent).toBe(
+    expect(lines[0]).toHaveTextContent(
       "The quick brown fox jumps over the lazy dog is an",
     );
-    expect(lines[1]?.textContent).toBe(
+    expect(lines[1]).toHaveTextContent(
       "English-language pangram—a sentence that contains all of",
     );
   });

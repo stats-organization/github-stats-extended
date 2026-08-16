@@ -398,7 +398,7 @@ describe("Test renderTopLanguages", () => {
     let langNames = screen.queryAllByTestId("lang-name");
     expect(langNames[0]).toBeInTheDocument();
     expect(langNames[1]).toBeInTheDocument();
-    expect(langNames[2]).not.toBeDefined();
+    expect(langNames).toHaveLength(2);
 
     // multiple languages passed
     document.body.innerHTML = renderTopLanguages(langs, {
@@ -406,7 +406,7 @@ describe("Test renderTopLanguages", () => {
     });
     langNames = screen.queryAllByTestId("lang-name");
     expect(langNames[0]).toBeInTheDocument();
-    expect(langNames[1]).not.toBeDefined();
+    expect(langNames).toHaveLength(1);
   });
 
   it("should resize the height correctly depending on langs", () => {
@@ -493,10 +493,9 @@ describe("Test renderTopLanguages", () => {
     expect(progressBgStyles?.["fill"]?.trim()).toBe(`#${prog_bar_bg_color}`);
     expect(screen.queryByTestId("card-bg")).toHaveAttribute("fill", "#252525");
 
-    const progressBackgroundNodes = screen.queryAllByTestId(
-      "progress-background",
-    );
-    expect(progressBackgroundNodes.length).toBeGreaterThan(0);
+    expect(
+      screen.queryAllByTestId("progress-background").length,
+    ).toBeGreaterThan(0);
   });
 
   it("should render custom colors with themes", () => {
@@ -749,7 +748,7 @@ describe("Test renderTopLanguages", () => {
 
   it("should render a translated title", () => {
     document.body.innerHTML = renderTopLanguages(langs, { locale: "cn" });
-    expect(document.querySelector(".header")?.textContent).toBe("最常用的语言");
+    expect(document.querySelector(".header")).toHaveTextContent("最常用的语言");
   });
 
   it("should render without rounding", () => {
@@ -764,7 +763,7 @@ describe("Test renderTopLanguages", () => {
       langs_count: 1,
     };
     document.body.innerHTML = renderTopLanguages(langs, { ...options });
-    expect(screen.queryAllByTestId("lang-name").length).toBe(
+    expect(screen.queryAllByTestId("lang-name")).toHaveLength(
       options.langs_count,
     );
   });
@@ -775,14 +774,14 @@ describe("Test renderTopLanguages", () => {
       langs_count: 2,
     };
     document.body.innerHTML = renderTopLanguages(langs, { ...options });
-    expect(screen.queryAllByTestId("lang-name").length).toBe(
+    expect(screen.queryAllByTestId("lang-name")).toHaveLength(
       options.langs_count,
     );
   });
 
   it('should show "No languages data." message instead of empty card when nothing to show', () => {
     document.body.innerHTML = renderTopLanguages({});
-    expect(document.querySelector(".stat")?.textContent).toBe(
+    expect(document.querySelector(".stat")).toHaveTextContent(
       "No languages data.",
     );
   });
@@ -827,7 +826,7 @@ describe("Test renderTopLanguages", () => {
 
     const langNames = screen.queryAllByTestId("lang-name");
     expect(langNames[0]).toHaveTextContent("HTML");
-    expect(langNames.length).toBe(3);
+    expect(langNames).toHaveLength(3);
   });
 
   it("should hide stats values when hide_values is true (donut layout)", () => {

@@ -75,27 +75,22 @@ describe("Card", () => {
     const card = new Card({ titlePrefixIcon: icons.contribs });
 
     document.body.innerHTML = card.render(``);
-    expect(document.getElementsByClassName("icon")[0]).toBeInTheDocument();
+    expect(document.querySelector(".icon")).toBeInTheDocument();
   });
 
   it("title should not have prefix icon", () => {
     const card = new Card({});
 
     document.body.innerHTML = card.render(``);
-    expect(document.getElementsByClassName("icon")[0]).toBeUndefined();
+    expect(document.querySelector(".icon")).not.toBeInTheDocument();
   });
 
   it("should have proper height, width", () => {
     const card = new Card({ height: 200, width: 200 });
     document.body.innerHTML = card.render(``);
-    expect(document.getElementsByTagName("svg")[0]).toHaveAttribute(
-      "height",
-      "200",
-    );
-    expect(document.getElementsByTagName("svg")[0]).toHaveAttribute(
-      "width",
-      "200",
-    );
+    const svg = document.querySelector("svg");
+    expect(svg).toHaveAttribute("height", "200");
+    expect(svg).toHaveAttribute("width", "200");
   });
 
   it("should have less height after title is hidden", () => {
@@ -103,10 +98,7 @@ describe("Card", () => {
     card.setHideTitle(true);
 
     document.body.innerHTML = card.render(``);
-    expect(document.getElementsByTagName("svg")[0]).toHaveAttribute(
-      "height",
-      "170",
-    );
+    expect(document.querySelector("svg")).toHaveAttribute("height", "170");
   });
 
   it("main-card-body should have proper when title is visible", () => {

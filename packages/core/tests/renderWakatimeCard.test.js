@@ -1,4 +1,4 @@
-import { queryByTestId } from "@testing-library/dom";
+import { screen } from "@testing-library/dom";
 import { describe, expect, it } from "vitest";
 
 import wakatimeApi from "../src/api/wakatime.js";
@@ -32,20 +32,19 @@ describe("Test Render WakaTime Card", () => {
       hide: ["YAML", "Other"],
     });
 
-    expect(queryByTestId(document.body, /YAML/i)).toBeNull();
-    expect(queryByTestId(document.body, /Other/i)).toBeNull();
-    expect(queryByTestId(document.body, /TypeScript/i)).not.toBeNull();
+    expect(screen.queryByTestId(/YAML/i)).not.toBeInTheDocument();
+    expect(screen.queryByTestId(/Other/i)).not.toBeInTheDocument();
+    expect(screen.queryByTestId(/TypeScript/i)).toBeInTheDocument();
   });
 
   it("should render translations", () => {
     document.body.innerHTML = renderWakatimeCard({}, { locale: "cn" });
-    expect(document.getElementsByClassName("header")[0].textContent).toBe(
+    expect(document.querySelector(".header")).toHaveTextContent(
       "WakaTime 周统计",
     );
     expect(
-      document.querySelector('g[transform="translate(0, 0)"]>text.stat.bold')
-        .textContent,
-    ).toBe("WakaTime 用户个人资料未公开");
+      document.querySelector('g[transform="translate(0, 0)"]>text.stat.bold'),
+    ).toHaveTextContent("WakaTime 用户个人资料未公开");
   });
 
   it("should render without rounding", () => {
@@ -65,7 +64,7 @@ describe("Test Render WakaTime Card", () => {
       },
       {},
     );
-    expect(document.querySelector(".stat").textContent).toBe(
+    expect(document.querySelector(".stat")).toHaveTextContent(
       "No coding activity this week",
     );
   });
@@ -80,7 +79,7 @@ describe("Test Render WakaTime Card", () => {
         layout: "compact",
       },
     );
-    expect(document.querySelector(".stat").textContent).toBe(
+    expect(document.querySelector(".stat")).toHaveTextContent(
       "No coding activity this week",
     );
   });
