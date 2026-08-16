@@ -28,6 +28,10 @@
       "@stats/source"
     ],
 
+    // Emit
+    // Off by default so no `tsc` writes output unless explicitly opted in
+    "noEmit": true,
+
     // Interop Constraints
     "verbatimModuleSyntax": true,
     "isolatedModules": true,

@@ -7,7 +7,6 @@
     "vitest.config.e2e.ts"
   ],
   "compilerOptions": {
-    "composite": true,
     "module": "nodenext",
     "moduleResolution": "nodenext"
   }

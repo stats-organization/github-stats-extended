@@ -5,7 +5,6 @@
     "allowJs": true,
 
     "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "outDir": "build"
+    "moduleResolution": "nodenext"
   }
 }

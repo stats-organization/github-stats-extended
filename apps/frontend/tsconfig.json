@@ -9,10 +9,8 @@
   ],
   "compilerOptions": {
     "lib": ["DOM"],
-    "composite": true,
     "module": "esnext",
     "moduleResolution": "bundler",
-    "outDir": "./build-ts",
     "resolveJsonModule": true
   }
 }
