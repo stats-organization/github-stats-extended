@@ -639,6 +639,82 @@ describe("Test fetchStats", () => {
     expect(stats.totalContributions).toBe(350);
   });
 
+  it("should throw when the contributions query returns an error", async () => {
+    mock.onPost("https://api.github.com/graphql").reply((cfg) => {
+      const req = JSON.parse(cfg.data as string) as { query: string };
+      if (req.query.includes("contributionCalendar")) {
+        return [
+          200,
+          {
+            data: null,
+            errors: [{ message: "Some test GraphQL error" }],
+          },
+        ];
+      }
+      return [
+        200,
+        req.query.includes("totalCommitContributions") ? data_stats : data_repo,
+      ];
+    });
+
+    await expect(
+      fetchStats(
+        "anuraghazra",
+        false,
+        [],
+        false,
+        false,
+        false,
+        undefined,
+        [],
+        [],
+        false,
+        false,
+        false,
+        false,
+        false,
+        [],
+        true, // include_contributions
+      ),
+    ).rejects.toThrow("Some test GraphQL error");
+  });
+
+  it("should throw a generic error when the contributions query returns an error without a message", async () => {
+    mock.onPost("https://api.github.com/graphql").reply((cfg) => {
+      const req = JSON.parse(cfg.data as string) as { query: string };
+      if (req.query.includes("contributionCalendar")) {
+        return [200, { data: null, errors: [{ type: "SOME_ERROR" }] }];
+      }
+      return [
+        200,
+        req.query.includes("totalCommitContributions") ? data_stats : data_repo,
+      ];
+    });
+
+    await expect(
+      fetchStats(
+        "anuraghazra",
+        false,
+        [],
+        false,
+        false,
+        false,
+        undefined,
+        [],
+        [],
+        false,
+        false,
+        false,
+        false,
+        false,
+        [],
+        true, // include_contributions
+      ),
+    ).rejects.toThrow(
+      "Something went wrong while trying to retrieve the contributions data using the GraphQL API.",
+    );
+  });
+
   it("should return correct data when user don't have any pull requests", async () => {
     mock
       .onPost("https://api.github.com/graphql")

@@ -1,8 +1,7 @@
 /**
  * A GraphQL query paired with the types of its result and variables.
  *
- * `text` is what goes over the wire; the other two members only carry types and are
- * never assigned.
+ * `text` is what goes over the wire; the other two members only carry types and are never assigned.
  * Documents are generated from `queries/*.graphql`
  * See `scripts/generate-graphql-types.js`.
  */
