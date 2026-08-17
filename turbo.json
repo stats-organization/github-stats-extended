@@ -3,6 +3,7 @@
   "globalDependencies": ["tsconfig.base.json"],
   "tasks": {
     "build": {
+       "env": ["PAT_1"],
       "dependsOn": ["^build"],
       "outputs": ["build/**"]
     },
