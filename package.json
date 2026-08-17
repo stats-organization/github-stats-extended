@@ -19,7 +19,7 @@
     "knip": "6.27.0",
     "lint-staged": "17.0.8",
     "prettier": "3.9.5",
-    "turbo": "2.10.5",
+    "turbo": "2.10.9",
     "typescript": "6.0.3",
     "typescript-eslint": "8.65.0",
     "vitest": "catalog:default"
