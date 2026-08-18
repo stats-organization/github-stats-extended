@@ -5,7 +5,5 @@ coverage
 scripts
 tests
 .env
-**/*.md
 **/*.svg
-.eslintrc.json
 codecov.yml
