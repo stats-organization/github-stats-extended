@@ -32,6 +32,19 @@ export default defineConfig({
       title: "GitHub Stats Extended",
       description: "Dynamically generate GitHub stats for your READMEs.",
       logo: { src: "./src/assets/appLogo64.png", alt: "" },
+      // Starlight defaults to a favicon.svg this project does not ship.
+      favicon: "/favicon.ico",
+      head: [
+        {
+          tag: "link",
+          attrs: { rel: "apple-touch-icon", href: `${base}/logo192.png` },
+        },
+        {
+          tag: "link",
+          attrs: { rel: "manifest", href: `${base}/manifest.json` },
+        },
+        { tag: "meta", attrs: { name: "theme-color", content: "#000000" } },
+      ],
       social: [
         {
           icon: "github",
