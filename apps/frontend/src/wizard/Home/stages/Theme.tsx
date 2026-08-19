@@ -100,7 +100,7 @@ export function ThemeStage({
       <div className="pl-10 pr-10">
         {"For more theme options check the "}
         <LinkExternal
-          href={docsUrl("advanced_documentation", "themes")}
+          href={docsUrl("customization/theming")}
           className="underline text-primary"
         >
           customization documentation

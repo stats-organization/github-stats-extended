@@ -405,7 +405,7 @@ export function CustomizeStage({
         <div className="pl-10 pr-10">
           For more customization options check the{" "}
           <LinkExternal
-            href={docsUrl("advanced_documentation")}
+            href={docsUrl("customization/common-options")}
             className="underline text-primary"
           >
             customization documentation

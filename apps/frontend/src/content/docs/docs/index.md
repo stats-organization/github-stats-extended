@@ -4,7 +4,7 @@ title: GitHub Stats Extended
 
 Dynamically generate GitHub stats for your READMEs.
 
-GitHub-Stats-Extended is the [extended, actively maintained successor](/frontend/docs/fork/) of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats). It generates stats cards about your GitHub contributions, your top languages and more, which you can [customize](/frontend/docs/advanced_documentation/) through a large set of parameters.
+GitHub-Stats-Extended is the [extended, actively maintained successor](/frontend/docs/fork/) of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats). It generates stats cards about your GitHub contributions, your top languages and more, which you can [customize](/frontend/docs/customization/common-options/) through a large set of parameters.
 
 <picture>
   <source
@@ -26,7 +26,7 @@ As a more comfortable alternative, use the [card wizard](https://github-stats-ex
 
 ## Card Types
 
-### Stats Card
+### [Stats Card](/frontend/docs/cards/stats/)
 
 <picture>
   <source
@@ -36,7 +36,7 @@ As a more comfortable alternative, use the [card wizard](https://github-stats-ex
   <img src="https://github-stats-extended.vercel.app/api?username=anuraghazra&theme=light_github" alt="Anurag's GitHub stats" />
 </picture>
 
-### Top Languages Card
+### [Top Languages Card](/frontend/docs/cards/top-languages/)
 
 <picture>
   <source
@@ -46,7 +46,7 @@ As a more comfortable alternative, use the [card wizard](https://github-stats-ex
   <img src="https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&langs_count=4&theme=light_github" alt="Top Langs" />
 </picture>
 
-### WakaTime Card
+### [WakaTime Card](/frontend/docs/cards/wakatime/)
 
 <picture>
   <source
@@ -56,7 +56,7 @@ As a more comfortable alternative, use the [card wizard](https://github-stats-ex
   <img src="https://github-stats-extended.vercel.app/api/wakatime?username=alan&langs_count=6&theme=light_github" alt="Alan's WakaTime stats" />
 </picture>
 
-### Repo Card
+### [Repo Card](/frontend/docs/cards/repo-pin/)
 
 <picture>
   <source
@@ -66,7 +66,7 @@ As a more comfortable alternative, use the [card wizard](https://github-stats-ex
   <img src="https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats&theme=light_github_repocard" alt="Readme Card" />
 </picture>
 
-### Gist Card
+### [Gist Card](/frontend/docs/cards/gist-pin/)
 
 <picture>
   <source
@@ -89,8 +89,9 @@ GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For 
 
 ## Where to next
 
-- [Advanced Customization](/frontend/docs/advanced_documentation/) — every parameter the cards accept.
-- [Available Themes](/frontend/docs/themes/) — the built-in themes, rendered as live samples.
+- [Cards](/frontend/docs/cards/stats/) — the options each card accepts.
+- [Customization](/frontend/docs/customization/common-options/) — options every card shares, plus theming and locales.
+- [Available Themes](/frontend/docs/customization/themes/) — the built-in themes, rendered as live samples.
 - [Run It Yourself](/frontend/docs/deploy/) — GitHub Actions or a self-hosted Vercel deployment.
 - [Fork Information](/frontend/docs/fork/) — what this project adds on top of github-readme-stats.
 

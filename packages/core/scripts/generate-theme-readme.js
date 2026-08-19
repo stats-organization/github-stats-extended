@@ -5,7 +5,8 @@ import { format, resolveConfig } from "prettier";
 import { themes } from "../src/themes/index.ts";
 
 // The docs live with the site that publishes them.
-const TARGET_FILE = "../../apps/frontend/src/content/docs/docs/themes.md";
+const TARGET_FILE =
+  "../../apps/frontend/src/content/docs/docs/customization/themes.md";
 const REPO_CARD_LINKS_FLAG = "<!-- REPO_CARD_LINKS -->";
 const STAT_CARD_LINKS_FLAG = "<!-- STATS_CARD_LINKS -->";
 

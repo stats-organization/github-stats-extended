@@ -20,7 +20,7 @@ The frontend is based on [GitHub Trends](https://github.com/avgupta456/github-tr
 
 To include stars from repos which are not owned by you, but where you are a collaborator or organization member, add `&role=OWNER,ORGANIZATION_MEMBER,COLLABORATOR` to your stats card url. To include such repos in your language stats, you can also add the same parameter to your top languages card url.
 
-See [here](/frontend/docs/advanced_documentation/#filtering-by-repository-and-owner) for full feature documentation.
+See [here](/frontend/docs/cards/stats/#filtering-by-repository-and-owner) for full feature documentation.
 
 The resolution of this most requested feature in github-readme-stats was [originally implemented](https://github.com/anuraghazra/github-readme-stats/issues/1#issuecomment-855681098) by [@developStorm](https://github.com/developStorm).
 
@@ -48,7 +48,7 @@ GitHub-Stats-Extended adds the ability to show contribution stats for specific r
 
 Especially for regular contributors in open source projects it might make sense to display an overview of their own contributions to these projects on their GitHub profile.
 
-See [here](/frontend/docs/advanced_documentation/#filtering-by-repository-and-owner) for full feature documentation.
+See [here](/frontend/docs/cards/stats/#filtering-by-repository-and-owner) for full feature documentation.
 
 ---
 

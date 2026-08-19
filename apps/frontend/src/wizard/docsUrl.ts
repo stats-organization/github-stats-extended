@@ -4,13 +4,18 @@
  *
  * @todo extract them statically from the config or other astro exports to build this dynamically.
  */
-type DocPage = "advanced_documentation" | "deploy" | "fork" | "themes";
+type DocPage =
+  | "cards/stats"
+  | "customization/common-options"
+  | "customization/theming"
+  | "customization/themes"
+  | "deploy"
+  | "fork";
 
 /**
  * @param page - Slug of the target page.
- * @param hash - Heading to scroll to, without the `#`.
  */
-export function docsUrl(page: DocPage, hash?: string): string {
+export function docsUrl(page: DocPage): string {
   const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-  return `${base}/docs/${page}/${hash ? `#${hash}` : ""}`;
+  return `${base}/docs/${page}/`;
 }
