@@ -20,8 +20,13 @@ You can look at a preview for [all available themes](/frontend/docs/customizatio
 
 ## Responsive Card Theme
 
-[![Anurag's GitHub stats-Dark](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark#gh-dark-mode-only)](https://github.com/stats-organization/github-stats-extended#responsive-card-theme#gh-dark-mode-only)
-[![Anurag's GitHub stats-Light](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=default#gh-light-mode-only)](https://github.com/stats-organization/github-stats-extended#responsive-card-theme#gh-light-mode-only)
+<picture>
+  <source
+    srcset="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark"
+    media="(prefers-color-scheme: dark)"
+  />
+  <img src="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=default" alt="Anurag's GitHub stats" />
+</picture>
 
 Since GitHub will re-upload the cards and serve them from their [CDN](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-anonymized-urls), we can not infer the browser/GitHub theme on the server side. There are, however, four methods you can use to create dynamics themes on the client side.
 
@@ -64,13 +69,10 @@ You can use [GitHub's theme context](https://github.blog/changelog/2021-11-24-sp
 [![Anurag's GitHub stats-Light](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=default#gh-light-mode-only)](https://github.com/stats-organization/github-stats-extended#gh-light-mode-only)
 ```
 
-<details>
-<summary>👀 Show example</summary>
-
-[![Anurag's GitHub stats-Dark](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark#gh-dark-mode-only)](https://github.com/stats-organization/github-stats-extended#gh-dark-mode-only)
-[![Anurag's GitHub stats-Light](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=default#gh-light-mode-only)](https://github.com/stats-organization/github-stats-extended#gh-light-mode-only)
-
-</details>
+:::note
+`#gh-dark-mode-only` and `#gh-light-mode-only` are honoured by GitHub when it renders
+markdown, so there is no live example here: outside GitHub both images are shown.
+:::
 
 ### Use the transparent theme
 
