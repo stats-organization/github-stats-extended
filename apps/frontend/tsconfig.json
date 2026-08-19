@@ -10,7 +10,7 @@
     "playwright.config.ts"
   ],
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": ["DOM", "ESNext"],
     "module": "esnext",
     "moduleResolution": "bundler",
     // Starlight ships TypeScript rather than declarations, and its own sources trip
