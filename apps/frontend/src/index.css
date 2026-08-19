@@ -14,11 +14,13 @@ Override background color in dark mode with GitHub's dark mode background color.
   name: "light";
   --color-primary: #2f80ed;
   --color-error: var(--color-red-700);
+  --color-error-content: #ffffff;
 }
 @plugin "daisyui/theme" {
   name: "dark";
   --color-primary: #2f80ed;
-  --color-error: var(--color-red-900);
+  --color-error: var(--color-red-400);
+  --color-error-content: #0d1117;
   --color-base-100: #0d1117;
 }
 
@@ -33,10 +35,10 @@ Override background color in dark mode with GitHub's dark mode background color.
  * Everything here is nested so it reaches only the wizard's own nodes: 
  * the page background, font and reset belong to the site, which shares this page.
  */
+/* Scoping only: no background, so overlays mounted on `body` stay see-through. */
 .wizard {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--color-base-100);
   color: var(--color-base-content);
 
   button {
@@ -95,10 +97,10 @@ Override background color in dark mode with GitHub's dark mode background color.
     background-color: color-mix(in oklab, var(--color-base-100), #888 60%);
   }
   .btn-error {
-    color: var(--color-neutral-content);
+    color: var(--color-error-content);
   }
   .btn-error:hover {
-    color: var(--color-neutral-content);
+    color: var(--color-error-content);
     background-color: color-mix(in oklab, var(--color-error), #f00 40%);
   }
 

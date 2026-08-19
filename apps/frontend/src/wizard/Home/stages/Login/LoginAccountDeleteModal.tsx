@@ -43,7 +43,7 @@ export function LoginAccountDeleteModal(
 
   return createPortal(
     // `wizard` because this mounts on `body`, outside the element the app's styles are scoped to.
-    <div className="wizard fixed left-0 top-0 w-full h-full">
+    <div className="wizard fixed left-0 top-0 w-full h-full bg-black/50 z-50">
       <div className="w-full h-full flex justify-center items-center">
         <div
           className="w-96 p-4 bg-base-100 rounded-sm border-2 border-base-300 text-base-content"
