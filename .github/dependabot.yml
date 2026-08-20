@@ -4,7 +4,8 @@ updates:
   - package-ecosystem: npm
     directory: "/"
     schedule:
-      interval: daily
+      interval: cron
+      cronjob: "45 0 * * 3,6"
     open-pull-requests-limit: 20
     commit-message:
       prefix: "build(deps)"
