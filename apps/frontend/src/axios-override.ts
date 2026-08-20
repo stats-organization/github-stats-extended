@@ -12,6 +12,7 @@ import additionalUserStars from "./mockData/additional_user_stars.json" with { t
 import commentedIssues from "./mockData/commented_issues.json" with { type: "json" };
 import commentedPrs from "./mockData/commented_prs.json" with { type: "json" };
 import commits from "./mockData/commits.json" with { type: "json" };
+import contributions from "./mockData/contributions.json" with { type: "json" };
 import gist_graphql from "./mockData/gist-graphql.json" with { type: "json" };
 import gist_rest from "./mockData/gist-rest.json" with { type: "json" };
 import repository from "./mockData/repository.json" with { type: "json" };
@@ -100,6 +101,14 @@ axios.defaults.adapter = async (config) => {
     params.variables?.login === DEMO_USER
   ) {
     return createMockResponse(additionalUserStars, config);
+  }
+
+  if (
+    config.url === "https://api.github.com/graphql" &&
+    params.query?.includes("query userContributions(") &&
+    params.variables?.login === DEMO_USER
+  ) {
+    return createMockResponse(contributions, config);
   }
 
   if (

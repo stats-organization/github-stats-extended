@@ -1,0 +1,51 @@
+{
+  "data": {
+    "user": {
+      "year_2018": {
+        "contributionCalendar": {
+          "totalContributions": 368
+        }
+      },
+      "year_2019": {
+        "contributionCalendar": {
+          "totalContributions": 1061
+        }
+      },
+      "year_2020": {
+        "contributionCalendar": {
+          "totalContributions": 1539
+        }
+      },
+      "year_2021": {
+        "contributionCalendar": {
+          "totalContributions": 783
+        }
+      },
+      "year_2022": {
+        "contributionCalendar": {
+          "totalContributions": 629
+        }
+      },
+      "year_2023": {
+        "contributionCalendar": {
+          "totalContributions": 707
+        }
+      },
+      "year_2024": {
+        "contributionCalendar": {
+          "totalContributions": 458
+        }
+      },
+      "year_2025": {
+        "contributionCalendar": {
+          "totalContributions": 345
+        }
+      },
+      "year_2026": {
+        "contributionCalendar": {
+          "totalContributions": 251
+        }
+      }
+    }
+  }
+}
