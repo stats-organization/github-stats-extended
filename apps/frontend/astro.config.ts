@@ -18,10 +18,8 @@ export default defineConfig({
   outDir: "./build",
   // One screenshot; not worth a native image dependency.
   image: { service: passthroughImageService() },
-  // The published Advanced Customization page became the Cards and Customization groups.
   // Astro prefixes `base` onto the source but not the destination, hence it spelled out here.
   redirects: {
-    "/docs/advanced_documentation": `${base}/docs/customization/common-options/`,
     // Sidebar group labels are not routes, so send them to the group's first page.
     "/docs/cards": `${base}/docs/cards/stats/`,
     "/docs/customization": `${base}/docs/customization/common-options/`,

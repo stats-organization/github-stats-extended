@@ -3,11 +3,6 @@ import { expect, test } from "@playwright/test";
 // Nothing links to a redirect, so the build's link validator cannot catch a broken one.
 const redirects = [
   {
-    from: "docs/advanced_documentation",
-    to: "/frontend/docs/customization/common-options/",
-    heading: "Common Options",
-  },
-  {
     from: "docs/cards",
     to: "/frontend/docs/cards/stats/",
     heading: "Stats Card",
