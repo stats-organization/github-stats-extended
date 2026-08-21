@@ -36,3 +36,9 @@
   max-width: 100%;
   height: auto;
 }
+
+/* `prefers-color-scheme` cannot see the site theme, so pick the card by `data-theme`. */
+:root[data-theme="dark"] .card-preview-light,
+:root[data-theme="light"] .card-preview-dark {
+  display: none;
+}

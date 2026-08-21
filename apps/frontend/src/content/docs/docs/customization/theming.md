@@ -20,13 +20,8 @@ You can look at a preview for [all available themes](/frontend/docs/customizatio
 
 ## Responsive Card Theme
 
-<picture>
-  <source
-    srcset="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark"
-    media="(prefers-color-scheme: dark)"
-  />
-  <img src="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=default" alt="Anurag's GitHub stats" />
-</picture>
+<img class="card-preview-light" src="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=default" alt="Anurag's GitHub stats" />
+<img class="card-preview-dark" src="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark" alt="Anurag's GitHub stats" />
 
 Since GitHub will re-upload the cards and serve them from their [CDN](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-anonymized-urls), we can not infer the browser/GitHub theme on the server side. There are, however, four methods you can use to create dynamics themes on the client side.
 
@@ -46,19 +41,9 @@ You can use [GitHub's new media feature](https://github.blog/changelog/2022-05-1
 </picture>
 ```
 
-<details>
-<summary>👀 Show example</summary>
-
-<picture>
-  <source
-    srcset="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark"
-    media="(prefers-color-scheme: dark)"
-  />
-  <!-- light mode -->
-  <img src="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true" />
-</picture>
-
-</details>
+:::note
+`prefers-color-scheme` follows the browser or system color scheme, not this page's theme. So there is no live example here.
+:::
 
 ### Use GitHub's theme context tag
 
