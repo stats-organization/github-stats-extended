@@ -70,8 +70,7 @@ You can use [GitHub's theme context](https://github.blog/changelog/2021-11-24-sp
 ```
 
 :::note
-`#gh-dark-mode-only` and `#gh-light-mode-only` are honoured by GitHub when it renders
-markdown, so there is no live example here: outside GitHub both images are shown.
+`#gh-dark-mode-only` and `#gh-light-mode-only` only work on GitHub. So there is no live example here.
 :::
 
 ### Use the transparent theme

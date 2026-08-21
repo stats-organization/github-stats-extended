@@ -24,18 +24,15 @@
   display: flex;
   flex-wrap: nowrap;
   gap: 0.5rem;
-  align-items: stretch;
+  align-items: center;
 }
 
 .card-row a {
-  flex: 1 1 0;
+  flex: 0 1 auto;
   min-width: 0;
-  display: flex;
 }
 
 .card-row img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
+  max-width: 100%;
+  height: auto;
 }

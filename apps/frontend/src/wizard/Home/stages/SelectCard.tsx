@@ -62,7 +62,7 @@ export function SelectCardStage({
         cardType: CardType.GIST,
       },
       {
-        title: "WakaTime Stats Card",
+        title: "WakaTime Card",
         description: "your coding activity from WakaTime",
         demoCard: cardUrl(CardType.WAKATIME)
           .username(DEMO_WAKATIME_USER)

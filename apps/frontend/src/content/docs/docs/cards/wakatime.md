@@ -2,17 +2,17 @@
 title: WakaTime Card
 ---
 
-The WakaTime card shows how long you have spent coding in each language, taken from your WakaTime profile.
+The WakaTime card shows how much time you have spent coding in each language, taken from your [WakaTime](https://wakatime.com) profile.
 
 :::caution[Warning]
 Please be aware that we currently only show data from WakaTime profiles that are public. You therefore have to make sure that **BOTH** `Display code time publicly` and `Display languages, editors, os, categories publicly` are enabled.
 :::
 
 :::caution[Warning]
-In case you just created a new WakaTime account, then it might take up to 24 hours until your stats will become visible on the WakaTime stats card.
+In case you just created a new WakaTime account, then it might take up to 24 hours until your stats will become visible on the WakaTime card.
 :::
 
-Change the `?username=` value to your [WakaTime](https://wakatime.com) username.
+Change the `?username=` value to your WakaTime username.
 
 ```md
 [![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan)](https://wakatime.com/@alan)
@@ -20,7 +20,7 @@ Change the `?username=` value to your [WakaTime](https://wakatime.com) username.
 
 ## Options
 
-You can customize the appearance and behavior of the WakaTime stats card using the [common options](/frontend/docs/customization/common-options/) and exclusive options listed in the table below.
+You can customize the appearance and behavior of the WakaTime card using the [common options](/frontend/docs/customization/common-options/) and exclusive options listed in the table below.
 
 | Name                 | Description                                                                                                                                                | Type                            | Default value    |
 | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | ---------------- |
