@@ -4,7 +4,7 @@
   "redirects": [
     {
       "source": "/",
-      "destination": "https://github.com/stats-organization/github-stats-extended"
+      "destination": "/frontend/docs/"
     }
   ]
 }
