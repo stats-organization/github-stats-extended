@@ -41,9 +41,7 @@ You can use [GitHub's new media feature](https://github.blog/changelog/2022-05-1
 </picture>
 ```
 
-:::note
-`prefers-color-scheme` follows the browser or system color scheme, not this page's theme. So there is no live example here.
-:::
+For example the image at the top of the Responsive Card Theme section works like this - it follows the theme you set for this page.
 
 ### Use GitHub's theme context tag
 
@@ -54,9 +52,7 @@ You can use [GitHub's theme context](https://github.blog/changelog/2021-11-24-sp
 [![Anurag's GitHub stats-Light](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=default#gh-light-mode-only)](https://github.com/stats-organization/github-stats-extended#gh-light-mode-only)
 ```
 
-:::note
-`#gh-dark-mode-only` and `#gh-light-mode-only` only work on GitHub. So there is no live example here.
-:::
+For example the image at the top of the Responsive Card Theme section works like this - it follows the theme you set for this page.
 
 ### Use the transparent theme
 
