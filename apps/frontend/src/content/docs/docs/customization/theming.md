@@ -20,8 +20,8 @@ You can look at a preview for [all available themes](/frontend/docs/customizatio
 
 ## Responsive Card Theme
 
-<img class="card-preview-light" src="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=default" alt="Anurag's GitHub stats" />
-<img class="card-preview-dark" src="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark" alt="Anurag's GitHub stats" />
+<img class="card-preview-light" src="/api?username=anuraghazra&show_icons=true&theme=default" alt="Anurag's GitHub stats" />
+<img class="card-preview-dark" src="/api?username=anuraghazra&show_icons=true&theme=dark" alt="Anurag's GitHub stats" />
 
 Since GitHub will re-upload the cards and serve them from their [CDN](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-anonymized-urls), we can not infer the browser/GitHub theme on the server side. There are, however, four methods you can use to create dynamics themes on the client side.
 
@@ -65,7 +65,7 @@ We have included a `transparent` theme that has a transparent background. This t
 <details>
 <summary>👀 Show example</summary>
 
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=transparent)
+![Anurag's GitHub stats](/api?username=anuraghazra&show_icons=true&theme=transparent)
 
 </details>
 
@@ -80,6 +80,6 @@ You can use the `bg_color` parameter to make any of [the available themes](/fron
 <details>
 <summary>👀 Show example</summary>
 
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&bg_color=00000000)
+![Anurag's GitHub stats](/api?username=anuraghazra&show_icons=true&bg_color=00000000)
 
 </details>

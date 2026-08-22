@@ -34,16 +34,16 @@ You can customize the appearance and behavior of the pinned repository card usin
 
 ## Demo
 
-![Readme Card](https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats)
+![Readme Card](/api/pin?username=anuraghazra&repo=github-readme-stats)
 
 Use [show\_owner](#options) query option to include the repo's owner username:
 
-![Readme Card](https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats&show_owner=true)
+![Readme Card](/api/pin?username=anuraghazra&repo=github-readme-stats&show_owner=true)
 
 Use [show](#options) query option to display the user's contributions to the repository:
 
-![Readme Card](https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented)
+![Readme Card](/api/pin?username=anuraghazra&repo=github-readme-stats&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented)
 
 You can also specify the `repo` parameter in the form `<user_or_organization>/<repository>` to pin a repository from any user or organization, not just your own. This allows you to showcase repositories you contributed to, regardless of ownership.
 
-![Readme Card](https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=statykjs/statyk&show_owner=true&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented)
+![Readme Card](/api/pin?username=anuraghazra&repo=statykjs/statyk&show_owner=true&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented)

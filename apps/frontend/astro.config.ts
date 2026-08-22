@@ -8,6 +8,9 @@ import starlightLinksValidator from "starlight-links-validator";
 
 const base = "/frontend";
 
+// `pnpm dev:backend` serves the card endpoints; override to point at another instance.
+const BACKEND_ORIGIN = process.env.BACKEND_ORIGIN ?? "http://localhost:9000";
+
 /*
  * One app: Starlight serves the docs under `/frontend/docs`, and the card
  * wizard is a page of the same site at `/frontend`.
@@ -50,8 +53,13 @@ export default defineConfig({
           href: "https://github.com/stats-organization/github-stats-extended",
         },
       ],
-      // The docs link to each other by site path, so a rename must fail the build.
-      plugins: [starlightLinksValidator()],
+      plugins: [
+        starlightLinksValidator({
+          // The docs link to each other by site path, so a rename must fail the build.
+          // `/api` is served by the backend, not by this site, so it has no page to match.
+          exclude: ["/api/**"],
+        }),
+      ],
       customCss: ["./src/styles/starlight-theme.css"],
       components: { SiteTitle: "./src/components/SiteTitle.astro" },
       sidebar: [
@@ -91,6 +99,11 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
+    /*
+     * On Vercel the same deployment serves `/api` and `/frontend`, so the docs can reference cards by root-relative path.
+     * Locally the two are separate servers, so forward `/api` to `pnpm dev:backend` to keep those paths working.
+     */
+    server: { proxy: { "/api": BACKEND_ORIGIN } },
     resolve: {
       conditions: ["@stats/source"],
       alias: [

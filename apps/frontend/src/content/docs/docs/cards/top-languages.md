@@ -151,28 +151,28 @@ You can use the `&stats_format=bytes` option to display the stats in bytes inste
 
 ## Demo
 
-![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra)
+![Top Langs](/api/top-langs?username=anuraghazra)
 
 ### Compact layout
 
-![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&layout=compact)
+![Top Langs](/api/top-langs?username=anuraghazra&layout=compact)
 
 ### Donut Chart layout
 
-[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&layout=donut)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&layout=donut)
+[![Top Langs](/api/top-langs?username=anuraghazra&layout=donut)](/api/top-langs?username=anuraghazra&layout=donut)
 
 ### Donut Vertical Chart layout
 
-[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&layout=donut-vertical)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&layout=donut-vertical)
+[![Top Langs](/api/top-langs?username=anuraghazra&layout=donut-vertical)](/api/top-langs?username=anuraghazra&layout=donut-vertical)
 
 ### Pie Chart layout
 
-[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&layout=pie)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&layout=pie)
+[![Top Langs](/api/top-langs?username=anuraghazra&layout=pie)](/api/top-langs?username=anuraghazra&layout=pie)
 
 ### Hidden progress bars
 
-[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&hide_progress=true)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&hide_progress=true)
+[![Top Langs](/api/top-langs?username=anuraghazra&hide_progress=true)](/api/top-langs?username=anuraghazra&hide_progress=true)
 
 ### Display bytes instead of percentage
 
-[![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&stats_format=bytes)](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&stats_format=bytes)
+[![Top Langs](/api/top-langs?username=anuraghazra&stats_format=bytes)](/api/top-langs?username=anuraghazra&stats_format=bytes)

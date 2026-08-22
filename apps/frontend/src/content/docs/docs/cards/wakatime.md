@@ -42,10 +42,10 @@ Custom title should be URI-escaped, as specified in [Percent Encoding](https://e
 
 ## Demo
 
-![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan)
+![Alan's WakaTime stats](/api/wakatime?username=alan)
 
-![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan&card_width=315&hide_progress=true)
+![Alan's WakaTime stats](/api/wakatime?username=alan&card_width=315&hide_progress=true)
 
 ### Compact layout
 
-![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan&layout=compact)
+![Alan's WakaTime stats](/api/wakatime?username=alan&layout=compact)

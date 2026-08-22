@@ -36,7 +36,7 @@ GitHub-Stats-Extended fetches up to 1000 of your starred repositories to accurat
 
 GitHub-Stats-Extended allows you to display your top languages without any numbers via the `hide_values` parameter. And the `prog_bar_bg_color` parameter allows you to customize the background color of the progress bars, e.g. by setting it to white:
 
-![anuraghazra's top languages without numbers](https://github-stats-extended.vercel.app/api/top-langs?username=anuraghazra&langs_count=4&hide_values=true&prog_bar_bg_color=fff)
+![anuraghazra's top languages without numbers](/api/top-langs?username=anuraghazra&langs_count=4&hide_values=true&prog_bar_bg_color=fff)
 
 ### Private contributions support
 
@@ -54,7 +54,7 @@ See [here](/frontend/docs/cards/stats/#filtering-by-repository-and-owner) for fu
 
 anuraghazra's contributions to github-readme-stats:
 
-![anuraghazra's contributions to github-readme-stats](https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented)
+![anuraghazra's contributions to github-readme-stats](/api/pin?username=anuraghazra&repo=github-readme-stats&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented)
 
 Add `&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented` to your repo card url to display your contributions to the pinned repository.
 
@@ -62,7 +62,7 @@ Add `&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commen
 
 anurag's contributions to razorpay:
 
-![anurag's contributions to razorpay](https://github-stats-extended.vercel.app/api?username=anuraghazra&owner=razorpay&hide=prs,issues,stars,commits,contribs&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented&hide_rank=true&custom_title=anurag%27s%20contributions%20to%20razorpay&card_width=333)
+![anurag's contributions to razorpay](/api?username=anuraghazra&owner=razorpay&hide=prs,issues,stars,commits,contribs&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented&hide_rank=true&custom_title=anurag%27s%20contributions%20to%20razorpay&card_width=333)
 
 Add `&repo=userA/repoA,orgB/repoB` or `&owner=userC,orgD` to your profile stats url to filter your contributions by repo or organization. (The screenshot above uses further customization options.)
 

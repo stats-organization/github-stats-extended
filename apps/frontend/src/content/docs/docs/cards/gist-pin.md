@@ -25,8 +25,8 @@ You can customize the appearance and behavior of the gist card using the [common
 
 ## Demo
 
-![Gist Card](https://github-stats-extended.vercel.app/api/gist?id=bbfce31e0217a3689c8d961a356cb10d)
+![Gist Card](/api/gist?id=bbfce31e0217a3689c8d961a356cb10d)
 
 Use [show\_owner](#options) query option to include the gist's owner username
 
-![Gist Card](https://github-stats-extended.vercel.app/api/gist?id=bbfce31e0217a3689c8d961a356cb10d&show_owner=true)
+![Gist Card](/api/gist?id=bbfce31e0217a3689c8d961a356cb10d&show_owner=true)

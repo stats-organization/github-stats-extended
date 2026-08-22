@@ -8,6 +8,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
+    "dev": "node --env-file-if-exists=.env express.js",
     "test": "vitest",
     "test:update:snapshot": "vitest -u",
     "test:e2e": "vitest --config vitest.config.e2e.ts",

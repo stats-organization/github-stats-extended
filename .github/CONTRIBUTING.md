@@ -10,7 +10,22 @@ pnpm run build:packages
 pnpm run dev:frontend
 ```
 
-The easiest way to run and test the project is to deploy it to Vercel as described in the [deployment guide](https://github-stats-extended.vercel.app/frontend/docs/deploy/).
+### Backend server
+
+The wizard renders its previews in the browser, but the docs reference cards by
+root-relative path (`/api?username=...`), so those images only load with the backend running:
+
+```bash
+pnpm run dev:backend # card endpoints on :9000, proxied by the frontend dev server
+```
+
+It needs a [Personal Access Token](https://github-stats-extended.vercel.app/frontend/docs/deploy/#first-step-get-your-personal-access-token-pat) in `apps/backend/.env` (the SQL database is optional):
+
+```
+PAT_1=your_token_here
+```
+
+You can also deploy to Vercel and test there, as described in the [deployment guide](https://github-stats-extended.vercel.app/frontend/docs/deploy/).
 
 ## Tests
 
