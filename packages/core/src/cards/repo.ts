@@ -18,7 +18,7 @@ import {
 import type { RepositoryData } from "../fetchers/types.js";
 import { repoCardLocales } from "../translations.js";
 
-import type { CommonOptions } from "./types.js";
+import type { CommonOptions } from "./common-options.js";
 
 const ICON_SIZE = 16;
 const CARD_DEFAULT_WIDTH = 400;

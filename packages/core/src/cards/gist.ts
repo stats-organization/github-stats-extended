@@ -3,7 +3,7 @@ import { getLightDarkColors } from "../common/color.js";
 import { kFormatter, wrapTextMultiline } from "../common/fmt.js";
 import { encodeHTML } from "../common/html.js";
 import { icons } from "../common/icons.js";
-import languageColors from "../common/languageColors.json" with { type: "json" };
+import { getLanguageColor } from "../common/languageColors.js";
 import { parseEmojis } from "../common/ops.js";
 import {
   countWrappedLines,
@@ -16,7 +16,7 @@ import {
 } from "../common/render.js";
 import type { GistData } from "../fetchers/types.js";
 
-import type { CommonOptions } from "./types.js";
+import type { CommonOptions } from "./common-options.js";
 
 const ICON_SIZE = 16;
 const CARD_DEFAULT_WIDTH = 400;
@@ -122,8 +122,7 @@ const renderGistCard = (
   );
 
   const languageName = language || "Unspecified";
-  const languageColor =
-    (languageColors as Record<string, string>)[languageName] || "#858585";
+  const languageColor = getLanguageColor(languageName);
 
   const svgLanguage = createLanguageNode(languageName, languageColor);
 

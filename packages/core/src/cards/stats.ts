@@ -8,7 +8,7 @@ import { createTextNode, flexLayout, measureText } from "../common/render.js";
 import type { StatsData } from "../fetchers/types.js";
 import { statCardLocales, wakatimeCardLocales } from "../translations.js";
 
-import type { CommonOptions } from "./types.js";
+import type { CommonOptions } from "./common-options.js";
 
 const CARD_MIN_WIDTH = 287;
 const CARD_DEFAULT_WIDTH = 287;

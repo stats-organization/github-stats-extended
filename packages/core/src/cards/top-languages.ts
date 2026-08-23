@@ -3,6 +3,7 @@ import { I18n } from "../common/I18n.js";
 import { getLightDarkColors, isPrefixedHexColor } from "../common/color.js";
 import { formatBytes } from "../common/fmt.js";
 import { encodeHTML } from "../common/html.js";
+import { DEFAULT_LANG_COLOR } from "../common/languageColors.js";
 import { chunkArray, clampValue, lowercaseTrim } from "../common/ops.js";
 import {
   createProgressNode,
@@ -12,11 +13,10 @@ import {
 import type { Lang, TopLangData } from "../fetchers/types.js";
 import { langCardLocales } from "../translations.js";
 
-import type { CommonOptions } from "./types.js";
+import type { CommonOptions } from "./common-options.js";
 
 const DEFAULT_CARD_WIDTH = 300;
 const MIN_CARD_WIDTH = 280;
-const DEFAULT_LANG_COLOR = "#858585";
 const CARD_PADDING = 25;
 const COMPACT_LAYOUT_BASE_HEIGHT = 90;
 const MAXIMUM_LANGS_COUNT = 20;
