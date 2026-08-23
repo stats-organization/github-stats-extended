@@ -17,7 +17,7 @@ Copy and paste this into your markdown, then change the `?username=` value to yo
 [![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra)](https://github.com/stats-organization/github-stats-extended)
 ```
 
-As a more comfortable alternative, use the [card wizard](https://github-stats-extended.vercel.app/frontend) to configure your card visually. Then copy the generated markdown into your [GitHub profile README](https://docs.github.com/en/account-and-profile/how-tos/profile-customization/managing-your-profile-readme#adding-a-profile-readme).
+As a more comfortable alternative, use the [card wizard](/frontend) to configure your card visually. Then copy the generated markdown into your [GitHub profile README](https://docs.github.com/en/account-and-profile/how-tos/profile-customization/managing-your-profile-readme#adding-a-profile-readme).
 
 ## Migration from github-readme-stats
 
@@ -28,7 +28,7 @@ To migrate from [github-readme-stats](https://github.com/anuraghazra/github-read
 + https://github-stats-extended.vercel.app/api?username=octocat&theme=radical
 ```
 
-GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For details see [Compatibility Notes](https://github-stats-extended.vercel.app/frontend/docs/fork/#compatibility-notes).
+GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For details see [Compatibility Notes](/frontend/docs/fork/#compatibility-notes).
 
 ## Card Types
 

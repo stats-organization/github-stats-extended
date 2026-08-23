@@ -56,8 +56,8 @@ export default defineConfig({
       plugins: [
         starlightLinksValidator({
           // The docs link to each other by site path, so a rename must fail the build.
-          // `/api` is served by the backend, not by this site, so it has no page to match.
-          exclude: ["/api/**"],
+          // `/api` and `/frontend` are not part of the docs, so they don't have matching pages.
+          exclude: ["/api/**", "/frontend"],
         }),
       ],
       customCss: ["./src/styles/starlight-theme.css"],

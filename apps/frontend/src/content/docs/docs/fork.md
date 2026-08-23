@@ -40,7 +40,7 @@ GitHub-Stats-Extended allows you to display your top languages without any numbe
 
 ### Private contributions support
 
-GitHub-Stats-Extended can include private contributions in your stats cards. You no longer have to deploy your own instance for that. Just log into the [GitHub-Stats-Extended Wizard](https://github-stats-extended.vercel.app/frontend) via the "GitHub Private Access" button (or click "Upgrade to Private Access" if already logged in). This will allow GitHub-Stats-Extended to see your private contributions.
+GitHub-Stats-Extended can include private contributions in your stats cards. You no longer have to deploy your own instance for that. Just log into the [GitHub-Stats-Extended Wizard](/frontend) via the "GitHub Private Access" button (or click "Upgrade to Private Access" if already logged in). This will allow GitHub-Stats-Extended to see your private contributions.
 
 ### Display contributions to specific repositories or organizations
 
