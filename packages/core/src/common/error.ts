@@ -87,10 +87,35 @@ const retrieveSecondaryMessage = (err: Error): string | undefined => {
     : undefined;
 };
 
+/**
+ * Structured details of a caught error for API results.
+ */
+export interface ErrorDetails {
+  /** Error type such as `MAX_RETRY`. Absent when the error has no type. */
+  type?: string;
+  message: string;
+}
+
+/**
+ * Extract structured details from a caught error.
+ *
+ * Callers attach the result to API results as an optional `error` field.
+ * The `status` value itself stays stable, so exact comparisons in
+ * `apps/backend/router.js` and external callers keep working.
+ *
+ * @param err The caught error.
+ * @returns The error type and message.
+ */
+const describeError = (err: Error): ErrorDetails => {
+  const type = "type" in err && typeof err.type === "string" ? err.type : "";
+  return type ? { type, message: err.message } : { message: err.message };
+};
+
 export {
   CustomError,
   MissingParamError,
   SECONDARY_ERROR_MESSAGES,
   TRY_AGAIN_LATER,
+  describeError,
   retrieveSecondaryMessage,
 };
