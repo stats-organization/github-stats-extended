@@ -1,0 +1,98 @@
+# Fork Information
+
+This project is an actively maintained fork and extension of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats).
+
+## Key Differences
+
+Compared to [github-readme-stats](https://github.com/anuraghazra/github-readme-stats), this project adds the following changes:
+
+### Frontend for easy, visual configuration of cards
+
+GitHub-Stats-Extended adds a frontend which allows users to visually configure stats cards. It is hosted at https://github-stats-extended.vercel.app/frontend.
+
+![frontend screenshot](frontend-screenshot.png)
+
+The frontend is based on [GitHub Trends](https://github.com/avgupta456/github-trends) by [@avgupta456](https://github.com/avgupta456).
+
+### Aggregate stats across organizations
+
+To include stars from repos which are not owned by you, but where you are a collaborator or organization member, add `&role=OWNER,ORGANIZATION_MEMBER,COLLABORATOR` to your stats card url. To include such repos in your language stats, you can also add the same parameter to your top languages card url.
+
+See [here](advanced_documentation.md#filtering-by-repository-and-owner) for full feature documentation.
+
+The resolution of this most requested feature in github-readme-stats was [originally implemented](https://github.com/anuraghazra/github-readme-stats/issues/1#issuecomment-855681098) by [@developStorm](https://github.com/developStorm).
+
+### Improved performance and latency
+
+GitHub-Stats-Extended proactively precomputes and caches cards. This solves the problem where [cards wouldn't load on the first try](https://github.com/anuraghazra/github-readme-stats/issues/2603). It also gives GitHub-Stats-Extended more time while generating cards in the background, which allows it to fetch more repo data:
+
+### Multi-page fetching for accurate star counts
+
+GitHub-Stats-Extended fetches up to 1000 of your starred repositories to accurately compute your stars count. In github-readme-stats, this is limited to 100 repos because github-readme-stats doesn't have the above-mentioned performance improvements.
+
+### Customization of top languages card
+
+GitHub-Stats-Extended allows you to display your top languages without any numbers via the `hide_values` parameter. And the `prog_bar_bg_color` parameter allows you to customize the background color of the progress bars, e.g. by setting it to white:
+
+![anuraghazra's top languages without numbers](https://github-stats-extended.vercel.app/api/top-langs?username=anuraghazra&langs_count=4&hide_values=true&prog_bar_bg_color=fff)
+
+### Private contributions support
+
+GitHub-Stats-Extended can include private contributions in your stats cards. You no longer have to deploy your own instance for that. Just log into the [GitHub-Stats-Extended Wizard](https://github-stats-extended.vercel.app/frontend) via the "GitHub Private Access" button (or click "Upgrade to Private Access" if already logged in). This will allow GitHub-Stats-Extended to see your private contributions.
+
+### Display contributions to specific repositories or organizations
+
+GitHub-Stats-Extended adds the ability to show contribution stats for specific repositories and organizations.
+
+Especially for regular contributors in open source projects it might make sense to display an overview of their own contributions to these projects on their GitHub profile.
+
+See [here](advanced_documentation.md#filtering-by-repository-and-owner) for full feature documentation.
+
+---
+
+anuraghazra's contributions to github-readme-stats:
+
+![anuraghazra's contributions to github-readme-stats](https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented)
+
+Add `&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented` to your repo card url to display your contributions to the pinned repository.
+
+---
+
+anurag's contributions to razorpay:
+
+![anurag's contributions to razorpay](https://github-stats-extended.vercel.app/api?username=anuraghazra&owner=razorpay&hide=prs,issues,stars,commits,contribs&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented&hide_rank=true&custom_title=anurag%27s%20contributions%20to%20razorpay&card_width=333)
+
+Add `&repo=userA/repoA,orgB/repoB` or `&owner=userC,orgD` to your profile stats url to filter your contributions by repo or organization. (The screenshot above uses further customization options.)
+
+### Other
+
+GitHub-Stats-Extended adds various other, minor improvements. For example, the repo card now supports the `card_width` parameter.
+
+## Why This Fork Exists
+
+[github-readme-stats](https://github.com/anuraghazra/github-readme-stats) is a great project, which unfortunately saw its development slow down in the past years, with [highly requested features](https://github.com/anuraghazra/github-readme-stats/issues/1935) getting delayed for a long time.
+
+One of the valued maintainers [wrote](https://github.com/anuraghazra/github-readme-stats/pull/3911#issuecomment-3377726545):
+
+> I joined the project as collaborator in the middle of 2023 and there was just a few guys in the team while hundreds of PRs, issues and discussions pending to be reviewed.
+>
+> The volume is overwhelming for the small team, especially taking into account that right now I'm alone online and working only sometimes when I have a free hours, so it took some time to get to your PR.
+
+So [@martin-mfg](https://github.com/martin-mfg) decided to fork the project, implement some of the highly requested features and make the enhanced project available to everyone. Since the initial release of this fork @martin-mfg joined forces with the maintainers of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) and GitHub-Stats-Extended is now becoming the successor of github-readme-stats.
+
+## Compatibility Notes
+
+GitHub-Stats-Extended aims to be fully compatible with [github-readme-stats](https://github.com/anuraghazra/github-readme-stats). Additional functionality introduced in this fork has to be explicitly enabled via some parameter.
+
+So you can change an existing stats card url from [github-readme-stats](https://github.com/anuraghazra/github-readme-stats) to GitHub-Stats-Extended simply by changing the domain from `github-readme-stats.vercel.app` to `github-stats-extended.vercel.app`. The card will look the same.
+
+There is only one exception to this: GitHub-Stats-Extended improves line wrapping for multi-line gist and repository descriptions.
+This should be an improvement for existing cards, but it still changes their appearance a bit.
+
+Previously, line wrapping happened simply after 59 characters, with special handling for Chinese characters:
+
+<img width="400" height="140" alt="character-based" src="https://github.com/user-attachments/assets/1cf7edba-7f6c-4a37-89d7-334cbe54f0f1" />
+
+GitHub-Stats-Extended now takes the actual width of each character into account:
+
+<img width="400" height="150" alt="new-server-side-calculation" src="https://github.com/user-attachments/assets/277b92df-b2a9-48be-bd2a-d28c1d6764c5" />

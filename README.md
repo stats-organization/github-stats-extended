@@ -13,7 +13,7 @@
 </a>
 </div>
 
-GitHub-Stats-Extended is the [extended, actively maintained successor](https://github-stats-extended.vercel.app/frontend/docs/fork/) of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats). It generates [various stats cards](#card-types) about your GitHub contributions, your top languages and more. You can [customize](#documentation) the cards via multiple parameters.
+GitHub-Stats-Extended is the [extended, actively maintained successor](docs/fork.md) of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats). It generates [various stats cards](#card-types) about your GitHub contributions, your top languages and more. You can [customize](#documentation) the cards via multiple parameters.
 
 ## Table of Contents
 
@@ -43,7 +43,7 @@ To migrate from [github-readme-stats](https://github.com/anuraghazra/github-read
 + https://github-stats-extended.vercel.app/api?username=octocat&theme=radical
 ```
 
-GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For details see [Compatibility Notes](https://github-stats-extended.vercel.app/frontend/docs/fork/#compatibility-notes).
+GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For details see [Compatibility Notes](docs/fork.md#compatibility-notes).
 
 ## Card Types
 
@@ -109,7 +109,7 @@ GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For 
 
 ## Documentation
 
-The [card wizard](https://github-stats-extended.vercel.app/frontend) offers some essential customization options. For more advanced customization and other project info check out the [documentation](https://github-stats-extended.vercel.app/frontend/docs/cards/stats/).
+The [card wizard](https://github-stats-extended.vercel.app/frontend) offers some essential customization options. For more advanced customization and other project info check out the [advanced documentation](docs/advanced_documentation.md).
 
 ## Acknowledgements
 
