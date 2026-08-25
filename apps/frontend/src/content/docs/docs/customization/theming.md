@@ -43,8 +43,6 @@ You can use [GitHub's media feature](https://github.blog/changelog/2022-05-19-sp
 </picture>
 ```
 
-For example the image at the top of the Responsive Card Theme section works like this - it follows the theme you set for this page.
-
 ### Set light and dark mode in one card
 
 Use the `theme_light` and `theme_dark` or `*_light` / `*_dark` color parameters to embed both modes in a single card URL. See [Light & Dark Mode Parameters](#light--dark-mode-parameters) below for full details. The card will then display in light mode or dark mode based on your browser / operating system settings.
@@ -72,8 +70,6 @@ You can use [GitHub's theme context](https://github.blog/changelog/2021-11-24-sp
 [![Anurag's GitHub stats-Dark](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark_github#gh-dark-mode-only)](https://github.com/stats-organization/github-stats-extended#gh-dark-mode-only)
 [![Anurag's GitHub stats-Light](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=light_github#gh-light-mode-only)](https://github.com/stats-organization/github-stats-extended#gh-light-mode-only)
 ```
-
-For example the image at the top of the Responsive Card Theme section works like this - it follows the theme you set for this page.
 
 ### Use the transparent theme
 
