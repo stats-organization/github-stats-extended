@@ -48,7 +48,7 @@ You can customize the appearance and behavior of the top languages card using th
 | `count_weight`                  | Configures language stats algorithm (see [Language stats algorithm](#language-stats-algorithm)).                                                                                                | integer                         | `0`                                                 |
 | `stats_format`                  | Switches between two available formats for language's stats `percentages` and `bytes`.                                                                                                          | enum                            | `percentages`                                       |
 
-<sup>1</sup>: This parameter supports light and dark mode. You can use `prog_bar_bg_color_light` and `prog_bar_bg_color_dark` to specify different colors for light and dark mode.
+<sup>1</sup>: Supports light and dark mode via `prog_bar_bg_color_light` and `prog_bar_bg_color_dark`.
 
 :::caution[Warning]
 Language names and custom title should be URI-escaped, as specified in [Percent Encoding](https://en.wikipedia.org/wiki/Percent-encoding) (i.e: `c++` should become `c%2B%2B`, `jupyter notebook` should become `jupyter%20notebook`, `Most Used Languages` should become `Most%20Used%20Languages`, etc.) You can use [urlencoder.org](https://www.urlencoder.org/) to help you do this automatically.
