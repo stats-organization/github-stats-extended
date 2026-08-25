@@ -50,7 +50,9 @@ GitHub-Stats-Extended adds `light_github` and `dark_github` [themes](/frontend/d
 
 GitHub-Stats-Extended adds an optional stat showing the total number of [contributions](https://docs.github.com/en/account-and-profile/reference/profile-contributions-reference#what-counts-as-a-contribution) (commits, pull requests, issues, etc.) across all years of a user's GitHub history. Add `&show=contributions` to your stats card URL to enable it. Whether private contributions are counted depends on [your GitHub profile visibility settings](https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/manage-visibility-settings-for-private-contributions-and-achievements#changing-the-visibility-of-your-private-contributions).
 
-Note that the pre-existing "Contributed to" stat indicates the number of repositories a user has contributed to, not the number of contributions.
+:::note
+The pre-existing "Contributed to" stat indicates the number of repositories a user has contributed to, not the number of contributions.
+:::
 
 ### Customization of top languages card
 

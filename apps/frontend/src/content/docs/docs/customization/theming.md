@@ -49,7 +49,11 @@ There are several ways to switch a card between modes on the client side.
 
 `theme_light` / `theme_dark` and the `*_light` / `*_dark` color parameters put both modes in a single card URL, which then follows the viewer's browser or OS setting. See [Light & Dark Mode Parameters](#light--dark-mode-parameters) for the details.
 
-Nothing here is GitHub-specific, so it also works outside GitHub — including sponsorship pages, where the other approaches do not. The trade-off: GitHub serves the card from its [CDN](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-anonymized-urls), so a GitHub theme that differs from the browser/OS setting cannot be detected.
+Nothing here is GitHub-specific, so it also works outside GitHub — including sponsorship pages, where the other approaches do not.
+
+:::note
+GitHub serves the card from its [CDN](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-anonymized-urls), so a GitHub theme that differs from the browser/OS setting cannot be detected.
+:::
 
 ```md
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github)
