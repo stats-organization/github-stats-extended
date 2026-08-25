@@ -4,7 +4,7 @@ title: Theming
 
 With inbuilt themes, you can customize the look of the card without doing any [manual customization](/frontend/docs/customization/common-options/).
 
-Use `&theme=THEME_NAME` parameter like so :
+Pass `&theme=THEME_NAME`:
 
 ```md
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=radical)
@@ -16,20 +16,22 @@ GitHub Stats Extended comes with several built-in themes (e.g. `radical`, `merko
 
 <img src="https://res.cloudinary.com/anuraghazra/image/upload/v1595174536/grs-themes_l4ynja.png" alt="GitHub Stats Extended Themes" width="600px"/>
 
-We recommend using `light_github` for light mode and `dark_github` for dark mode. These themes match GitHub's default light and dark themes, ensuring that your stats card looks consistent with the rest of your profile. For repository cards and gist cards we recommend using `light_github_repocard` and `dark_github_repocard`, which use a different icon color.
+:::tip
+Use `light_github` and `dark_github` to match GitHub's own light and dark themes. For repository and gist cards use `light_github_repocard` and `dark_github_repocard`, which differ only in icon color.
+:::
 
-You can look at a preview for [all available themes](/frontend/docs/customization/themes/) or checkout the [theme config file](https://github.com/stats-organization/github-stats-extended/blob/master/packages/core/src/themes/index.ts). Please note that we paused the addition of new themes to decrease maintenance efforts; all pull requests related to new themes will be closed.
+Preview [all available themes](/frontend/docs/customization/themes/) or read the [theme config file](https://github.com/stats-organization/github-stats-extended/blob/master/packages/core/src/themes/index.ts). We have paused the addition of new themes to reduce maintenance effort; pull requests adding one will be closed.
 
 ## Light and Dark Mode
 
 <img class="card-preview-light" src="/api?username=anuraghazra&show_icons=true&theme=light_github" alt="Anurag's GitHub stats" />
 <img class="card-preview-dark" src="/api?username=anuraghazra&show_icons=true&theme=dark_github" alt="Anurag's GitHub stats" />
 
-There are several methods you can use to create dynamic themes on the client side.
+There are several ways to switch a card between modes on the client side.
 
 ### Use GitHub's media feature (recommended)
 
-You can use [GitHub's media feature](https://github.blog/changelog/2022-05-19-specify-theme-context-for-images-in-markdown-beta/) in HTML to specify which image to display in light or dark mode. This is done using the HTML `<picture>` element in combination with the `prefers-color-scheme` media feature.
+[GitHub's media feature](https://github.blog/changelog/2022-05-19-specify-theme-context-for-images-in-markdown-beta/) picks the image from a `<picture>` element using the `prefers-color-scheme` media query.
 
 <!-- prettier-ignore -->
 ```html
@@ -45,11 +47,9 @@ You can use [GitHub's media feature](https://github.blog/changelog/2022-05-19-sp
 
 ### Set light and dark mode in one card
 
-Use the `theme_light` and `theme_dark` or `*_light` / `*_dark` color parameters to embed both modes in a single card URL. See [Light & Dark Mode Parameters](#light--dark-mode-parameters) for full details. The card will then display in light mode or dark mode based on your browser / operating system settings.
+`theme_light` / `theme_dark` and the `*_light` / `*_dark` color parameters put both modes in a single card URL, which then follows the viewer's browser or OS setting. See [Light & Dark Mode Parameters](#light--dark-mode-parameters) for the details.
 
-This approach doesn't use any GitHub-specific features, so it works even when embedding the card outside of GitHub. Or on your GitHub sponsorship page, which doesn't support the other, GitHub-specific approaches.
-
-However, unlike with the "media" feature or the theme context tag, if a user chooses a GitHub theme different from their browser/OS setting, the card will not be able to detect this. Since GitHub re-uploads the cards and serves them from their [CDN](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-anonymized-urls), we can not infer the GitHub theme with this approach, only the browser/OS theme.
+Nothing here is GitHub-specific, so it also works outside GitHub — including sponsorship pages, where the other approaches do not. The trade-off: GitHub serves the card from its [CDN](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-anonymized-urls), so a GitHub theme that differs from the browser/OS setting cannot be detected.
 
 ```md
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github)
@@ -64,7 +64,7 @@ However, unlike with the "media" feature or the theme context tag, if a user cho
 
 ### Light & Dark Mode Parameters
 
-You can use the `theme_light`, `theme_dark`, and `*_light` / `*_dark` color parameters to customize the look of your card for different modes.
+These parameters style each mode separately.
 
 **Priority (lowest → highest):**
 
@@ -74,13 +74,13 @@ You can use the `theme_light`, `theme_dark`, and `*_light` / `*_dark` color para
 - general color parameters
 - `*_light` / `*_dark` color parameters
 
-for example:
+For example:
 
 ```md
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github)
 ```
 
-You can mix different parameter types. For example, set a light theme and a dark theme, but choose a custom title color:
+Types can be mixed — a light and a dark theme, plus one fixed title color:
 
 ```md
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github&title_color=aabbcc)
@@ -88,7 +88,7 @@ You can mix different parameter types. For example, set a light theme and a dark
 
 ### Use GitHub's theme context tag
 
-You can use [GitHub's theme context](https://github.blog/changelog/2021-11-24-specify-theme-context-for-images-in-markdown/) tags to switch the theme based on the user's GitHub theme. This is done by appending `#gh-dark-mode-only` or `#gh-light-mode-only` to the end of an image URL. This tag will define whether the image specified in the markdown is only shown to viewers using a light or a dark GitHub theme:
+Appending `#gh-dark-mode-only` or `#gh-light-mode-only` to an image URL shows it only to viewers on that [GitHub theme](https://github.blog/changelog/2021-11-24-specify-theme-context-for-images-in-markdown/):
 
 ```md
 [![Anurag's GitHub stats-Dark](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark_github#gh-dark-mode-only)](https://github.com/stats-organization/github-stats-extended#gh-dark-mode-only)
@@ -97,7 +97,7 @@ You can use [GitHub's theme context](https://github.blog/changelog/2021-11-24-sp
 
 ### Use the transparent theme
 
-We have included a `transparent` theme that has a transparent background. This theme is optimized to look good on GitHub's dark and light default themes. You can enable this theme using the `&theme=transparent` parameter like so:
+The `transparent` theme has no background, so it sits well on GitHub's light and dark themes:
 
 ```md
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=transparent)
@@ -112,7 +112,7 @@ We have included a `transparent` theme that has a transparent background. This t
 
 ### Add transparent alpha channel to a themes bg\_color
 
-You can use the `bg_color` parameter to make any of [the available themes](/frontend/docs/customization/themes/) transparent. This is done by setting the `bg_color` to a color with a transparent alpha channel (i.e. `bg_color=00000000`):
+Any of [the available themes](/frontend/docs/customization/themes/) turns transparent when `bg_color` carries an alpha channel (i.e. `bg_color=00000000`):
 
 ```md
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&bg_color=00000000)
