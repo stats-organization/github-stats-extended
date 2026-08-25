@@ -45,7 +45,7 @@ You can use [GitHub's media feature](https://github.blog/changelog/2022-05-19-sp
 
 ### Set light and dark mode in one card
 
-Use the `theme_light` and `theme_dark` or `*_light` / `*_dark` color parameters to embed both modes in a single card URL. See [Light & Dark Mode Parameters](#light--dark-mode-parameters) below for full details. The card will then display in light mode or dark mode based on your browser / operating system settings.
+Use the `theme_light` and `theme_dark` or `*_light` / `*_dark` color parameters to embed both modes in a single card URL. See [Light & Dark Mode Parameters](#light--dark-mode-parameters) for full details. The card will then display in light mode or dark mode based on your browser / operating system settings.
 
 This approach doesn't use any GitHub-specific features, so it works even when embedding the card outside of GitHub. Or on your GitHub sponsorship page, which doesn't support the other, GitHub-specific approaches.
 
@@ -61,6 +61,30 @@ However, unlike with the "media" feature or the theme context tag, if a user cho
 ![Anurag's GitHub stats](/api?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github)
 
 </details>
+
+### Light & Dark Mode Parameters
+
+You can use the `theme_light`, `theme_dark`, and `*_light` / `*_dark` color parameters to customize the look of your card for different modes.
+
+**Priority (lowest → highest):**
+
+- default theme
+- `theme`
+- `theme_light` / `theme_dark`
+- general color parameters
+- `*_light` / `*_dark` color parameters
+
+for example:
+
+```md
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github)
+```
+
+You can mix different parameter types. For example, set a light theme and a dark theme, but choose a custom title color:
+
+```md
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github&title_color=aabbcc)
+```
 
 ### Use GitHub's theme context tag
 
@@ -100,27 +124,3 @@ You can use the `bg_color` parameter to make any of [the available themes](/fron
 ![Anurag's GitHub stats](/api?username=anuraghazra&show_icons=true&bg_color=00000000)
 
 </details>
-
-## Light & Dark Mode Parameters
-
-You can use the `theme_light`, `theme_dark`, and `*_light` / `*_dark` color parameters to customize the look of your card for different modes.
-
-**Priority (lowest → highest):**
-
-- default theme
-- `theme`
-- `theme_light` / `theme_dark`
-- general color parameters
-- `*_light` / `*_dark` color parameters
-
-for example:
-
-```md
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github)
-```
-
-You can mix different parameter types. For example, set a light theme and a dark theme, but choose a custom title color:
-
-```md
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github&title_color=aabbcc)
-```
