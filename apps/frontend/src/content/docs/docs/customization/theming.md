@@ -58,7 +58,7 @@ However, unlike with the "media" feature or the theme context tag, if a user cho
 <details>
 <summary>👀 Show example</summary>
 
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github)
+![Anurag's GitHub stats](/api?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github)
 
 </details>
 
