@@ -24,8 +24,7 @@ Preview [all available themes](/frontend/docs/customization/themes/) or read the
 
 ## Light and Dark Mode
 
-<img class="card-preview-light" src="/api?username=anuraghazra&show_icons=true&theme=light_github" alt="Anurag's GitHub stats" />
-<img class="card-preview-dark" src="/api?username=anuraghazra&show_icons=true&theme=dark_github" alt="Anurag's GitHub stats" />
+![Anurag's GitHub stats](/api?username=anuraghazra&show_icons=true)
 
 There are several ways to switch a card between modes on the client side.
 

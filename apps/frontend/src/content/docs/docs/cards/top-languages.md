@@ -153,45 +153,28 @@ You can use the `&stats_format=bytes` option to display the stats in bytes inste
 
 ## Demo
 
-<img class="card-preview-light" src="/api/top-langs?username=anuraghazra&theme=light_github" alt="Top Langs" />
-<img class="card-preview-dark" src="/api/top-langs?username=anuraghazra&theme=dark_github" alt="Top Langs" />
+![Top Langs](/api/top-langs?username=anuraghazra)
 
 ### Compact layout
 
-<img class="card-preview-light" src="/api/top-langs?username=anuraghazra&layout=compact&theme=light_github" alt="Top Langs" />
-<img class="card-preview-dark" src="/api/top-langs?username=anuraghazra&layout=compact&theme=dark_github" alt="Top Langs" />
+![Top Langs](/api/top-langs?username=anuraghazra&layout=compact)
 
 ### Donut Chart layout
 
-<a href="/api/top-langs?username=anuraghazra&layout=donut">
-  <img class="card-preview-light" src="/api/top-langs?username=anuraghazra&layout=donut&theme=light_github" alt="Top Langs" />
-  <img class="card-preview-dark" src="/api/top-langs?username=anuraghazra&layout=donut&theme=dark_github" alt="Top Langs" />
-</a>
+[![Top Langs](/api/top-langs?username=anuraghazra&layout=donut)](/api/top-langs?username=anuraghazra&layout=donut)
 
 ### Donut Vertical Chart layout
 
-<a href="/api/top-langs?username=anuraghazra&layout=donut-vertical">
-  <img class="card-preview-light" src="/api/top-langs?username=anuraghazra&layout=donut-vertical&theme=light_github" alt="Top Langs" />
-  <img class="card-preview-dark" src="/api/top-langs?username=anuraghazra&layout=donut-vertical&theme=dark_github" alt="Top Langs" />
-</a>
+[![Top Langs](/api/top-langs?username=anuraghazra&layout=donut-vertical)](/api/top-langs?username=anuraghazra&layout=donut-vertical)
 
 ### Pie Chart layout
 
-<a href="/api/top-langs?username=anuraghazra&layout=pie">
-  <img class="card-preview-light" src="/api/top-langs?username=anuraghazra&layout=pie&theme=light_github" alt="Top Langs" />
-  <img class="card-preview-dark" src="/api/top-langs?username=anuraghazra&layout=pie&theme=dark_github" alt="Top Langs" />
-</a>
+[![Top Langs](/api/top-langs?username=anuraghazra&layout=pie)](/api/top-langs?username=anuraghazra&layout=pie)
 
 ### Hidden progress bars
 
-<a href="/api/top-langs?username=anuraghazra&hide_progress=true">
-  <img class="card-preview-light" src="/api/top-langs?username=anuraghazra&hide_progress=true&theme=light_github" alt="Top Langs" />
-  <img class="card-preview-dark" src="/api/top-langs?username=anuraghazra&hide_progress=true&theme=dark_github" alt="Top Langs" />
-</a>
+[![Top Langs](/api/top-langs?username=anuraghazra&hide_progress=true)](/api/top-langs?username=anuraghazra&hide_progress=true)
 
 ### Display bytes instead of percentage
 
-<a href="/api/top-langs?username=anuraghazra&stats_format=bytes">
-  <img class="card-preview-light" src="/api/top-langs?username=anuraghazra&stats_format=bytes&theme=light_github" alt="Top Langs" />
-  <img class="card-preview-dark" src="/api/top-langs?username=anuraghazra&stats_format=bytes&theme=dark_github" alt="Top Langs" />
-</a>
+[![Top Langs](/api/top-langs?username=anuraghazra&stats_format=bytes)](/api/top-langs?username=anuraghazra&stats_format=bytes)

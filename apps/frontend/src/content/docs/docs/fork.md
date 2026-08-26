@@ -58,8 +58,7 @@ The pre-existing "Contributed to" stat counts repositories a user has contribute
 
 GitHub-Stats-Extended can show your top languages without any numbers via the `hide_values` parameter. And the new `prog_bar_bg_color` parameter sets the background color of progress bars, e.g. to transparent:
 
-<img class="card-preview-light" src="/api/top-langs?username=anuraghazra&langs_count=4&hide_values=true&prog_bar_bg_color=0000&theme=light_github" alt="anuraghazra's top languages without numbers" />
-<img class="card-preview-dark" src="/api/top-langs?username=anuraghazra&langs_count=4&hide_values=true&prog_bar_bg_color=0000&theme=dark_github" alt="anuraghazra's top languages without numbers" />
+![Anuraghazra's top languages without numbers](/api/top-langs?username=anuraghazra&langs_count=4&hide_values=true&prog_bar_bg_color=0000)
 
 ### Private contributions support
 
@@ -75,19 +74,17 @@ See [here](/frontend/docs/cards/stats/#filtering-by-repository-and-owner) for fu
 
 ---
 
-anuraghazra's contributions to github-readme-stats:
+Anuraghazra's contributions to github-readme-stats:
 
-<img class="card-preview-light" src="/api/pin?username=anuraghazra&repo=github-readme-stats&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented&theme=light_github_repocard" alt="anuraghazra's contributions to github-readme-stats" />
-<img class="card-preview-dark" src="/api/pin?username=anuraghazra&repo=github-readme-stats&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented&theme=dark_github_repocard" alt="anuraghazra's contributions to github-readme-stats" />
+![Anuraghazra's contributions to github-readme-stats](/api/pin?username=anuraghazra&repo=github-readme-stats&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented)
 
 Add `&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented` to your repo card url to display your contributions to the pinned repository.
 
 ---
 
-anurag's contributions to razorpay:
+Anurag's contributions to razorpay:
 
-<img class="card-preview-light" src="/api?username=anuraghazra&owner=razorpay&hide=prs,issues,stars,commits,contribs&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented&hide_rank=true&custom_title=anurag%27s%20contributions%20to%20razorpay&card_width=333&theme=light_github" alt="anurag's contributions to razorpay" />
-<img class="card-preview-dark" src="/api?username=anuraghazra&owner=razorpay&hide=prs,issues,stars,commits,contribs&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented&hide_rank=true&custom_title=anurag%27s%20contributions%20to%20razorpay&card_width=333&theme=dark_github" alt="anurag's contributions to razorpay" />
+![Anurag's contributions to razorpay](/api?username=anuraghazra&owner=razorpay&hide=prs,issues,stars,commits,contribs&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented&hide_rank=true&custom_title=Anurag%27s%20contributions%20to%20razorpay&card_width=333)
 
 Add `&repo=userA/repoA,orgB/repoB` or `&owner=userC,orgD` to your profile stats url to filter your contributions by repo or organization. (The screenshot above uses further customization options.)
 

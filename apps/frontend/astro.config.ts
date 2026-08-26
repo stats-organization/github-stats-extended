@@ -1,10 +1,13 @@
 import path from "node:path";
 
+import { unified } from "@astrojs/markdown-remark";
 import react from "@astrojs/react";
 import starlight from "@astrojs/starlight";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, passthroughImageService } from "astro/config";
 import starlightLinksValidator from "starlight-links-validator";
+
+import { rehypeCardImages } from "./src/plugins/rehypeCardImages.js";
 
 const base = "/frontend";
 
@@ -21,6 +24,12 @@ export default defineConfig({
   outDir: "./build",
   // One screenshot; not worth a native image dependency.
   image: { service: passthroughImageService() },
+  markdown: {
+    // Starlight appends its own plugins to whatever processor is configured here.
+    processor: unified({
+      rehypePlugins: [rehypeCardImages],
+    }),
+  },
   // Astro prefixes `base` onto the source but not the destination, hence it spelled out here.
   redirects: {
     // Sidebar group labels are not routes, so send them to the group's first page.

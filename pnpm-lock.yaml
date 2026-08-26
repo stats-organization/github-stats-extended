@@ -173,6 +173,9 @@ importers:
         specifier: ^14.0.1
         version: 14.0.1
     devDependencies:
+      '@astrojs/markdown-remark':
+        specifier: 7.2.2
+        version: 7.2.2
       '@types/react':
         specifier: 19.2.17
         version: 19.2.17

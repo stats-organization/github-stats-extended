@@ -4,8 +4,7 @@ title: GitHub Stats Extended
 
 Dynamically generate GitHub stats for your READMEs.
 
-<img class="card-preview-light" src="/api?username=anuraghazra&theme=light_github" alt="Anurag's GitHub stats" />
-<img class="card-preview-dark" src="/api?username=anuraghazra&theme=dark_github" alt="Anurag's GitHub stats" />
+![Anurag's GitHub stats](/api?username=anuraghazra)
 
 GitHub-Stats-Extended is the [extended, actively maintained successor](/frontend/docs/fork/) of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats). It generates [various stats cards](#card-types) about your GitHub contributions, your top languages and more. You can [customize](/frontend/docs/customization/common-options/) the cards via multiple parameters.
 
@@ -34,34 +33,23 @@ GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For 
 
 - Show your GitHub statistics:
 
-  <img class="card-preview-light" src="/api?username=anuraghazra&theme=light_github" alt="Anurag's GitHub stats" />
-  <img class="card-preview-dark" src="/api?username=anuraghazra&theme=dark_github" alt="Anurag's GitHub stats" />
+  ![Anurag's GitHub stats](/api?username=anuraghazra)
 
 - ...your top languages...:
 
-  <img class="card-preview-light" src="/api/top-langs?username=anuraghazra&langs_count=4&theme=light_github" alt="Top Langs" />
-  <img class="card-preview-dark" src="/api/top-langs?username=anuraghazra&langs_count=4&theme=dark_github" alt="Top Langs" />
+  ![Top Langs](/api/top-langs?username=anuraghazra&langs_count=4)
 
 - ...and development time:
 
-  <a href="https://wakatime.com/@alan">
-    <img class="card-preview-light" src="/api/wakatime?username=alan&langs_count=6&theme=light_github" alt="Alan's WakaTime stats" />
-    <img class="card-preview-dark" src="/api/wakatime?username=alan&langs_count=6&theme=dark_github" alt="Alan's WakaTime stats" />
-  </a>
+  [![Alan's WakaTime stats](/api/wakatime?username=alan&langs_count=6)](https://wakatime.com/@alan)
 
 - Pin more than 6 repos in your GitHub profile:
 
-  <a href="https://github.com/anuraghazra/github-readme-stats">
-    <img class="card-preview-light" src="/api/pin?username=anuraghazra&repo=github-readme-stats&theme=light_github_repocard" alt="Readme Card" />
-    <img class="card-preview-dark" src="/api/pin?username=anuraghazra&repo=github-readme-stats&theme=dark_github_repocard" alt="Readme Card" />
-  </a>
+  [![Readme Card](/api/pin?username=anuraghazra&repo=github-readme-stats)](https://github.com/anuraghazra/github-readme-stats)
 
 - Pin Gists in your GitHub profile:
 
-  <a href="https://gist.github.com/Yizack/bbfce31e0217a3689c8d961a356cb10d">
-    <img class="card-preview-light" src="/api/gist?id=bbfce31e0217a3689c8d961a356cb10d&theme=light_github_repocard" alt="Gist Card" />
-    <img class="card-preview-dark" src="/api/gist?id=bbfce31e0217a3689c8d961a356cb10d&theme=dark_github_repocard" alt="Gist Card" />
-  </a>
+  [![Gist Card](/api/gist?id=bbfce31e0217a3689c8d961a356cb10d)](https://gist.github.com/Yizack/bbfce31e0217a3689c8d961a356cb10d)
 
 - Customize all the cards:
 

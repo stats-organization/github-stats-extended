@@ -1,4 +1,3 @@
-import type { ThemeName } from "@stats-organization/github-readme-stats-core";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { JSX } from "react";
 import { useDispatch } from "react-redux";
@@ -16,13 +15,10 @@ import { LinkExternal } from "../../shared/LinkExternal";
 import { authenticate } from "../api/user";
 import { DEFAULT_OPTION as LANGUAGES_DEFAULT_LAYOUT } from "../components/Home/LanguagesLayoutSection";
 import { DEFAULT_OPTION as WAKATIME_DEFAULT_LAYOUT } from "../components/Home/WakatimeLayoutSection";
-import {
-  CATEGORY_BY_CARD_TYPE,
-  CardCategory,
-  CardType,
-} from "../models/CardType";
+import { CATEGORY_BY_CARD_TYPE, CardType } from "../models/CardType";
 import { STAGE_LABELS } from "../models/Stage";
 import type { StageIndex } from "../models/Stage";
+import { getCardThemeDefault } from "../models/cardThemeDefault";
 import { useIsDarkTheme } from "../useIsDarkTheme";
 
 import { buildCardUrl } from "./buildCardUrl";
@@ -38,13 +34,6 @@ import { useCardDescriptor } from "./useCardDescriptor";
 interface HomeScreenProps {
   stage: StageIndex;
   setStage: (stageIndex: StageIndex) => void;
-}
-
-function getDefaultTheme(isDark: boolean, category: CardCategory): ThemeName {
-  if (category === CardCategory.REPO) {
-    return isDark ? "dark_github_repocard" : "light_github_repocard";
-  }
-  return isDark ? "dark_github" : "light_github";
 }
 
 export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
@@ -81,7 +70,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
   const isDark = useIsDarkTheme();
   const cardCategory = CATEGORY_BY_CARD_TYPE[selectedCard];
   const [theme, setTheme] = useState(() =>
-    getDefaultTheme(isDark, cardCategory),
+    getCardThemeDefault(isDark, cardCategory),
   );
 
   const handleCardTypeChange = (cardType: CardType) => {
@@ -99,8 +88,8 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
       }));
     }
 
-    if (theme === getDefaultTheme(isDark, cardCategory)) {
-      setTheme(getDefaultTheme(isDark, CATEGORY_BY_CARD_TYPE[cardType]));
+    if (theme === getCardThemeDefault(isDark, cardCategory)) {
+      setTheme(getCardThemeDefault(isDark, CATEGORY_BY_CARD_TYPE[cardType]));
     }
 
     setSelectedCard(cardType);
@@ -119,7 +108,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
 
   // Preview builder for the customize stage, dark-themed to match the surroundings.
   const customizeCardBuilder = useMemo(
-    () => cardBuilder.theme(getDefaultTheme(isDark, cardCategory)),
+    () => cardBuilder.theme(getCardThemeDefault(isDark, cardCategory)),
     [cardBuilder, isDark, cardCategory],
   );
 
