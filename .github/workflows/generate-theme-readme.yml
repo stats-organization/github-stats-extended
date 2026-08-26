@@ -1,10 +1,11 @@
-name: Generate Theme Readme
+name: Generate Themes Doc
 on:
   push:
     branches:
       - master
     paths:
       - "packages/core/src/themes/index.ts"
+      - "scripts/generate-theme-readme.js"
   workflow_dispatch:
   schedule:
     #        ┌───────────── minute (0 - 59)
@@ -23,7 +24,7 @@ permissions: {}
 jobs:
   generate-theme-doc:
     runs-on: ubuntu-latest
-    name: Generate Theme Readme
+    name: Generate Themes Doc
 
     permissions:
       contents: write
@@ -36,19 +37,20 @@ jobs:
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies
 
-      - name: Generate readme
+      - name: Generate themes doc
         run: pnpm run generate-theme-readme
 
-      - name: Create Pull Request if themes README has changed
+      - name: Create Pull Request if the themes doc has changed
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
-          commit-message: "feat(core): update themes README"
-          branch: "update_themes_readme/patch"
+          commit-message: "docs(frontend): update available themes page"
+          branch: "update_themes_doc/patch"
           delete-branch: true
-          title: Update themes README
+          title: Update available themes page
           body: >-
             The [generate-theme-readme](https://github.com/stats-organization/github-stats-extended/actions/workflows/generate-theme-readme.yml)
             workflow detected changes in
             [`packages/core/src/themes/index.ts`](https://github.com/stats-organization/github-stats-extended/blob/master/packages/core/src/themes/index.ts)
-            and regenerated the themes README.
+            and regenerated the Available Themes page,
+            [`apps/frontend/src/content/docs/docs/customization/themes.md`](https://github.com/stats-organization/github-stats-extended/blob/master/apps/frontend/src/content/docs/docs/customization/themes.md).
           labels: "ci"
