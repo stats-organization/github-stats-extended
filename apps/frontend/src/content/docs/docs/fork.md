@@ -34,29 +34,29 @@ GitHub-Stats-Extended fetches up to 1000 of your starred repositories to accurat
 
 ### Light and dark mode in a single card URL
 
-GitHub-Stats-Extended adds `theme_light`, `theme_dark` and the `*_light` / `*_dark` color variants (e.g. `title_color_light`), which hold both modes in one card URL. The card then follows the viewer's browser or OS setting.
+GitHub-Stats-Extended adds parameters `theme_light`, `theme_dark` and the `*_light` / `*_dark` color variants (e.g. `title_color_light`), to specify both modes in one card URL. The card then follows the viewer's browser or OS setting.
 
 ```md
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&theme_light=light_github&theme_dark=dark_github)
 ```
 
-It works anywhere, including GitHub sponsorship pages, where the other light/dark approaches do not. See [Set light and dark mode in one card](/frontend/docs/customization/theming/#set-light-and-dark-mode-in-one-card) for the details.
+It works everywhere, including GitHub sponsorship pages, where the other light/dark approaches do not. See [Set light and dark mode in one card](/frontend/docs/customization/theming/#set-light-and-dark-mode-in-one-card) for the details.
 
 ### GitHub-themed light and dark themes
 
-GitHub-Stats-Extended adds `light_github` and `dark_github` [themes](/frontend/docs/customization/themes/) matching GitHub's own UI colors. Repo and gist cards have `light_github_repocard` and `dark_github_repocard`, which differ only in icon color.
+GitHub-Stats-Extended adds `light_github` and `dark_github` [themes](/frontend/docs/customization/themes/) that exactly match GitHub's own UI colors. For repo and gist cards use `light_github_repocard` and `dark_github_repocard`, which differ only in icon color.
 
 ### New Contributions stat
 
-GitHub-Stats-Extended adds an optional stat counting every [contribution](https://docs.github.com/en/account-and-profile/reference/profile-contributions-reference#what-counts-as-a-contribution) — commits, pull requests, issues — across all years of a user's history; enable it with `&show=contributions`. Private contributions count only if [your profile visibility settings](https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/manage-visibility-settings-for-private-contributions-and-achievements#changing-the-visibility-of-your-private-contributions) allow it.
+GitHub-Stats-Extended adds an optional stat showing the number of [contributions](https://docs.github.com/en/account-and-profile/reference/profile-contributions-reference#what-counts-as-a-contribution) (commits, pull requests, issues, etc.) across all years of a user's history. Enable it with `&show=contributions`. Whether private contributions are counted depends on [your profile visibility settings](https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/manage-visibility-settings-for-private-contributions-and-achievements#changing-the-visibility-of-your-private-contributions).
 
 :::note
-The pre-existing "Contributed to" stat counts repositories, not contributions.
+The pre-existing "Contributed to" stat counts repositories a user has contributed to, not contributions.
 :::
 
 ### Customization of top languages card
 
-GitHub-Stats-Extended can show your top languages without numbers via `hide_values`, and `prog_bar_bg_color` sets the bar background — here transparent:
+GitHub-Stats-Extended can show your top languages without any numbers via the `hide_values` parameter. And the new `prog_bar_bg_color` parameter sets the background color of progress bars, e.g. to transparent:
 
 <img class="card-preview-light" src="/api/top-langs?username=anuraghazra&langs_count=4&hide_values=true&prog_bar_bg_color=0000&theme=light_github" alt="anuraghazra's top languages without numbers" />
 <img class="card-preview-dark" src="/api/top-langs?username=anuraghazra&langs_count=4&hide_values=true&prog_bar_bg_color=0000&theme=dark_github" alt="anuraghazra's top languages without numbers" />

@@ -49,10 +49,10 @@ There are several ways to switch a card between modes on the client side.
 
 `theme_light` / `theme_dark` and the `*_light` / `*_dark` color parameters put both modes in a single card URL, which then follows the viewer's browser or OS setting. See [Light & Dark Mode Parameters](#light--dark-mode-parameters) for the details.
 
-Nothing here is GitHub-specific, so it also works outside GitHub — including sponsorship pages, where the other approaches do not.
+This approach is not GitHub-specific, so it also works outside GitHub — including GitHub sponsorship pages, where the other approaches don't work.
 
 :::note
-GitHub serves the card from its [CDN](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-anonymized-urls), so a GitHub theme that differs from the browser/OS setting cannot be detected.
+GitHub serves the card from its [CDN](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-anonymized-urls), so a GitHub theme that differs from the browser/OS setting cannot be detected by this approach.
 :::
 
 ```md
@@ -84,7 +84,7 @@ For example:
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github)
 ```
 
-Types can be mixed — a light and a dark theme, plus one fixed title color:
+Parameter types can be mixed — for example a light and a dark theme, plus one fixed title color:
 
 ```md
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github&title_color=aabbcc)
@@ -92,7 +92,7 @@ Types can be mixed — a light and a dark theme, plus one fixed title color:
 
 ### Use GitHub's theme context tag
 
-Appending `#gh-dark-mode-only` or `#gh-light-mode-only` to an image URL shows it only to viewers on that [GitHub theme](https://github.blog/changelog/2021-11-24-specify-theme-context-for-images-in-markdown/):
+Appending [`#gh-dark-mode-only` or `#gh-light-mode-only`](https://github.blog/changelog/2021-11-24-specify-theme-context-for-images-in-markdown/) to an image URL shows it only to viewers on that GitHub mode:
 
 ```md
 [![Anurag's GitHub stats-Dark](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark_github#gh-dark-mode-only)](https://github.com/stats-organization/github-stats-extended#gh-dark-mode-only)
@@ -101,7 +101,7 @@ Appending `#gh-dark-mode-only` or `#gh-light-mode-only` to an image URL shows it
 
 ### Use the transparent theme
 
-The `transparent` theme has no background, so it sits well on GitHub's light and dark themes:
+The `transparent` theme has no background, so it sits well on GitHub's light and dark modes:
 
 ```md
 ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=transparent)
