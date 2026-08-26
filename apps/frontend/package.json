@@ -39,7 +39,7 @@
     "@types/react-dom": "19.2.3",
     "clsx": "2.1.1",
     "jsdom": "catalog:default",
-    "starlight-links-validator": "0.25.2",
+    "starlight-links-validator": "0.25.3",
     "tailwindcss": "4.3.3",
     "vitest": "catalog:default"
   },
