@@ -3,15 +3,13 @@ import type { RehypePlugin } from "@astrojs/markdown-remark";
 import { CATEGORY_BY_CARD_TYPE, CardType } from "../wizard/models/CardType";
 import { getCardThemeDefault } from "../wizard/models/cardThemeDefault";
 
-const CARD_ENDPOINT = "/api";
-
 /** The card each endpoint renders; `/api` itself is the stats card. */
 const CARD_TYPE_BY_PATH: Record<string, CardType> = {
-  [CARD_ENDPOINT]: CardType.STATS,
-  [`${CARD_ENDPOINT}/top-langs`]: CardType.TOP_LANGS,
-  [`${CARD_ENDPOINT}/pin`]: CardType.PIN,
-  [`${CARD_ENDPOINT}/gist`]: CardType.GIST,
-  [`${CARD_ENDPOINT}/wakatime`]: CardType.WAKATIME,
+  "/api": CardType.STATS,
+  "/api/top-langs": CardType.TOP_LANGS,
+  "/api/pin": CardType.PIN,
+  "/api/gist": CardType.GIST,
+  "/api/wakatime": CardType.WAKATIME,
 };
 
 /** An `<img>` for a card that does not already say how it loads. */
@@ -21,18 +19,38 @@ const RAW_CARD_IMAGE = /<img(?![^>]*\bloading=)(?=[^>]*\bsrc="\/api)/g;
 const RELATIVE_BASE = "https://cards.invalid";
 
 /**
- * Defers every card image, and renders one that names no theme twice,
- * once per site theme — so a preview is a single line of markdown.
+ * Builds a card preview out of one line of markdown.
+ *
+ * A `/api` image that names no theme is rendered twice, once per site theme,
+ * and `styles/starlight-theme.css` shows whichever copy matches.
+ * Every card image loads lazily, so the hidden copy is never fetched,
+ * and links to its own URL unless the markdown already points it somewhere better.
  */
 export const rehypeCardImages: RehypePlugin = () => (tree) => {
   // Typed off the tree so the plugin needs no hast types of its own.
-  function walk(children: typeof tree.children) {
+  type ElementNode = Extract<
+    (typeof tree.children)[number],
+    { tagName: string }
+  >;
+
+  /** Opening a preview shows how the card is configured. */
+  const linked = (
+    image: ElementNode,
+    className?: Array<string>,
+  ): ElementNode => ({
+    type: "element",
+    tagName: "a",
+    properties: { href: image.properties.src, className },
+    children: [image],
+  });
+
+  function walk(children: typeof tree.children, insideLink: boolean) {
     for (const [index, child] of children.entries()) {
       // `rehype-raw` runs after this plugin, so a card written as HTML is still text.
       if (child.type === "raw") {
         child.value = child.value.replaceAll(
           RAW_CARD_IMAGE,
-          '<img loading="lazy" decoding="async"',
+          '<img loading="lazy"',
         );
         continue;
       }
@@ -42,47 +60,57 @@ export const rehypeCardImages: RehypePlugin = () => (tree) => {
       }
 
       if (child.tagName !== "img") {
-        walk(child.children);
+        walk(child.children, insideLink || child.tagName === "a");
         continue;
       }
 
       const { properties } = child;
       const src = properties.src;
-      if (typeof src !== "string" || !src.startsWith(CARD_ENDPOINT)) {
+      if (typeof src !== "string") {
         continue;
       }
 
-      properties.loading ??= "lazy";
-      properties.decoding ??= "async";
-
       const { pathname, search, searchParams } = new URL(src, RELATIVE_BASE);
       const cardType = CARD_TYPE_BY_PATH[pathname];
+      if (cardType === undefined) {
+        continue;
+      }
+
+      // A hidden copy has no layout box, so only the shown theme is fetched.
+      properties.loading ??= "lazy";
 
       // A named theme is the point of the preview, so leave it as one image.
-      if (cardType === undefined || searchParams.has("theme")) {
+      if (searchParams.has("theme")) {
+        if (!insideLink) {
+          children.splice(index, 1, linked(child));
+        }
         continue;
       }
 
       const category = CATEGORY_BY_CARD_TYPE[cardType];
 
-      // `styles/starlight-theme.css` hides the copy that does not match the
-      // site theme; rename these classes in both places.
-      const copy = (variant: "light" | "dark") => ({
-        ...child,
-        properties: {
-          ...properties,
-          // Appended, not re-serialized, so the rest of the query survives verbatim.
-          src: `${src}${search === "" ? "?" : "&"}theme=${getCardThemeDefault(variant === "dark", category)}`,
-          className: [
-            variant === "dark" ? `card-preview-dark` : `card-preview-light`,
-          ],
-        },
-      });
+      const themed = (variant: "light" | "dark") => {
+        // `styles/starlight-theme.css` hides the class that does not match the
+        // site theme; rename it in both places. It also goes on the link, so a
+        // hidden copy leaves nothing focusable behind.
+        const className =
+          variant === "dark" ? "card-preview-dark" : "card-preview-light";
+        const image = {
+          ...child,
+          properties: {
+            ...properties,
+            // Appended, not re-serialized, so the rest of the query survives verbatim.
+            src: `${src}${search === "" ? "?" : "&"}theme=${getCardThemeDefault(variant === "dark", category)}`,
+            className: [className],
+          },
+        };
+        return insideLink ? image : linked(image, [className]);
+      };
 
       // Both copies name a theme, so the one the iterator lands on next is skipped.
-      children.splice(index, 1, copy("light"), copy("dark"));
+      children.splice(index, 1, themed("light"), themed("dark"));
     }
   }
 
-  walk(tree.children);
+  walk(tree.children, false);
 };

@@ -53,7 +53,7 @@ GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For 
 
 - Customize all the cards:
 
-  [![Anurag's GitHub stats](/api?username=anuraghazra&show_icons=true&theme=calm&rank_icon=github&include_all_commits=true&custom_title=Anurag's+Stats&disable_animations=true&number_format=long&show=prs_merged_percentage,prs_reviewed)](/api?username=anuraghazra&show_icons=true&theme=calm&rank_icon=github&include_all_commits=true&custom_title=Anurag's+Stats&disable_animations=true&number_format=long&show=prs_merged_percentage,prs_reviewed)
+  ![Anurag's GitHub stats](/api?username=anuraghazra&show_icons=true&theme=calm&rank_icon=github&include_all_commits=true&custom_title=Anurag's+Stats&disable_animations=true&number_format=long&show=prs_merged_percentage,prs_reviewed)
 
 ## Where to next
 

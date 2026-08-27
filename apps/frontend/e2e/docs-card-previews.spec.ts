@@ -38,18 +38,46 @@ test("the pin and gist previews use the repocard themes", async ({ page }) => {
   }
 });
 
+test("a preview links to itself, unless the markdown links it elsewhere", async ({
+  page,
+}) => {
+  await page.goto("docs/");
+
+  // Opening a preview shows its query string, so each copy links to its own theme.
+  await expect(
+    page.locator('main a.card-preview-light:has(img[alt="Top Langs"])'),
+  ).toHaveAttribute(
+    "href",
+    "/api/top-langs?username=anuraghazra&langs_count=4&theme=light_github",
+  );
+
+  // The repo card already points at the repo it describes, which is more useful.
+  await expect(
+    page.locator('main a:has(img[alt="Readme Card"])'),
+  ).toHaveAttribute(
+    "href",
+    "https://github.com/anuraghazra/github-readme-stats",
+  );
+});
+
 test("a preview that names a theme stays a single image", async ({ page }) => {
   await page.goto("docs/customization/theming/");
 
-  const transparent = page.locator('main img[src*="theme=transparent"]');
-  await expect(transparent).toHaveCount(1);
-  await expect(transparent).toHaveAttribute("loading", "lazy");
+  await expect(page.locator('main img[src*="theme=transparent"]')).toHaveCount(
+    1,
+  );
 });
 
-test("every card image on the themes page is deferred", async ({ page }) => {
+test("every sample on the themes page is deferred and links to itself", async ({
+  page,
+}) => {
   await page.goto("docs/customization/themes/");
 
-  await expect(page.locator('main img[src^="/api"]')).not.toHaveCount(0);
+  const samples = page.locator('main img[src^="/api"]');
+  await expect(samples).not.toHaveCount(0);
+  await expect(
+    page.locator('main a[href^="/api"] > img[src^="/api"]'),
+  ).toHaveCount(await samples.count());
   await expect(
     page.locator('main img[src^="/api"]:not([loading="lazy"])'),
   ).toHaveCount(0);
@@ -88,9 +116,9 @@ test.describe("in a browser set to dark", () => {
     await expect(cardImage(page, "Top Langs", "light")).toBeHidden();
 
     /*
-     * A hidden preview has no layout box, so lazy loading never requests it. The
-     * pin and gist pair is the fair comparison: both sit at the same depth, and
-     * below the fold, where the dev server's late CSS cannot briefly reveal one.
+     * A hidden copy has no layout box, so lazy loading never requests it.
+     * The pin and gist pair is the fair comparison:
+     * both sit below the fold, where the dev server's late CSS cannot briefly reveal one.
      */
     await expect
       .poll(() => requested.some((url) => url.includes("dark_github_repocard")))
