@@ -124,6 +124,8 @@ Any of [the available themes](/frontend/docs/customization/themes/) turns transp
 <details>
 <summary>👀 Show example</summary>
 
-![Anurag's GitHub stats](/api?username=anuraghazra&show_icons=true&bg_color=00000000)
+<!-- set theme=default explicitly so rehypeCardImages.ts doesn't create a light and a dark version -->
+
+![Anurag's GitHub stats](/api?username=anuraghazra&show_icons=true&bg_color=00000000&theme=default)
 
 </details>

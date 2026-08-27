@@ -39,7 +39,7 @@
 
 /*
  * `prefers-color-scheme` cannot see the site theme, so pick the card by `data-theme`.
- * `plugins/rehypeCardImages.ts` writes these classes; rename them in both places.
+ * `plugins/rehypeCardImages.ts` writes these classes; keep class names in sync with that file.
  */
 :root[data-theme="dark"] .card-preview-light,
 :root[data-theme="light"] .card-preview-dark {

@@ -80,7 +80,11 @@ export const rehypeCardImages: RehypePlugin = () => (tree) => {
       properties.loading ??= "lazy";
 
       // A named theme is the point of the preview, so leave it as one image.
-      if (searchParams.has("theme")) {
+      if (
+        searchParams.has("theme") ||
+        searchParams.has("theme_light") ||
+        searchParams.has("theme_dark")
+      ) {
         if (!insideLink) {
           children.splice(index, 1, linked(child));
         }
@@ -91,8 +95,8 @@ export const rehypeCardImages: RehypePlugin = () => (tree) => {
 
       const themed = (variant: "light" | "dark") => {
         // `styles/starlight-theme.css` hides the class that does not match the
-        // site theme; rename it in both places. It also goes on the link, so a
-        // hidden copy leaves nothing focusable behind.
+        // site theme; keep class names in sync with that file. It also goes on
+        // the link, so a hidden copy leaves nothing focusable behind.
         const className =
           variant === "dark" ? "card-preview-dark" : "card-preview-light";
         const image = {
