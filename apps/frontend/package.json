@@ -13,7 +13,7 @@
     "typecheck": "astro sync && tsc -p tsconfig.typecheck.json"
   },
   "dependencies": {
-    "@astrojs/react": "^6.0.2",
+    "@astrojs/react": "^6.0.4",
     "@astrojs/starlight": "^0.41.7",
     "@reduxjs/toolkit": "^2.12.0",
     "@stats-organization/github-readme-stats-backend": "workspace:^",
@@ -40,7 +40,7 @@
     "@types/react-dom": "19.2.3",
     "clsx": "2.1.1",
     "jsdom": "catalog:default",
-    "starlight-links-validator": "0.25.2",
+    "starlight-links-validator": "0.25.3",
     "tailwindcss": "4.3.3",
     "vitest": "catalog:default"
   },
