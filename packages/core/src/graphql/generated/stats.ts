@@ -87,7 +87,7 @@ export type RangeContributionsByRepoFragment = {
   pullRequestContributionsByRepository: Array<{
     repository: { nameWithOwner: string };
   }>;
-  repositoryContributions: {
+  repositoryContributions?: {
     nodes: Array<{ repository: { nameWithOwner: string } } | null> | null;
   };
 };

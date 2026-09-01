@@ -4,12 +4,18 @@ import githubUsernameRegex from "github-username-regex";
 
 import { calculateRank } from "../calculateRank.js";
 import { getConfig } from "../common/config.js";
+import type { GitHubDateRange } from "../common/date.js";
+import { getGitHubYearRange, toGitHubDateTime } from "../common/date.js";
 import { CustomError, MissingParamError } from "../common/error.js";
 import { wrapTextMultiline } from "../common/fmt.js";
 import { createGraphQLFetcher } from "../common/http.js";
 import type { GraphQLResponse } from "../common/http.js";
 import { logger } from "../common/log.js";
-import { buildSearchFilter, parseOwnerAffiliations } from "../common/ops.js";
+import {
+  buildSearchFilter,
+  chunkArray,
+  parseOwnerAffiliations,
+} from "../common/ops.js";
 import { retryer } from "../common/retryer.js";
 import { buildContributionsDocument } from "../graphql/contributionsDocument.js";
 import {
@@ -21,7 +27,6 @@ import type {
   UserInfoQuery,
   UserInfoQueryVariables,
 } from "../graphql/generated/stats.js";
-import type { ContributionRange } from "../graphql/reposContributedToDocument.js";
 import {
   MAX_REPOSITORIES_LIMIT,
   buildReposContributedToDocument,
@@ -285,6 +290,25 @@ const fetchRepoUserStats = async (
 };
 
 /**
+ * Turn a GraphQL `errors` payload into the error to throw.
+ *
+ * @param errors Errors from the response envelope.
+ * @param statusText HTTP status text, used as the error type when GitHub gave a message.
+ * @param fallback Message when GitHub gave none.
+ */
+const graphqlError = (
+  errors: NonNullable<GraphQLResponse<unknown>["data"]["errors"]>,
+  statusText: string,
+  fallback: string,
+): CustomError => {
+  logger.error(errors);
+  const message = errors[0]?.message;
+  return message
+    ? new CustomError(wrapTextMultiline(message, 525, 12)[0] ?? "", statusText)
+    : new CustomError(fallback, CustomError.GRAPHQL_ERROR);
+};
+
+/**
  * Fetch all-time contributions by building a single GraphQL query
  * for all the given years.
  *
@@ -312,17 +336,10 @@ const fetchTotalContributions = async (
   );
 
   if (contribRes.data.errors) {
-    logger.error(contribRes.data.errors);
-    const firstError = contribRes.data.errors[0];
-    if (firstError?.message) {
-      throw new CustomError(
-        wrapTextMultiline(firstError.message, 525, 12)[0] ?? "",
-        contribRes.statusText,
-      );
-    }
-    throw new CustomError(
+    throw graphqlError(
+      contribRes.data.errors,
+      contribRes.statusText,
       "Something went wrong while trying to retrieve the contributions data using the GraphQL API.",
-      CustomError.GRAPHQL_ERROR,
     );
   }
 
@@ -344,181 +361,133 @@ const fetchTotalContributions = async (
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 /**
- * Round a timestamp (e.g. `Date.getTime()`) to the nearest UTC midnight.
- *
- * @param timestamp Milliseconds since epoch.
- * @returns Milliseconds since epoch of the nearest UTC midnight.
+ * Ranges per request.
+ * Each costs roughly `4 * MAX_REPOSITORIES_LIMIT` nodes,
+ * so an unchunked round of a heavily split account would breach GitHub's 500k node ceiling
+ * and lose the ranges that had already resolved along with it.
  */
-const roundToNearestMidnight = (timestamp: number): number =>
-  Math.round(timestamp / MS_PER_DAY) * MS_PER_DAY;
+const MAX_RANGES_PER_REQUEST = 100;
+
+const REPOS_CONTRIBUTED_TO_ERROR =
+  "Something went wrong while trying to retrieve the repository contributions data using the GraphQL API.";
 
 /**
- * Fetch the repositories a user contributed to across every given range.
+ * Count the repositories a user contributed to across every contribution year.
  *
- * All ranges still pending are queried together in a single request. Whenever a
- * range's sub-collection returns `MAX_REPOSITORIES_LIMIT` results,
- * that range is split and requeried in the next round, since the true count
- * could be higher and some repos may be missing from the response.
+ * `repositoriesContributedTo` spans at most one year,
+ * so every year is fetched as an aliased `contributionsCollection(from, to)` in one request and the repos de-duplicated.
+ * A range returning `MAX_REPOSITORIES_LIMIT` results may have more,
+ * so it is halved and requeried in the next round.
  *
- * @param username GitHub username.
- * @param ranges Ranges to fetch.
- * @param includeOwnRepos Whether to include the user's own repos in the result.
+ * Whether private contributions are included depends on the used PAT.
+ *
+ * @param canonicalUsername Username as GitHub reports it; `nameWithOwner` uses its
+ *        casing, which the raw query-string username need not match.
+ * @param years Contribution years to walk.
+ * @param includeOwnRepos Whether to count the user's own repositories.
  * @param pat Optional PAT override.
- * @returns The set of `nameWithOwner` repo identifiers.
+ * @returns Count of repositories.
  */
-const fetchReposContributedTo = async (
-  username: string,
-  ranges: Array<ContributionRange>,
+const fetchAllTimeReposContributedTo = async (
+  canonicalUsername: string,
+  years: Array<number>,
   includeOwnRepos: boolean,
   pat: string | null,
-): Promise<Set<string>> => {
+): Promise<number> => {
   const repos = new Set<string>();
-  let pending = ranges;
+  let pending = years.map(getGitHubYearRange);
 
   while (pending.length > 0) {
-    const document = buildReposContributedToDocument(pending);
-    const fetcher = createGraphQLFetcher(document, "bearer");
-    const res = await retryer(
-      fetcher,
-      { login: username, maxRepositories: MAX_REPOSITORIES_LIMIT },
-      pat,
-    );
+    const nextPending: Array<GitHubDateRange> = [];
 
-    if (res.data.errors) {
-      logger.error(res.data.errors);
-      const firstError = res.data.errors[0];
-      if (firstError?.message) {
-        throw new CustomError(
-          wrapTextMultiline(firstError.message, 525, 12)[0] ?? "",
+    for (const chunk of chunkArray(pending, MAX_RANGES_PER_REQUEST)) {
+      const fetcher = createGraphQLFetcher(
+        buildReposContributedToDocument(chunk, includeOwnRepos),
+        "bearer",
+      );
+      const res = await retryer(
+        fetcher,
+        { login: canonicalUsername, maxRepositories: MAX_REPOSITORIES_LIMIT },
+        pat,
+      );
+      if (res.data.errors) {
+        throw graphqlError(
+          res.data.errors,
           res.statusText,
+          REPOS_CONTRIBUTED_TO_ERROR,
         );
       }
-      throw new CustomError(
-        "Something went wrong while trying to retrieve the repository contributions data using the GraphQL API.",
-        CustomError.GRAPHQL_ERROR,
-      );
-    }
-
-    const user = res.data.data.user;
-    if (!user) {
-      throw new CustomError(
-        "Something went wrong while trying to retrieve the repository contributions data using the GraphQL API.",
-        CustomError.GRAPHQL_ERROR,
-      );
-    }
-
-    const nextPending: Array<ContributionRange> = [];
-    pending.forEach((range, index) => {
-      const rangeResponse = user[`range_${index}`];
-      if (!rangeResponse) {
+      const user = res.data.data.user;
+      if (!user) {
         throw new CustomError(
-          "Something went wrong while trying to retrieve the repository contributions data using the GraphQL API.",
+          REPOS_CONTRIBUTED_TO_ERROR,
           CustomError.GRAPHQL_ERROR,
         );
       }
 
-      const commitRepos = rangeResponse.commitContributionsByRepository;
-      const issueRepos = rangeResponse.issueContributionsByRepository;
-      const prRepos = rangeResponse.pullRequestContributionsByRepository;
-      const createdRepoNodes =
-        rangeResponse.repositoryContributions.nodes ?? [];
+      for (const [index, range] of chunk.entries()) {
+        const rangeResponse = user[`range_${index}`];
+        if (!rangeResponse) {
+          throw new CustomError(
+            REPOS_CONTRIBUTED_TO_ERROR,
+            CustomError.GRAPHQL_ERROR,
+          );
+        }
 
-      const isSaturated =
-        commitRepos.length >= MAX_REPOSITORIES_LIMIT ||
-        issueRepos.length >= MAX_REPOSITORIES_LIMIT ||
-        prRepos.length >= MAX_REPOSITORIES_LIMIT ||
-        createdRepoNodes.length >= MAX_REPOSITORIES_LIMIT;
-
-      const rangeDays = Math.round(
-        (range.to.getTime() - range.from.getTime()) / MS_PER_DAY,
-      );
-      // a range of 1 day or less can't be split any further
-      if (isSaturated && rangeDays >= 2) {
-        const mid = new Date(
-          roundToNearestMidnight(
-            range.from.getTime() + Math.floor(rangeDays / 2) * MS_PER_DAY,
+        const lists = [
+          rangeResponse.commitContributionsByRepository,
+          rangeResponse.issueContributionsByRepository,
+          rangeResponse.pullRequestContributionsByRepository,
+          (rangeResponse.repositoryContributions?.nodes ?? []).filter(
+            (node) => node !== null,
           ),
+        ];
+        const isSaturated = lists.some(
+          (list) => list.length >= MAX_REPOSITORIES_LIMIT,
         );
-        // GitHub seems to use only the date portion and ignore the time. So we
-        // subtract 1 second from the `to` of the first half to wrap it to the
-        // previous day and avoid a 1-day overlap of the two halves.
-        nextPending.push({
-          from: range.from,
-          to: new Date(mid.getTime() - 1000),
-        });
-        nextPending.push({ from: mid, to: range.to });
-        return;
-      }
-      if (isSaturated) {
-        logger.log(
-          `Range ${range.from.toISOString()} - ${range.to.toISOString()} is saturated but cannot be split further.`,
-        );
-      }
 
-      for (const { repository } of [
-        ...commitRepos,
-        ...issueRepos,
-        ...prRepos,
-      ]) {
-        repos.add(repository.nameWithOwner);
-      }
-      for (const node of createdRepoNodes) {
-        if (node) {
-          repos.add(node.repository.nameWithOwner);
+        const rangeDays = Math.round(
+          (range.to.getTime() - range.from.getTime()) / MS_PER_DAY,
+        );
+        // a range of 1 day or less can't be split any further
+        if (isSaturated && rangeDays >= 2) {
+          // every `from` sits on UTC midnight, so the split lands on a day boundary too
+          const mid = new Date(
+            range.from.getTime() + Math.floor(rangeDays / 2) * MS_PER_DAY,
+          );
+          // GitHub only reads the date portion,
+          // so the first half ends 1 second before `mid` to keep the halves from sharing a day
+          nextPending.push(
+            { from: range.from, to: new Date(mid.getTime() - 1000) },
+            { from: mid, to: range.to },
+          );
+          continue;
+        }
+        if (isSaturated) {
+          logger.log(
+            `Range ${range.from.toISOString()} - ${range.to.toISOString()} is saturated but cannot be split further.`,
+          );
+        }
+
+        for (const { repository } of lists.flat()) {
+          const name = repository.nameWithOwner;
+          if (includeOwnRepos || !name.startsWith(`${canonicalUsername}/`)) {
+            repos.add(name);
+          }
         }
       }
-    });
+    }
 
-    if (nextPending.length > 0) {
+    // each saturated range pushes both of its halves
+    const saturatedCount = nextPending.length / 2;
+    if (saturatedCount > 0) {
       logger.log(
-        `found ${pending.length} saturated ranges, splitting and retrying...`,
+        `found ${saturatedCount} saturated ranges, splitting and retrying...`,
       );
     }
     pending = nextPending;
   }
 
-  if (!includeOwnRepos) {
-    for (const repo of repos) {
-      if (repo.startsWith(`${username}/`)) {
-        repos.delete(repo);
-      }
-    }
-  }
-  return repos;
-};
-
-/**
- * Calculates the count of repositories the user contributed to, across every
- * contribution year.
- *
- * GitHub's `repositoriesContributedTo` field can only span one year. So we walk
- * every year individually via `contributionsCollection(from, to)` and
- * de-duplicate the repo results.
- *
- * Whether private contributions are included depends on the used PAT.
- *
- * @param username GitHub username.
- * @param years Contribution years to walk.
- * @param includeOwnRepos Whether to include the user's own repositories in the count.
- * @param pat Optional PAT override.
- * @returns Count of repositories.
- */
-const fetchAllTimeReposContributedTo = async (
-  username: string,
-  years: Array<number>,
-  includeOwnRepos: boolean,
-  pat: string | null = null,
-): Promise<number> => {
-  const ranges: Array<ContributionRange> = years.map((year) => ({
-    from: new Date(Date.UTC(year, 0, 1)),
-    to: new Date(Date.UTC(year, 11, 31, 23, 59, 59)),
-  }));
-  const repos = await fetchReposContributedTo(
-    username,
-    ranges,
-    includeOwnRepos,
-    pat,
-  );
   return repos.size;
 };
 
@@ -599,7 +568,10 @@ const fetchStats = async (
     includeMergedPullRequests: include_merged_pull_requests,
     includeDiscussions: include_discussions,
     includeDiscussionsAnswers: include_discussions_answers,
-    startTime: commits_year ? `${commits_year}-01-01T00:00:00Z` : undefined,
+    startTime:
+      commits_year === undefined
+        ? undefined
+        : toGitHubDateTime(getGitHubYearRange(commits_year).from),
     ownerAffiliations: affiliations,
     includeUserRepositories: contribs_include_own_repos,
     pat,
@@ -688,7 +660,7 @@ const fetchStats = async (
 
   if (include_all_time_contribs) {
     stats.allTimeContributedTo = await fetchAllTimeReposContributedTo(
-      username,
+      user.login,
       user.contributionsCollection.contributionYears,
       contribs_include_own_repos,
       pat,

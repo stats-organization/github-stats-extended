@@ -81,6 +81,20 @@ export default async (
     };
   }
 
+  // anything but a four-digit year builds a DateTime GitHub rejects
+  if (commits_year !== undefined && !/^\d{4}$/.test(commits_year)) {
+    return {
+      status: "error - permanent",
+      content: renderError({
+        message: "Something went wrong",
+        secondaryMessage: 'Invalid number input for parameter "commits_year"',
+        renderOptions: colorParams,
+      }),
+    };
+  }
+  const commitsYearParsed =
+    commits_year === undefined ? undefined : Number(commits_year);
+
   try {
     const showStats = parseArray(show);
     const repoOwner = parseArray(owner);
@@ -97,7 +111,7 @@ export default async (
         showStats.includes("prs_merged_percentage"),
       showStats.includes("discussions_started"),
       showStats.includes("discussions_answered"),
-      parseInt(commits_year, 10),
+      commitsYearParsed,
       repository,
       repoOwner,
       showStats.includes("prs_authored"),
@@ -125,7 +139,7 @@ export default async (
           card_width: parseInt(card_width, 10),
           hide_rank: parseBoolean(hide_rank),
           include_all_commits: parseBoolean(include_all_commits),
-          commits_year: parseInt(commits_year, 10),
+          commits_year: commitsYearParsed,
           line_height,
           text_bold: parseBoolean(text_bold),
           custom_title,

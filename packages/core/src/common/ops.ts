@@ -99,20 +99,6 @@ const parseEmojis = (str: string): string => {
   });
 };
 
-/**
- * Get diff in minutes between two dates.
- *
- * @param d1 First date.
- * @param d2 Second date.
- * @returns Number of minutes between the two dates.
- */
-const dateDiff = (d1: Date, d2: Date): number => {
-  const date1 = new Date(d1);
-  const date2 = new Date(d2);
-  const diff = date1.getTime() - date2.getTime();
-  return Math.round(diff / (1000 * 60));
-};
-
 const isOwnerAffiliation = (value: string): value is RepositoryAffiliation =>
   OWNER_AFFILIATIONS.some((affiliation) => affiliation === value);
 
@@ -167,7 +153,6 @@ export {
   lowercaseTrim,
   chunkArray,
   parseEmojis,
-  dateDiff,
   parseOwnerAffiliations,
   buildSearchFilter,
 };

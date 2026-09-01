@@ -138,7 +138,6 @@ describe("Test renderStatsCard", () => {
     });
 
     expect(screen.getByTestId("all_time_contribs")).toHaveTextContent("500");
-    expect(screen.queryByTestId("all_time_contribs")).toBeInTheDocument();
   });
 
   it("should hide_rank", () => {

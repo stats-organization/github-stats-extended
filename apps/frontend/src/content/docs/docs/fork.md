@@ -56,9 +56,11 @@ The pre-existing "Contributed to" stat counts repositories a user has contribute
 
 ### New options for "contributed-to" stats
 
-GitHub-Stats-Extended adds an `all_time_contribs` stat that shows the number of repositories a user has contributed to across all years — not just the past year like the default `contribs` stat. Enable it with [`&show=all_time_contribs`](/frontend/docs/cards/stats/#showing-additional-individual-stats).
+GitHub-Stats-Extended adds an `all_time_contribs` stat that shows the number of repositories a user has contributed to across all years — not just the past year like the default `contribs` stat.
+Enable it with [`&show=all_time_contribs`](/frontend/docs/cards/stats/#showing-additional-individual-stats).
 
-GitHub-Stats-Extended also adds a parameter [`contribs_include_own_repos`](/frontend/docs/cards/stats/#options) to include the user's own repositories in the `contribs` and `all_time_contribs` stats. By default, both stats exclude them and only count repositories owned by other users or organizations.
+GitHub-Stats-Extended also adds a parameter [`contribs_include_own_repos`](/frontend/docs/cards/stats/#options) to include the user's own repositories in the `contribs` and `all_time_contribs` stats.
+By default, both stats exclude them and only count repositories owned by other users or organizations.
 
 ### Customization of top languages card
 

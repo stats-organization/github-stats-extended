@@ -109,7 +109,8 @@ fragment RangeContributionsByRepo on ContributionsCollection {
       nameWithOwner
     }
   }
-  repositoryContributions(first: $maxRepositories) {
+  repositoryContributions(first: $maxRepositories)
+    @include(if: $includeOwnRepos) {
     nodes {
       repository {
         nameWithOwner

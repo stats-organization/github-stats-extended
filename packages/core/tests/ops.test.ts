@@ -3,7 +3,6 @@ import { describe, expect, it } from "vitest";
 import {
   chunkArray,
   clampValue,
-  dateDiff,
   lowercaseTrim,
   parseArray,
   parseBoolean,
@@ -73,16 +72,5 @@ describe("Test ops.js", () => {
     expect(() => parseEmojis("")).toThrow(/parseEmoji/);
     // @ts-expect-error testing missing argument
     expect(() => parseEmojis()).toThrow(/parseEmoji/);
-  });
-
-  it("should test dateDiff", () => {
-    const a = new Date("2020-01-01T00:10:00Z");
-    const b = new Date("2020-01-01T00:00:00Z");
-    expect(dateDiff(a, b)).toBe(10);
-
-    const c = new Date("2020-01-01T00:00:00Z");
-    const d = new Date("2020-01-01T00:10:30Z");
-    // rounds to nearest minute
-    expect(dateDiff(c, d)).toBe(-10);
   });
 });

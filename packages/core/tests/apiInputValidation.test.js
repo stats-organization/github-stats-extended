@@ -27,4 +27,23 @@ describe("API input validation", () => {
       expect(result.content).toContain("unsafe characters");
     });
   });
+
+  describe("stats: commits_year", () => {
+    // "" and "12" used to parse to NaN and be silently ignored; "1" reached
+    // GitHub as an unparsable DateTime and surfaced as a temporary error.
+    it.each(["", "abc", "1", "12", "20244", "2024.5", "-2024"])(
+      "rejects %j",
+      async (value) => {
+        const result = await statsApi({
+          username: "user",
+          commits_year: value,
+        });
+        expect(result.status).toBe("error - permanent");
+        // the error card html-escapes the quotes around the parameter name
+        expect(result.content).toContain(
+          "Invalid number input for parameter &#34;commits_year&#34;",
+        );
+      },
+    );
+  });
 });
