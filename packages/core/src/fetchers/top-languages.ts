@@ -100,7 +100,7 @@ const fetchTopLanguages = async (
 
   // accumulate size and repo count per language
   const languageMap: Record<string, Lang> = {};
-  let repoCount;
+  let repoCount: number;
   for (const edge of languageEdges) {
     const existing = languageMap[edge.node.name];
 
