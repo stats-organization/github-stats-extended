@@ -4,18 +4,13 @@ import githubUsernameRegex from "github-username-regex";
 
 import { calculateRank } from "../calculateRank.js";
 import { getConfig } from "../common/config.js";
-import type { GitHubDateRange } from "../common/date.js";
 import { getGitHubYearRange, toGitHubDateTime } from "../common/date.js";
 import { CustomError, MissingParamError } from "../common/error.js";
 import { wrapTextMultiline } from "../common/fmt.js";
 import { createGraphQLFetcher } from "../common/http.js";
 import type { GraphQLResponse } from "../common/http.js";
 import { logger } from "../common/log.js";
-import {
-  buildSearchFilter,
-  chunkArray,
-  parseOwnerAffiliations,
-} from "../common/ops.js";
+import { buildSearchFilter, parseOwnerAffiliations } from "../common/ops.js";
 import { retryer } from "../common/retryer.js";
 import { buildContributionsDocument } from "../graphql/contributionsDocument.js";
 import {
@@ -363,21 +358,40 @@ const MS_PER_DAY = 24 * 60 * 60 * 1000;
 /**
  * Ranges per request.
  * Each costs roughly `4 * MAX_REPOSITORIES_LIMIT` nodes,
- * so an unchunked round of a heavily split account would breach GitHub's 500k node ceiling
- * and lose the ranges that had already resolved along with it.
+ * so an unchunked request for a heavily split account would breach GitHub's 500k node ceiling.
+ * GitHub can still reject a request of this size, in which case the chunk size is halved
+ * and the request retried; it is doubled back up to this maximum after every success.
  */
-const MAX_RANGES_PER_REQUEST = 100;
+const MAX_RANGES_PER_REQUEST = 400;
 
 const REPOS_CONTRIBUTED_TO_ERROR =
   "Something went wrong while trying to retrieve the repository contributions data using the GraphQL API.";
+
+/** GraphQL error type GitHub returns when a query exceeds its node/complexity budget. */
+const RESOURCE_LIMITS_EXCEEDED = "RESOURCE_LIMITS_EXCEEDED";
+
+/**
+ * Whether GitHub rejected the query for returning too many results.
+ *
+ * @see https://docs.github.com/en/graphql/overview/rate-limits-and-query-limits-for-the-graphql-api#other-resource-limits
+ *
+ * @param errors Errors from the response envelope.
+ * @returns True if the query has to be retried with fewer ranges.
+ */
+const isResourceLimitsExceeded = (
+  errors: NonNullable<GraphQLResponse<unknown>["data"]["errors"]>,
+): boolean => errors.some((error) => error.type === RESOURCE_LIMITS_EXCEEDED);
 
 /**
  * Count the repositories a user contributed to across every contribution year.
  *
  * `repositoriesContributedTo` spans at most one year,
  * so every year is fetched as an aliased `contributionsCollection(from, to)` in one request and the repos de-duplicated.
+ * Ranges are worked off a queue, `MAX_RANGES_PER_REQUEST` at a time.
  * A range returning `MAX_REPOSITORIES_LIMIT` results may have more,
- * so it is halved and requeried in the next round.
+ * so it is halved and both halves are queued again.
+ * When GitHub rejects a request with `RESOURCE_LIMITS_EXCEEDED`,
+ * the number of ranges per request is halved and the request retried.
  *
  * Whether private contributions are included depends on the used PAT.
  *
@@ -395,97 +409,101 @@ const fetchAllTimeReposContributedTo = async (
   pat: string | null,
 ): Promise<number> => {
   const repos = new Set<string>();
-  let pending = years.map(getGitHubYearRange);
+  const pending = years.map(getGitHubYearRange);
+  // halved when GitHub rejects a request for exceeding its resource limits, increases on success
+  let rangesPerRequest = MAX_RANGES_PER_REQUEST;
 
   while (pending.length > 0) {
-    const nextPending: Array<GitHubDateRange> = [];
-
-    for (const chunk of chunkArray(pending, MAX_RANGES_PER_REQUEST)) {
-      const fetcher = createGraphQLFetcher(
-        buildReposContributedToDocument(chunk, includeOwnRepos),
-        "bearer",
-      );
-      const res = await retryer(
-        fetcher,
-        { login: canonicalUsername, maxRepositories: MAX_REPOSITORIES_LIMIT },
-        pat,
-      );
-      if (res.data.errors) {
-        throw graphqlError(
-          res.data.errors,
-          res.statusText,
-          REPOS_CONTRIBUTED_TO_ERROR,
+    const chunk = pending.slice(0, rangesPerRequest);
+    const fetcher = createGraphQLFetcher(
+      buildReposContributedToDocument(chunk, includeOwnRepos),
+      "bearer",
+    );
+    const res = await retryer(
+      fetcher,
+      { login: canonicalUsername, maxRepositories: MAX_REPOSITORIES_LIMIT },
+      pat,
+    );
+    if (res.data.errors) {
+      if (isResourceLimitsExceeded(res.data.errors) && chunk.length > 1) {
+        rangesPerRequest = Math.floor(chunk.length / 2);
+        logger.log(
+          `Resource limits exceeded, retrying with ${rangesPerRequest} ranges per request...`,
         );
+        continue;
       }
-      const user = res.data.data.user;
-      if (!user) {
+      throw graphqlError(
+        res.data.errors,
+        res.statusText,
+        REPOS_CONTRIBUTED_TO_ERROR,
+      );
+    }
+    const user = res.data.data.user;
+    if (!user) {
+      throw new CustomError(
+        REPOS_CONTRIBUTED_TO_ERROR,
+        CustomError.GRAPHQL_ERROR,
+      );
+    }
+
+    pending.splice(0, chunk.length);
+    rangesPerRequest = Math.min(
+      MAX_RANGES_PER_REQUEST,
+      Math.ceil(rangesPerRequest * 1.25),
+    );
+
+    for (const [index, range] of chunk.entries()) {
+      const rangeResponse = user[`range_${index}`];
+      if (!rangeResponse) {
         throw new CustomError(
           REPOS_CONTRIBUTED_TO_ERROR,
           CustomError.GRAPHQL_ERROR,
         );
       }
 
-      for (const [index, range] of chunk.entries()) {
-        const rangeResponse = user[`range_${index}`];
-        if (!rangeResponse) {
-          throw new CustomError(
-            REPOS_CONTRIBUTED_TO_ERROR,
-            CustomError.GRAPHQL_ERROR,
-          );
-        }
+      const lists = [
+        rangeResponse.commitContributionsByRepository,
+        rangeResponse.issueContributionsByRepository,
+        rangeResponse.pullRequestContributionsByRepository,
+        (rangeResponse.repositoryContributions?.nodes ?? []).filter(
+          (node) => node !== null,
+        ),
+      ];
+      const isSaturated = lists.some(
+        (list) => list.length >= MAX_REPOSITORIES_LIMIT,
+      );
 
-        const lists = [
-          rangeResponse.commitContributionsByRepository,
-          rangeResponse.issueContributionsByRepository,
-          rangeResponse.pullRequestContributionsByRepository,
-          (rangeResponse.repositoryContributions?.nodes ?? []).filter(
-            (node) => node !== null,
-          ),
-        ];
-        const isSaturated = lists.some(
-          (list) => list.length >= MAX_REPOSITORIES_LIMIT,
+      const rangeDays = Math.round(
+        (range.to.getTime() - range.from.getTime()) / MS_PER_DAY,
+      );
+      if (isSaturated && rangeDays >= 2) {
+        const mid = new Date(
+          range.from.getTime() + Math.floor(rangeDays / 2) * MS_PER_DAY,
         );
-
-        const rangeDays = Math.round(
-          (range.to.getTime() - range.from.getTime()) / MS_PER_DAY,
+        logger.log(
+          `Range ${range.from.toISOString()} - ${range.to.toISOString()} is saturated, splitting and retrying...`,
         );
-        // a range of 1 day or less can't be split any further
-        if (isSaturated && rangeDays >= 2) {
-          // every `from` sits on UTC midnight, so the split lands on a day boundary too
-          const mid = new Date(
-            range.from.getTime() + Math.floor(rangeDays / 2) * MS_PER_DAY,
-          );
-          // GitHub only reads the date portion,
-          // so the first half ends 1 second before `mid` to keep the halves from sharing a day
-          nextPending.push(
-            { from: range.from, to: new Date(mid.getTime() - 1000) },
-            { from: mid, to: range.to },
-          );
-          continue;
-        }
-        if (isSaturated) {
-          logger.log(
-            `Range ${range.from.toISOString()} - ${range.to.toISOString()} is saturated but cannot be split further.`,
-          );
-        }
+        // GitHub only reads the date portion,
+        // so the first half ends 1 second before `mid` to keep the halves from sharing a day
+        pending.push(
+          { from: range.from, to: new Date(mid.getTime() - 1000) },
+          { from: mid, to: range.to },
+        );
+        continue;
+      }
+      if (isSaturated) {
+        logger.log(
+          `Range ${range.from.toISOString()} - ${range.to.toISOString()} is saturated but cannot be split further.`,
+        );
+      }
 
-        for (const { repository } of lists.flat()) {
-          const name = repository.nameWithOwner;
-          if (includeOwnRepos || !name.startsWith(`${canonicalUsername}/`)) {
-            repos.add(name);
-          }
+      for (const { repository } of lists.flat()) {
+        const name = repository.nameWithOwner;
+        if (includeOwnRepos || !name.startsWith(`${canonicalUsername}/`)) {
+          repos.add(name);
         }
       }
     }
-
-    // each saturated range pushes both of its halves
-    const saturatedCount = nextPending.length / 2;
-    if (saturatedCount > 0) {
-      logger.log(
-        `found ${saturatedCount} saturated ranges, splitting and retrying...`,
-      );
-    }
-    pending = nextPending;
   }
 
   return repos.size;
