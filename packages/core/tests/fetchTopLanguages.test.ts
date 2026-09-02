@@ -36,15 +36,15 @@ const data_langs = {
           {
             name: "test-repo-2",
             languages: {
-              edges: [{ size: 100, node: { color: "#0f0", name: "HTML" } }],
+              edges: [
+                { size: 100, node: { color: "#0ff", name: "javascript" } },
+              ],
             },
           },
           {
             name: "test-repo-3",
             languages: {
-              edges: [
-                { size: 100, node: { color: "#0ff", name: "javascript" } },
-              ],
+              edges: [{ size: 100, node: { color: "#0f0", name: "HTML" } }],
             },
           },
           {
