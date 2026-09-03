@@ -360,7 +360,7 @@ const MS_PER_DAY = 24 * 60 * 60 * 1000;
  * Each costs roughly `4 * MAX_REPOSITORIES_LIMIT` nodes,
  * so an unchunked request for a heavily split account would breach GitHub's 500k node ceiling.
  * GitHub can still reject a request of this size, in which case the chunk size is halved
- * and the request retried; it is doubled back up to this maximum after every success.
+ * and the request retried; it is increased back up to this maximum after every success.
  */
 const MAX_RANGES_PER_REQUEST = 400;
 
@@ -387,11 +387,12 @@ const isResourceLimitsExceeded = (
  *
  * `repositoriesContributedTo` spans at most one year,
  * so every year is fetched as an aliased `contributionsCollection(from, to)` in one request and the repos de-duplicated.
- * Ranges are worked off a queue, `MAX_RANGES_PER_REQUEST` at a time.
+ * Ranges are worked off a queue, multiple ranges at a time.
  * A range returning `MAX_REPOSITORIES_LIMIT` results may have more,
  * so it is halved and both halves are queued again.
- * When GitHub rejects a request with `RESOURCE_LIMITS_EXCEEDED`,
- * the number of ranges per request is halved and the request retried.
+ * When GitHub rejects a request with `RESOURCE_LIMITS_EXCEEDED` or a timeout,
+ * it is retried with half as many ranges.
+ * When GitHub rejects a request with an empty response, it is retried up to 3 times.
  *
  * Whether private contributions are included depends on the used PAT.
  *
