@@ -330,7 +330,6 @@ const renderWakatimeCard = (
   const langsCount = clampValue(langs_count, 1, langs_count);
 
   const { lightColors, darkColors } = getLightDarkColors(options);
-  const { titleColor, textColor } = lightColors;
 
   const filteredLanguages = languages
     .filter((language) => language.hours || language.minutes)
@@ -452,7 +451,7 @@ const renderWakatimeCard = (
   card.setHideBorder(hide_border);
   card.setHideTitle(hide_title);
   card.setCSS({
-    light: `
+    light: ({ titleColor, textColor }) => `
     ${getStyles({ textColor })}
     @keyframes slideInAnimation {
       from {
@@ -480,14 +479,12 @@ const renderWakatimeCard = (
     }
     .progress-background { fill: ${textColor === titleColor ? "#fff0" /* transparent */ : textColor}; }
     `,
-    dark: darkColors
-      ? `
-      ${getStyles({ textColor: darkColors.textColor })}
-      .lang-name { fill: ${darkColors.textColor} }
-      .lang-progress { fill: ${darkColors.titleColor}; }
-      .progress-background { fill: ${darkColors.textColor === darkColors.titleColor ? "#fff0" /* transparent */ : darkColors.textColor}; }
-    `
-      : null,
+    dark: ({ titleColor, textColor }) => `
+      ${getStyles({ textColor })}
+      .lang-name { fill: ${textColor} }
+      .lang-progress { fill: ${titleColor}; }
+      .progress-background { fill: ${textColor === titleColor ? "#fff0" /* transparent */ : textColor}; }
+    `,
   });
 
   return card.render(`

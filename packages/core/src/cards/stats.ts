@@ -1,6 +1,7 @@
 import { Card } from "../common/Card.js";
 import { I18n } from "../common/I18n.js";
 import { getLightDarkColors } from "../common/color.js";
+import type { CardColors } from "../common/color.js";
 import { CustomError } from "../common/error.js";
 import { icons, rankIcon } from "../common/icons.js";
 import { buildSearchFilter, clampValue } from "../common/ops.js";
@@ -275,7 +276,6 @@ const renderStatsCard = (
   const lheight = parseInt(String(line_height), 10);
 
   const { lightColors, darkColors } = getLightDarkColors(options);
-  const { iconColor, textColor, ringColor } = lightColors;
 
   const apostrophe = /s$/i.test(name.trim()) ? "" : "s";
   const i18n = new I18n({
@@ -538,24 +538,14 @@ const renderStatsCard = (
 
   card.setHideBorder(hide_border);
   card.setHideTitle(hide_title);
-  card.setCSS({
-    light: getStyles({
-      ringColor,
-      textColor,
-      iconColor,
-      show_icons,
-      progress,
-    }),
-    dark: darkColors
-      ? getStyles({
-          ringColor: darkColors.ringColor,
-          textColor: darkColors.textColor,
-          iconColor: darkColors.iconColor,
-          show_icons,
-          progress,
-        })
-      : null,
-  });
+  const cardStyles = ({
+    ringColor,
+    textColor,
+    iconColor,
+  }: CardColors): string =>
+    getStyles({ ringColor, textColor, iconColor, show_icons, progress });
+
+  card.setCSS({ light: cardStyles, dark: cardStyles });
 
   if (disable_animations) {
     card.disableAnimations();

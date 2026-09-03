@@ -54,7 +54,6 @@ const renderGistCard = (
   } = options;
 
   const { lightColors, darkColors } = getLightDarkColors({ ...options, theme });
-  const { textColor, iconColor } = lightColors;
 
   const desc = parseEmojis(description || "No description provided");
 
@@ -151,7 +150,7 @@ const renderGistCard = (
   });
 
   card.setCSS({
-    light: `
+    light: ({ textColor, iconColor }) => `
     .description {
       font: 400 ${DESCRIPTION_FONT_SIZE}px 'Segoe UI', Ubuntu, Sans-Serif;fill: ${textColor};
       ${browser_rendering ? wrappedTextStyles(textColor) : ""}
@@ -159,16 +158,14 @@ const renderGistCard = (
     .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${textColor} }
     .icon { fill: ${iconColor} }
   `,
-    dark: darkColors
-      ? `
+    dark: ({ textColor, iconColor }) => `
       .description {
-        fill: ${darkColors.textColor};
-        ${browser_rendering ? wrappedTextStyles(darkColors.textColor) : ""}
+        fill: ${textColor};
+        ${browser_rendering ? wrappedTextStyles(textColor) : ""}
       }
-      .gray { fill: ${darkColors.textColor} }
-      .icon { fill: ${darkColors.iconColor} }
-    `
-      : null,
+      .gray { fill: ${textColor} }
+      .icon { fill: ${iconColor} }
+    `,
   });
 
   card.setHideBorder(hide_border);

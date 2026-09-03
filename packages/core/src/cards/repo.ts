@@ -327,17 +327,17 @@ const renderRepoCard = (
   card.setHideBorder(hide_border);
   card.setHideTitle(false);
   card.setCSS({
-    light: `
+    light: ({ textColor, iconColor }) => `
     .description {
-      font: 400 ${DESCRIPTION_FONT_SIZE}px 'Segoe UI', Ubuntu, Sans-Serif;fill: ${lightColors.textColor};
-      ${browser_rendering ? wrappedTextStyles(lightColors.textColor) : ""}
+      font: 400 ${DESCRIPTION_FONT_SIZE}px 'Segoe UI', Ubuntu, Sans-Serif;fill: ${textColor};
+      ${browser_rendering ? wrappedTextStyles(textColor) : ""}
     }
-    .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${lightColors.textColor} }
+    .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${textColor} }
     .badge { font: 600 11px 'Segoe UI', Ubuntu, Sans-Serif; }
-    .badge rect { opacity: 0.2; stroke: ${lightColors.textColor} }
-    .badge text { fill: ${lightColors.textColor} }
+    .badge rect { opacity: 0.2; stroke: ${textColor} }
+    .badge text { fill: ${textColor} }
 
-    .stat { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${lightColors.textColor} }
+    .stat { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${textColor} }
     .stagger {
       opacity: 0;
       animation: fadeInAnimation 0.3s ease-in-out forwards;
@@ -345,23 +345,21 @@ const renderRepoCard = (
     .not_bold { font-weight: 400 }
     .bold { font-weight: 700 }
     .icon {
-      fill: ${lightColors.iconColor};
+      fill: ${iconColor};
       display: block;
     }
   `,
-    dark: darkColors
-      ? `
+    dark: ({ textColor, iconColor }) => `
       .description {
-        fill: ${darkColors.textColor};
-        ${browser_rendering ? wrappedTextStyles(darkColors.textColor) : ""}
+        fill: ${textColor};
+        ${browser_rendering ? wrappedTextStyles(textColor) : ""}
       }
-      .gray { fill: ${darkColors.textColor} }
-      .badge rect { stroke: ${darkColors.textColor} }
-      .badge text { fill: ${darkColors.textColor} }
-      .stat { fill: ${darkColors.textColor} }
-      .icon { fill: ${darkColors.iconColor}; }
-    `
-      : null,
+      .gray { fill: ${textColor} }
+      .badge rect { stroke: ${textColor} }
+      .badge text { fill: ${textColor} }
+      .stat { fill: ${textColor} }
+      .icon { fill: ${iconColor}; }
+    `,
   });
 
   return card.render(`

@@ -122,19 +122,16 @@ describe("Card", () => {
   });
 
   it("should render with correct colors", () => {
-    const { titleColor, textColor, iconColor, bgColor, borderColor } =
-      getCardColors({
-        title_color: "f00",
-        icon_color: "0f0",
-        text_color: "00f",
-        bg_color: "fff",
-        theme: "default",
-      });
-
     const card = new Card({
       height: 200,
       colors: {
-        light: { titleColor, textColor, iconColor, bgColor, borderColor },
+        light: getCardColors({
+          title_color: "f00",
+          icon_color: "0f0",
+          text_color: "00f",
+          bg_color: "fff",
+          theme: "default",
+        }),
         dark: null,
       },
     });
@@ -152,19 +149,16 @@ describe("Card", () => {
   });
 
   it("should render gradient backgrounds", () => {
-    const { titleColor, textColor, iconColor, bgColor, borderColor } =
-      getCardColors({
-        title_color: "f00",
-        icon_color: "0f0",
-        text_color: "00f",
-        bg_color: "90,fff,000,f00",
-        theme: "default",
-      });
-
     const card = new Card({
       height: 200,
       colors: {
-        light: { titleColor, textColor, iconColor, bgColor, borderColor },
+        light: getCardColors({
+          title_color: "f00",
+          icon_color: "0f0",
+          text_color: "00f",
+          bg_color: "90,fff,000,f00",
+          theme: "default",
+        }),
         dark: null,
       },
     });
