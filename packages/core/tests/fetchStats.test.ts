@@ -206,7 +206,7 @@ const data_stats_many_years: GraphQLBody<UserInfoQuery> = {
   },
 };
 
-/** GitHub's answer when a query asks for more than it is willing to resolve. */
+/** GitHub's response when a query asks for more than it is willing to resolve. */
 const data_resource_limits_exceeded: GraphQLBody<ReposContributedToQuery> = {
   data: { user: null },
   errors: [
@@ -216,6 +216,10 @@ const data_resource_limits_exceeded: GraphQLBody<ReposContributedToQuery> = {
     },
   ],
 };
+
+/** GitHub's response when a query takes too long. */
+const message_timeout =
+  "<html>\r\n<head><title>502 Bad Gateway</title></head>\r\n<body>\r\n<center><h1>502 Bad Gateway</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n";
 
 const error: GraphQLBody<UserInfoQuery> = {
   data: { user: null },
@@ -676,10 +680,14 @@ describe("Test fetchStats", () => {
    * Mock the contributed-to query to reject requests with more than `maxRanges` ranges,
    * like GitHub does when a query is too big.
    *
-   * @param maxRanges maximum number of accepted ranges.
+   * @param maxRanges Maximum number of accepted ranges.
+   * @param rejection Axios response tuple `[status, body]` returned when the limit is exceeded.
    * @returns Range counts of all contributed-to requests, in order; filled as they arrive.
    */
-  const mockRangeLimit = (maxRanges: number): Array<number> => {
+  const mockRangeLimit = (
+    maxRanges: number,
+    rejection: [number, unknown],
+  ): Array<number> => {
     const allRangeCounts: Array<number> = [];
 
     mock.reset();
@@ -691,7 +699,7 @@ describe("Test fetchStats", () => {
       const rangeCount = (req.query.match(/range_\d+:/g) ?? []).length;
       allRangeCounts.push(rangeCount);
       if (rangeCount > maxRanges) {
-        return [200, data_resource_limits_exceeded];
+        return rejection;
       }
 
       const ranges: QueryUser<ReposContributedToQuery> = {};
@@ -705,7 +713,7 @@ describe("Test fetchStats", () => {
   };
 
   it("should halve ranges when resource limits exceeded, should raise again on success", async () => {
-    const rangeCounts = mockRangeLimit(2);
+    const rangeCounts = mockRangeLimit(2, [200, data_resource_limits_exceeded]);
 
     const stats = await fetchStatsWith({ include_all_time_contribs: true });
 
@@ -714,12 +722,83 @@ describe("Test fetchStats", () => {
   });
 
   it("should throw when a single range already exceeds the resource limits", async () => {
-    const rangeCounts = mockRangeLimit(0);
+    const rangeCounts = mockRangeLimit(0, [200, data_resource_limits_exceeded]);
 
     await expect(
       fetchStatsWith({ include_all_time_contribs: true }),
     ).rejects.toThrow("Resource limits for this query exceeded.");
 
     expect(rangeCounts.at(-1)).toBe(1);
+  });
+
+  it.each([502, 504])(
+    "should halve ranges on %i gateway timeout and raise again on success",
+    async (status) => {
+      const rangeCounts = mockRangeLimit(2, [status, message_timeout]);
+
+      const stats = await fetchStatsWith({ include_all_time_contribs: true });
+
+      expect(stats.allTimeContributedTo).toBe(2);
+      expect(rangeCounts).toEqual([9, 4, 2, 3, 1, 2, 3, 1, 2, 1]);
+    },
+  );
+
+  it.each([502, 504])(
+    "should throw when a single range already returns %i",
+    async (status) => {
+      const rangeCounts = mockRangeLimit(0, [status, message_timeout]);
+
+      await expect(
+        fetchStatsWith({ include_all_time_contribs: true }),
+      ).rejects.toThrow(
+        "Something went wrong while trying to retrieve the repository contributions data using the GraphQL API.",
+      );
+
+      expect(rangeCounts.at(-1)).toBe(1);
+    },
+  );
+
+  it("should retry on empty contributed-to response and succeed within retry limit", async () => {
+    let contributedToCallCount = 0;
+
+    mock.reset();
+    mock.onPost("https://api.github.com/graphql").reply((cfg) => {
+      const req = JSON.parse(cfg.data as string) as { query: string };
+      if (!req.query.includes("userReposContributedTo")) {
+        return [200, data_stats];
+      }
+      contributedToCallCount++;
+      // return empty body for first 3 attempts, then a valid response
+      return contributedToCallCount <= 3
+        ? [200, ""]
+        : [200, data_repos_contributed_to];
+    });
+
+    const stats = await fetchStatsWith({ include_all_time_contribs: true });
+
+    expect(stats.allTimeContributedTo).toBe(3);
+    expect(contributedToCallCount).toBe(4);
+  });
+
+  it("should throw when empty contributed-to responses exhaust retry limit", async () => {
+    let contributedToCallCount = 0;
+
+    mock.reset();
+    mock.onPost("https://api.github.com/graphql").reply((cfg) => {
+      const req = JSON.parse(cfg.data as string) as { query: string };
+      if (!req.query.includes("userReposContributedTo")) {
+        return [200, data_stats];
+      }
+      contributedToCallCount++;
+      return [200, ""];
+    });
+
+    await expect(
+      fetchStatsWith({ include_all_time_contribs: true }),
+    ).rejects.toThrow(
+      "Something went wrong while trying to retrieve the repository contributions data using the GraphQL API.",
+    );
+
+    expect(contributedToCallCount).toBe(4);
   });
 });

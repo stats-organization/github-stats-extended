@@ -412,6 +412,8 @@ const fetchAllTimeReposContributedTo = async (
   const pending = years.map(getGitHubYearRange);
   // halved when GitHub rejects a request for exceeding its resource limits, increases on success
   let rangesPerRequest = MAX_RANGES_PER_REQUEST;
+  let emptyResponseRetries = 0;
+  const MAX_EMPTY_RESPONSE_RETRIES = 3;
 
   while (pending.length > 0) {
     const chunk = pending.slice(0, rangesPerRequest);
@@ -424,11 +426,24 @@ const fetchAllTimeReposContributedTo = async (
       { login: canonicalUsername, maxRepositories: MAX_REPOSITORIES_LIMIT },
       pat,
     );
+    if (res.status === 502 || res.status === 504) {
+      if (chunk.length > 1) {
+        rangesPerRequest = Math.floor(chunk.length / 2);
+        logger.log(
+          `Gateway timeout (${res.status}), retrying with ${rangesPerRequest} range(s) per request...`,
+        );
+        continue;
+      }
+      throw new CustomError(
+        REPOS_CONTRIBUTED_TO_ERROR,
+        CustomError.GRAPHQL_ERROR,
+      );
+    }
     if (res.data.errors) {
       if (isResourceLimitsExceeded(res.data.errors) && chunk.length > 1) {
         rangesPerRequest = Math.floor(chunk.length / 2);
         logger.log(
-          `Resource limits exceeded, retrying with ${rangesPerRequest} ranges per request...`,
+          `Resource limits exceeded, retrying with ${rangesPerRequest} range(s) per request...`,
         );
         continue;
       }
@@ -438,6 +453,20 @@ const fetchAllTimeReposContributedTo = async (
         REPOS_CONTRIBUTED_TO_ERROR,
       );
     }
+    if (typeof res.data !== "object") {
+      if (emptyResponseRetries < MAX_EMPTY_RESPONSE_RETRIES) {
+        emptyResponseRetries++;
+        logger.log(
+          `Empty response from GitHub, retrying (${emptyResponseRetries}/${MAX_EMPTY_RESPONSE_RETRIES})...`,
+        );
+        continue;
+      }
+      throw new CustomError(
+        REPOS_CONTRIBUTED_TO_ERROR,
+        CustomError.GRAPHQL_ERROR,
+      );
+    }
+    emptyResponseRetries = 0;
     const user = res.data.data.user;
     if (!user) {
       throw new CustomError(
