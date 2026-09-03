@@ -28,7 +28,7 @@ jobs:
             --request POST                   # the only thing the endpoint checks
             --location                       # a redirect would otherwise pass the status check
             --max-redirs 5                   # bounded well below curl's default of 50
-            --speed-limit 1 --speed-time 300 # give up after 300s of no traffic
+            --speed-limit 1 --speed-time 360 # give up after 360s of no traffic
             --output response.txt            # keep the body out of the status capture
             --write-out "%{http_code}"       # status is all we capture on stdout
           )
