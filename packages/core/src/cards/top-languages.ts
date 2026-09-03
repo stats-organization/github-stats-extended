@@ -13,7 +13,7 @@ import {
 import type { Lang, TopLangData } from "../fetchers/types.js";
 import { langCardLocales } from "../translations.js";
 
-import type { CommonOptions } from "./common-options.js";
+import type { CommonCardOptions } from "./options.js";
 
 const DEFAULT_CARD_WIDTH = 300;
 const MIN_CARD_WIDTH = 280;
@@ -29,7 +29,8 @@ const DONUT_VERTICAL_LAYOUT_DEFAULT_LANGS_COUNT = 6;
 
 type TopLangLayout = "compact" | "normal" | "donut" | "donut-vertical" | "pie";
 
-interface TopLangOptions extends CommonOptions {
+interface TopLangOptions extends CommonCardOptions {
+  locale: string;
   hide_title: boolean;
   card_width: number;
   hide: Array<string>;

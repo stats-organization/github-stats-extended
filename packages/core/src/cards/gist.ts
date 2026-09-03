@@ -16,7 +16,7 @@ import {
 } from "../common/render.js";
 import type { GistData } from "../fetchers/types.js";
 
-import type { CommonOptions } from "./common-options.js";
+import type { CardOptions, CommonCardOptions } from "./options.js";
 
 const ICON_SIZE = 16;
 const CARD_DEFAULT_WIDTH = 400;
@@ -27,7 +27,7 @@ const DESCRIPTION_FONT_SIZE = 13;
 const DESCRIPTION_LINE_HEIGHT_PX = 16;
 const DESCRIPTION_MAX_LINES = 10;
 
-interface GistCardOptions extends CommonOptions {
+interface GistCardOptions extends CommonCardOptions {
   show_owner: boolean;
   browser_rendering: boolean;
 }
@@ -41,7 +41,7 @@ interface GistCardOptions extends CommonOptions {
  */
 const renderGistCard = (
   gistData: GistData,
-  options: Partial<GistCardOptions> = {},
+  options: CardOptions<GistCardOptions> = {},
 ): string => {
   const { name, nameWithOwner, description, language, starsCount, forksCount } =
     gistData;

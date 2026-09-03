@@ -24,7 +24,6 @@ describe("Test ops.js", () => {
     expect(parseBoolean("1")).toBe(undefined);
     expect(parseBoolean("0")).toBe(undefined);
     expect(parseBoolean("")).toBe(undefined);
-    // @ts-expect-error testing invalid input
     expect(parseBoolean(undefined)).toBe(undefined);
   });
 

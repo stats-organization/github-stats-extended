@@ -18,7 +18,7 @@ import {
 import type { RepositoryData } from "../fetchers/types.js";
 import { repoCardLocales } from "../translations.js";
 
-import type { CommonOptions } from "./common-options.js";
+import type { CommonCardOptions } from "./options.js";
 
 const ICON_SIZE = 16;
 const CARD_DEFAULT_WIDTH = 400;
@@ -27,7 +27,8 @@ const DESCRIPTION_FONT_SIZE = 13;
 const DESCRIPTION_LINE_HEIGHT_PX = 16;
 const DESCRIPTION_MAX_LINES = 3;
 
-interface RepoCardOptions extends CommonOptions {
+interface RepoCardOptions extends CommonCardOptions {
+  locale: string;
   show_owner: boolean;
   browser_rendering: boolean;
   description_lines_count: number;
