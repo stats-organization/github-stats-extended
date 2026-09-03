@@ -166,9 +166,6 @@ importers:
       redux:
         specifier: ^5.0.1
         version: 5.0.1
-      save-svg-as-png:
-        specifier: ^1.4.17
-        version: 1.4.17
       uuid:
         specifier: ^14.0.1
         version: 14.0.1
@@ -3930,9 +3927,6 @@ packages:
 
   satteri@0.9.5:
     resolution: {integrity: sha512-ZuWVl+vnM64y+/TtX8Kosv2c00W+hLQiiwnEL6H0UKVVrxFqMw4D2CJHHQaouVd89OAhtBBfjWLqhKi3TVUV4w==}
-
-  save-svg-as-png@1.4.17:
-    resolution: {integrity: sha512-7QDaqJsVhdFPwviCxkgHiGm9omeaMBe1VKbHySWU6oFB2LtnGCcYS13eVoslUgq6VZC6Tjq/HddBd1K6p2PGpA==}
 
   sax@1.6.1:
     resolution: {integrity: sha512-42tBVwLWnaQvW5zc4HbZrTuWccECCZfBi92FDuwtqxasH+JbPB3/FOKb1m222K42R4WxuxzzMsTswfzgtSu64Q==}
@@ -8778,8 +8772,6 @@ snapshots:
       '@bruits/satteri-wasm32-wasi': 0.9.5
       '@bruits/satteri-win32-arm64-msvc': 0.9.5
       '@bruits/satteri-win32-x64-msvc': 0.9.5
-
-  save-svg-as-png@1.4.17: {}
 
   sax@1.6.1: {}
 
