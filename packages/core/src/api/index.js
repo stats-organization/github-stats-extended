@@ -2,6 +2,7 @@ import { renderStatsCard } from "../cards/stats.js";
 import { findInvalidColorParam, pickColorParams } from "../common/color.js";
 import {
   MissingParamError,
+  describeError,
   retrieveSecondaryMessage,
 } from "../common/error.js";
 import { parseArray, parseBoolean } from "../common/ops.js";
@@ -160,6 +161,7 @@ export default async (
     if (err instanceof Error) {
       return {
         status: "error - temporary",
+        error: describeError(err),
         content: renderError({
           message: err.message,
           secondaryMessage: retrieveSecondaryMessage(err),
