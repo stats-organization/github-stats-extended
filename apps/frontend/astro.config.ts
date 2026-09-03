@@ -107,7 +107,29 @@ export default defineConfig({
     }),
   ],
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [
+      tailwindcss(),
+
+      // The e2e run sets `STUB_CARD_API`: answer the card endpoints here rather than
+      // proxy them to a `pnpm dev:backend` that is not running.
+      !!process.env.STUB_CARD_API && {
+        name: "stub-card-api",
+        // In `configureServer`'s body, so it runs ahead of Vite's proxy middleware.
+        configureServer(server) {
+          server.middlewares.use((req, res, next) => {
+            const pathname = req.url?.split("?")[0] ?? "";
+            if (pathname !== "/api" && !pathname.startsWith("/api/")) {
+              next();
+              return;
+            }
+            res.setHeader("Content-Type", "image/svg+xml");
+            res.end(
+              '<svg xmlns="http://www.w3.org/2000/svg" width="495" height="195"></svg>',
+            );
+          });
+        },
+      },
+    ],
     /*
      * On Vercel the same deployment serves `/api` and `/frontend`, so the docs can reference cards by root-relative path.
      * Locally the two are separate servers, so forward `/api` to `pnpm dev:backend` to keep those paths working.
@@ -124,12 +146,6 @@ export default defineConfig({
           ),
         },
       ],
-    },
-    // The backend code the wizard reuses imports `pg`, which never runs in the browser.
-    build: {
-      rolldownOptions: {
-        external: ["pg"],
-      },
     },
   },
 });
