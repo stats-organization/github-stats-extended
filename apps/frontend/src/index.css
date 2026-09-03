@@ -104,11 +104,18 @@ Override background color in dark mode with GitHub's dark mode background color.
     background-color: color-mix(in oklab, var(--color-error), #f00 40%);
   }
 
-  /* Unscoped, this strips the focus ring from the site's search box. */
-  input:focus,
-  select:focus {
-    outline: 0;
-    border: var(--color-primary) solid 1px;
+  /* daisyUI's disabled border matches its own background and its text sits at 2.5:1. */
+  .input:is(:disabled, [disabled]) {
+    border-color: color-mix(
+      in oklab,
+      var(--color-base-content) 20%,
+      transparent
+    );
+
+    &:is(input),
+    & :is(input) {
+      color: color-mix(in oklab, var(--color-base-content) 65%, transparent);
+    }
   }
 }
 

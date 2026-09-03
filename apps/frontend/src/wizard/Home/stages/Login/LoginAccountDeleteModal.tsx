@@ -1,32 +1,7 @@
-import { useEffect, useRef } from "react";
-import type { JSX, RefObject } from "react";
-import { createPortal } from "react-dom";
+import { useId } from "react";
+import type { JSX } from "react";
 
 import { Button } from "../../../components/Generic/Button";
-
-function useOutsideAlerter(
-  ref: RefObject<HTMLElement | null>,
-  action: () => void,
-) {
-  useEffect(() => {
-    /**
-     * Alert if clicked on outside of element
-     */
-    function handleClickOutside(event: MouseEvent) {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        action();
-      }
-    }
-
-    // Bind the event listener
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      // Unbind the event listener on clean up
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [action, ref]);
-}
 
 interface LoginAccountDeleteModalProps {
   onClose: () => void;
@@ -38,36 +13,44 @@ export function LoginAccountDeleteModal(
 ): JSX.Element {
   const { onConfirm, onClose } = props;
 
-  const wrapperRef = useRef<HTMLDivElement | null>(null);
-  useOutsideAlerter(wrapperRef, onClose);
+  const titleId = useId();
 
-  return createPortal(
-    // `wizard` because this mounts on `body`, outside the element the app's styles are scoped to.
-    <div className="wizard fixed left-0 top-0 w-full h-full bg-black/50 z-50">
-      <div className="w-full h-full flex justify-center items-center">
-        <div
-          className="w-96 p-4 bg-base-100 rounded-sm border-2 border-base-300 text-base-content"
-          ref={wrapperRef}
-        >
-          <p className="mb-1 text-2xl">Delete Account</p>
-          <hr />
-          <br />
-          <p>
-            Are you sure you want to delete your account from GitHub Stats
-            Extended?
-          </p>
-          <br />
-          <div className="flex flex-wrap">
-            <Button variant="primary" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button variant="error" className="ml-auto" onClick={onConfirm}>
-              Delete Account
-            </Button>
-          </div>
+  return (
+    <dialog
+      // React re-attaches an inline ref every render, and reopening a dialog throws.
+      ref={(node) => {
+        if (node !== null && !node.open) {
+          node.showModal();
+        }
+      }}
+      className="modal"
+      aria-labelledby={titleId}
+      onClose={onClose}
+    >
+      <div className="modal-box w-96">
+        <p id={titleId} className="mb-1 text-2xl">
+          Delete Account
+        </p>
+        <hr />
+        <br />
+        <p>
+          Are you sure you want to delete your account from GitHub Stats
+          Extended?
+        </p>
+        <br />
+        <div className="flex flex-wrap">
+          <Button variant="primary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button variant="error" className="ml-auto" onClick={onConfirm}>
+            Delete Account
+          </Button>
         </div>
       </div>
-    </div>,
-    document.body,
+      {/* daisyUI's backdrop: submitting it closes the dialog, so a click outside dismisses. */}
+      <form method="dialog" className="modal-backdrop">
+        <button>Close</button>
+      </form>
+    </dialog>
   );
 }

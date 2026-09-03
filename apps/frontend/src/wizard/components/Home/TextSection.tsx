@@ -1,4 +1,4 @@
-import { clsx } from "clsx";
+import { useId } from "react";
 import type { ClipboardEventHandler, JSX, ReactNode } from "react";
 
 import { useDebouncedField } from "../../hooks/useDebouncedField";
@@ -26,6 +26,7 @@ export function TextSection({
   placeholder,
   onPaste,
 }: TextSectionProps): JSX.Element {
+  const titleId = useId();
   const { inputValue, setInputValue } = useDebouncedField({
     value,
     onValueChange,
@@ -33,14 +34,12 @@ export function TextSection({
   });
 
   return (
-    <Section title={title}>
+    <Section title={title} titleId={titleId}>
       <p>{description}</p>
       <input
+        aria-labelledby={titleId}
         type="text"
-        className={clsx(
-          "border border-base-content/20 rounded px-2 py-1 mt-2 w-3/4 min-w-48 max-w-xl",
-          disabled ? "cursor-not-allowed bg-base-200" : "bg-base-100",
-        )}
+        className="input mt-2 w-3/4 min-w-48 max-w-xl"
         value={inputValue}
         onChange={(e) => {
           setInputValue(e.target.value);

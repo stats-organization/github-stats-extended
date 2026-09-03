@@ -1,3 +1,4 @@
+import { useId } from "react";
 import type { JSX, ReactNode } from "react";
 
 import { useDebouncedField } from "../../hooks/useDebouncedField";
@@ -27,6 +28,7 @@ export function NumericSection({
   disabled = false,
   placeholder,
 }: NumericSectionProps): JSX.Element {
+  const titleId = useId();
   const { inputValue, setInputValue } = useDebouncedField({
     value,
     onValueChange,
@@ -34,11 +36,12 @@ export function NumericSection({
   });
 
   return (
-    <Section title={title}>
+    <Section title={title} titleId={titleId}>
       <p>{description}</p>
       <input
+        aria-labelledby={titleId}
         type="number"
-        className="border border-base-content/20 rounded px-2 py-1 mt-2 w-1/4 bg-base-100"
+        className="input validator mt-2 w-1/4"
         value={inputValue}
         onChange={(e) => {
           setInputValue(e.target.value);
@@ -49,6 +52,10 @@ export function NumericSection({
         disabled={disabled}
         placeholder={placeholder}
       />
+      {/* Hidden until the field is `:user-invalid`, then shown in the error colour. */}
+      <p className="validator-hint">
+        Enter a number between {min} and {max}.
+      </p>
     </Section>
   );
 }

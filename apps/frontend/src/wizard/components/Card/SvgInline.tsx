@@ -4,8 +4,6 @@ import { loadConfigFromEnv } from "@stats-organization/github-readme-stats-core"
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import type { JSX } from "react";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 
 import { setShouldMock } from "../../../axios-override.js";
 import {
@@ -117,13 +115,17 @@ export function SvgInline(props: SvgInlineProps): JSX.Element {
   if (forceLoading || !loaded) {
     if (compact) {
       return (
-        <Skeleton key="compactSkeleton" style={{ paddingBottom: "58%" }} />
+        <div
+          key="compactSkeleton"
+          className="skeleton w-full"
+          style={{ paddingBottom: "58%" }}
+        />
       );
     }
     // maximum dimensions of cards in SelectCard stage
     return (
-      <div className=" w-[450px]">
-        <Skeleton key="skeleton" className="h-[245px]" />
+      <div className="w-[450px]">
+        <div key="skeleton" className="skeleton h-[245px] w-full" />
       </div>
     );
   }

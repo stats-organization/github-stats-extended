@@ -26,7 +26,6 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-icons": "^5.7.0",
-    "react-loading-skeleton": "^3.5.0",
     "react-redux": "^9.3.0",
     "react-spinners": "^0.17.0",
     "react-toastify": "^11.1.0",

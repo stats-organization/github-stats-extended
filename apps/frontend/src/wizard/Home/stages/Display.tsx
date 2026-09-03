@@ -101,7 +101,7 @@ export function DisplayStage({
       </div>
       <div className="w-full lg:w-3/5 md:w-1/2 object-center pt-5 md:pt-0 pl-0 md:pl-5 lg:pl-0">
         <div
-          className="w-full lg:w-3/5 mx-auto flex flex-col justify-center sticky top-32 rounded p-4"
+          className="w-full lg:w-3/5 mx-auto flex flex-col justify-center sticky top-[calc(var(--sl-nav-height)+var(--wizard-progress-height,6rem)+0.5rem)] rounded p-4"
           style={{ background: getCardThemeBackdrop(theme, isDark) }}
         >
           <CardImage
