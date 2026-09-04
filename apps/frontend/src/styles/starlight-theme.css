@@ -20,7 +20,7 @@
 }
 
 /* Prose styles render images as blocks; shrink-wrap any link that wraps one. */
-a:has(> img) {
+.sl-markdown-content a:has(> img) {
   display: inline-block;
 }
 
