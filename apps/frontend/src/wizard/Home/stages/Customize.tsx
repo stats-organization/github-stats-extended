@@ -414,7 +414,7 @@ export function CustomizeStage({
         </div>
       </div>
       <div className="w-full lg:w-3/5 md:w-1/2 object-center pt-5 md:pt-0 pl-0 md:pl-5 lg:pl-0">
-        <div className="w-full lg:w-3/5 mx-auto flex flex-col justify-center sticky top-32">
+        <div className="w-full lg:w-3/5 mx-auto flex flex-col justify-center sticky top-[calc(var(--sl-nav-height)+8.5rem)]">
           <CardImage card={card} stage={2} />
         </div>
       </div>
