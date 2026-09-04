@@ -53,7 +53,7 @@ describe("buildCardUrl", () => {
       "?username=john" +
         "&hide_title=true" +
         // commas are percent-encoded (%2C) now that params go through URLSearchParams
-        "&show=reviews%2Cdiscussions_started%2Cdiscussions_answered%2Cprs_merged%2Cprs_merged_percentage%2Cprs_commented%2Cprs_reviewed%2Cissues_commented%2Ccontributions" +
+        "&show=reviews%2Cdiscussions_started%2Cdiscussions_answered%2Cprs_merged%2Cprs_merged_percentage%2Cprs_commented%2Cprs_reviewed%2Cissues_commented%2Ccontributions%2Call_time_contribs" +
         "&show_icons=true" +
         "&include_all_commits=true",
     );

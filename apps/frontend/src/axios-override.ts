@@ -15,6 +15,7 @@ import commits from "./wizard/mockData/commits.json" with { type: "json" };
 import contributions from "./wizard/mockData/contributions.json" with { type: "json" };
 import gist_graphql from "./wizard/mockData/gist-graphql.json" with { type: "json" };
 import gist_rest from "./wizard/mockData/gist-rest.json" with { type: "json" };
+import reposContributedTo from "./wizard/mockData/repos_contributed_to.json" with { type: "json" };
 import repository from "./wizard/mockData/repository.json" with { type: "json" };
 import reviewedPrs from "./wizard/mockData/reviewed_prs.json" with { type: "json" };
 import topLanguages from "./wizard/mockData/top_languages.json" with { type: "json" };
@@ -109,6 +110,14 @@ axios.defaults.adapter = async (config) => {
     params.variables?.login === DEMO_USER
   ) {
     return createMockResponse(contributions, config);
+  }
+
+  if (
+    config.url === "https://api.github.com/graphql" &&
+    params.query?.includes("query userReposContributedTo(") &&
+    params.variables?.login === DEMO_USER
+  ) {
+    return createMockResponse(reposContributedTo, config);
   }
 
   if (

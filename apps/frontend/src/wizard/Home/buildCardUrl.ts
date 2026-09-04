@@ -54,7 +54,7 @@ export function buildCardUrl(
       }
       if (showAllStats) {
         url = url.show(
-          "reviews,discussions_started,discussions_answered,prs_merged,prs_merged_percentage,prs_commented,prs_reviewed,issues_commented,contributions",
+          "reviews,discussions_started,discussions_answered,prs_merged,prs_merged_percentage,prs_commented,prs_reviewed,issues_commented,contributions,all_time_contribs",
         );
       }
       if (showIcons) {
