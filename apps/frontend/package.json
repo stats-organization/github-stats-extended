@@ -19,7 +19,7 @@
     "@stats-organization/github-readme-stats-backend": "workspace:^",
     "@stats-organization/github-readme-stats-core": "workspace:^",
     "@tailwindcss/vite": "^4.3.3",
-    "astro": "^7.2.3",
+    "astro": "^7.2.9",
     "axios": "catalog:default",
     "axios-cache-interceptor": "^1.12.1",
     "daisyui": "^5.7.22",
