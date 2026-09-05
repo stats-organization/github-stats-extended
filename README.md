@@ -2,10 +2,18 @@
   <img src="docs/appIcon.svg" width="100px" alt="GitHub Stats Extended Logo" />
   <h1>GitHub Stats Extended</h1>
   <p>Dynamically generate GitHub stats for your READMEs.</p>
-<a href="https://github-stats-extended.vercel.app/api?username=anuraghazra"><img src="https://github-stats-extended.vercel.app/api?username=anuraghazra"></a>
+<a href="https://github-stats-extended.vercel.app/api?username=anuraghazra">
+  <picture>
+    <source
+      srcset="https://github-stats-extended.vercel.app/api?username=anuraghazra&theme=dark_github"
+      media="(prefers-color-scheme: dark)"
+    />
+    <img src="https://github-stats-extended.vercel.app/api?username=anuraghazra&theme=light_github" />
+  </picture>
+</a>
 </div>
 
-GitHub-Stats-Extended is the [extended, actively maintained successor](docs/fork.md) of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats). It generates [various stats cards](#card-types) about your GitHub contributions, your top languages and more. You can [customize](#documentation) the cards via multiple parameters.
+GitHub-Stats-Extended is the [extended, actively maintained successor](https://github-stats-extended.vercel.app/frontend/docs/fork/) of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats). It generates [various stats cards](#card-types) about your GitHub contributions, your top languages and more. You can [customize](#documentation) the cards via multiple parameters.
 
 ## Table of Contents
 
@@ -35,29 +43,65 @@ To migrate from [github-readme-stats](https://github.com/anuraghazra/github-read
 + https://github-stats-extended.vercel.app/api?username=octocat&theme=radical
 ```
 
-GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For details see [Compatibility Notes](docs/fork.md#compatibility-notes).
+GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For details see [Compatibility Notes](https://github-stats-extended.vercel.app/frontend/docs/fork/#compatibility-notes).
 
 ## Card Types
 
 - Show your GitHub statistics:
 
-  ![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra)
+  <picture>
+    <source
+      srcset="https://github-stats-extended.vercel.app/api?username=anuraghazra&theme=dark_github"
+      media="(prefers-color-scheme: dark)"
+    />
+    <img src="https://github-stats-extended.vercel.app/api?username=anuraghazra&theme=light_github" alt="Anurag's GitHub stats" />
+  </picture>
 
 - ...your top languages...:
 
-  ![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&langs_count=4)
+  <picture>
+    <source
+      srcset="https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&langs_count=4&theme=dark_github"
+      media="(prefers-color-scheme: dark)"
+    />
+    <img src="https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&langs_count=4&theme=light_github" alt="Top Langs" />
+  </picture>
 
 - ...and development time:
 
-  [![Alan's WakaTime stats](https://github-stats-extended.vercel.app/api/wakatime?username=alan&langs_count=6)](https://wakatime.com/@alan)
+  <a href="https://wakatime.com/@alan">
+    <picture>
+      <source
+        srcset="https://github-stats-extended.vercel.app/api/wakatime?username=alan&langs_count=6&theme=dark_github"
+        media="(prefers-color-scheme: dark)"
+      />
+      <img src="https://github-stats-extended.vercel.app/api/wakatime?username=alan&langs_count=6&theme=light_github" alt="Alan's WakaTime stats" />
+    </picture>
+  </a>
 
 - Pin more than 6 repos in your GitHub profile:
 
-  [![Readme Card](https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats)](https://github.com/anuraghazra/github-readme-stats)
+  <a href="https://github.com/anuraghazra/github-readme-stats">
+    <picture>
+      <source
+        srcset="https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats&theme=dark_github_repocard"
+        media="(prefers-color-scheme: dark)"
+      />
+      <img src="https://github-stats-extended.vercel.app/api/pin/?username=anuraghazra&repo=github-readme-stats&theme=light_github_repocard" alt="Readme Card" />
+    </picture>
+  </a>
 
 - Pin Gists in your GitHub profile:
 
-  [![Gist Card](https://github-stats-extended.vercel.app/api/gist?id=bbfce31e0217a3689c8d961a356cb10d)](https://gist.github.com/Yizack/bbfce31e0217a3689c8d961a356cb10d)
+  <a href="https://gist.github.com/Yizack/bbfce31e0217a3689c8d961a356cb10d">
+    <picture>
+      <source
+        srcset="https://github-stats-extended.vercel.app/api/gist?id=bbfce31e0217a3689c8d961a356cb10d&theme=dark_github_repocard"
+        media="(prefers-color-scheme: dark)"
+      />
+      <img src="https://github-stats-extended.vercel.app/api/gist?id=bbfce31e0217a3689c8d961a356cb10d&theme=light_github_repocard" alt="Gist Card" />
+    </picture>
+  </a>
 
 - Customize all the cards:
 
@@ -65,7 +109,7 @@ GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For 
 
 ## Documentation
 
-The [card wizard](https://github-stats-extended.vercel.app/frontend) offers some essential customization options. For more advanced customization and other project info check out the [advanced documentation](docs/advanced_documentation.md).
+The [card wizard](https://github-stats-extended.vercel.app/frontend) offers some essential customization options. For more advanced customization and other project info check out the [documentation](https://github-stats-extended.vercel.app/frontend/docs/cards/stats/).
 
 ## Acknowledgements
 
