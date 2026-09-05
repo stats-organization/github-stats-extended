@@ -15,7 +15,7 @@ onlyBuiltDependencies:
 
 catalog:
   "@vitest/coverage-v8": 4.1.11
-  axios: 1.18.1
+  axios: ^1.18.1
   jsdom: 30.0.1
   vitest: 4.1.11
 
@@ -29,6 +29,7 @@ overrides:
   # oxc and is what the rest of the repo already resolves to. Drop this once @astrojs/react moves to ^6.
   "@astrojs/react>@vitejs/plugin-react": 6.0.3
   # see https://github.com/stats-organization/github-stats-extended/pull/555
+  axios: 1.18.1
   axios-cache-interceptor: 1.12.1
   astro: 7.2.3
   "@astrojs/markdown-satteri": 0.3.6
