@@ -136,6 +136,26 @@ Click on the deploy button to get started!
 
 Add an SQL database, either through an integration such as ["Nile"](https://vercel.com/marketplace/nile), or by manually setting the environment variable `POSTGRES_URL`.
 
+#### Encrypt the stored access tokens
+
+Set `TOKEN_ENCRYPTION_KEY` to encrypt the GitHub access tokens in `authenticated_users` at rest (AES-256-GCM). Generate it with:
+
+```sh
+openssl rand -base64 32
+```
+
+Keep it in the Vercel environment variables, not in the database. If it is lost, affected users have to log in again.
+
+Existing tokens are encrypted on the user's next login. To encrypt them now, redeploy with the key set, then run against the same database (exits non-zero if a token cannot be read):
+
+```sh
+POSTGRES_URL=… TOKEN_ENCRYPTION_KEY=… pnpm --filter ./apps/backend run encrypt-access-tokens
+```
+
+:::tip[Rotating the key]
+Set `TOKEN_ENCRYPTION_KEY=<new>,<old>` and redeploy: new logins are encrypted with the first key, stored tokens are decrypted with whichever key matches. Run the command above with the same value to re-encrypt everything, then drop the old key.
+:::
+
 #### Use your own OAuth App
 
 [Create your own OAuth App](https://github.com/settings/developers) and set the environment variables `OAUTH_REDIRECT_URI`, `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` on Vercel accordingly.
@@ -171,6 +191,11 @@ GitHub Stats Extended provides several environment variables that can be used to
       <td><code>DELETE_AFTER_HOURS</code></td>
       <td>Sets the duration in hours after which the server stops <a href="/frontend/docs/fork/#improved-performance-and-latency">proactively regenerating</a> a previously requested card if it hasn't been requested again in the meantime. Defaults to 8 days, i.e. 192 hours.</td>
       <td>Any int or float</td>
+    </tr>
+    <tr>
+      <td><code>TOKEN_ENCRYPTION_KEY</code></td>
+      <td>Encrypts the stored GitHub access tokens at rest, see <a href="#encrypt-the-stored-access-tokens">above</a>. Comma-separate several keys to rotate: the first encrypts, all decrypt.</td>
+      <td>One or more 32 byte keys, base64 or hex</td>
     </tr>
     <tr>
       <td><code>WHITELIST</code></td>

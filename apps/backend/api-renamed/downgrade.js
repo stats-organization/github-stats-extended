@@ -38,21 +38,23 @@ export default async (req, res) => {
     return;
   }
 
-  // delete existing app authorization via GitHub API
+  // delete existing app authorization via GitHub API; skipped if the stored token is unreadable
   try {
-    await axios.delete(
-      `https://api.github.com/applications/${process.env.OAUTH_CLIENT_ID}/grant`,
-      {
-        auth: {
-          username: process.env.OAUTH_CLIENT_ID,
-          password: process.env.OAUTH_CLIENT_SECRET,
+    if (userAccess.token !== null) {
+      await axios.delete(
+        `https://api.github.com/applications/${process.env.OAUTH_CLIENT_ID}/grant`,
+        {
+          auth: {
+            username: process.env.OAUTH_CLIENT_ID,
+            password: process.env.OAUTH_CLIENT_SECRET,
+          },
+          data: { access_token: userAccess.token },
+          headers: {
+            Accept: "application/vnd.github+json",
+          },
         },
-        data: { access_token: userAccess.token },
-        headers: {
-          Accept: "application/vnd.github+json",
-        },
-      },
-    );
+      );
+    }
   } catch (err) {
     logger.error(err);
     res.statusCode = 500;
