@@ -88,7 +88,7 @@
     "@testing-library/jest-dom": "7.0.1",
     "@uppercod/css-to-object": "1.1.1",
     "axios-mock-adapter": "2.1.0",
-    "graphql": "17.0.2",
+    "graphql": "16.14.2",
     "js-yaml": "5.4.1",
     "jsdom": "catalog:default",
     "vitest": "catalog:default"
