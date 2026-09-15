@@ -39,6 +39,7 @@ query userInfo(
   $includeDiscussionsAnswers: Boolean!
   $startTime: DateTime = null
   $ownerAffiliations: [RepositoryAffiliation]
+  $includeUserRepositories: Boolean!
 ) {
   user(login: $login) {
     name
@@ -52,6 +53,7 @@ query userInfo(
     repositoriesContributedTo(
       first: 1
       contributionTypes: [COMMIT, ISSUE, PULL_REQUEST, REPOSITORY]
+      includeUserRepositories: $includeUserRepositories
     ) {
       totalCount
     }
@@ -88,5 +90,31 @@ query userInfo(
 fragment YearContributions on ContributionsCollection {
   contributionCalendar {
     totalContributions
+  }
+}
+
+fragment RangeContributionsByRepo on ContributionsCollection {
+  commitContributionsByRepository(maxRepositories: $maxRepositories) {
+    repository {
+      nameWithOwner
+    }
+  }
+  issueContributionsByRepository(maxRepositories: $maxRepositories) {
+    repository {
+      nameWithOwner
+    }
+  }
+  pullRequestContributionsByRepository(maxRepositories: $maxRepositories) {
+    repository {
+      nameWithOwner
+    }
+  }
+  repositoryContributions(first: $maxRepositories)
+    @include(if: $includeOwnRepos) {
+    nodes {
+      repository {
+        nameWithOwner
+      }
+    }
   }
 }

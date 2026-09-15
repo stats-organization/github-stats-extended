@@ -12,7 +12,7 @@ test("selecting 'None' progress style hides the rank circle", async ({
     page.locator("main").getByRole("heading", { level: 1 }),
   ).toContainText("Modify Card Parameters");
 
-  const preview = page.locator("#svgWrapper");
+  const preview = page.locator("#svg-wrapper");
   const rankCircle = preview.locator('[data-testid="rank-circle"]');
 
   // Default "Rank" progress style renders the rank circle.

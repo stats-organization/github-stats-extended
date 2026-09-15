@@ -1,6 +1,7 @@
 import { Card } from "../common/Card.js";
 import { I18n } from "../common/I18n.js";
 import { getLightDarkColors } from "../common/color.js";
+import type { CardColors } from "../common/color.js";
 import { CustomError } from "../common/error.js";
 import { icons, rankIcon } from "../common/icons.js";
 import { buildSearchFilter, clampValue } from "../common/ops.js";
@@ -8,7 +9,7 @@ import { createTextNode, flexLayout, measureText } from "../common/render.js";
 import type { StatsData } from "../fetchers/types.js";
 import { statCardLocales, wakatimeCardLocales } from "../translations.js";
 
-import type { CommonOptions } from "./types.js";
+import type { CommonCardOptions } from "./options.js";
 
 const CARD_MIN_WIDTH = 287;
 const CARD_DEFAULT_WIDTH = 287;
@@ -19,7 +20,8 @@ const RANK_ONLY_CARD_DEFAULT_WIDTH = 290;
 
 type RankIcon = "default" | "github" | "percentile";
 
-interface StatCardOptions extends CommonOptions {
+interface StatCardOptions extends CommonCardOptions {
+  locale: string;
   hide: Array<string>;
   show_icons: boolean;
   hide_title: boolean;
@@ -242,6 +244,7 @@ const renderStatsCard = (
     totalDiscussionsStarted,
     totalDiscussionsAnswered,
     contributedTo,
+    allTimeContributedTo,
     totalPRsAuthored,
     totalPRsCommented,
     totalPRsReviewed,
@@ -274,7 +277,6 @@ const renderStatsCard = (
   const lheight = parseInt(String(line_height), 10);
 
   const { lightColors, darkColors } = getLightDarkColors(options);
-  const { iconColor, textColor, ringColor } = lightColors;
 
   const apostrophe = /s$/i.test(name.trim()) ? "" : "s";
   const i18n = new I18n({
@@ -432,6 +434,15 @@ const renderStatsCard = (
     id: "contribs",
   };
 
+  if (show.includes("all_time_contribs")) {
+    STATS["all_time_contribs"] = {
+      icon: icons.contribs,
+      label: i18n.t("statcard.all-time-contribs"),
+      value: allTimeContributedTo,
+      id: "all_time_contribs",
+    };
+  }
+
   const isLongLocale = locale ? LONG_LOCALES.includes(locale) : false;
 
   // check if all used labels are short
@@ -528,24 +539,14 @@ const renderStatsCard = (
 
   card.setHideBorder(hide_border);
   card.setHideTitle(hide_title);
-  card.setCSS({
-    light: getStyles({
-      ringColor,
-      textColor,
-      iconColor,
-      show_icons,
-      progress,
-    }),
-    dark: darkColors
-      ? getStyles({
-          ringColor: darkColors.ringColor,
-          textColor: darkColors.textColor,
-          iconColor: darkColors.iconColor,
-          show_icons,
-          progress,
-        })
-      : null,
-  });
+  const cardStyles = ({
+    ringColor,
+    textColor,
+    iconColor,
+  }: CardColors): string =>
+    getStyles({ ringColor, textColor, iconColor, show_icons, progress });
+
+  card.setCSS({ light: cardStyles, dark: cardStyles });
 
   if (disable_animations) {
     card.disableAnimations();

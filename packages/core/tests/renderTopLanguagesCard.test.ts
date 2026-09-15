@@ -524,7 +524,7 @@ describe("Test renderTopLanguages", () => {
   it("should render with all the themes", () => {
     Object.entries(themes).forEach(([name, themeData]) => {
       document.body.innerHTML = renderTopLanguages(langs, {
-        theme: name as keyof typeof themes,
+        theme: name,
       });
 
       const styleTag = document.querySelector("style");

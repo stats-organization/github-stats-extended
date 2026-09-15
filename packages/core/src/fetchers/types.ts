@@ -44,6 +44,7 @@ export interface StatsData {
   totalDiscussionsStarted: number;
   totalDiscussionsAnswered: number;
   contributedTo: number;
+  allTimeContributedTo: number;
   totalPRsAuthored: number;
   totalPRsCommented: number;
   totalPRsReviewed: number;

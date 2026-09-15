@@ -1,3 +1,4 @@
+import { useId } from "react";
 import type { JSX } from "react";
 
 import { Select } from "../Generic/Select";
@@ -28,10 +29,13 @@ export function StatsRankSection({
   selectedOption,
   onOptionChange,
 }: StatsRankSectionProps): JSX.Element {
+  const titleId = useId();
+
   return (
-    <Section title="Progress Style">
+    <Section title="Progress Style" titleId={titleId}>
       <p>Select a progress style.</p>
       <Select
+        aria-labelledby={titleId}
         options={options}
         selectedOption={selectedOption}
         onOptionChange={onOptionChange}

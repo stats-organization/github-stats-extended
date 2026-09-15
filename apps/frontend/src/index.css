@@ -29,6 +29,7 @@ Override background color in dark mode with GitHub's dark mode background color.
   --transition-fast: 100ms;
   /* Slower, deliberate fade for large surfaces during a theme switch. */
   --transition-surface: 300ms;
+  --font-size: 16px;
 }
 
 /*
@@ -109,6 +110,28 @@ Override background color in dark mode with GitHub's dark mode background color.
   select:focus {
     outline: 0;
     border: var(--color-primary) solid 1px;
+  }
+
+  /* daisyUI's disabled border matches its own background and its text sits at 2.5:1. */
+  .input:is(:disabled, [disabled]) {
+    border-color: color-mix(
+      in oklab,
+      var(--color-base-content) 20%,
+      transparent
+    );
+
+    &:is(input),
+    & :is(input) {
+      color: color-mix(in oklab, var(--color-base-content) 65%, transparent);
+    }
+  }
+
+  /*
+   * `.validator` makes `:user-valid` fields green. We only want to color the error state,
+   * so restore `--input-color` to the value `.input` uses by default.
+   */
+  .validator:user-valid {
+    --input-color: color-mix(in oklab, var(--color-base-content) 20%, #0000);
   }
 }
 

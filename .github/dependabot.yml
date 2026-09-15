@@ -32,6 +32,12 @@ updates:
         patterns:
           - "vite"
           - "@vitejs/*"
+      astro:
+        patterns:
+          - "astro"
+          - "astro-*"
+          - "@astrojs/*"
+          - "starlight-*"
       tailwind:
         patterns:
           - "tailwindcss"
