@@ -23,6 +23,7 @@ interface TestApiResult {
   error?: {
     type?: string;
     message?: string;
+    secondaryMessage?: string;
   };
   content: string;
 }
@@ -48,6 +49,8 @@ describe("Test describeError", () => {
     ).toStrictEqual({
       type: CustomError.MAX_RETRY,
       message: "Downtime due to GitHub API rate limiting",
+      secondaryMessage:
+        "You can deploy own instance or wait until public will be no longer limited",
     });
   });
 
@@ -55,6 +58,18 @@ describe("Test describeError", () => {
     expect(describeError(new MissingParamError(["username"]))).toStrictEqual({
       message:
         'Missing params "username" make sure you pass the parameters in URL',
+    });
+  });
+
+  it("should return a secondary message when available", () => {
+    expect(
+      describeError(
+        new MissingParamError(["username"], "Specify a GitHub username"),
+      ),
+    ).toStrictEqual({
+      message:
+        'Missing params "username" make sure you pass the parameters in URL',
+      secondaryMessage: "Specify a GitHub username",
     });
   });
 });
@@ -84,6 +99,8 @@ describe("Test API result error contract", () => {
       error: {
         type: CustomError.MAX_RETRY,
         message: "Downtime due to GitHub API rate limiting",
+        secondaryMessage:
+          "You can deploy own instance or wait until public will be no longer limited",
       },
     });
   });

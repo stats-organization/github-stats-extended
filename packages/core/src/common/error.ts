@@ -94,6 +94,7 @@ export interface ErrorDetails {
   /** Error type such as `MAX_RETRY`. Absent when the error has no type. */
   type?: string;
   message: string;
+  secondaryMessage?: string;
 }
 
 /**
@@ -104,11 +105,20 @@ export interface ErrorDetails {
  * `apps/backend/router.js` and external callers keep working.
  *
  * @param err The caught error.
- * @returns The error type and message.
+ * @returns The available error details.
  */
 const describeError = (err: Error): ErrorDetails => {
-  const type = "type" in err && typeof err.type === "string" ? err.type : "";
-  return type ? { type, message: err.message } : { message: err.message };
+  const details: ErrorDetails = { message: err.message };
+  const secondaryMessage = retrieveSecondaryMessage(err);
+
+  if (err instanceof CustomError) {
+    details.type = err.type;
+  }
+  if (secondaryMessage !== undefined) {
+    details.secondaryMessage = secondaryMessage;
+  }
+
+  return details;
 };
 
 export {
