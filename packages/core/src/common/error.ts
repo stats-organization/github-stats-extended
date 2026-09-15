@@ -101,8 +101,6 @@ export interface ErrorDetails {
  * Extract structured details from a caught error.
  *
  * Callers attach the result to API results as an optional `error` field.
- * The `status` value itself stays stable, so exact comparisons in
- * `apps/backend/router.js` and external callers keep working.
  *
  * @param err The caught error.
  * @returns The available error details.
