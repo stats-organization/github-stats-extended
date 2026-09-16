@@ -209,16 +209,7 @@ describe("Test /api/status/up", () => {
     mock.onPost("https://api.github.com/graphql").networkError();
 
     const { req, res } = faker({}, {});
-    // the retryer sleeps through its transient-backoff schedule
-    // (2 PATs x [1s, 2s, 4s] + jitter) before giving up
-    vi.useFakeTimers();
-    try {
-      const pending = up(req, res);
-      await vi.advanceTimersByTimeAsync(20_000);
-      await pending;
-    } finally {
-      vi.useRealTimers();
-    }
+    await up(req, res);
 
     expect(res.setHeader).toHaveBeenCalledWith(
       "Content-Type",
@@ -243,16 +234,7 @@ describe("Test /api/status/up", () => {
     mock.onPost("https://api.github.com/graphql").networkError();
 
     const { req, res } = faker({}, {});
-    // the retryer sleeps through its transient-backoff schedule
-    // (2 PATs x [1s, 2s, 4s] + jitter) before giving up
-    vi.useFakeTimers();
-    try {
-      const pending = up(req, res);
-      await vi.advanceTimersByTimeAsync(20_000);
-      await pending;
-    } finally {
-      vi.useRealTimers();
-    }
+    await up(req, res);
 
     expect(res.setHeader.mock.calls).toEqual([
       ["Content-Type", "application/json"],
