@@ -507,3 +507,13 @@ export const themes = {
  * Name of one of the {@link themes}.
  */
 export type ThemeName = keyof typeof themes;
+
+/**
+ * Checks whether a value is one of the {@link themes}
+ */
+export const isThemeName = (value: unknown): value is ThemeName => {
+  if (typeof value !== "string") {
+    return false;
+  }
+  return value in themes;
+};

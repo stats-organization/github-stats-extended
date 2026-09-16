@@ -1,4 +1,5 @@
 import { clsx } from "clsx";
+import type { Ref } from "react";
 
 import { HOST } from "../../../constants";
 import type { CardUrlBuilder } from "../../models/CardUrl";
@@ -10,6 +11,8 @@ interface CardImageProps {
   stage: number;
   compact?: boolean;
   className?: string;
+  /** Forwarded to `SvgInline`'s shadow-root host. */
+  ref?: Ref<HTMLDivElement>;
 }
 
 export const CardImage = ({
@@ -17,6 +20,7 @@ export const CardImage = ({
   stage,
   compact = false,
   className,
+  ref,
 }: CardImageProps) => {
   // `client=wizard` marks requests coming from the wizard preview.
   const fullImageSrc = card.client("wizard").toApiUrl(HOST);
@@ -28,6 +32,7 @@ export const CardImage = ({
         url={fullImageSrc}
         compact={compact}
         stage={stage}
+        ref={ref}
       />
     </div>
   );

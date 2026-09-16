@@ -30,23 +30,25 @@ Endpoint: `api/top-langs?username=anuraghazra`
 
 You can customize the appearance and behavior of the top languages card using the [common options](/frontend/docs/customization/common-options/) and exclusive options listed in the table below.
 
-| Name                 | Description                                                                                                                                                                                     | Type                            | Default value                                       |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | --------------------------------------------------- |
-| `hide`               | Hides the [specified languages](#hide-individual-languages) from card.                                                                                                                          | string (comma-separated values) | `null`                                              |
-| `hide_title`         | Hides the title of your card.                                                                                                                                                                   | boolean                         | `false`                                             |
-| `layout`             | Switches between five available layouts `normal` & `compact` & `donut` & `donut-vertical` & `pie`.                                                                                              | enum                            | `normal`                                            |
-| `card_width`         | Sets the card's width manually.                                                                                                                                                                 | number                          | `300`                                               |
-| `langs_count`        | Shows more languages on the card, between 1-20.                                                                                                                                                 | integer                         | `5` for `normal` and `donut`, `6` for other layouts |
-| `exclude_repo`       | Excludes specified repositories.                                                                                                                                                                | string (comma-separated values) | `null`                                              |
-| `role`               | Include repositories where the user has one of the specified [roles](https://docs.github.com/en/graphql/reference/repos#enum-repositoryaffiliation) (OWNER, ORGANIZATION_MEMBER, COLLABORATOR). | string (comma-separated values) | `OWNER`                                             |
-| `custom_title`       | Sets a custom title for the card.                                                                                                                                                               | string                          | `Most Used Languages`                               |
-| `disable_animations` | Disables all animations in the card.                                                                                                                                                            | boolean                         | `false`                                             |
-| `prog_bar_bg_color`  | Background color of the bars. (Applies only to `normal` layout.)                                                                                                                                | string (hex color)              | `#ddd`                                              |
-| `hide_progress`      | Uses the compact layout option, hides percentages, and removes the bars.                                                                                                                        | boolean                         | `false`                                             |
-| `hide_values`        | Hides language percentages or bytes while keeping the progress bars or chart.                                                                                                                   | boolean                         | `false`                                             |
-| `size_weight`        | Configures language stats algorithm (see [Language stats algorithm](#language-stats-algorithm)).                                                                                                | integer                         | `1`                                                 |
-| `count_weight`       | Configures language stats algorithm (see [Language stats algorithm](#language-stats-algorithm)).                                                                                                | integer                         | `0`                                                 |
-| `stats_format`       | Switches between two available formats for language's stats `percentages` and `bytes`.                                                                                                          | enum                            | `percentages`                                       |
+| Name                            | Description                                                                                                                                                                                     | Type                            | Default value                                       |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | --------------------------------------------------- |
+| `hide`                          | Hides the [specified languages](#hide-individual-languages) from card.                                                                                                                          | string (comma-separated values) | `null`                                              |
+| `hide_title`                    | Hides the title of your card.                                                                                                                                                                   | boolean                         | `false`                                             |
+| `layout`                        | Switches between five available layouts `normal` & `compact` & `donut` & `donut-vertical` & `pie`.                                                                                              | enum                            | `normal`                                            |
+| `card_width`                    | Sets the card's width manually.                                                                                                                                                                 | number                          | `300`                                               |
+| `langs_count`                   | Shows more languages on the card, between 1-20.                                                                                                                                                 | integer                         | `5` for `normal` and `donut`, `6` for other layouts |
+| `exclude_repo`                  | Excludes specified repositories.                                                                                                                                                                | string (comma-separated values) | `null`                                              |
+| `role`                          | Include repositories where the user has one of the specified [roles](https://docs.github.com/en/graphql/reference/repos#enum-repositoryaffiliation) (OWNER, ORGANIZATION_MEMBER, COLLABORATOR). | string (comma-separated values) | `OWNER`                                             |
+| `custom_title`                  | Sets a custom title for the card.                                                                                                                                                               | string                          | `Most Used Languages`                               |
+| `disable_animations`            | Disables all animations in the card.                                                                                                                                                            | boolean                         | `false`                                             |
+| `prog_bar_bg_color`<sup>1</sup> | Background color of the bars. (Applies only to `normal` layout.)                                                                                                                                | string (hex color)              | `#ddd`                                              |
+| `hide_progress`                 | Uses the compact layout option, hides percentages, and removes the bars.                                                                                                                        | boolean                         | `false`                                             |
+| `hide_values`                   | Hides language percentages or bytes while keeping the progress bars or chart.                                                                                                                   | boolean                         | `false`                                             |
+| `size_weight`                   | Configures language stats algorithm (see [Language stats algorithm](#language-stats-algorithm)).                                                                                                | integer                         | `1`                                                 |
+| `count_weight`                  | Configures language stats algorithm (see [Language stats algorithm](#language-stats-algorithm)).                                                                                                | integer                         | `0`                                                 |
+| `stats_format`                  | Switches between two available formats for language's stats `percentages` and `bytes`.                                                                                                          | enum                            | `percentages`                                       |
+
+<sup>1</sup>: Supports light and dark mode via `prog_bar_bg_color_light` and `prog_bar_bg_color_dark`.
 
 :::caution[Warning]
 Language names and custom title should be URI-escaped, as specified in [Percent Encoding](https://en.wikipedia.org/wiki/Percent-encoding) (i.e: `c++` should become `c%2B%2B`, `jupyter notebook` should become `jupyter%20notebook`, `Most Used Languages` should become `Most%20Used%20Languages`, etc.) You can use [urlencoder.org](https://www.urlencoder.org/) to help you do this automatically.
@@ -159,20 +161,20 @@ You can use the `&stats_format=bytes` option to display the stats in bytes inste
 
 ### Donut Chart layout
 
-[![Top Langs](/api/top-langs?username=anuraghazra&layout=donut)](/api/top-langs?username=anuraghazra&layout=donut)
+![Top Langs](/api/top-langs?username=anuraghazra&layout=donut)
 
 ### Donut Vertical Chart layout
 
-[![Top Langs](/api/top-langs?username=anuraghazra&layout=donut-vertical)](/api/top-langs?username=anuraghazra&layout=donut-vertical)
+![Top Langs](/api/top-langs?username=anuraghazra&layout=donut-vertical)
 
 ### Pie Chart layout
 
-[![Top Langs](/api/top-langs?username=anuraghazra&layout=pie)](/api/top-langs?username=anuraghazra&layout=pie)
+![Top Langs](/api/top-langs?username=anuraghazra&layout=pie)
 
 ### Hidden progress bars
 
-[![Top Langs](/api/top-langs?username=anuraghazra&hide_progress=true)](/api/top-langs?username=anuraghazra&hide_progress=true)
+![Top Langs](/api/top-langs?username=anuraghazra&hide_progress=true)
 
 ### Display bytes instead of percentage
 
-[![Top Langs](/api/top-langs?username=anuraghazra&stats_format=bytes)](/api/top-langs?username=anuraghazra&stats_format=bytes)
+![Top Langs](/api/top-langs?username=anuraghazra&stats_format=bytes)

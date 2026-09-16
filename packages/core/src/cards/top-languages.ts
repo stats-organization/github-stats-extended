@@ -3,6 +3,7 @@ import { I18n } from "../common/I18n.js";
 import { getLightDarkColors, isPrefixedHexColor } from "../common/color.js";
 import { formatBytes } from "../common/fmt.js";
 import { encodeHTML } from "../common/html.js";
+import { DEFAULT_LANG_COLOR } from "../common/languageColors.js";
 import { chunkArray, clampValue, lowercaseTrim } from "../common/ops.js";
 import {
   createProgressNode,
@@ -12,11 +13,10 @@ import {
 import type { Lang, TopLangData } from "../fetchers/types.js";
 import { langCardLocales } from "../translations.js";
 
-import type { CommonOptions } from "./types.js";
+import type { CommonCardOptions } from "./options.js";
 
 const DEFAULT_CARD_WIDTH = 300;
 const MIN_CARD_WIDTH = 280;
-const DEFAULT_LANG_COLOR = "#858585";
 const CARD_PADDING = 25;
 const COMPACT_LAYOUT_BASE_HEIGHT = 90;
 const MAXIMUM_LANGS_COUNT = 20;
@@ -29,7 +29,8 @@ const DONUT_VERTICAL_LAYOUT_DEFAULT_LANGS_COUNT = 6;
 
 type TopLangLayout = "compact" | "normal" | "donut" | "donut-vertical" | "pie";
 
-interface TopLangOptions extends CommonOptions {
+interface TopLangOptions extends CommonCardOptions {
+  locale: string;
   hide_title: boolean;
   card_width: number;
   hide: Array<string>;
@@ -1022,7 +1023,7 @@ const renderTopLanguages = (
   card.setHideBorder(hide_border);
   card.setHideTitle(hide_title);
   card.setCSS({
-    light: `
+    light: ({ textColor, progBarBgColor }) => `
     @keyframes slideInAnimation {
       from {
         width: 0;
@@ -1040,7 +1041,7 @@ const renderTopLanguages = (
       }
     }
     .stat {
-      font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: ${lightColors.textColor};
+      font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: ${textColor};
     }
     @supports(-moz-appearance: auto) {
       /* Selector detects Firefox */
@@ -1049,7 +1050,7 @@ const renderTopLanguages = (
     .bold { font-weight: 700 }
     .lang-name {
       font: 400 11px "Segoe UI", Ubuntu, Sans-Serif;
-      fill: ${lightColors.textColor};
+      fill: ${textColor};
     }
     .stagger {
       opacity: 0;
@@ -1061,15 +1062,13 @@ const renderTopLanguages = (
     .lang-progress{
       animation: growWidthAnimation 0.6s ease-in-out forwards;
     }
-    .progress-background { fill: ${lightColors.progBarBgColor}; }
+    .progress-background { fill: ${progBarBgColor}; }
     `,
-    dark: darkColors
-      ? `
-      .stat { fill: ${darkColors.textColor}; }
-      .lang-name { fill: ${darkColors.textColor}; }
-      .progress-background { fill: ${darkColors.progBarBgColor}; }
-    `
-      : null,
+    dark: ({ textColor, progBarBgColor }) => `
+      .stat { fill: ${textColor}; }
+      .lang-name { fill: ${textColor}; }
+      .progress-background { fill: ${progBarBgColor}; }
+    `,
   });
 
   if (layout === "pie" || layout === "donut-vertical") {

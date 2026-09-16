@@ -25,6 +25,6 @@
   "dependencies": {
     "@stats-organization/github-readme-stats-core": "workspace:^",
     "axios": "catalog:default",
-    "pg": "^8.22.0"
+    "pg": "^8.23.0"
   }
 }

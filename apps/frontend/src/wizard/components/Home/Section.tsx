@@ -4,9 +4,15 @@ import { HiOutlineLightningBolt as LightningIcon } from "react-icons/hi";
 interface SectionProps {
   title: string;
   children: ReactNode;
+  /** Set when a control names itself after the title with `aria-labelledby`. */
+  titleId?: string;
 }
 
-export function Section({ title, children }: SectionProps): JSX.Element {
+export function Section({
+  title,
+  children,
+  titleId,
+}: SectionProps): JSX.Element {
   return (
     <div className="flex relative pb-12">
       <div className="h-full w-10 absolute inset-0 flex items-center justify-center">
@@ -17,7 +23,10 @@ export function Section({ title, children }: SectionProps): JSX.Element {
       </div>
 
       <div className="flex-grow pl-4">
-        <h2 className="font-medium title-font text-sm text-base-content mb-1 tracking-wider">
+        <h2
+          id={titleId}
+          className="font-medium title-font text-sm text-base-content mb-1 tracking-wider"
+        >
           {title}
         </h2>
         {children}

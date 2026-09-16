@@ -79,7 +79,12 @@ export default defineConfig({
     command: "pnpm run dev",
     url: baseURL,
     reuseExistingServer: !process.env["CI"],
-    // `astro dev` detaches itself in an AI-agent shell, which reads as exiting early.
-    env: { ASTRO_DEV_BACKGROUND: "1" },
+    env: {
+      // `astro dev` detaches itself in an AI-agent shell, which reads as exiting early.
+      ASTRO_DEV_BACKGROUND: "1",
+      // `STUB_CARD_API` has the dev server answer `/api` itself, instead of proxying
+      // the card endpoints to a backend that is not running here.
+      STUB_CARD_API: "1",
+    },
   },
 });

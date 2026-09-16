@@ -12,7 +12,7 @@ title: Demo Gallery
 
 ## Showing additional stats
 
-![Anurag's GitHub stats](/api?username=anuraghazra&show_icons=true&show=reviews,discussions_started,discussions_answered,prs_merged,prs_merged_percentage,prs_commented,prs_reviewed,issues_commented)
+![Anurag's GitHub stats](/api?username=anuraghazra&show_icons=true&show=contributions,reviews,discussions_started,discussions_answered,prs_merged,prs_merged_percentage,prs_commented,prs_reviewed,issues_commented)
 
 ## Showing stats for a specific repository
 

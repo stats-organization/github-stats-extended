@@ -3,7 +3,7 @@ import { getLightDarkColors } from "../common/color.js";
 import { kFormatter, wrapTextMultiline } from "../common/fmt.js";
 import { encodeHTML } from "../common/html.js";
 import { icons } from "../common/icons.js";
-import languageColors from "../common/languageColors.json" with { type: "json" };
+import { getLanguageColor } from "../common/languageColors.js";
 import { parseEmojis } from "../common/ops.js";
 import {
   countWrappedLines,
@@ -16,7 +16,7 @@ import {
 } from "../common/render.js";
 import type { GistData } from "../fetchers/types.js";
 
-import type { CommonOptions } from "./types.js";
+import type { CardOptions, CommonCardOptions } from "./options.js";
 
 const ICON_SIZE = 16;
 const CARD_DEFAULT_WIDTH = 400;
@@ -27,7 +27,7 @@ const DESCRIPTION_FONT_SIZE = 13;
 const DESCRIPTION_LINE_HEIGHT_PX = 16;
 const DESCRIPTION_MAX_LINES = 10;
 
-interface GistCardOptions extends CommonOptions {
+interface GistCardOptions extends CommonCardOptions {
   show_owner: boolean;
   browser_rendering: boolean;
 }
@@ -41,7 +41,7 @@ interface GistCardOptions extends CommonOptions {
  */
 const renderGistCard = (
   gistData: GistData,
-  options: Partial<GistCardOptions> = {},
+  options: CardOptions<GistCardOptions> = {},
 ): string => {
   const { name, nameWithOwner, description, language, starsCount, forksCount } =
     gistData;
@@ -54,7 +54,6 @@ const renderGistCard = (
   } = options;
 
   const { lightColors, darkColors } = getLightDarkColors({ ...options, theme });
-  const { textColor, iconColor } = lightColors;
 
   const desc = parseEmojis(description || "No description provided");
 
@@ -122,8 +121,7 @@ const renderGistCard = (
   );
 
   const languageName = language || "Unspecified";
-  const languageColor =
-    (languageColors as Record<string, string>)[languageName] || "#858585";
+  const languageColor = getLanguageColor(languageName);
 
   const svgLanguage = createLanguageNode(languageName, languageColor);
 
@@ -152,7 +150,7 @@ const renderGistCard = (
   });
 
   card.setCSS({
-    light: `
+    light: ({ textColor, iconColor }) => `
     .description {
       font: 400 ${DESCRIPTION_FONT_SIZE}px 'Segoe UI', Ubuntu, Sans-Serif;fill: ${textColor};
       ${browser_rendering ? wrappedTextStyles(textColor) : ""}
@@ -160,16 +158,14 @@ const renderGistCard = (
     .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${textColor} }
     .icon { fill: ${iconColor} }
   `,
-    dark: darkColors
-      ? `
+    dark: ({ textColor, iconColor }) => `
       .description {
-        fill: ${darkColors.textColor};
-        ${browser_rendering ? wrappedTextStyles(darkColors.textColor) : ""}
+        fill: ${textColor};
+        ${browser_rendering ? wrappedTextStyles(textColor) : ""}
       }
-      .gray { fill: ${darkColors.textColor} }
-      .icon { fill: ${darkColors.iconColor} }
-    `
-      : null,
+      .gray { fill: ${textColor} }
+      .icon { fill: ${iconColor} }
+    `,
   });
 
   card.setHideBorder(hide_border);

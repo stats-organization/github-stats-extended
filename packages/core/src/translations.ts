@@ -362,6 +362,9 @@ const statCardLocales = ({
       no: "Bidro til (i fjor)",
       be: "Уклад (за мінулы год)",
     },
+    "statcard.all-time-contribs": {
+      en: "Contributed to (all time)",
+    },
     "statcard.reviews": {
       en: "Total PRs Reviewed",
       ar: "طلبات السحب التي تم مراجعتها",
@@ -511,21 +514,27 @@ const statCardLocales = ({
     },
     "statcard.prs-authored": {
       en: "PRs Created",
+      "zh-tw": "建立的拉取請求",
     },
     "statcard.prs-commented": {
       en: "PRs Commented",
+      "zh-tw": "參與討論的拉取請求",
     },
     "statcard.prs-reviewed": {
       en: "PRs Reviewed",
+      "zh-tw": "審核的拉取請求",
     },
     "statcard.issues-authored": {
       en: "Issues Created",
+      "zh-tw": "建立的議題",
     },
     "statcard.issues-commented": {
       en: "Issues Commented",
+      "zh-tw": "參與討論的議題",
     },
     "statcard.contributions": {
       en: "Total Contributions",
+      "zh-tw": "總貢獻數量",
     },
     "statcard.prs-merged": {
       en: "Total PRs Merged",
@@ -727,18 +736,23 @@ const repoCardLocales = {
   },
   "repocard.prs-authored": {
     en: "my created PRs",
+    "zh-tw": "我所創建的拉取請求",
   },
   "repocard.prs-commented": {
     en: "my commented PRs",
+    "zh-tw": "我所參與的拉取請求",
   },
   "repocard.prs-reviewed": {
     en: "my reviewed PRs",
+    "zh-tw": "我所審核的拉取請求",
   },
   "repocard.issues-authored": {
     en: "my created issues",
+    "zh-tw": "我所創建的議題",
   },
   "repocard.issues-commented": {
     en: "my commented issues",
+    "zh-tw": "我所參與的議題",
   },
 };
 

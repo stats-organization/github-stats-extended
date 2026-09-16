@@ -1,0 +1,1982 @@
+{
+  "data": {
+    "user": {
+      "range_0": {
+        "commitContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/verlet.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/EvolutionAquerium"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/CanvasFun"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Candy.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/anuraghazra.github.io-old"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/VerletDrawing"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/simplerockets"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Atomic.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/classicLogo"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/WebGL.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Loader.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/creativechat"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Electron_experiments"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/verlet_tests"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/NewtonsInterpolation"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "CodingTrain/website-archive"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "CodingTrain/Logo"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/YoutubeDownloader"
+            }
+          }
+        ],
+        "issueContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "CodingTrain/Suggestion-Box"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "microsoft/vscode"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "CodingTrain/Logo"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/verlet.js"
+            }
+          }
+        ],
+        "pullRequestContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "CodingTrain/website-archive"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "CodingTrain/Logo"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/now-github-starter"
+            }
+          }
+        ]
+      },
+      "range_1": {
+        "commitContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/anuraghazra.github.io"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/CanvasFun"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Nothing"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Verly.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/circleci-test"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/ShaderExpo"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/QuickerPoll"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/gatsby-github-issues-blog"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "askbuddie/YTBackup"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/BugVilla"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/EvolutionAquerium"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/anuraghazra.github.io-old-react"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/react-stripe-dropdown"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/GyroDodge"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "CodingTrain/website-archive"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/NikeHyperAce"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "MichaelDeBoey/gatsby-remark-embedder"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/gatsby-plugin-social-banners"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/VerlyRangeSlider"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/facebook-reaction-animation"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/GithubActionsPlayground"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/parasites"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/FlockingBlackHole"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/ParticleBrush"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/2k76"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/WebGL.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Atomic.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/harleydavidson"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Candy.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/weird-hello-worlds"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Slime"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/gatsby-starter-netlify-cms"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/verlet_tests"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "askbuddie/vulnerabilities"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/YouBackup"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "askbuddie/Buddies-movie"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "knaxus/native-javascript"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/LSystemCreator"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Loader.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "sjfricke/awesome-webgl"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/anuraghazra.github.io-old"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "wesbos/dad-jokes"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "CodingTrain/Happy-2019"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "dnesbala/NumberFacts"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "mrsudarshanrai/Web-html-editor"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "soham2008xyz/product-sans"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "expressjs/expressjs.com"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "mrsudarshanrai/Weather-App"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "strateos/react-map-interaction"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "adarshaacharya/NodejsBlogSystem"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/VerletDrawing"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/classicLogo"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "adarshaacharya/Tour360"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/CanvasBalls"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "gatsbyjs/gatsby"
+            }
+          }
+        ],
+        "issueContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "CodingTrain/website-archive"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/gatsby-github-issues-blog"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/GithubActionsPlayground"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/circleci-test"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "MichaelDeBoey/gatsby-remark-embedder"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "CodingTrain/Intro-to-Data-APIs-JS"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "sean-codes/webgl-concepts"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "forem/forem"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "CodingTrain/Suggestion-Box"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "askbuddie/YTBackup"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "casesandberg/react-color"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "askbuddie/invisible-calculator"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Nothing"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "umihico/PortfolioHub"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "askbuddie/vulnerabilities"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "react/yoga"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "RillingDev/ok"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "CodingTrain/project-trainsite"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "rstacruz/cheatsheets"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "nature-of-code/noc-book"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "processing/p5.js-web-editor"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "gkjohnson/webgl-shader-editor"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "bradstiff/react-responsive-pinch-zoom-pan"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "strateos/react-map-interaction"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "YurkaninRyan/tkplaceholder-remark-social-cards"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "askbuddie/AskBuddie-CTF"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "CodingTrain/teamtrees"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "glugmvit/glugmvit.github.io"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "CodingTrain/project-trainsite-frontend"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "gatsbyjs/gatsby"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "processing/p5.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "knaxus/native-javascript"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "rowanfreeman/gatsby-plugin-alias-imports"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "maitraysuthar/rest-api-nodejs-mongodb"
+            }
+          }
+        ],
+        "pullRequestContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "CodingTrain/website-archive"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/CanvasFun"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "MichaelDeBoey/gatsby-remark-embedder"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "gatsbyjs/gatsby"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/gatsby-remark-embedder"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "wesbos/dad-jokes"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/p5.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/circleci-test"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "strateos/react-map-interaction"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "singhshivam/react-external-image"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "mrsudarshanrai/Weather-App"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Verly.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "mrsudarshanrai/Web-html-editor"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "askbuddie/vulnerabilities"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "dnesbala/NumberFacts"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anilrai01/Dice-Game"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "sjfricke/awesome-webgl"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "CodingTrain/Happy-2019"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/anuraghazra.github.io"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/website"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "glugmvit/glugmvit.github.io"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "askbuddie/Buddies-movie"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "ooloth/gatsbytutorials.com"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "adarshaacharya/Tour360"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "processing/p5.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "knaxus/native-javascript"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/npm-expansions"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "hakimel/reveal.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "adarshaacharya/NodejsBlogSystem"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "expressjs/expressjs.com"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "soham2008xyz/product-sans"
+            }
+          }
+        ]
+      },
+      "range_2": {
+        "commitContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/github-readme-stats"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/BugVilla"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/convoychat"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "adaptui/react"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/anuraghazra"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/anuraghazra.github.io"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/design-patterns-everyday"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/micro-open-graph"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/react-folder-tree"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/abell-issues-blog"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "adaptui/react-tailwind"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/covid19-sim"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/graphql-oauth"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "saurabhdaware/text-to-handwriting"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/graphql-jwt-auth-test"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/graphql-oauth-client"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/QuickerPoll"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/code-runner-action"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/CanvasFun"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/csb-git-integration-bug"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "phuocng/1loc"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/VerletDrawing"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "abelljs/abell"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/rust-particles"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "ErikCH/DevYouTubeList"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "chakra-ui/chakra-ui"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "shrijan00003/shrijan00003.github.io"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Atomic.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/VanillaMVC"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/facebook-reaction-animation"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/test-myaction"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "prvnbist/transcode"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "akasrai/sajilo-editor"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/EvolutionAquerium"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "MichaelDeBoey/gatsby-remark-embedder"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/react-stripe-dropdown"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/gatsby-github-issues-blog"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "adobe/react-spectrum"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "ariakit/ariakit"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/ts-string-interpolator"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "abhisheknaiidu/awesome-github-profile-readme"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "EddieHubCommunity/awesome-github-profiles"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "react-hook-form/documentation"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "reactjs/server-components-demo"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "timelessco/react-components-template"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "volantlang/volant-vo"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "codesandbox/codesandbox-client"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/nodejs-dynamic-restapi"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/NikeHyperAce"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "timelessco/swipeable-bottom-sheet"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Verly.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "Fusemachines/covid-nepal-web"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "ABSphreak/ABSphreak"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/AnuReact"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "emmabostian/developer-portfolios"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "knaxus/rest-and-graphql"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "forem/forem"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Candy.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "eggheadio/gatsby-starter-egghead-blog"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "glugmvit/glugmvit.github.io"
+            }
+          }
+        ],
+        "issueContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/github-readme-stats"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "codesandbox/codesandbox-client"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/webhooks-test"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "ariakit/ariakit"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/test-myaction"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "codecrafters-io/build-your-own-x"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "winhtaikaung/react-tiny-link"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "fraserxu/react-dropdown"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "bradgarropy/adobe-lunch"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "rohitjoshi21/CodeJam"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "tommoor/react-emoji-render"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/BugVilla"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "phuocng/1loc"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "denoland/deno"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "showdownjs/showdown"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "preetjdp/Blog"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "saurabhdaware/text-to-handwriting"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "sindresorhus/sindresorhus"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "EddieHubCommunity/EddieBot"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "rishab-sharma/page"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "prykdev/prykdev"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "EddieHubCommunity/awesome-github-profiles"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "ChoukseyKhushbu/Gitzilla"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "technote-space/technote-space"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "adaptui/react"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "adaptui/react-tailwind"
+            }
+          }
+        ],
+        "pullRequestContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "adaptui/react"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/github-readme-stats"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/convoychat"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/BugVilla"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "adaptui/react-tailwind"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/anuraghazra.github.io"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "chakra-ui/chakra-ui"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "phuocng/1loc"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "abelljs/abell"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "leapfrogtechnology/resume-builder"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "ErikCH/DevYouTubeList"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "shrijan00003/shrijan00003.github.io"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "yogain123/AlgoCasts-JS"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "saurabhdaware/text-to-handwriting"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "abhisheknaiidu/awesome-github-profile-readme"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "timelessco/swipeable-bottom-sheet"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "ariakit/ariakit"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "adobe/react-spectrum"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "react-hook-form/documentation"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "bradgarropy/bradgarropy.com"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "reactjs/server-components-demo"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "MichaelDeBoey/gatsby-remark-embedder"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "codesandbox/codesandbox-client"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "akasrai/sajilo-editor"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "codecrafters-io/build-your-own-x"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "timelessco/react-components-template"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "apollographql/apollo"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "Fusemachines/covid-nepal-web"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/react-folder-tree"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "volantlang/volant-vo"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "emmabostian/developer-portfolios"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "prvnbist/transcode"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "expressjs/expressjs.com"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "eggheadio/gatsby-starter-egghead-blog"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/renderless-components"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "forem/forem"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "knaxus/rest-and-graphql"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "ABSphreak/ABSphreak"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "EddieHubCommunity/awesome-github-profiles"
+            }
+          }
+        ]
+      },
+      "range_3": {
+        "commitContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "timelessco/renderlesskit-react-tailwind-docs"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "adaptui/react-tailwind"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/github-readme-stats"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/ToyLang"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/vscode-strip-ts-copy"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/twitter-banner-jokes"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/anuraghazra"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "adaptui/react"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/tw-dynamic-interpolation"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "scriptified/scriptified.dev"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/anuraghazra.github.io"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/peerlist-profile-action"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/CanvasFun"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/react-stripe-dropdown"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "tailwindlabs/tailwindcss-jit"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/convoychat"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Verly.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "razorpay/blade"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "ariakit/ariakit"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "codesandbox/codesandbox-client"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "chakra-ui/chakra-ui"
+            }
+          }
+        ],
+        "issueContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/anuraghazra.github.io"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/github-readme-stats"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "adaptui/react-tailwind"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "razorpay/blade"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/vscode-strip-ts-copy"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "EddieHubCommunity/BioDrop"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "codesandbox/codesandbox-client"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "tailwindlabs/tailwindcss-jit"
+            }
+          }
+        ],
+        "pullRequestContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "adaptui/react-tailwind"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/github-readme-stats"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "adaptui/react"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "timelessco/renderlesskit-react-tailwind-docs"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "razorpay/blade"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/vscode-strip-ts-copy"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/anuraghazra.github.io"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "scriptified/scriptified.dev"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "ariakit/ariakit"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "codesandbox/codesandbox-client"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "tailwindlabs/tailwindcss-jit"
+            }
+          }
+        ]
+      },
+      "range_4": {
+        "commitContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "razorpay/blade"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/test-github-ts"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "statykjs/statyk"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/type-trident"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/typelevel-parser"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/github-readme-stats"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/playground-format-on-save"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/anuraghazra"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/react18-ssr-test"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/go-phyllotaxis"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/test-codesandbox-projects"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/codesandbox-template-astro"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "ts-essentials/ts-essentials"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "ariakit/ariakit"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Verly.js"
+            }
+          }
+        ],
+        "issueContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "razorpay/blade"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "ariakit/ariakit"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "w3c/aria-practices"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "microsoft/fluentui-react-native"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "millsp/ts-toolbelt"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/github-readme-stats"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "statykjs/statyk"
+            }
+          }
+        ],
+        "pullRequestContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "razorpay/blade"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/github-readme-stats"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "statykjs/statyk"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "ts-essentials/ts-essentials"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Verly.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "ariakit/ariakit"
+            }
+          }
+        ]
+      },
+      "range_5": {
+        "commitContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "razorpay/blade"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/verly-cpp"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/ToyLang"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/test-fork-workflow"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/github-readme-stats"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/playground-format-on-save"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/test-githubblock"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/type-trident"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/rn-tabview-test-repro"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/vscode-strip-ts-copy"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/react-folder-tree"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/anuraghazra"
+            }
+          }
+        ],
+        "issueContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "razorpay/blade"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "pomber/stargazer"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "arethetypeswrong/arethetypeswrong.github.io"
+            }
+          }
+        ],
+        "pullRequestContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "razorpay/blade"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/github-readme-stats"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/verly-cpp"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/playground-format-on-save"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/vscode-strip-ts-copy"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/ToyLang"
+            }
+          }
+        ]
+      },
+      "range_6": {
+        "commitContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "razorpay/blade"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/github-readme-stats"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/vscode-strip-ts-copy"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/tslint-plugin-analytics"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Verly.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/verly-cpp"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/blade-checkout-ui-demo"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/playground-format-on-save"
+            }
+          }
+        ],
+        "issueContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "razorpay/blade"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/Verly.js"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "table-library/react-table-library"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "mantinedev/mantine"
+            }
+          }
+        ],
+        "pullRequestContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "razorpay/blade"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/verly-cpp"
+            }
+          }
+        ]
+      },
+      "range_7": {
+        "commitContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "razorpay/blade"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/webgpu-boids"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/github-readme-stats"
+            }
+          }
+        ],
+        "issueContributionsByRepository": [],
+        "pullRequestContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "razorpay/blade"
+            }
+          },
+          {
+            "repository": {
+              "nameWithOwner": "anuraghazra/github-readme-stats"
+            }
+          }
+        ]
+      },
+      "range_8": {
+        "commitContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "razorpay/blade"
+            }
+          }
+        ],
+        "issueContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "razorpay/blade"
+            }
+          }
+        ],
+        "pullRequestContributionsByRepository": [
+          {
+            "repository": {
+              "nameWithOwner": "razorpay/blade"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

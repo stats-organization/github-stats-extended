@@ -60,7 +60,7 @@ describe("Test Render WakaTime Card", () => {
     document.body.innerHTML = renderWakatimeCard(
       {
         ...wakaTimeData.data,
-        languages: undefined,
+        languages: [],
       },
       {},
     );
@@ -73,7 +73,7 @@ describe("Test Render WakaTime Card", () => {
     document.body.innerHTML = renderWakatimeCard(
       {
         ...wakaTimeData.data,
-        languages: undefined,
+        languages: [],
       },
       {
         layout: "compact",
@@ -101,10 +101,13 @@ describe("Test Render WakaTime Card", () => {
 
 describe("test wakatime API", () => {
   it("should return a permanent error for an invalid color parameter", async () => {
-    const result = await wakatimeApi({
-      username: "user",
-      title_color: "not-a-color",
-    });
+    const result = await wakatimeApi(
+      // api handler accepts a partial options object at runtime
+      {
+        username: "user",
+        title_color: "not-a-color",
+      } as Parameters<typeof wakatimeApi>[0],
+    );
 
     expect(result.status).toBe("error - permanent");
     expect(result.content).toContain(

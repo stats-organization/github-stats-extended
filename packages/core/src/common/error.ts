@@ -87,10 +87,43 @@ const retrieveSecondaryMessage = (err: Error): string | undefined => {
     : undefined;
 };
 
+/**
+ * Structured details of a caught error for API results.
+ */
+export interface ErrorDetails {
+  /** Error type such as `MAX_RETRY`. Absent when the error has no type. */
+  type?: string;
+  message: string;
+  secondaryMessage?: string;
+}
+
+/**
+ * Extract structured details from a caught error.
+ *
+ * Callers attach the result to API results as an optional `error` field.
+ *
+ * @param err The caught error.
+ * @returns The available error details.
+ */
+const describeError = (err: Error): ErrorDetails => {
+  const details: ErrorDetails = { message: err.message };
+  const secondaryMessage = retrieveSecondaryMessage(err);
+
+  if (err instanceof CustomError) {
+    details.type = err.type;
+  }
+  if (secondaryMessage !== undefined) {
+    details.secondaryMessage = secondaryMessage;
+  }
+
+  return details;
+};
+
 export {
   CustomError,
   MissingParamError,
   SECONDARY_ERROR_MESSAGES,
   TRY_AGAIN_LATER,
+  describeError,
   retrieveSecondaryMessage,
 };
