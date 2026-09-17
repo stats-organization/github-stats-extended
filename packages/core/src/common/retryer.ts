@@ -5,16 +5,10 @@ import { CustomError } from "./error.js";
 import { logger } from "./log.js";
 
 /**
- * Number of retries after the initial request failed,
- * i.e. a fetcher is called up to `RETRIES + 1` times.
- */
-const RETRIES = 3;
-
-/**
  * Delays (in milliseconds) applied before a retry that was caused by a
  * temporary problem such as a network failure.
  */
-const TEMPORARY_ERROR_RETRY_DELAYS_MS: Array<number> = [100, 1000, 3000];
+const TRANSIENT_RETRY_DELAYS_MS: Array<number> = [100, 1000, 3000];
 
 /**
  * Error-detection fields the retryer inspects to detect rate-limiting and credential failures.
@@ -66,11 +60,11 @@ type FetcherFunction<TData = unknown, TVariables = Record<string, unknown>> = (
 ) => Promise<FetcherResponse<TData>>;
 
 /**
- * Try to execute the fetcher function until it succeeds or {@link RETRIES} retries are exhausted.
+ * Try to execute the fetcher function until it succeeds or retries are exhausted.
  *
  * Rate-limited or rejected credentials are retried immediately with the next
  * available PAT, temporary problems (e.g. network failures) are retried with
- * the same PAT after the delays defined in {@link TEMPORARY_ERROR_RETRY_DELAYS_MS}.
+ * the same PAT after the delays defined in {@link TRANSIENT_RETRY_DELAYS_MS}.
  *
  * @template TData Shape of `response.data` returned by the fetcher.
  * @template TVariables Variables the fetcher accepts.
@@ -95,7 +89,11 @@ const retryer = async <TData = unknown, TVariables = Record<string, unknown>>(
   let patOffset = 0;
   let temporaryFailures = 0;
 
-  for (let attempt = 0; attempt <= RETRIES; attempt++) {
+  for (
+    let attempt = 0;
+    attempt <= TRANSIENT_RETRY_DELAYS_MS.length;
+    attempt++
+  ) {
     if (patOffset >= PATs.length) {
       break;
     }
@@ -122,19 +120,18 @@ const retryer = async <TData = unknown, TVariables = Record<string, unknown>>(
         (!!errors && errorType === "RATE_LIMITED") ||
         /rate limit/i.test(errorMsg);
 
-      if (isRateLimited) {
-        logger.log(`${currentPAT.name} Failed due to rate limiting`);
-        patOffset++;
-      } else {
+      if (!isRateLimited) {
         return response;
       }
+      logger.log(`${currentPAT.name} Failed due to rate limiting`);
+      patOffset++;
     } catch (err) {
       const e = err as { response?: FetcherResponse<TData> };
 
       // network/unexpected error → temporary problem, retry with a delay
       if (!e.response) {
-        if (attempt < RETRIES) {
-          await sleep(TEMPORARY_ERROR_RETRY_DELAYS_MS[temporaryFailures] ?? 0);
+        if (attempt < TRANSIENT_RETRY_DELAYS_MS.length) {
+          await sleep(TRANSIENT_RETRY_DELAYS_MS[temporaryFailures] ?? 0);
           temporaryFailures++;
           continue;
         } else {
@@ -149,13 +146,12 @@ const retryer = async <TData = unknown, TVariables = Record<string, unknown>>(
       const isAccountSuspended =
         message === "Sorry. Your account was suspended.";
 
-      if (isBadCredential || isAccountSuspended) {
-        logger.log(`${currentPAT.name} Failed due to bad credentials`);
-        patOffset++;
-      } else {
+      if (!isBadCredential && !isAccountSuspended) {
         // HTTP error with a response → return it for caller-side handling
         return e.response;
       }
+      logger.log(`${currentPAT.name} Failed due to bad credentials`);
+      patOffset++;
     }
   }
 

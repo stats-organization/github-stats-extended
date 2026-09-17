@@ -54,7 +54,7 @@ const other_error = {
   errors: [
     {
       type: "SOME_ERROR",
-      message: "This is a error",
+      message: "This is an error",
     },
   ],
 };
@@ -167,7 +167,7 @@ describe("Test /api/status/pat-info", () => {
               status: "error",
               error: {
                 type: "SOME_ERROR",
-                message: "This is a error",
+                message: "This is an error",
               },
             },
             PAT_2: {

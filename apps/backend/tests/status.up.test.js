@@ -206,16 +206,24 @@ describe("Test /api/status/up", () => {
   });
 
   it("should throw an error if the request fails", async () => {
-    mock.onPost("https://api.github.com/graphql").networkError();
+    vi.useFakeTimers();
+    try {
+      mock.onPost("https://api.github.com/graphql").networkError();
 
-    const { req, res } = faker({}, {});
-    await up(req, res);
+      const { req, res } = faker({}, {});
+      const result = up(req, res);
 
-    expect(res.setHeader).toHaveBeenCalledWith(
-      "Content-Type",
-      "application/json",
-    );
-    expect(res.send).toHaveBeenCalledWith(false);
+      await vi.runAllTimersAsync();
+      await result;
+
+      expect(res.setHeader).toHaveBeenCalledWith(
+        "Content-Type",
+        "application/json",
+      );
+      expect(res.send).toHaveBeenCalledWith(false);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("should have proper cache when no error is thrown", async () => {
@@ -231,14 +239,22 @@ describe("Test /api/status/up", () => {
   });
 
   it("should have proper cache when error is thrown", async () => {
-    mock.onPost("https://api.github.com/graphql").networkError();
+    vi.useFakeTimers();
+    try {
+      mock.onPost("https://api.github.com/graphql").networkError();
 
-    const { req, res } = faker({}, {});
-    await up(req, res);
+      const { req, res } = faker({}, {});
+      const result = up(req, res);
 
-    expect(res.setHeader.mock.calls).toEqual([
-      ["Content-Type", "application/json"],
-      ["Cache-Control", "no-store"],
-    ]);
+      await vi.runAllTimersAsync();
+      await result;
+
+      expect(res.setHeader.mock.calls).toEqual([
+        ["Content-Type", "application/json"],
+        ["Cache-Control", "no-store"],
+      ]);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
