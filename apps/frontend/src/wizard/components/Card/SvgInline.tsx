@@ -59,7 +59,7 @@ export function SvgInline(props: SvgInlineProps): JSX.Element {
     const loadSvg = async () => {
       const config: Record<string, string | undefined> = {
         FETCH_MULTI_PAGE_STARS: "10",
-        PAT_1: userToken as string, // even if it's null, core's retryer.js sees there is 1 PAT and sets `RETRIES` accordingly
+        PAT_1: userToken as string, // even if it's null, core's retryer.js needs at least one PAT entry to run
       };
 
       loadConfigFromEnv(config);
