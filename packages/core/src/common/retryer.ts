@@ -65,6 +65,7 @@ type FetcherFunction<TData = unknown, TVariables = Record<string, unknown>> = (
  * Rate-limited or rejected credentials are retried immediately with the next
  * available PAT, temporary problems (e.g. network failures) are retried with
  * the same PAT after the delays defined in {@link TRANSIENT_RETRY_DELAYS_MS}.
+ * Both budgets are independent, so retries of one kind never consume the other's.
  *
  * @template TData Shape of `response.data` returned by the fetcher.
  * @template TVariables Variables the fetcher accepts.
@@ -86,20 +87,12 @@ const retryer = async <TData = unknown, TVariables = Record<string, unknown>>(
     throw new CustomError("No GitHub API tokens found", CustomError.NO_TOKENS);
   }
   const startPAT = getRandomInt(PATs.length);
-  let patOffset = 0;
   let temporaryFailures = 0;
 
-  for (
-    let attempt = 0;
-    attempt <= TRANSIENT_RETRY_DELAYS_MS.length;
-    attempt++
-  ) {
-    if (patOffset >= PATs.length) {
-      break;
-    }
-    const currentPAT = PATs[(startPAT + patOffset) % PATs.length];
+  for (let attempt = 0; attempt - temporaryFailures < PATs.length; attempt++) {
+    const currentPAT =
+      PATs[(startPAT + attempt - temporaryFailures) % PATs.length];
     if (!currentPAT) {
-      patOffset++;
       continue;
     }
 
@@ -124,18 +117,17 @@ const retryer = async <TData = unknown, TVariables = Record<string, unknown>>(
         return response;
       }
       logger.log(`${currentPAT.name} Failed due to rate limiting`);
-      patOffset++;
     } catch (err) {
       const e = err as { response?: FetcherResponse<TData> };
 
       // network/unexpected error → temporary problem, retry with a delay
       if (!e.response) {
-        if (attempt < TRANSIENT_RETRY_DELAYS_MS.length) {
+        if (temporaryFailures < TRANSIENT_RETRY_DELAYS_MS.length) {
           await sleep(TRANSIENT_RETRY_DELAYS_MS[temporaryFailures] ?? 0);
           temporaryFailures++;
           continue;
         } else {
-          // retries exhausted → let caller treat as failure
+          // transient retries exhausted → let caller treat as failure
           throw err;
         }
       }
@@ -151,7 +143,6 @@ const retryer = async <TData = unknown, TVariables = Record<string, unknown>>(
         return e.response;
       }
       logger.log(`${currentPAT.name} Failed due to bad credentials`);
-      patOffset++;
     }
   }
 

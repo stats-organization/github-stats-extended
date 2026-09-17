@@ -79,7 +79,7 @@ describe("Test Retryer", () => {
     expect(fetcherFail).toHaveBeenCalledTimes(2);
   });
 
-  it("retryer should not exceed the retry limit when many PATs are available", async () => {
+  it("retryer should try every PAT when they are all rate limited", async () => {
     try {
       loadConfigFromEnv({
         PAT_1: "pat1",
@@ -93,7 +93,7 @@ describe("Test Retryer", () => {
         "Downtime due to GitHub API rate limiting",
       );
 
-      expect(fetcherFail).toHaveBeenCalledTimes(4);
+      expect(fetcherFail).toHaveBeenCalledTimes(5);
     } finally {
       loadConfigFromEnv();
     }
@@ -222,7 +222,7 @@ describe("Test Retryer", () => {
       ) as unknown as Fetcher;
 
       const result = retryer(fetcherRateLimitThenNetworkErrors, {});
-      const assertion = expect(result).rejects.toThrow("Network Error 3");
+      const assertion = expect(result).rejects.toThrow("Network Error 4");
 
       // the rate limited attempt is retried immediately
       await vi.advanceTimersByTimeAsync(99);
@@ -232,10 +232,17 @@ describe("Test Retryer", () => {
       expect(fetcherRateLimitThenNetworkErrors).toHaveBeenCalledTimes(3);
       await vi.advanceTimersByTimeAsync(1000);
       expect(fetcherRateLimitThenNetworkErrors).toHaveBeenCalledTimes(4);
+      await vi.advanceTimersByTimeAsync(3000);
+      expect(fetcherRateLimitThenNetworkErrors).toHaveBeenCalledTimes(5);
 
       await assertion;
       expect(tokens[1]).not.toBe(tokens[0]);
-      expect(tokens.slice(1)).toStrictEqual([tokens[1], tokens[1], tokens[1]]);
+      expect(tokens.slice(1)).toStrictEqual([
+        tokens[1],
+        tokens[1],
+        tokens[1],
+        tokens[1],
+      ]);
     } finally {
       vi.useRealTimers();
     }
