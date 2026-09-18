@@ -136,6 +136,9 @@ Click on the deploy button to get started!
 
 Add an SQL database, either through an integration such as ["Nile"](https://vercel.com/marketplace/nile), or by manually setting the environment variable `POSTGRES_URL`.
 
+#### Increase Vercel's function timeout
+If you handle a large number of requests, the `/api/repeat-recent` endpoint may time out. By default, Vercel limits serverless functions to 5 minutes. You can [increase this limit](https://vercel.com/docs/functions/configuring-functions/duration#dashboard) in Vercel's dashboard. Note that this [requires](https://vercel.com/docs/functions/limitations#max-duration) a "Pro" or "Enterprise" plan.
+
 #### Use your own OAuth App
 
 [Create your own OAuth App](https://github.com/settings/developers) and set the environment variables `OAUTH_REDIRECT_URI`, `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` on Vercel accordingly.
