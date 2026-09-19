@@ -13,7 +13,7 @@ const languageColors: Record<string, string> = languageColorsJson;
  * @returns The language's hex color, or the default gray when it is unknown.
  */
 const getLanguageColor = (name: string): string => {
-  return languageColors[name] ?? DEFAULT_LANG_COLOR;
+  return languageColors[name.toLowerCase()] ?? DEFAULT_LANG_COLOR;
 };
 
 export { DEFAULT_LANG_COLOR, getLanguageColor };
