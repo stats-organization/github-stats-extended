@@ -13,15 +13,15 @@
     "typecheck": "astro sync && tsc -p tsconfig.typecheck.json"
   },
   "dependencies": {
-    "@astrojs/react": "^6.0.4",
+    "@astrojs/react": "^6.0.5",
     "@astrojs/starlight": "^0.41.10",
     "@reduxjs/toolkit": "^2.12.0",
     "@stats-organization/github-readme-stats-core": "workspace:^",
     "@tailwindcss/vite": "^4.3.3",
-    "astro": "^7.2.3",
+    "astro": "^7.3.2",
     "axios": "catalog:default",
-    "axios-cache-interceptor": "^1.12.1",
-    "daisyui": "^5.7.22",
+    "axios-cache-interceptor": "^1.12.3",
+    "daisyui": "^5.7.37",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-icons": "^5.7.0",
@@ -32,7 +32,7 @@
     "uuid": "^14.0.2"
   },
   "devDependencies": {
-    "@astrojs/markdown-remark": "7.2.3",
+    "@astrojs/markdown-remark": "7.3.1",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "clsx": "2.1.1",
