@@ -78,7 +78,7 @@ export default async ({
         card_width: parseInt(card_width, 10),
         hide: parseArray(hide),
         line_height,
-        hide_progress,
+        hide_progress: parseBoolean(hide_progress),
         border_radius,
         locale: locale ? locale.toLowerCase() : null,
         layout,

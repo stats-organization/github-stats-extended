@@ -186,7 +186,7 @@ const createTextNode = ({
 
   const staggerDelay = (index + 3) * 150;
   const cardProgress = hideProgress
-    ? null
+    ? ""
     : createProgressNode({
         x: 110,
         y: 4,
@@ -203,7 +203,7 @@ const createTextNode = ({
         x="${hideProgress ? HIDDEN_PROGRESSBAR_PADDING : PROGRESSBAR_PADDING + progressBarWidth}"
         y="12.5"
       >${encodeHTML(value)}</text>
-      ${String(cardProgress)}
+      ${cardProgress}
     </g>
   `;
 };
