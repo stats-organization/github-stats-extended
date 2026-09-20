@@ -5,15 +5,15 @@
   "packageManager": "pnpm@10.34.5+sha512.a4ee05f2f73658255bd6a89859c065a45c28a57daefae2c893a168ee2b73168c37b91e83e57ea67654ad03f03031746430e8bce38e362e042605fb8abc80192e",
   "devDependencies": {
     "@eslint-react/eslint-plugin": "5.19.0",
-    "@eslint/compat": "2.1.0",
+    "@eslint/compat": "2.1.1",
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.63.0",
     "@types/node": "24.13.3",
     "@vitest/coverage-v8": "catalog:default",
-    "eslint": "10.9.1",
+    "eslint": "10.10.0",
     "eslint-import-resolver-typescript": "4.4.5",
     "eslint-plugin-import-x": "4.17.1",
-    "eslint-plugin-jsdoc": "64.2.1",
+    "eslint-plugin-jsdoc": "64.3.10",
     "globals": "17.12.0",
     "husky": "9.1.7",
     "knip": "6.35.1",
@@ -21,7 +21,7 @@
     "prettier": "3.9.6",
     "turbo": "2.10.12",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.68.0",
+    "typescript-eslint": "8.70.0",
     "vitest": "catalog:default"
   },
   "scripts": {
