@@ -117,8 +117,8 @@ importers:
         specifier: ^6.0.5
         version: 6.0.5(@types/node@24.13.4)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(esbuild@0.28.2)(jiti@2.7.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(yaml@2.9.0)
       '@astrojs/starlight':
-        specifier: ^0.41.10
-        version: 0.41.10(@astrojs/markdown-remark@7.2.3)(astro@7.2.3(@astrojs/markdown-remark@7.2.3)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(yaml@2.9.0))(typescript@6.0.3)
+        specifier: ^0.41.11
+        version: 0.41.11(@astrojs/markdown-remark@7.2.3)(astro@7.2.3(@astrojs/markdown-remark@7.2.3)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(yaml@2.9.0))(typescript@6.0.3)
       '@reduxjs/toolkit':
         specifier: ^2.12.0
         version: 2.12.0(react-redux@9.3.0(@types/react@19.3.0)(react@19.3.0)(redux@5.0.1))(react@19.3.0)
@@ -182,7 +182,7 @@ importers:
         version: 30.0.1
       starlight-links-validator:
         specifier: 0.25.3
-        version: 0.25.3(@astrojs/starlight@0.41.10(@astrojs/markdown-remark@7.2.3)(astro@7.2.3(@astrojs/markdown-remark@7.2.3)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(yaml@2.9.0))(typescript@6.0.3))(astro@7.2.3(@astrojs/markdown-remark@7.2.3)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(yaml@2.9.0))
+        version: 0.25.3(@astrojs/starlight@0.41.11(@astrojs/markdown-remark@7.2.3)(astro@7.2.3(@astrojs/markdown-remark@7.2.3)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(yaml@2.9.0))(typescript@6.0.3))(astro@7.2.3(@astrojs/markdown-remark@7.2.3)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(yaml@2.9.0))
       tailwindcss:
         specifier: 4.3.3
         version: 4.3.3
@@ -366,8 +366,8 @@ packages:
   '@astrojs/sitemap@3.7.3':
     resolution: {integrity: sha512-f8euLVsyeAmAkSm/1M2Kb8sL8byQmfgbvBNaHFItCheTj/IpiJYSEWVcqDHZ/yEHxiS7+w87mQkzwZaPHmk5GA==}
 
-  '@astrojs/starlight@0.41.10':
-    resolution: {integrity: sha512-xE+OO2zzJkHPzc+giuFj+1c0sYw3//goo31PEksguNTd3XpXvV7TaJ0TzQzBUSCxYtBwWjAPkJfqR2W4aMQdhQ==}
+  '@astrojs/starlight@0.41.11':
+    resolution: {integrity: sha512-hM95Mbsl4l60SBwaNQA/HTxpOLGfeB5EfR9qY3kr0SsAVKUspCssjO0RVBsLiPAE6EA5xuORcCoz/Q6DTX+MuQ==}
     peerDependencies:
       '@astrojs/markdown-remark': ^7.2.0
       astro: 7.2.3
@@ -4733,7 +4733,7 @@ snapshots:
       stream-replace-string: 2.0.0
       zod: 4.5.4
 
-  '@astrojs/starlight@0.41.10(@astrojs/markdown-remark@7.2.3)(astro@7.2.3(@astrojs/markdown-remark@7.2.3)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(yaml@2.9.0))(typescript@6.0.3)':
+  '@astrojs/starlight@0.41.11(@astrojs/markdown-remark@7.2.3)(astro@7.2.3(@astrojs/markdown-remark@7.2.3)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(yaml@2.9.0))(typescript@6.0.3)':
     dependencies:
       '@astrojs/markdown-satteri': 0.3.6
       '@astrojs/mdx': 7.0.8(@astrojs/markdown-satteri@0.3.6)(astro@7.2.3(@astrojs/markdown-remark@7.2.3)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(yaml@2.9.0))
@@ -8852,10 +8852,10 @@ snapshots:
 
   stackback@0.0.2: {}
 
-  starlight-links-validator@0.25.3(@astrojs/starlight@0.41.10(@astrojs/markdown-remark@7.2.3)(astro@7.2.3(@astrojs/markdown-remark@7.2.3)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(yaml@2.9.0))(typescript@6.0.3))(astro@7.2.3(@astrojs/markdown-remark@7.2.3)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(yaml@2.9.0)):
+  starlight-links-validator@0.25.3(@astrojs/starlight@0.41.11(@astrojs/markdown-remark@7.2.3)(astro@7.2.3(@astrojs/markdown-remark@7.2.3)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(yaml@2.9.0))(typescript@6.0.3))(astro@7.2.3(@astrojs/markdown-remark@7.2.3)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(yaml@2.9.0)):
     dependencies:
       '@astrojs/markdown-satteri': 0.3.6
-      '@astrojs/starlight': 0.41.10(@astrojs/markdown-remark@7.2.3)(astro@7.2.3(@astrojs/markdown-remark@7.2.3)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(yaml@2.9.0))(typescript@6.0.3)
+      '@astrojs/starlight': 0.41.11(@astrojs/markdown-remark@7.2.3)(astro@7.2.3(@astrojs/markdown-remark@7.2.3)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(yaml@2.9.0))(typescript@6.0.3)
       '@types/picomatch': 4.0.3
       astro: 7.2.3(@astrojs/markdown-remark@7.2.3)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(yaml@2.9.0)
       github-slugger: 2.0.0
