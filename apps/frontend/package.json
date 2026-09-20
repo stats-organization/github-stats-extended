@@ -20,7 +20,7 @@
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.2",
     "axios": "catalog:default",
-    "axios-cache-interceptor": "^1.12.3",
+    "axios-cache-interceptor": "^1.12.1",
     "daisyui": "^5.7.37",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
