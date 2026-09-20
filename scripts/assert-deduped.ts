@@ -3,13 +3,7 @@ import fs from "fs";
 // Packages held at a single version by an override in pnpm-workspace.yaml.
 // Keep in sync with that block:
 // fails if a duplicate returns, or if the package is gone and the entry is stale.
-const SINGLE_VERSION: Array<string> = [
-  "lightningcss",
-  "axios",
-  "axios-cache-interceptor",
-  "astro",
-  "@astrojs/markdown-satteri",
-];
+const SINGLE_VERSION: Array<string> = ["lightningcss"];
 
 const lockfile = fs.readFileSync("pnpm-lock.yaml", "utf8").split("\n");
 

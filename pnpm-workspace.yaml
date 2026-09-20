@@ -28,9 +28,6 @@ overrides:
   # pulls in semver@6.3.1 — rejected by `trustPolicy: no-downgrade`. Version 6 dropped Babel for
   # oxc and is what the rest of the repo already resolves to. Drop this once @astrojs/react moves to ^6.
   "@astrojs/react>@vitejs/plugin-react": 6.0.3
-  # see https://github.com/stats-organization/github-stats-extended/pull/555
-#  astro: 7.2.3
-#  "@astrojs/markdown-satteri": 0.3.6
 
 # Deliberately stricter than pnpm 11's 1440 default (7 days vs 1)
 minimumReleaseAge: 10080
