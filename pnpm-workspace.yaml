@@ -28,6 +28,8 @@ overrides:
   # pulls in semver@6.3.1 — rejected by `trustPolicy: no-downgrade`. Version 6 dropped Babel for
   # oxc and is what the rest of the repo already resolves to. Drop this once @astrojs/react moves to ^6.
   "@astrojs/react>@vitejs/plugin-react": 6.0.3
+  # zod 4.6.2 leads to type errors being detected in starlight
+  zod: 4.6.1
   # see https://github.com/stats-organization/github-stats-extended/pull/555
   axios: 1.18.1
   axios-cache-interceptor: 1.12.1
