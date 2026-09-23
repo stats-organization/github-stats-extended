@@ -13,7 +13,7 @@ Every card accepts the options below, on top of the exclusive options listed on 
 | `bg_color`<sup>1</sup>     | Card's background color.                                                                                                   | string (hex color or a gradient in the form of _angle,start,end_) | `fffefe`      |
 | `hide_border`              | Hides the card's border.                                                                                                   | boolean                                                           | `false`       |
 | `theme`<sup>1</sup>        | Name of the theme, choose from [all available themes](/frontend/docs/customization/themes/).                               | enum                                                              | `default`     |
-| `cache_seconds`            | Sets the cache header manually (min: 21600, max: 86400).                                                                   | integer                                                           | `21600`       |
+| `cache_seconds`            | Sets the cache header manually (min: 21600, max: 86400). This setting is only respected on self-hosted instances!          | integer                                                           | `21600`       |
 | `locale`                   | Sets the language in the card, you can check full list of available locales [here](/frontend/docs/customization/locales/). | enum                                                              | `en`          |
 | `border_radius`            | Corner rounding on the card.                                                                                               | number                                                            | `4.5`         |
 
