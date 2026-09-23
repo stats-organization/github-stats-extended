@@ -84,7 +84,7 @@
     "@graphql-codegen/typescript": "6.1.0",
     "@graphql-codegen/typescript-operations": "6.1.6",
     "@octokit/graphql-schema": "15.26.1",
-    "@testing-library/dom": "10.4.1",
+    "@testing-library/dom": "10.4.2",
     "@testing-library/jest-dom": "7.0.1",
     "@uppercod/css-to-object": "1.1.1",
     "axios-mock-adapter": "2.1.0",
