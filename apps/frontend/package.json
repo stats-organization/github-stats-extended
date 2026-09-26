@@ -21,7 +21,7 @@
     "astro": "^7.2.3",
     "axios": "catalog:default",
     "axios-cache-interceptor": "^1.12.1",
-    "daisyui": "^5.7.37",
+    "daisyui": "^5.7.42",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-icons": "^5.7.0",
