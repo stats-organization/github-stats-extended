@@ -54,7 +54,9 @@ GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For 
 - **Free tier**: includes a subtle watermark
 - **Premium tier** ($1 one-time): removes watermark + unlocks 6 premium themes
 - No build step, no token required — just copy-paste the markdown
-- Live API at `https://stats.astraintelligence.space/?username=YOUR_USERNAME`
+- Live API at `http://167.233.135.161:8083/?username=YOUR_USERNAME` (free, no signup)
+
+> **Note:** A custom domain is being set up — the numeric address works now
 
 ## Card Types
 
