@@ -45,6 +45,17 @@ To migrate from [github-readme-stats](https://github.com/anuraghazra/github-read
 
 GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For details see [Compatibility Notes](https://github-stats-extended.vercel.app/frontend/docs/fork/#compatibility-notes).
 
+### Alternative Tools & Services
+
+**GitHub Stats Card** ([try it](https://astra-intelligence.github.io/github-stats-card/)) — A lighter alternative that generates stats cards without needing a Vercel deploy. Features:
+
+- SVG cards with stars, languages, followers, and repos
+- 8+ curated themes (dark/light, gradient accents)
+- **Free tier**: includes a subtle watermark
+- **Premium tier** ($1 one-time): removes watermark + unlocks 6 premium themes
+- No build step, no token required — just copy-paste the markdown
+- Live API at `https://stats.astraintelligence.space/?username=YOUR_USERNAME`
+
 ## Card Types
 
 - Show your GitHub statistics:
