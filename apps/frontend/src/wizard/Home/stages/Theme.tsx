@@ -37,7 +37,7 @@ const forPicker = (names: ReadonlyArray<ThemeName>) =>
 // the stats, top languages and WakaTime cards. Each side offers only its own
 // variant, so the theme Home.tsx starts on is always one of the entries here.
 //
-// Keep in sync with `generateTable` in `packages/core/scripts/generate-theme-readme.js`,
+// Keep in sync with `generateTable` in `scripts/generate-theme-readme.ts`,
 // which splits the theme README tables by the same rule.
 const repoCardThemes = forPicker(
   allThemeNames.filter(

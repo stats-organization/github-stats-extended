@@ -5,7 +5,7 @@ on:
       - master
     paths:
       - "packages/core/src/themes/index.ts"
-      - "scripts/generate-theme-readme.js"
+      - "scripts/generate-theme-readme.ts"
   workflow_dispatch:
   schedule:
     #        ┌───────────── minute (0 - 59)
