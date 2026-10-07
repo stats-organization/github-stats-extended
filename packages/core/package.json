@@ -80,15 +80,15 @@
     "generate-language-colors": "node scripts/generate-language-colors"
   },
   "devDependencies": {
-    "@graphql-codegen/core": "6.2.0",
+    "@graphql-codegen/core": "6.2.1",
     "@graphql-codegen/typescript": "6.1.0",
-    "@graphql-codegen/typescript-operations": "6.1.6",
+    "@graphql-codegen/typescript-operations": "6.1.9",
     "@octokit/graphql-schema": "15.26.1",
     "@testing-library/dom": "10.4.1",
     "@testing-library/jest-dom": "7.0.1",
     "@uppercod/css-to-object": "1.1.1",
     "axios-mock-adapter": "2.1.0",
-    "graphql": "16.14.2",
+    "graphql": "17.0.2",
     "js-yaml": "5.4.1",
     "jsdom": "catalog:default",
     "vitest": "catalog:default"
