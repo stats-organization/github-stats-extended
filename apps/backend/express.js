@@ -1,8 +1,23 @@
+import path from "path";
+import { fileURLToPath } from "url";
+
 import express from "express";
 
 import router from "./router.js";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
+
+app.get("/", (req, res) => {
+  res.redirect("/frontend/docs/");
+});
+
+app.use(
+  "/frontend",
+  express.static(path.join(__dirname, "../frontend/build"), {
+    maxAge: "360000",
+  }),
+);
 
 app.use((req, res) => {
   /*

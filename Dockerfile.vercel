@@ -1,0 +1,37 @@
+# --- Build stage ---
+
+FROM node:24-slim AS build
+RUN corepack enable
+WORKDIR /app
+
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+COPY packages/core/package.json packages/core/
+COPY apps/backend/package.json apps/backend/
+COPY apps/frontend/package.json apps/frontend/
+
+RUN pnpm install --frozen-lockfile
+
+COPY . .
+RUN pnpm run build:packages
+RUN pnpm run build:frontend
+
+# --- Production stage ---
+
+FROM node:24-slim
+RUN corepack enable
+WORKDIR /app
+
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+COPY packages/core/package.json packages/core/
+COPY apps/backend/package.json apps/backend/
+COPY apps/frontend/package.json apps/frontend/
+
+RUN pnpm install --frozen-lockfile --prod
+
+COPY --from=build /app/packages/core/build/ packages/core/build/
+COPY --from=build /app/apps/frontend/build/ apps/frontend/build/
+COPY apps/backend/ apps/backend/
+
+ENV PORT=80
+EXPOSE 80
+CMD ["node", "apps/backend/express.js"]

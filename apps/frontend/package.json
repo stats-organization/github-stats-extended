@@ -12,16 +12,21 @@
     "lint": "astro sync && eslint",
     "typecheck": "astro sync && tsc -p tsconfig.typecheck.json"
   },
-  "dependencies": {
+  "devDependencies": {
+    "@astrojs/markdown-remark": "7.2.4",
     "@astrojs/react": "^6.0.5",
     "@astrojs/starlight": "^0.41.11",
     "@reduxjs/toolkit": "^2.12.0",
     "@stats-organization/github-readme-stats-core": "workspace:^",
     "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
     "astro": "^7.2.3",
     "axios": "catalog:default",
     "axios-cache-interceptor": "^1.12.1",
+    "clsx": "2.1.1",
     "daisyui": "^5.7.37",
+    "jsdom": "catalog:default",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-icons": "^5.7.0",
@@ -29,16 +34,9 @@
     "react-spinners": "^0.17.1",
     "react-toastify": "^11.1.0",
     "redux": "^5.0.1",
-    "uuid": "^14.0.2"
-  },
-  "devDependencies": {
-    "@astrojs/markdown-remark": "7.2.4",
-    "@types/react": "19.3.0",
-    "@types/react-dom": "19.3.0",
-    "clsx": "2.1.1",
-    "jsdom": "catalog:default",
     "starlight-links-validator": "0.25.3",
     "tailwindcss": "4.3.3",
+    "uuid": "^14.0.2",
     "vitest": "catalog:default"
   },
   "browserslist": {

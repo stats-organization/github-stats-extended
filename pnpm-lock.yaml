@@ -95,6 +95,9 @@ importers:
       axios:
         specifier: 1.18.1
         version: 1.18.1
+      express:
+        specifier: 5.2.1
+        version: 5.2.1
       pg:
         specifier: ^8.23.0
         version: 8.23.0
@@ -102,9 +105,6 @@ importers:
       axios-mock-adapter:
         specifier: 2.1.0
         version: 2.1.0(axios@1.18.1)
-      express:
-        specifier: 5.2.1
-        version: 5.2.1
       jsdom:
         specifier: catalog:default
         version: 30.0.1
@@ -113,7 +113,10 @@ importers:
         version: 5.0.0(@types/node@24.13.4)(@vitest/coverage-v8@5.0.0)(jsdom@30.0.1)(vite@8.3.0(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))
 
   apps/frontend:
-    dependencies:
+    devDependencies:
+      '@astrojs/markdown-remark':
+        specifier: 7.2.4
+        version: 7.2.4
       '@astrojs/react':
         specifier: ^6.0.5
         version: 6.0.5(@types/node@24.13.4)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(esbuild@0.28.2)(jiti@2.7.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(yaml@2.9.1)
@@ -129,6 +132,12 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.3.3
         version: 4.3.3(vite@8.3.0(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))
+      '@types/react':
+        specifier: 19.3.0
+        version: 19.3.0
+      '@types/react-dom':
+        specifier: 19.3.0
+        version: 19.3.0(@types/react@19.3.0)
       astro:
         specifier: 7.2.8
         version: 7.2.8(@astrojs/markdown-remark@7.2.4)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(yaml@2.9.1)
@@ -138,9 +147,15 @@ importers:
       axios-cache-interceptor:
         specifier: 1.12.1
         version: 1.12.1(axios@1.18.1)
+      clsx:
+        specifier: 2.1.1
+        version: 2.1.1
       daisyui:
         specifier: ^5.7.37
         version: 5.7.37
+      jsdom:
+        specifier: catalog:default
+        version: 30.0.1
       react:
         specifier: ^19.3.0
         version: 19.3.0
@@ -162,31 +177,15 @@ importers:
       redux:
         specifier: ^5.0.1
         version: 5.0.1
-      uuid:
-        specifier: ^14.0.2
-        version: 14.0.2
-    devDependencies:
-      '@astrojs/markdown-remark':
-        specifier: 7.2.4
-        version: 7.2.4
-      '@types/react':
-        specifier: 19.3.0
-        version: 19.3.0
-      '@types/react-dom':
-        specifier: 19.3.0
-        version: 19.3.0(@types/react@19.3.0)
-      clsx:
-        specifier: 2.1.1
-        version: 2.1.1
-      jsdom:
-        specifier: catalog:default
-        version: 30.0.1
       starlight-links-validator:
         specifier: 0.25.3
         version: 0.25.3(@astrojs/starlight@0.41.11(@astrojs/markdown-remark@7.2.4)(astro@7.2.8(@astrojs/markdown-remark@7.2.4)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(yaml@2.9.1))(typescript@6.0.3))(astro@7.2.8(@astrojs/markdown-remark@7.2.4)(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.3)(@types/node@24.13.4)(jiti@2.7.0)(yaml@2.9.1))
       tailwindcss:
         specifier: 4.3.3
         version: 4.3.3
+      uuid:
+        specifier: ^14.0.2
+        version: 14.0.2
       vitest:
         specifier: catalog:default
         version: 5.0.0(@types/node@24.13.4)(@vitest/coverage-v8@5.0.0)(jsdom@30.0.1)(vite@8.3.0(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))
