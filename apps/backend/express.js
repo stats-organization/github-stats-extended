@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
 app.use(
   "/frontend",
   express.static(path.join(__dirname, "../frontend/build"), {
-    maxAge: "360000",
+    maxAge: "3600000",
   }),
 );
 
@@ -31,7 +31,7 @@ app.use((req, res) => {
   return router(req, res);
 });
 
-const port = process.env.PORT || process.env.port || 9000;
+const port = process.env.PORT || process.env.port || 80;
 app.listen(port, "0.0.0.0", () => {
   console.log(`Server running on port ${port}`);
 });
