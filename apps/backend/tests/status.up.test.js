@@ -15,7 +15,7 @@ import {
   vi,
 } from "vitest";
 
-import up, { RATE_LIMIT_SECONDS } from "../api-renamed/status/up.js";
+import up, { RATE_LIMIT_SECONDS } from "../api/status/up.js";
 
 const mock = new MockAdapter(axios);
 

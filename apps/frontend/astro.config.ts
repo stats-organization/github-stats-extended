@@ -12,7 +12,7 @@ import { rehypeCardImages } from "./src/plugins/rehypeCardImages.js";
 const base = "/frontend";
 
 // `pnpm dev:backend` serves the card endpoints; override to point at another instance.
-const BACKEND_ORIGIN = process.env.BACKEND_ORIGIN ?? "http://localhost:80";
+const BACKEND_ORIGIN = process.env.BACKEND_ORIGIN ?? "http://localhost:9000";
 
 /*
  * One app: Starlight serves the docs under `/frontend/docs`, and the card

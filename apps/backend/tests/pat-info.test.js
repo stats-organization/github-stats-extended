@@ -77,7 +77,7 @@ beforeAll(async () => {
   vi.spyOn(logger, "error").mockImplementation(() => {});
 
   ({ RATE_LIMIT_SECONDS, default: patInfo } =
-    await import("../api-renamed/status/pat-info.js"));
+    await import("../api/status/pat-info.js"));
 });
 
 afterEach(() => {

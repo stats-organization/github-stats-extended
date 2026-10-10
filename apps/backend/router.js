@@ -6,14 +6,14 @@ import {
   wakatime,
 } from "@stats-organization/github-readme-stats-core";
 
-import { default as authenticate } from "./api-renamed/authenticate.js";
-import { default as deleteUser } from "./api-renamed/delete-user.js";
-import { default as downgrade } from "./api-renamed/downgrade.js";
-import { default as repeatRecent } from "./api-renamed/repeat-recent.js";
-import { default as patInfo } from "./api-renamed/status/pat-info.js";
-import { default as statusUp } from "./api-renamed/status/up.js";
-import { default as userAccess } from "./api-renamed/user-access.js";
-import { default as wakatimeProxy } from "./api-renamed/wakatime-proxy.js";
+import { default as authenticate } from "./api/authenticate.js";
+import { default as deleteUser } from "./api/delete-user.js";
+import { default as downgrade } from "./api/downgrade.js";
+import { default as repeatRecent } from "./api/repeat-recent.js";
+import { default as patInfo } from "./api/status/pat-info.js";
+import { default as statusUp } from "./api/status/up.js";
+import { default as userAccess } from "./api/user-access.js";
+import { default as wakatimeProxy } from "./api/wakatime-proxy.js";
 import { guardAccess } from "./src/common/access.js";
 import {
   CACHE_TTL,

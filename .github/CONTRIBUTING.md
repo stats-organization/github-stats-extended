@@ -2,37 +2,49 @@
 
 ## Local Development
 
-To set up the project GitHub-Stats-Extended locally, run the following commands:
+You can either build and run the whole project via Docker, or build and run the components individually via pnpm.
+
+### via Docker
+
+```bash
+docker build -f Dockerfile.vercel -t github-stats-extended .
+docker run -p 9000:80 --env-file apps/backend/.env github-stats-extended
+```
+
+### via pnpm
+
+First install all dependencies:
 
 ```bash
 pnpm install
-pnpm run build:packages
+```
+
+To run the frontend dev server:
+
+```bash
 pnpm run dev:frontend
 ```
 
-### Backend server
+The frontend attempts to load stats cards from the backend in several places. To make this work locally, run the backend dev server in a separate terminal.
 
-The wizard renders its previews in the browser, but the docs reference cards by
-root-relative path (`/api?username=...`), so those images only load with the backend running:
+To run the backend dev server:
 
 ```bash
-pnpm run dev:backend # card endpoints on :80, proxied by the frontend dev server
+pnpm run build:packages
+pnpm run dev:backend
 ```
 
-It needs a [Personal Access Token](https://github-stats-extended.vercel.app/frontend/docs/deploy/#first-step-get-your-personal-access-token-pat) in `apps/backend/.env` (the SQL database is optional):
+### Environment Variables
 
-```
-PAT_1=your_token_here
-```
-
-You can also deploy to Vercel and test there, as described in the [deployment guide](https://github-stats-extended.vercel.app/frontend/docs/deploy/).
+To successfully render stats cards, your test server needs a valid [Personal Access Token](https://github-stats-extended.vercel.app/frontend/docs/deploy/#first-step-get-your-personal-access-token-pat). Set this PAT and any of the [other, optional environment variables](https://github-stats-extended.vercel.app/frontend/docs/deploy/#available-environment-variables) in [`apps/backend/.env`](./apps/backend/.env).
 
 ## Tests
 
 ```bash
-pnpm run test       # unit tests
-pnpm run lint       # eslint
-pnpm run typecheck  # tsc
+pnpm run lint           # eslint
+pnpm run typecheck      # tsc
+pnpm run format:check   # prettier
+pnpm run test           # unit tests
 ```
 
 The **Backend E2E test** in CI compares the cards your branch renders against the ones served by the preview deployment, which is still on the last commit merged to master.
