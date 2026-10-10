@@ -14,7 +14,7 @@ import {
   vi,
 } from "vitest";
 
-import { normalizeSvg, wakaTimeData } from "../utils.js";
+import { createRequestResponse, normalizeSvg, wakaTimeData } from "../utils.js";
 
 const mock = new MockAdapter(axios);
 
@@ -25,11 +25,6 @@ const wakaTimeProfileNotPublicData = {
     },
   },
 };
-
-const createResponse = () => ({
-  end: vi.fn(),
-  setHeader: vi.fn(),
-});
 
 beforeEach(() => {
   vi.stubEnv("CACHE_SECONDS", "");
@@ -64,11 +59,9 @@ describe("Test /api/wakatime contract", () => {
   it("should match the public happy-path response snapshot", async () => {
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/wakatime?username=anuraghazra",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse(
+      "/api/wakatime?username=anuraghazra",
+    );
 
     await router(req, res);
 
@@ -111,11 +104,9 @@ describe("Test /api/wakatime contract", () => {
       disable_animations: "true",
     });
 
-    const req = {
-      headers: {},
-      url: `/api/wakatime?${params.toString()}`,
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse(
+      `/api/wakatime?${params.toString()}`,
+    );
 
     await router(req, res);
 
@@ -130,11 +121,7 @@ describe("Test /api/wakatime contract", () => {
   it("should match the public missing-username response snapshot", async () => {
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/wakatime",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse("/api/wakatime");
 
     await router(req, res);
 
@@ -149,11 +136,7 @@ describe("Test /api/wakatime contract", () => {
   it("should render error card in same theme as requested card", async () => {
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/wakatime?theme=merko",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse("/api/wakatime?theme=merko");
 
     await router(req, res);
 
@@ -175,11 +158,9 @@ describe("Test /api/wakatime contract", () => {
 
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/wakatime?username=anuraghazra",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse(
+      "/api/wakatime?username=anuraghazra",
+    );
 
     await router(req, res);
 
@@ -196,11 +177,9 @@ describe("Test /api/wakatime contract", () => {
 
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/wakatime?username=martin-mfg",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse(
+      "/api/wakatime?username=martin-mfg",
+    );
 
     await router(req, res);
 
@@ -217,11 +196,7 @@ describe("Test /api/wakatime contract", () => {
 
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/wakatime",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse("/api/wakatime");
 
     await router(req, res);
 

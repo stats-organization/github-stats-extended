@@ -6,6 +6,8 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 
+import { createRequestResponse } from "../utils.js";
+
 const REPO = "curly-fiesta";
 const USER = "catelinemnemosyne";
 const STATS_CARD_USER = "e2eninja";
@@ -155,11 +157,6 @@ const CACHE_BURST_STRING = `v=${new Date().getTime()}`;
 
 const mock = new MockAdapter(axios, { onNoMatch: "passthrough" });
 
-const createResponse = () => ({
-  end: vi.fn(),
-  setHeader: vi.fn(),
-});
-
 let router;
 
 /**
@@ -168,11 +165,7 @@ let router;
  * @returns {Promise<string>} Rendered SVG markup.
  */
 async function getLocalSvg(url) {
-  const req = {
-    headers: {},
-    url,
-  };
-  const res = createResponse();
+  const { req, res } = createRequestResponse(url);
 
   await router(req, res);
 

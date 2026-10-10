@@ -66,7 +66,33 @@ jobs:
           context: .
           file: Dockerfile.vercel
           push: true
+          load: true
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Smoke test
+        run: |
+          docker run -d --name smoke-test -p 80:80 ghcr.io/${{ github.repository }}:latest
+          for i in $(seq 1 30); do
+            if curl -sf -o /dev/null http://localhost/; then
+              echo "Server is up"
+              break
+            fi
+            if [ "$i" -eq 30 ]; then
+              echo "Server failed to start"
+              docker logs smoke-test
+              exit 1
+            fi
+            sleep 1
+          done
+          BODY=$(curl -sL http://localhost/)
+          echo "Response body (first 500 chars):"
+          echo "$BODY" | head -c 500
+          echo "$BODY" | grep -qi "wizard" || {
+            echo "Expected content not found in response"
+            docker logs smoke-test
+            exit 1
+          }
+          docker stop smoke-test

@@ -1,9 +1,10 @@
 // @ts-check
 
 import { pin } from "@stats-organization/github-readme-stats-core";
+import supertest from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import router from "../router.js";
+import { app } from "../app.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
 import { getUserAccessByName, storeRequest } from "../src/common/database.js";
 
@@ -21,16 +22,6 @@ vi.mock(import("../src/common/database.js"), async (importOriginal) => ({
 const pinMock = vi.mocked(pin);
 const storeRequestMock = vi.mocked(storeRequest);
 const getUserAccessByNameMock = vi.mocked(getUserAccessByName);
-
-const createRequest = (search = "") => ({
-  headers: {},
-  url: `/api/pin?${search}`,
-});
-
-const createResponse = () => ({
-  end: vi.fn(),
-  setHeader: vi.fn(),
-});
 
 const defaultCacheHeader =
   `max-age=${CACHE_TTL.PIN_CARD.DEFAULT}, ` +
@@ -53,12 +44,11 @@ describe("Test /api/pin backend routing", () => {
       content: "mock-pin-svg",
     });
 
-    const req = createRequest(
-      "username=anuraghazra&repo=convoychat&theme=dark",
-    );
-    const res = createResponse();
-
-    await router(req, res);
+    const res = await supertest(app)
+      .get("/api/pin?username=anuraghazra&repo=convoychat&theme=dark")
+      .expect("Cache-Control", defaultCacheHeader)
+      .expect("Content-Type", "image/svg+xml")
+      .expect(200);
 
     expect(getUserAccessByNameMock).toHaveBeenCalledWith("anuraghazra");
     expect(pinMock).toHaveBeenCalledWith(
@@ -69,16 +59,7 @@ describe("Test /api/pin backend routing", () => {
       },
       "user-pat",
     );
-    expect(req.query).toEqual({
-      username: "anuraghazra",
-      repo: "convoychat",
-      theme: "dark",
-    });
-    expect(res.setHeader.mock.calls).toEqual([
-      ["Cache-Control", defaultCacheHeader],
-      ["Content-Type", "image/svg+xml"],
-    ]);
-    expect(res.end).toHaveBeenCalledExactlyOnceWith("mock-pin-svg");
-    expect(storeRequestMock).toHaveBeenCalledExactlyOnceWith(req);
+    expect(res.body.toString()).toBe("mock-pin-svg");
+    expect(storeRequestMock).toHaveBeenCalledOnce();
   });
 });

@@ -14,14 +14,13 @@ import {
   vi,
 } from "vitest";
 
-import { happy_path_gist_data, normalizeSvg } from "../utils.js";
+import {
+  createRequestResponse,
+  happy_path_gist_data,
+  normalizeSvg,
+} from "../utils.js";
 
 const mock = new MockAdapter(axios);
-
-const createResponse = () => ({
-  end: vi.fn(),
-  setHeader: vi.fn(),
-});
 
 beforeEach(() => {
   vi.stubEnv("CACHE_SECONDS", "");
@@ -54,11 +53,7 @@ describe("Test /api/gist contract", () => {
   it("should match the public happy-path response snapshot", async () => {
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/gist?id=happy-gist-id",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse("/api/gist?id=happy-gist-id");
 
     await router(req, res);
 
@@ -87,11 +82,9 @@ describe("Test /api/gist contract", () => {
       disable_animations: "true",
     });
 
-    const req = {
-      headers: {},
-      url: `/api/gist?${params.toString()}`,
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse(
+      `/api/gist?${params.toString()}`,
+    );
 
     await router(req, res);
 
@@ -107,11 +100,7 @@ describe("Test /api/gist contract", () => {
   it("should match the public missing-id response snapshot", async () => {
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/gist",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse("/api/gist");
 
     await router(req, res);
 
@@ -128,11 +117,7 @@ describe("Test /api/gist contract", () => {
 
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/gist",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse("/api/gist");
 
     await router(req, res);
 

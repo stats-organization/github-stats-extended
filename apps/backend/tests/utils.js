@@ -260,6 +260,18 @@ export const wakaTimeData = {
   },
 };
 
+export const createRequestResponse = (url) => ({
+  req: {
+    headers: {},
+    url,
+    query: Object.fromEntries(new URL(url, "http://localhost").searchParams),
+  },
+  res: {
+    end: vi.fn(),
+    setHeader: vi.fn(),
+  },
+});
+
 /** @typedef {import('@stats-organization/github-readme-stats-core')} CoreModule */
 
 /**

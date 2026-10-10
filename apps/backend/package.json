@@ -19,6 +19,7 @@
   "devDependencies": {
     "axios-mock-adapter": "2.1.0",
     "jsdom": "catalog:default",
+    "supertest": "^7.3.1",
     "vitest": "catalog:default"
   },
   "dependencies": {

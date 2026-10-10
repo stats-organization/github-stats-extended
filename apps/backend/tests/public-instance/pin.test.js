@@ -14,14 +14,9 @@ import {
   vi,
 } from "vitest";
 
-import { data_user, normalizeSvg } from "../utils.js";
+import { createRequestResponse, data_user, normalizeSvg } from "../utils.js";
 
 const mock = new MockAdapter(axios);
-
-const createResponse = () => ({
-  end: vi.fn(),
-  setHeader: vi.fn(),
-});
 
 beforeEach(() => {
   vi.stubEnv("CACHE_SECONDS", "");
@@ -52,11 +47,9 @@ describe("Test /api/pin contract", () => {
   it("should match the public happy-path response snapshot", async () => {
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/pin?username=anuraghazra&repo=convoychat",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse(
+      "/api/pin?username=anuraghazra&repo=convoychat",
+    );
 
     await router(req, res);
 
@@ -78,11 +71,9 @@ describe("Test /api/pin contract", () => {
 
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/pin?username=anuraghazra&repo=convoychat",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse(
+      "/api/pin?username=anuraghazra&repo=convoychat",
+    );
 
     await router(req, res);
 
@@ -143,11 +134,7 @@ describe("Test /api/pin contract", () => {
       disable_animations: "false",
     });
 
-    const req = {
-      headers: {},
-      url: `/api/pin?${params.toString()}`,
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse(`/api/pin?${params.toString()}`);
 
     await router(req, res);
 
@@ -163,11 +150,7 @@ describe("Test /api/pin contract", () => {
   it("should match the public missing-params response snapshot", async () => {
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/pin",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse("/api/pin");
 
     await router(req, res);
 
@@ -182,11 +165,7 @@ describe("Test /api/pin contract", () => {
   it("should render error card in same theme as requested card", async () => {
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/pin?theme=merko",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse("/api/pin?theme=merko");
 
     await router(req, res);
 
@@ -201,11 +180,9 @@ describe("Test /api/pin contract", () => {
   it("should match the public blacklisted-username response snapshot", async () => {
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/pin?username=renovate-bot&repo=convoychat",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse(
+      "/api/pin?username=renovate-bot&repo=convoychat",
+    );
 
     await router(req, res);
 
@@ -222,11 +199,7 @@ describe("Test /api/pin contract", () => {
 
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/pin?username=martin-mfg",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse("/api/pin?username=martin-mfg");
 
     await router(req, res);
 
@@ -243,11 +216,7 @@ describe("Test /api/pin contract", () => {
 
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/pin",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse("/api/pin");
 
     await router(req, res);
 

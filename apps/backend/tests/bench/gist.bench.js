@@ -2,14 +2,9 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { beforeAll, bench, describe, vi } from "vitest";
 
-import { happy_path_gist_data } from "../utils.js";
+import { createRequestResponse, happy_path_gist_data } from "../utils.js";
 
 const mock = new MockAdapter(axios);
-
-const createResponse = () => ({
-  end: vi.fn(),
-  setHeader: vi.fn(),
-});
 
 let router;
 
@@ -30,12 +25,7 @@ describe("bench /api/gist", () => {
   bench(
     "base",
     async () => {
-      const req = {
-        headers: {},
-        url: "/api/gist?id=happy-gist-id",
-      };
-      const res = createResponse();
-
+      const { req, res } = createRequestResponse("/api/gist?id=happy-gist-id");
       await router(req, res);
     },
     { warmupIterations: 50 },
