@@ -406,6 +406,44 @@ describe("Test fetchStats", () => {
     );
   });
 
+  it("should return zero counts when GitHub rejects a user-scoped search", async () => {
+    mock.onGet(/https:\/\/api\.github\.com\/search\/issues.*/).reply(422, {
+      message: "Validation Failed",
+      errors: [
+        {
+          message:
+            "The listed users cannot be searched either because the users do not exist or you do not have permission to view the users.",
+          resource: "Search",
+          field: "q",
+          code: "invalid",
+        },
+      ],
+    });
+
+    const stats = await fetchStats(
+      "anuraghazra",
+      false,
+      [],
+      false,
+      false,
+      false,
+      undefined,
+      [],
+      [],
+      true,
+      true,
+      true,
+      true,
+      true,
+    );
+
+    expect(stats.totalPRsAuthored).toBe(0);
+    expect(stats.totalPRsCommented).toBe(0);
+    expect(stats.totalPRsReviewed).toBe(0);
+    expect(stats.totalIssuesAuthored).toBe(0);
+    expect(stats.totalIssuesCommented).toBe(0);
+  });
+
   it("should exclude stars of the `test-repo-1` repository", async () => {
     nock("https://api.github.com")
       .get("/search/commits?per_page=1&q=author:anuraghazra")
