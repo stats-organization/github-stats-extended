@@ -37,7 +37,7 @@ GitHub-Stats-Extended fetches up to 1000 of your starred repositories to accurat
 GitHub-Stats-Extended adds parameters `theme_light`, `theme_dark` and the `*_light` / `*_dark` color variants (e.g. `title_color_light`), to specify both modes in one card URL. The card then follows the viewer's browser or OS setting.
 
 ```md
-![Anuraghazra's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&theme_light=light_github&theme_dark=dark_github)
+![Anuraghazra's GitHub stats](https://github-stats-extended.vercel.app/api/stats?username=anuraghazra&theme_light=light_github&theme_dark=dark_github)
 ```
 
 It works everywhere, including GitHub sponsorship pages, where the other light/dark approaches do not. See [Set light and dark mode in one card](/frontend/docs/customization/theming/#set-light-and-dark-mode-in-one-card) for the details.
@@ -92,7 +92,7 @@ Add `&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commen
 
 Anuraghazra's contributions to razorpay:
 
-![Anuraghazra's contributions to razorpay](/api?username=anuraghazra&owner=razorpay&hide=prs,issues,stars,commits,contribs&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented&hide_rank=true&custom_title=Anurag%27s%20contributions%20to%20razorpay&card_width=333)
+![Anuraghazra's contributions to razorpay](/api/stats?username=anuraghazra&owner=razorpay&hide=prs,issues,stars,commits,contribs&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented&hide_rank=true&custom_title=Anurag%27s%20contributions%20to%20razorpay&card_width=333)
 
 Add `&repo=userA/repoA,orgB/repoB` or `&owner=userC,orgD` to your profile stats url to filter your contributions by repo or organization. (The screenshot above uses further customization options.)
 

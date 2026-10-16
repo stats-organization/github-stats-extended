@@ -4,7 +4,7 @@ title: GitHub Stats Extended
 
 Dynamically generate GitHub stats for your READMEs.
 
-![Anurag's GitHub stats](/api?username=anuraghazra)
+![Anurag's GitHub stats](/api/stats?username=anuraghazra)
 
 GitHub-Stats-Extended is the [extended, actively maintained successor](/frontend/docs/fork/) of [github-readme-stats](https://github.com/anuraghazra/github-readme-stats). It generates [various stats cards](#card-types) about your GitHub contributions, your top languages and more. You can [customize](/frontend/docs/customization/common-options/) the cards via multiple parameters.
 
@@ -13,7 +13,7 @@ GitHub-Stats-Extended is the [extended, actively maintained successor](/frontend
 Copy and paste this into your markdown, then change the `?username=` value to your GitHub username:
 
 ```md
-[![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra)](https://github.com/stats-organization/github-stats-extended)
+[![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api/stats?username=anuraghazra)](https://github.com/stats-organization/github-stats-extended)
 ```
 
 As a more comfortable alternative, use the [card wizard](/frontend) to configure your card visually. Then copy the generated markdown into your [GitHub profile README](https://docs.github.com/en/account-and-profile/how-tos/profile-customization/managing-your-profile-readme#adding-a-profile-readme).
@@ -33,7 +33,7 @@ GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For 
 
 - Show your GitHub statistics:
 
-  ![Anurag's GitHub stats](/api?username=anuraghazra)
+  ![Anurag's GitHub stats](/api/stats?username=anuraghazra)
 
 - ...your top languages...:
 
@@ -53,7 +53,7 @@ GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For 
 
 - Customize all the cards:
 
-  ![Anurag's GitHub stats](/api?username=anuraghazra&show_icons=true&theme=calm&rank_icon=github&include_all_commits=true&custom_title=Anurag's+Stats&disable_animations=true&number_format=long&show=prs_merged_percentage,prs_reviewed)
+  ![Anurag's GitHub stats](/api/stats?username=anuraghazra&show_icons=true&theme=calm&rank_icon=github&include_all_commits=true&custom_title=Anurag's+Stats&disable_animations=true&number_format=long&show=prs_merged_percentage,prs_reviewed)
 
 ## Where to next
 

@@ -19,7 +19,7 @@ You can pass a query parameter `&hide=` to hide any specific stats with comma-se
 > Options: `&hide=stars,commits,prs,issues,contribs`
 
 ```md
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&hide=contribs,prs)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api/stats?username=anuraghazra&hide=contribs,prs)
 ```
 
 ## Showing additional individual stats
@@ -29,7 +29,7 @@ You can pass a query parameter `&show=` to show any specific additional stats wi
 > Options: `&show=contributions,all_time_contribs,reviews,discussions_started,discussions_answered,prs_merged,prs_merged_percentage,prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented`
 
 ```md
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show=contributions,all_time_contribs,reviews,discussions_started,discussions_answered,prs_merged,prs_merged_percentage,prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api/stats?username=anuraghazra&show=contributions,all_time_contribs,reviews,discussions_started,discussions_answered,prs_merged,prs_merged_percentage,prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented)
 ```
 
 :::note
@@ -43,7 +43,7 @@ The `contribs` stat under `&hide=` counts repositories the user has contributed 
 To enable icons, you can pass `&show_icons=true` in the query param, like so:
 
 ```md
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api/stats?username=anuraghazra&show_icons=true)
 ```
 
 ## Filtering by repository and owner
@@ -59,7 +59,7 @@ Alternatively, you can use the `role` parameter to specify a comma-separated lis
 You can specify a year and fetch only the commits that were made in that year by passing `&commits_year=YYYY` to the parameter.
 
 ```md
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&commits_year=2020)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api/stats?username=anuraghazra&commits_year=2020)
 ```
 
 ## Options

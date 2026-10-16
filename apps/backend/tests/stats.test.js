@@ -1,6 +1,6 @@
 // @ts-check
 
-import { api, getConfig } from "@stats-organization/github-readme-stats-core";
+import { getConfig, stats } from "@stats-organization/github-readme-stats-core";
 import supertest from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -19,7 +19,7 @@ vi.mock(import("../src/common/database.js"), async (importOriginal) => ({
   getUserAccessByName: vi.fn(),
 }));
 
-const apiMock = vi.mocked(api);
+const statsMock = vi.mocked(stats);
 const getConfigMock = vi.mocked(getConfig);
 const storeRequestMock = vi.mocked(storeRequest);
 const getUserAccessByNameMock = vi.mocked(getUserAccessByName);
@@ -35,7 +35,7 @@ const errorCacheHeader =
   `stale-while-revalidate=${DURATIONS.ONE_DAY}`;
 
 beforeEach(() => {
-  apiMock.mockReset();
+  statsMock.mockReset();
   getConfigMock.mockReset().mockReturnValue({});
   storeRequestMock.mockReset().mockResolvedValue(undefined);
   getUserAccessByNameMock.mockReset().mockResolvedValue(null);
@@ -43,22 +43,22 @@ beforeEach(() => {
   delete process.env.CACHE_SECONDS;
 });
 
-describe("Test /api backend routing", () => {
+describe.each(["/api", "/api/stats"])("Test %s backend routing", (path) => {
   it("happy path should pass query params and user PAT, respond with stats content and persist request", async () => {
     getUserAccessByNameMock.mockResolvedValue({ token: "user-pat" });
-    apiMock.mockResolvedValue({
+    statsMock.mockResolvedValue({
       status: "success",
       content: "mock-stats-svg",
     });
 
     const res = await supertest(app)
-      .get("/api?username=anuraghazra&theme=dark&hide=issues,prs,contribs")
+      .get(`${path}?username=anuraghazra&theme=dark&hide=issues,prs,contribs`)
       .expect("Cache-Control", defaultCacheHeader)
       .expect("Content-Type", "image/svg+xml")
       .expect(200);
 
     expect(getUserAccessByNameMock).toHaveBeenCalledWith("anuraghazra");
-    expect(apiMock).toHaveBeenCalledWith(
+    expect(statsMock).toHaveBeenCalledWith(
       {
         username: "anuraghazra",
         theme: "dark",
@@ -71,19 +71,19 @@ describe("Test /api backend routing", () => {
   });
 
   it("should use the shorter error cache for temporary stats errors", async () => {
-    apiMock.mockResolvedValue({
+    statsMock.mockResolvedValue({
       status: "error - temporary",
       content: "temporary-error-svg",
     });
 
     const res = await supertest(app)
-      .get("/api?username=anuraghazra")
+      .get(`${path}?username=anuraghazra`)
       .expect("Cache-Control", errorCacheHeader)
       .expect("Content-Type", "image/svg+xml")
       .expect(200);
 
     expect(getUserAccessByNameMock).toHaveBeenCalledWith("anuraghazra");
-    expect(apiMock).toHaveBeenCalledWith(
+    expect(statsMock).toHaveBeenCalledWith(
       {
         username: "anuraghazra",
       },
@@ -94,19 +94,19 @@ describe("Test /api backend routing", () => {
   });
 
   it("should not persist permanent stats errors returned by core", async () => {
-    apiMock.mockResolvedValue({
+    statsMock.mockResolvedValue({
       status: "error - permanent",
       content: "permanent-error-svg",
     });
 
     const res = await supertest(app)
-      .get("/api?username=anuraghazra")
+      .get(`${path}?username=anuraghazra`)
       .expect("Cache-Control", defaultCacheHeader)
       .expect("Content-Type", "image/svg+xml")
       .expect(200);
 
     expect(getUserAccessByNameMock).toHaveBeenCalledWith("anuraghazra");
-    expect(apiMock).toHaveBeenCalledWith(
+    expect(statsMock).toHaveBeenCalledWith(
       {
         username: "anuraghazra",
       },
@@ -118,12 +118,12 @@ describe("Test /api backend routing", () => {
 
   it("should reject blacklisted usernames before calling core logic", async () => {
     const res = await supertest(app)
-      .get("/api?username=renovate-bot")
+      .get(`${path}?username=renovate-bot`)
       .expect("Cache-Control", defaultCacheHeader)
       .expect("Content-Type", "image/svg+xml")
       .expect(200);
 
-    expect(apiMock).not.toHaveBeenCalled();
+    expect(statsMock).not.toHaveBeenCalled();
     expect(getUserAccessByNameMock).not.toHaveBeenCalled();
     expect(res.body.toString()).toBe(
       "render-error:This username is blacklisted",
@@ -135,12 +135,12 @@ describe("Test /api backend routing", () => {
     getConfigMock.mockReturnValue({ whitelist: ["allowed-user"] });
 
     const res = await supertest(app)
-      .get("/api?username=blocked-user")
+      .get(`${path}?username=blocked-user`)
       .expect("Cache-Control", defaultCacheHeader)
       .expect("Content-Type", "image/svg+xml")
       .expect(200);
 
-    expect(apiMock).not.toHaveBeenCalled();
+    expect(statsMock).not.toHaveBeenCalled();
     expect(getUserAccessByNameMock).not.toHaveBeenCalled();
     expect(res.body.toString()).toBe(
       "render-error:This username is not whitelisted",

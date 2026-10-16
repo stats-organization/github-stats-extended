@@ -6,6 +6,7 @@ import { getCardThemeDefault } from "../wizard/models/cardThemeDefault";
 /** The card each endpoint renders; `/api` itself is the stats card. */
 const CARD_TYPE_BY_PATH: Record<string, CardType> = {
   "/api": CardType.STATS,
+  "/api/stats": CardType.STATS,
   "/api/top-langs": CardType.TOP_LANGS,
   "/api/pin": CardType.PIN,
   "/api/gist": CardType.GIST,
