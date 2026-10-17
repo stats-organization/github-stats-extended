@@ -58,8 +58,8 @@ importers:
         specifier: 4.17.1
         version: 4.17.1(@typescript-eslint/utils@8.71.1(eslint@10.12.0(jiti@2.7.0))(typescript@6.0.3))(eslint@10.12.0(jiti@2.7.0))
       eslint-plugin-jsdoc:
-        specifier: 65.2.0
-        version: 65.2.0(eslint@10.12.0(jiti@2.7.0))(typescript@6.0.3)
+        specifier: 65.2.2
+        version: 65.2.2(eslint@10.12.0(jiti@2.7.0))(typescript@6.0.3)
       globals:
         specifier: 17.13.0
         version: 17.13.0
@@ -2558,8 +2558,8 @@ packages:
       eslint-import-resolver-node:
         optional: true
 
-  eslint-plugin-jsdoc@65.2.0:
-    resolution: {integrity: sha512-IMZaNwdDa5otUQYGWN1pzywZLsGKswitvFFNhcO8IOsBfaWpWIDXYuZh2sYhe9MNyKN9hz0YryOFaKdpbTP5Bw==}
+  eslint-plugin-jsdoc@65.2.2:
+    resolution: {integrity: sha512-QhGam672HQqeTHC2fxtFVfoXzx6O9KxHx9wp0q44I4zRiS05HQOT6vbSANxVVBTCxI8Zh/xNqXT8xe7OpArZbw==}
     engines: {node: ^22.22.2 || >=24.15.0}
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
@@ -6756,7 +6756,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-jsdoc@65.2.0(eslint@10.12.0(jiti@2.7.0))(typescript@6.0.3):
+  eslint-plugin-jsdoc@65.2.2(eslint@10.12.0(jiti@2.7.0))(typescript@6.0.3):
     dependencies:
       '@es-joy/jsdoccomment': 0.98.0
       '@es-joy/resolve.exports': 1.2.0
