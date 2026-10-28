@@ -174,8 +174,8 @@ catalogs:
       specifier: 30.1.2
       version: 30.1.2
     nock:
-      specifier: 15.0.1
-      version: 15.0.1
+      specifier: 15.0.5
+      version: 15.0.5
     vitest:
       specifier: 5.0.0
       version: 5.0.0
@@ -266,7 +266,7 @@ importers:
         version: 30.1.2(@noble/hashes@1.8.0)
       nock:
         specifier: catalog:default
-        version: 15.0.1(supports-color@10.2.2)
+        version: 15.0.5(supports-color@10.2.2)
       supertest:
         specifier: 7.3.1
         version: 7.3.1(supports-color@10.2.2)
@@ -396,7 +396,7 @@ importers:
         version: 30.1.2(@noble/hashes@1.8.0)
       nock:
         specifier: catalog:default
-        version: 15.0.1(supports-color@10.2.2)
+        version: 15.0.5(supports-color@10.2.2)
       vitest:
         specifier: catalog:default
         version: 5.0.0(@types/node@24.19.1)(@vitest/coverage-v8@5.0.0)(jsdom@30.1.2(@noble/hashes@1.8.0))(vite@8.3.4(@types/node@24.19.1)(jiti@2.7.0)(yaml@2.9.1))
@@ -3561,9 +3561,9 @@ packages:
   nlcst-to-string@4.0.0:
     resolution: {integrity: sha512-YKLBCcUYKAg0FNlOBT6aI91qFmSiFKiluk655WzPF+DDMA02qIyy8uiRqI8QXtcFpEvll12LpL5MXqEmAZ+dcA==}
 
-  nock@15.0.1:
-    resolution: {integrity: sha512-Mjx5Xl4t9vP13eUZPWqwwpjjXNjvhUTo1qTdryVM3+7t6Z2w6WHZ9GVZk/zQ8Ym1vbmloWaglye3cloyHAJ8FA==}
-    engines: {node: '>=20.12.1'}
+  nock@15.0.5:
+    resolution: {integrity: sha512-nVeuZGS2we1PyvqbW082Qj0EB4bd//6pZk/zOPDlaTPU72qcWrqfHg3kx9JcBcH1fJxwJHjmsfuQ4mss42su4w==}
+    engines: {node: '>=22.20.0'}
 
   node-fetch-native@1.6.7:
     resolution: {integrity: sha512-g9yhqoedzIUm0nTnTqAQvueMPVOuIY16bqgAJJC8XOOubYFNwz6IER9qs0Gq2Xd0+CecCKFjtdDTMA4u4xG06Q==}
@@ -8179,7 +8179,7 @@ snapshots:
     dependencies:
       '@types/nlcst': 2.0.3
 
-  nock@15.0.1(supports-color@10.2.2):
+  nock@15.0.5(supports-color@10.2.2):
     dependencies:
       '@mswjs/interceptors': 0.44.0(supports-color@10.2.2)
     transitivePeerDependencies:
