@@ -4,7 +4,7 @@
   "type": "module",
   "packageManager": "pnpm@12.14.0+sha512.c18ba6d87993d3d164cb5e8948f32b2c06ee854487e06cd8d86781342fb3e5bb4634367034711e86802baa9c37bea906ce1929ad08d70884c97d801df13389a6",
   "devDependencies": {
-    "@eslint-react/eslint-plugin": "5.24.8",
+    "@eslint-react/eslint-plugin": "5.28.8",
     "@eslint/compat": "2.1.1",
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.63.0",
