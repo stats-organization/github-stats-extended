@@ -12,7 +12,7 @@ if (process.env.POSTGRES_URL) {
     connectionString: process.env.POSTGRES_URL,
   });
   if (!process.env.TOKEN_ENCRYPTION_KEY) {
-    logger.warn(
+    logger.error(
       "TOKEN_ENCRYPTION_KEY is not set: GitHub access tokens are stored in plaintext. " +
         "Generate a key with `openssl rand -base64 32` and set it to encrypt them at rest.",
     );
