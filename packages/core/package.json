@@ -94,7 +94,6 @@
   },
   "dependencies": {
     "axios": "catalog:default",
-    "emoji-name-map": "^2.0.3",
-    "github-username-regex": "^1.0.0"
+    "emoji-name-map": "^2.0.3"
   }
 }
