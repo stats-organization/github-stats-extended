@@ -100,6 +100,17 @@ describe("Test AccessTokenCipher", () => {
     );
   });
 
+  it("should reject a truncated auth tag", () => {
+    const parts = cipher.encrypt("gho_secret", USER).split(".");
+    parts[3] = Buffer.from(parts[3], "base64")
+      .subarray(0, 4)
+      .toString("base64");
+
+    expect(() => cipher.decrypt(parts.join("."), USER)).toThrow(
+      /Malformed encrypted access token/,
+    );
+  });
+
   it("should throw on a malformed encrypted value", () => {
     expect(() => cipher.decrypt("gse.v1.only-one-part", USER)).toThrow(
       /Malformed encrypted access token/,

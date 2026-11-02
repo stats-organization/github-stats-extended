@@ -3,6 +3,7 @@ import { createCipheriv, createDecipheriv, randomBytes } from "node:crypto";
 const ALGORITHM = "aes-256-gcm";
 const KEY_BYTES = 32;
 const IV_BYTES = 12;
+const AUTH_TAG_BYTES = 16;
 const HEX_KEY = /^[0-9a-fA-F]{64}$/;
 
 /** Marks a value as encrypted and versions the format. */
@@ -81,9 +82,9 @@ export class AccessTokenCipher {
     }
 
     const iv = randomBytes(IV_BYTES);
-    const cipher = createCipheriv(ALGORITHM, key, iv).setAAD(
-      Buffer.from(userId),
-    );
+    const cipher = createCipheriv(ALGORITHM, key, iv, {
+      authTagLength: AUTH_TAG_BYTES,
+    }).setAAD(Buffer.from(userId));
     const ciphertext = Buffer.concat([cipher.update(token), cipher.final()]);
     const parts = [iv, cipher.getAuthTag(), ciphertext].map((part) =>
       part.toString("base64"),
@@ -142,11 +143,16 @@ export class AccessTokenCipher {
     const [iv, authTag, ciphertext] = parts.map((part) =>
       Buffer.from(part, "base64"),
     );
+    if (iv.length !== IV_BYTES || authTag.length !== AUTH_TAG_BYTES) {
+      throw new TokenDecryptionError("Malformed encrypted access token");
+    }
     const aad = Buffer.from(userId);
 
     for (const key of keys) {
       try {
-        const decipher = createDecipheriv(ALGORITHM, key, iv)
+        const decipher = createDecipheriv(ALGORITHM, key, iv, {
+          authTagLength: AUTH_TAG_BYTES,
+        })
           .setAAD(aad)
           .setAuthTag(authTag);
         return Buffer.concat([

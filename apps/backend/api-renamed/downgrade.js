@@ -40,7 +40,11 @@ export default async (req, res) => {
 
   // delete existing app authorization via GitHub API; skipped if the stored token is unreadable
   try {
-    if (userAccess.token !== null) {
+    if (userAccess.token === null) {
+      logger.warn(
+        `User ${user_key} has private access but no valid token; skipping GitHub authorization deletion.`,
+      );
+    } else {
       await axios.delete(
         `https://api.github.com/applications/${process.env.OAUTH_CLIENT_ID}/grant`,
         {

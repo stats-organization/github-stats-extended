@@ -12,7 +12,7 @@ if (process.env.POSTGRES_URL) {
     connectionString: process.env.POSTGRES_URL,
   });
   if (!process.env.TOKEN_ENCRYPTION_KEY) {
-    logger.error(
+    logger.warn(
       "TOKEN_ENCRYPTION_KEY is not set: GitHub access tokens are stored in plaintext. " +
         "Generate a key with `openssl rand -base64 32` and set it to encrypt them at rest.",
     );
@@ -240,7 +240,7 @@ export async function deleteUser(userKey) {
  * Fetches token and private access status for a given user_key.
  *
  * @param {string} userKey user key of the user to fetch information for
- * @returns {Promise<{token: string | null, privateAccess: boolean} | null>} null if user not found, token null if it must log in again
+ * @returns {Promise<{token: string | null, privateAccess: boolean} | null>} token and private access status, null if user not found, token null if they must log in again
  */
 export async function getUserAccessByKey(userKey) {
   if (!pool) {
@@ -272,7 +272,7 @@ export async function getUserAccessByKey(userKey) {
  * Fetches token and private access status for a given username.
  *
  * @param {string} userName GitHub username of the user to fetch information for
- * @returns {Promise<{token: string | null, privateAccess: boolean} | null>} null if user not found, token null if it must log in again
+ * @returns {Promise<{token: string | null, privateAccess: boolean} | null>} token and private access status, null if user not found, token null if they must log in again
  */
 export async function getUserAccessByName(userName) {
   if (!pool) {
