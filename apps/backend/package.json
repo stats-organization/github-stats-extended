@@ -18,14 +18,15 @@
     "typecheck": "tsc -p tsconfig.typecheck.json"
   },
   "devDependencies": {
-    "axios-mock-adapter": "2.1.0",
-    "express": "5.2.1",
     "jsdom": "catalog:default",
+    "nock": "catalog:default",
+    "supertest": "7.3.1",
     "vitest": "catalog:default"
   },
   "dependencies": {
     "@stats-organization/github-readme-stats-core": "workspace:^",
     "axios": "catalog:default",
-    "pg": "^8.22.0"
+    "express": "5.2.1",
+    "pg": "^8.23.1"
   }
 }

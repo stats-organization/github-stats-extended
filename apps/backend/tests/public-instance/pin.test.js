@@ -1,8 +1,7 @@
 // @ts-check
 
 import { logger } from "@stats-organization/github-readme-stats-core";
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
+import nock from "nock";
 import {
   afterAll,
   afterEach,
@@ -14,14 +13,15 @@ import {
   vi,
 } from "vitest";
 
-import { data_user, normalizeSvg } from "../utils.js";
+import {
+  createRequestResponse,
+  data_user,
+  mockGraphQL,
+  normalizeSvg,
+} from "../utils.js";
 
-const mock = new MockAdapter(axios);
-
-const createResponse = () => ({
-  end: vi.fn(),
-  setHeader: vi.fn(),
-});
+/** @type {Array<string>} */
+let graphqlRequests;
 
 beforeEach(() => {
   vi.stubEnv("CACHE_SECONDS", "");
@@ -29,7 +29,7 @@ beforeEach(() => {
   vi.stubEnv("POSTGRES_URL", "");
   vi.stubEnv("WHITELIST", "");
 
-  mock.onPost("https://api.github.com/graphql").reply(200, data_user);
+  graphqlRequests = mockGraphQL(data_user);
 });
 
 beforeAll(() => {
@@ -38,7 +38,6 @@ beforeAll(() => {
 });
 
 afterEach(() => {
-  mock.reset();
   vi.unstubAllEnvs();
   // modules may cache environment variables, so we need to reset them
   vi.resetModules();
@@ -52,11 +51,9 @@ describe("Test /api/pin contract", () => {
   it("should match the public happy-path response snapshot", async () => {
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/pin?username=anuraghazra&repo=convoychat",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse(
+      "/api/pin?username=anuraghazra&repo=convoychat",
+    );
 
     await router(req, res);
 
@@ -72,17 +69,14 @@ describe("Test /api/pin contract", () => {
     let archived_data_user = structuredClone(data_user);
     archived_data_user.data.user.repository.isArchived = true;
 
-    mock
-      .onPost("https://api.github.com/graphql")
-      .reply(200, archived_data_user);
+    nock.cleanAll();
+    mockGraphQL(archived_data_user);
 
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/pin?username=anuraghazra&repo=convoychat",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse(
+      "/api/pin?username=anuraghazra&repo=convoychat",
+    );
 
     await router(req, res);
 
@@ -95,30 +89,29 @@ describe("Test /api/pin contract", () => {
   });
 
   it("should match the public many-params response snapshot", async () => {
-    mock.onPost("https://api.github.com/graphql").reply(200, data_user);
-    mock
-      .onGet(
-        "https://api.github.com/search/issues?per_page=1&q=repo:anuraghazra/convoychat+author:anuraghazra+type:pr",
+    nock("https://api.github.com")
+      .get(
+        "/search/issues?per_page=1&q=repo:anuraghazra/convoychat+author:anuraghazra+type:pr",
       )
       .reply(200, { total_count: 1234 });
-    mock
-      .onGet(
-        "https://api.github.com/search/issues?per_page=1&q=repo:anuraghazra/convoychat+commenter:anuraghazra+-author:anuraghazra+type:pr",
+    nock("https://api.github.com")
+      .get(
+        "/search/issues?per_page=1&q=repo:anuraghazra/convoychat+commenter:anuraghazra+-author:anuraghazra+type:pr",
       )
       .reply(200, { total_count: 2345 });
-    mock
-      .onGet(
-        "https://api.github.com/search/issues?per_page=1&q=repo:anuraghazra/convoychat+reviewed-by:anuraghazra+-author:anuraghazra+type:pr",
+    nock("https://api.github.com")
+      .get(
+        "/search/issues?per_page=1&q=repo:anuraghazra/convoychat+reviewed-by:anuraghazra+-author:anuraghazra+type:pr",
       )
       .reply(200, { total_count: 3456 });
-    mock
-      .onGet(
-        "https://api.github.com/search/issues?per_page=1&q=repo:anuraghazra/convoychat+author:anuraghazra+type:issue",
+    nock("https://api.github.com")
+      .get(
+        "/search/issues?per_page=1&q=repo:anuraghazra/convoychat+author:anuraghazra+type:issue",
       )
       .reply(200, { total_count: 4567 });
-    mock
-      .onGet(
-        "https://api.github.com/search/issues?per_page=1&q=repo:anuraghazra/convoychat+commenter:anuraghazra+-author:anuraghazra+type:issue",
+    nock("https://api.github.com")
+      .get(
+        "/search/issues?per_page=1&q=repo:anuraghazra/convoychat+commenter:anuraghazra+-author:anuraghazra+type:issue",
       )
       .reply(200, { total_count: 5678 });
 
@@ -140,20 +133,17 @@ describe("Test /api/pin contract", () => {
       border_radius: "12",
       border_color: "fedcba",
       description_lines_count: "1",
+      disable_animations: "false",
     });
 
-    const req = {
-      headers: {},
-      url: `/api/pin?${params.toString()}`,
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse(`/api/pin?${params.toString()}`);
 
     await router(req, res);
 
     expect(res.end).toHaveBeenCalledOnce();
 
     expect({
-      graphqlRequest: mock.history.post[0].data,
+      graphqlRequest: graphqlRequests[0],
       headers: res.setHeader.mock.calls,
       content: normalizeSvg(res.end.mock.calls[0][0]),
     }).toMatchSnapshot();
@@ -162,11 +152,7 @@ describe("Test /api/pin contract", () => {
   it("should match the public missing-params response snapshot", async () => {
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/pin",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse("/api/pin");
 
     await router(req, res);
 
@@ -181,11 +167,7 @@ describe("Test /api/pin contract", () => {
   it("should render error card in same theme as requested card", async () => {
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/pin?theme=merko",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse("/api/pin?theme=merko");
 
     await router(req, res);
 
@@ -200,11 +182,9 @@ describe("Test /api/pin contract", () => {
   it("should match the public blacklisted-username response snapshot", async () => {
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/pin?username=renovate-bot&repo=convoychat",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse(
+      "/api/pin?username=renovate-bot&repo=convoychat",
+    );
 
     await router(req, res);
 
@@ -221,11 +201,7 @@ describe("Test /api/pin contract", () => {
 
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/pin?username=martin-mfg",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse("/api/pin?username=martin-mfg");
 
     await router(req, res);
 
@@ -242,11 +218,7 @@ describe("Test /api/pin contract", () => {
 
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api/pin",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse("/api/pin");
 
     await router(req, res);
 

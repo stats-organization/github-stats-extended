@@ -418,7 +418,7 @@ exports[`Test /api/pin contract > should match the public many-params response s
         }
       }
     
-          * { animation-duration: 0s !important; animation-delay: 0s !important; }
+          
         </style>
 
         

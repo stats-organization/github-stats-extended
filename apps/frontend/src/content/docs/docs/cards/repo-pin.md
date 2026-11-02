@@ -29,25 +29,22 @@ You can customize the appearance and behavior of the pinned repository card usin
 | `show_icons`              | Shows icons near all stats enabled via `show`.                                                                                                                                                                                                   | boolean                         | `true`             |
 | `line_height`             | Sets the line height between stats enabled via `show`.                                                                                                                                                                                           | integer                         | `22`               |
 | `text_bold`               | Uses bold text for all stats enabled via `show`.                                                                                                                                                                                                 | boolean                         | `false`            |
+| `disable_animations`      | Disables all animations in the card.                                                                                                                                                                                                             | boolean                         | `true`             |
 | `number_format`           | Switches between two available formats for displaying the numbers for all stats enabled via `show`: `short` (i.e. `6.6k`) and `long` (i.e. `6626`).                                                                                              | enum                            | `short`            |
 | `show`                    | Shows [additional items](/frontend/docs/cards/stats/#showing-additional-individual-stats) on stats card (i.e. `prs_authored`, `prs_commented`, `prs_reviewed`, `issues_authored` or `issues_commented`).                                         | string (comma-separated values) | `null`             |
 
 ## Demo
 
-<img class="card-preview-light" src="/api/pin?username=anuraghazra&repo=github-readme-stats&theme=light_github_repocard" alt="Readme Card" />
-<img class="card-preview-dark" src="/api/pin?username=anuraghazra&repo=github-readme-stats&theme=dark_github_repocard" alt="Readme Card" />
+![Readme Card](/api/pin?username=anuraghazra&repo=github-readme-stats)
 
 Use [show\_owner](#options) query option to include the repo's owner username:
 
-<img class="card-preview-light" src="/api/pin?username=anuraghazra&repo=github-readme-stats&show_owner=true&theme=light_github_repocard" alt="Readme Card" />
-<img class="card-preview-dark" src="/api/pin?username=anuraghazra&repo=github-readme-stats&show_owner=true&theme=dark_github_repocard" alt="Readme Card" />
+![Readme Card](/api/pin?username=anuraghazra&repo=github-readme-stats&show_owner=true)
 
 Use [show](#options) query option to display the user's contributions to the repository:
 
-<img class="card-preview-light" src="/api/pin?username=anuraghazra&repo=github-readme-stats&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented&theme=light_github_repocard" alt="Readme Card" />
-<img class="card-preview-dark" src="/api/pin?username=anuraghazra&repo=github-readme-stats&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented&theme=dark_github_repocard" alt="Readme Card" />
+![Readme Card](/api/pin?username=anuraghazra&repo=github-readme-stats&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented)
 
 You can also specify the `repo` parameter in the form `<user_or_organization>/<repository>` to pin a repository from any user or organization, not just your own. This allows you to showcase repositories you contributed to, regardless of ownership.
 
-<img class="card-preview-light" src="/api/pin?username=anuraghazra&repo=statykjs/statyk&show_owner=true&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented&theme=light_github_repocard" alt="Readme Card" />
-<img class="card-preview-dark" src="/api/pin?username=anuraghazra&repo=statykjs/statyk&show_owner=true&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented&theme=dark_github_repocard" alt="Readme Card" />
+![Readme Card](/api/pin?username=anuraghazra&repo=statykjs/statyk&show_owner=true&show=prs_authored,prs_commented,prs_reviewed,issues_authored,issues_commented)

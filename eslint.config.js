@@ -128,7 +128,6 @@ export default defineConfig(
   },
   {
     files: ["**/*.{d.ts,ts,tsx}"],
-    ignores: ["apps/backend/**"],
     extends: [tseslint.configs.strictTypeChecked, tseslint.configs.stylistic],
     rules: {
       "@typescript-eslint/array-type": ["error", { default: "generic" }],

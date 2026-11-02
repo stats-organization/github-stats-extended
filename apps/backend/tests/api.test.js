@@ -1,9 +1,10 @@
 // @ts-check
 
 import { api, getConfig } from "@stats-organization/github-readme-stats-core";
+import supertest from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import router from "../router.js";
+import { app } from "../app.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
 import { getUserAccessByName, storeRequest } from "../src/common/database.js";
 
@@ -22,16 +23,6 @@ const apiMock = vi.mocked(api);
 const getConfigMock = vi.mocked(getConfig);
 const storeRequestMock = vi.mocked(storeRequest);
 const getUserAccessByNameMock = vi.mocked(getUserAccessByName);
-
-const createRequest = (search = "") => ({
-  headers: {},
-  url: `/api?${search}`,
-});
-
-const createResponse = () => ({
-  end: vi.fn(),
-  setHeader: vi.fn(),
-});
 
 const defaultCacheHeader =
   `max-age=${CACHE_TTL.STATS_CARD.DEFAULT}, ` +
@@ -60,12 +51,11 @@ describe("Test /api backend routing", () => {
       content: "mock-stats-svg",
     });
 
-    const req = createRequest(
-      "username=anuraghazra&theme=dark&hide=issues,prs,contribs",
-    );
-    const res = createResponse();
-
-    await router(req, res);
+    const res = await supertest(app)
+      .get("/api?username=anuraghazra&theme=dark&hide=issues,prs,contribs")
+      .expect("Cache-Control", defaultCacheHeader)
+      .expect("Content-Type", "image/svg+xml")
+      .expect(200);
 
     expect(getUserAccessByNameMock).toHaveBeenCalledWith("anuraghazra");
     expect(apiMock).toHaveBeenCalledWith(
@@ -76,17 +66,8 @@ describe("Test /api backend routing", () => {
       },
       "user-pat",
     );
-    expect(req.query).toEqual({
-      username: "anuraghazra",
-      theme: "dark",
-      hide: "issues,prs,contribs",
-    });
-    expect(res.setHeader.mock.calls).toEqual([
-      ["Cache-Control", defaultCacheHeader],
-      ["Content-Type", "image/svg+xml"],
-    ]);
-    expect(res.end).toHaveBeenCalledExactlyOnceWith("mock-stats-svg");
-    expect(storeRequestMock).toHaveBeenCalledExactlyOnceWith(req);
+    expect(res.body.toString()).toBe("mock-stats-svg");
+    expect(storeRequestMock).toHaveBeenCalledOnce();
   });
 
   it("should use the shorter error cache for temporary stats errors", async () => {
@@ -95,10 +76,11 @@ describe("Test /api backend routing", () => {
       content: "temporary-error-svg",
     });
 
-    const req = createRequest("username=anuraghazra");
-    const res = createResponse();
-
-    await router(req, res);
+    const res = await supertest(app)
+      .get("/api?username=anuraghazra")
+      .expect("Cache-Control", errorCacheHeader)
+      .expect("Content-Type", "image/svg+xml")
+      .expect(200);
 
     expect(getUserAccessByNameMock).toHaveBeenCalledWith("anuraghazra");
     expect(apiMock).toHaveBeenCalledWith(
@@ -107,12 +89,8 @@ describe("Test /api backend routing", () => {
       },
       null,
     );
-    expect(res.setHeader.mock.calls).toEqual([
-      ["Cache-Control", errorCacheHeader],
-      ["Content-Type", "image/svg+xml"],
-    ]);
-    expect(res.end).toHaveBeenCalledExactlyOnceWith("temporary-error-svg");
-    expect(storeRequestMock).toHaveBeenCalledExactlyOnceWith(req);
+    expect(res.body.toString()).toBe("temporary-error-svg");
+    expect(storeRequestMock).toHaveBeenCalledOnce();
   });
 
   it("should not persist permanent stats errors returned by core", async () => {
@@ -121,10 +99,11 @@ describe("Test /api backend routing", () => {
       content: "permanent-error-svg",
     });
 
-    const req = createRequest("username=anuraghazra");
-    const res = createResponse();
-
-    await router(req, res);
+    const res = await supertest(app)
+      .get("/api?username=anuraghazra")
+      .expect("Cache-Control", defaultCacheHeader)
+      .expect("Content-Type", "image/svg+xml")
+      .expect(200);
 
     expect(getUserAccessByNameMock).toHaveBeenCalledWith("anuraghazra");
     expect(apiMock).toHaveBeenCalledWith(
@@ -133,27 +112,20 @@ describe("Test /api backend routing", () => {
       },
       null,
     );
-    expect(res.setHeader.mock.calls).toEqual([
-      ["Cache-Control", defaultCacheHeader],
-      ["Content-Type", "image/svg+xml"],
-    ]);
-    expect(res.end).toHaveBeenCalledExactlyOnceWith("permanent-error-svg");
+    expect(res.body.toString()).toBe("permanent-error-svg");
     expect(storeRequestMock).not.toHaveBeenCalled();
   });
 
   it("should reject blacklisted usernames before calling core logic", async () => {
-    const req = createRequest("username=renovate-bot");
-    const res = createResponse();
-
-    await router(req, res);
+    const res = await supertest(app)
+      .get("/api?username=renovate-bot")
+      .expect("Cache-Control", defaultCacheHeader)
+      .expect("Content-Type", "image/svg+xml")
+      .expect(200);
 
     expect(apiMock).not.toHaveBeenCalled();
     expect(getUserAccessByNameMock).not.toHaveBeenCalled();
-    expect(res.setHeader.mock.calls).toEqual([
-      ["Cache-Control", defaultCacheHeader],
-      ["Content-Type", "image/svg+xml"],
-    ]);
-    expect(res.end).toHaveBeenCalledExactlyOnceWith(
+    expect(res.body.toString()).toBe(
       "render-error:This username is blacklisted",
     );
     expect(storeRequestMock).not.toHaveBeenCalled();
@@ -162,18 +134,15 @@ describe("Test /api backend routing", () => {
   it("should reject non-whitelisted usernames before calling core logic", async () => {
     getConfigMock.mockReturnValue({ whitelist: ["allowed-user"] });
 
-    const req = createRequest("username=blocked-user");
-    const res = createResponse();
-
-    await router(req, res);
+    const res = await supertest(app)
+      .get("/api?username=blocked-user")
+      .expect("Cache-Control", defaultCacheHeader)
+      .expect("Content-Type", "image/svg+xml")
+      .expect(200);
 
     expect(apiMock).not.toHaveBeenCalled();
     expect(getUserAccessByNameMock).not.toHaveBeenCalled();
-    expect(res.setHeader.mock.calls).toEqual([
-      ["Cache-Control", defaultCacheHeader],
-      ["Content-Type", "image/svg+xml"],
-    ]);
-    expect(res.end).toHaveBeenCalledExactlyOnceWith(
+    expect(res.body.toString()).toBe(
       "render-error:This username is not whitelisted",
     );
     expect(storeRequestMock).not.toHaveBeenCalled();

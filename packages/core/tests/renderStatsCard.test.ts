@@ -20,6 +20,7 @@ const stats: StatsData = {
   totalDiscussionsStarted: 10,
   totalDiscussionsAnswered: 50,
   contributedTo: 500,
+  allTimeContributedTo: 500,
   totalPRsAuthored: 100,
   totalPRsCommented: 100,
   totalPRsReviewed: 100,
@@ -57,6 +58,7 @@ describe("Test renderStatsCard", () => {
       screen.queryByTestId("prs_merged_percentage"),
     ).not.toBeInTheDocument();
     expect(screen.queryByTestId("contributions")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("all_time_contribs")).not.toBeInTheDocument();
   });
 
   it("should have proper name apostrophe", () => {
@@ -128,6 +130,14 @@ describe("Test renderStatsCard", () => {
     });
 
     expect(screen.getByTestId("contributions").textContent).toBe("5k");
+  });
+
+  it("should show all_time_contribs stat when included in show list", () => {
+    document.body.innerHTML = renderStatsCard(stats, {
+      show: ["all_time_contribs"],
+    });
+
+    expect(screen.getByTestId("all_time_contribs")).toHaveTextContent("500");
   });
 
   it("should hide_rank", () => {
@@ -253,7 +263,7 @@ describe("Test renderStatsCard", () => {
   it("should render with all the themes", () => {
     Object.entries(themes).forEach(([name, themeData]) => {
       document.body.innerHTML = renderStatsCard(stats, {
-        theme: name as keyof typeof themes,
+        theme: name,
       });
 
       const styleTag = document.querySelector("style");

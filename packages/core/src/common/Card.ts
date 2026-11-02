@@ -1,19 +1,12 @@
 import { getCardColors, isPrefixedHexColor, isValidGradient } from "./color.js";
+import type { CardColors } from "./color.js";
 import { encodeHTML } from "./html.js";
 import { flexLayout } from "./render.js";
 
-interface CardColors {
-  /** Card title color. */
-  titleColor: string;
-  /** Card text color. */
-  textColor: string;
-  /** Card icon color. */
-  iconColor: string;
-  /** Card background color. */
-  bgColor: string | Array<string>;
-  /** Card border color. */
-  borderColor: string;
-}
+/**
+ * Builds the card CSS for one color scheme from that scheme's resolved colors.
+ */
+type CardCSSBuilder = (colors: CardColors) => string;
 
 class Card {
   width: number;
@@ -111,15 +104,25 @@ class Card {
   /**
    * Sets the card CSS for light and dark mode.
    *
-   * The caller must ensure that the passed CSS strings are properly sanitized!
+   * Each builder receives the colors of its own color scheme,
+   * so a card never handles a missing dark palette itself:
+   * `dark` runs only when the card has dark colors, and always with non-null ones.
+   *
+   * @warning The caller must ensure that the returned CSS strings are properly sanitized!
    *
    * @param props The props object.
-   * @param props.light CSS applied unconditionally (light/default mode).
-   * @param props.dark CSS placed inside a `@media (prefers-color-scheme: dark)` block. Pass `null` when not needed.
+   * @param props.light Builds the CSS applied unconditionally (light/default mode).
+   * @param props.dark Builds the CSS placed inside a `@media (prefers-color-scheme: dark)` block.
    */
-  setCSS({ light, dark }: { light: string; dark?: string | null }): void {
-    this.css = light;
-    this.darkCss = dark ?? "";
+  setCSS({
+    light,
+    dark,
+  }: {
+    light: CardCSSBuilder;
+    dark: CardCSSBuilder;
+  }): void {
+    this.css = light(this.colors.light);
+    this.darkCss = this.colors.dark ? dark(this.colors.dark) : "";
   }
 
   /**

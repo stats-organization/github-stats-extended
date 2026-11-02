@@ -53,7 +53,7 @@ describe("buildCardUrl", () => {
       "?username=john" +
         "&hide_title=true" +
         // commas are percent-encoded (%2C) now that params go through URLSearchParams
-        "&show=reviews%2Cdiscussions_started%2Cdiscussions_answered%2Cprs_merged%2Cprs_merged_percentage%2Cprs_commented%2Cprs_reviewed%2Cissues_commented%2Ccontributions" +
+        "&show=reviews%2Cdiscussions_started%2Cdiscussions_answered%2Cprs_merged%2Cprs_merged_percentage%2Cprs_commented%2Cprs_reviewed%2Cissues_commented%2Ccontributions%2Call_time_contribs" +
         "&show_icons=true" +
         "&include_all_commits=true",
     );
@@ -74,12 +74,24 @@ describe("buildCardUrl", () => {
   it("builds pin suffix using userId not selectedUserId", () => {
     const result = buildCardUrl(USER_ID, CardType.PIN, {
       ...baseOptions,
+      enableAnimations: false,
       showOwner: true,
       descriptionLines: 3,
     });
 
     expect(result.toString()).toBe(
       "/pin?username=john-github&repo=repo1&show_owner=true&description_lines_count=3",
+    );
+  });
+
+  it("adds disable_animations to the pin card", () => {
+    const result = buildCardUrl(USER_ID, CardType.PIN, {
+      ...baseOptions,
+      enableAnimations: true,
+    });
+
+    expect(result.toString()).toBe(
+      "/pin?username=john-github&repo=repo1&disable_animations=false",
     );
   });
 
@@ -90,6 +102,15 @@ describe("buildCardUrl", () => {
     });
 
     expect(result.toString()).toBe("/gist?id=gist1&show_owner=true");
+  });
+
+  it("adds disable_animations to the gist card", () => {
+    const result = buildCardUrl(USER_ID, CardType.GIST, {
+      ...baseOptions,
+      enableAnimations: false,
+    });
+
+    expect(result.toString()).toBe("/gist?id=gist1&disable_animations=true");
   });
 
   it("builds wakatime suffix with percent and custom title", () => {

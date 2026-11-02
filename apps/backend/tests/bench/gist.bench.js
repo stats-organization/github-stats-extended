@@ -1,15 +1,10 @@
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
-import { beforeAll, bench, describe, vi } from "vitest";
+import { beforeAll, test, vi } from "vitest";
 
-import { happy_path_gist_data } from "../utils.js";
-
-const mock = new MockAdapter(axios);
-
-const createResponse = () => ({
-  end: vi.fn(),
-  setHeader: vi.fn(),
-});
+import {
+  createRequestResponse,
+  happy_path_gist_data,
+  mockGraphQL,
+} from "../utils.js";
 
 let router;
 
@@ -21,23 +16,12 @@ beforeAll(async () => {
 
   ({ default: router } = await import("../../router.js"));
 
-  mock
-    .onPost("https://api.github.com/graphql")
-    .reply(200, happy_path_gist_data);
+  mockGraphQL(happy_path_gist_data);
 });
 
-describe("bench /api/gist", () => {
-  bench(
-    "base",
-    async () => {
-      const req = {
-        headers: {},
-        url: "/api/gist?id=happy-gist-id",
-      };
-      const res = createResponse();
-
-      await router(req, res);
-    },
-    { warmupIterations: 50 },
-  );
+test("bench /api/gist", async ({ bench }) => {
+  await bench("base", async () => {
+    const { req, res } = createRequestResponse("/api/gist?id=happy-gist-id");
+    await router(req, res);
+  }).run({ warmupIterations: 50 });
 });

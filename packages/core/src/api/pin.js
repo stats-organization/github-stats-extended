@@ -2,6 +2,7 @@ import { renderRepoCard } from "../cards/repo.js";
 import { findInvalidColorParam, pickColorParams } from "../common/color.js";
 import {
   MissingParamError,
+  describeError,
   retrieveSecondaryMessage,
 } from "../common/error.js";
 import { parseArray, parseBoolean } from "../common/ops.js";
@@ -26,6 +27,7 @@ export default async (
     locale,
     border_radius,
     description_lines_count,
+    disable_animations,
     ...remainingParams
   },
   pat = null,
@@ -99,12 +101,14 @@ export default async (
         username,
         locale: locale ? locale.toLowerCase() : null,
         description_lines_count,
+        disable_animations: parseBoolean(disable_animations),
       }),
     };
   } catch (err) {
     if (err instanceof Error) {
       return {
         status: "error - temporary",
+        error: describeError(err),
         content: renderError({
           message: err.message,
           secondaryMessage: retrieveSecondaryMessage(err),

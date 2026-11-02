@@ -49,7 +49,7 @@ export function LoginAccountManagement(): JSX.Element {
   };
 
   return (
-    <LoginBox isOpaque={showDeleteModal}>
+    <LoginBox>
       <div className="mb-4">
         {privateAccess ? (
           <div className="flex items-center gap-4">

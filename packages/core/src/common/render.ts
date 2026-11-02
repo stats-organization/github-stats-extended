@@ -394,14 +394,15 @@ const renderError = ({
   renderOptions = {},
 }: {
   message: string;
-  secondaryMessage?: string;
+  secondaryMessage?: string | undefined;
+  // `| undefined`: api handlers forward absent query params
   renderOptions?: {
-    title_color?: string;
-    text_color?: string;
-    bg_color?: string;
-    border_color?: string;
-    theme?: string;
-    show_repo_link?: boolean;
+    title_color?: string | undefined;
+    text_color?: string | undefined;
+    bg_color?: string | undefined;
+    border_color?: string | undefined;
+    theme?: string | undefined;
+    show_repo_link?: boolean | undefined;
   };
 }): string => {
   const {

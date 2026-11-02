@@ -54,7 +54,7 @@ export function buildCardUrl(
       }
       if (showAllStats) {
         url = url.show(
-          "reviews,discussions_started,discussions_answered,prs_merged,prs_merged_percentage,prs_commented,prs_reviewed,issues_commented,contributions",
+          "reviews,discussions_started,discussions_answered,prs_merged,prs_merged_percentage,prs_commented,prs_reviewed,issues_commented,contributions,all_time_contribs",
         );
       }
       if (showIcons) {
@@ -124,6 +124,9 @@ export function buildCardUrl(
       if (descriptionLines) {
         url = url.descriptionLines(descriptionLines);
       }
+      if (enableAnimations) {
+        url = url.disableAnimations(false);
+      }
       return url;
     }
 
@@ -134,6 +137,9 @@ export function buildCardUrl(
       }
       if (showOwner) {
         url = url.showOwner();
+      }
+      if (!enableAnimations) {
+        url = url.disableAnimations();
       }
       return url;
     }

@@ -1,22 +1,14 @@
-import express from "express";
-
-import router from "./router.js";
-
-const app = express();
-
-app.use((req, res) => {
-  /*
-   * Vercel resolves `/api/pin/` to the same function as `/api/pin`, but the router matches the path exactly.
-   * Drop the trailing slash so local requests behave like deployed ones.
-   */
-  const [pathname, query] = req.url.split("?", 2);
-  if (pathname !== "/" && pathname?.endsWith("/")) {
-    req.url = pathname.slice(0, -1) + (query === undefined ? "" : `?${query}`);
-  }
-  return router(req, res);
-});
+import { app } from "./app.js";
 
 const port = process.env.PORT || process.env.port || 9000;
-app.listen(port, "0.0.0.0", () => {
+const server = app.listen(port, "0.0.0.0", () => {
   console.log(`Server running on port ${port}`);
 });
+
+const shutdown = (signal) => {
+  console.log(`${signal} received. Shutting down gracefully.`);
+  server.close(() => process.exit(0));
+  setTimeout(() => process.exit(1), 20_000).unref();
+};
+process.on("SIGTERM", shutdown);
+process.on("SIGINT", shutdown);

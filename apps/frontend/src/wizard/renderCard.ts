@@ -5,22 +5,14 @@ import {
   topLangs,
   wakatime,
 } from "@stats-organization/github-readme-stats-core";
-
-/**
- * What a core api handler returns:
- * a rendered card, or a rendered error card.
- */
-interface CardResult {
-  status: string;
-  content: string;
-}
+import type { ApiResult } from "@stats-organization/github-readme-stats-core";
 
 /** Core's api handlers are still JavaScript, so every param they destructure is inferred as required. */
-type CardHandler = (query: Record<string, string>) => Promise<CardResult>;
+type CardHandler = (query: Record<string, string>) => Promise<ApiResult>;
 
 const CARD_HANDLERS: Record<string, CardHandler | undefined> = {
   "/api": api as CardHandler,
-  "/api/gist": gist as CardHandler,
+  "/api/gist": gist,
   "/api/pin": pin as CardHandler,
   "/api/top-langs": topLangs as CardHandler,
   "/api/wakatime": wakatime as CardHandler,
@@ -34,7 +26,7 @@ const CARD_HANDLERS: Record<string, CardHandler | undefined> = {
  * @returns The rendered card, or the rendered error card when a param is rejected.
  * @throws When `url` is not one of the card endpoints.
  */
-export async function renderCard(url: string): Promise<CardResult> {
+export async function renderCard(url: string): Promise<ApiResult> {
   const { pathname, searchParams } = new URL(url);
 
   const handler = CARD_HANDLERS[pathname];

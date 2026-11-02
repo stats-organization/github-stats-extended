@@ -42,13 +42,10 @@ Custom title should be URI-escaped, as specified in [Percent Encoding](https://e
 
 ## Demo
 
-<img class="card-preview-light" src="/api/wakatime?username=alan&theme=light_github" alt="Alan's WakaTime stats" />
-<img class="card-preview-dark" src="/api/wakatime?username=alan&theme=dark_github" alt="Alan's WakaTime stats" />
+![Alan's WakaTime stats](/api/wakatime?username=alan)
 
-<img class="card-preview-light" src="/api/wakatime?username=alan&card_width=315&hide_progress=true&theme=light_github" alt="Alan's WakaTime stats" />
-<img class="card-preview-dark" src="/api/wakatime?username=alan&card_width=315&hide_progress=true&theme=dark_github" alt="Alan's WakaTime stats" />
+![Alan's WakaTime stats](/api/wakatime?username=alan&card_width=315&hide_progress=true)
 
 ### Compact layout
 
-<img class="card-preview-light" src="/api/wakatime?username=alan&layout=compact&theme=light_github" alt="Alan's WakaTime stats" />
-<img class="card-preview-dark" src="/api/wakatime?username=alan&layout=compact&theme=dark_github" alt="Alan's WakaTime stats" />
+![Alan's WakaTime stats](/api/wakatime?username=alan&layout=compact)

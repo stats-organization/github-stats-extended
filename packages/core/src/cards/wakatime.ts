@@ -8,7 +8,7 @@ import { createProgressNode, flexLayout } from "../common/render.js";
 import type { WakaTimeData, WakaTimeLang } from "../fetchers/types.js";
 import { wakatimeCardLocales } from "../translations.js";
 
-import type { CommonOptions } from "./common-options.js";
+import type { CommonCardOptions } from "./options.js";
 
 const DEFAULT_CARD_WIDTH = 495;
 const MIN_CARD_WIDTH = 250;
@@ -22,7 +22,8 @@ const TOTAL_TEXT_WIDTH = 275;
 type WakaTimeLayout = "compact" | "normal";
 type DisplayFormat = "time" | "percent";
 
-interface WakaTimeOptions extends CommonOptions {
+interface WakaTimeOptions extends CommonCardOptions {
+  locale: string;
   hide_title: boolean;
   hide: Array<string>;
   card_width: number;
@@ -185,7 +186,7 @@ const createTextNode = ({
 
   const staggerDelay = (index + 3) * 150;
   const cardProgress = hideProgress
-    ? null
+    ? ""
     : createProgressNode({
         x: 110,
         y: 4,
@@ -202,7 +203,7 @@ const createTextNode = ({
         x="${hideProgress ? HIDDEN_PROGRESSBAR_PADDING : PROGRESSBAR_PADDING + progressBarWidth}"
         y="12.5"
       >${encodeHTML(value)}</text>
-      ${String(cardProgress)}
+      ${cardProgress}
     </g>
   `;
 };
@@ -330,7 +331,6 @@ const renderWakatimeCard = (
   const langsCount = clampValue(langs_count, 1, langs_count);
 
   const { lightColors, darkColors } = getLightDarkColors(options);
-  const { titleColor, textColor } = lightColors;
 
   const filteredLanguages = languages
     .filter((language) => language.hours || language.minutes)
@@ -452,7 +452,7 @@ const renderWakatimeCard = (
   card.setHideBorder(hide_border);
   card.setHideTitle(hide_title);
   card.setCSS({
-    light: `
+    light: ({ titleColor, textColor }) => `
     ${getStyles({ textColor })}
     @keyframes slideInAnimation {
       from {
@@ -480,14 +480,12 @@ const renderWakatimeCard = (
     }
     .progress-background { fill: ${textColor === titleColor ? "#fff0" /* transparent */ : textColor}; }
     `,
-    dark: darkColors
-      ? `
-      ${getStyles({ textColor: darkColors.textColor })}
-      .lang-name { fill: ${darkColors.textColor} }
-      .lang-progress { fill: ${darkColors.titleColor}; }
-      .progress-background { fill: ${darkColors.textColor === darkColors.titleColor ? "#fff0" /* transparent */ : darkColors.textColor}; }
-    `
-      : null,
+    dark: ({ titleColor, textColor }) => `
+      ${getStyles({ textColor })}
+      .lang-name { fill: ${textColor} }
+      .lang-progress { fill: ${titleColor}; }
+      .progress-background { fill: ${textColor === titleColor ? "#fff0" /* transparent */ : textColor}; }
+    `,
   });
 
   return card.render(`

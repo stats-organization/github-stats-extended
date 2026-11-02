@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import wakatimeApi from "../src/api/wakatime.js";
 import { renderWakatimeCard } from "../src/cards/wakatime.js";
 
-import { wakaTimeData } from "./fetchWakatime.test.js";
+import { wakaTimeData } from "./fixtures/wakatime.js";
 
 describe("Test Render WakaTime Card", () => {
   it("should render correctly", () => {

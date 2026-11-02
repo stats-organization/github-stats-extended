@@ -4,7 +4,7 @@ title: Run It Yourself
 
 We cache generated cards for a few hours or days to avoid potential rate-limiting in the GitHub API or on Vercel. If you want to set your own cache duration or you want to include private contributions in your stats without granting our hosted version of GitHub-Stats-Extended access to your private contributions, you can run GitHub-Stats-Extended on your own.
 
-GitHub Actions is the simplest setup with static SVGs stored in your repo but less frequent updates, while self-hosting GitHub-Stats-Extended on Vercel takes more work and can serve fresher stats (with caching).
+GitHub Actions is the simplest setup with static SVGs stored in your repo but less frequent updates, while self-hosting GitHub-Stats-Extended takes more work and can serve fresher stats (with caching).
 
 ## GitHub Action
 
@@ -55,9 +55,11 @@ Then embed from your [profile README](https://docs.github.com/en/account-and-pro
 
 See more options and examples in the [GitHub Readme Stats Action README](https://github.com/stats-organization/github-readme-stats-action#readme).
 
-## Self-hosted on Vercel
+## Self-hosted
 
 Running your own instance avoids public rate limits and gives you full control over caching, tokens, and private stats.
+
+First, create a GitHub Personal Access Token so the server can query GitHub's API. Then choose one of the two deployment methods below: Docker runs anywhere you can host a container. The Vercel option replicates how github-stats-extended.vercel.app is deployed, for historical reasons. The last section lists available environment variables to customize your instance.
 
 ### First step: get your Personal Access Token (PAT)
 
@@ -93,13 +95,28 @@ This limits the scope of commits to public repositories only.
     - Pull requests: read-only
   - Click on `Generate token` and copy it.
 
-### On Vercel
+### Self-hosting via Docker
 
-Click on the deploy button to get started!
+A multi-platform Docker image (amd64/arm64) is published to the [GitHub Container Registry](https://github.com/stats-organization/github-stats-extended/pkgs/container/github-stats-extended) on every release.
+
+```bash
+docker run -d \
+  -p 9000:80 \
+  -e PAT_1=YOUR_PERSONAL_ACCESS_TOKEN \
+  ghcr.io/stats-organization/github-stats-extended:latest
+```
+
+Your instance is now available at `http://localhost:9000`.
+
+If you prefer to build the image yourself, simply run `docker build -f Dockerfile.vercel .` from the repository root.
+
+### Self-hosting on Vercel
+
+Click the button to deploy in one click, or follow the step-by-step guide below.
 
 [![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/stats-organization/github-stats-extended&root-directory=apps/backend)
 
-<b>Recommended: Step-by-step guide on setting up your own Vercel instance</b>
+#### Step-by-step guide
 
 1. Go to [vercel.com](https://vercel.com/).
 2. Click on `Log in`.
@@ -109,20 +126,13 @@ Click on the deploy button to get started!
 4. Sign in to GitHub and allow access to all repositories if prompted.
 5. Fork this repo. Disable "Copy the `master` branch only".
 6. Go back to your [Vercel dashboard](https://vercel.com/dashboard).
-7. To import a project, click the `Add New...` button and select the `Project` option.
+7. To import a project, click the `Create New...` button and select the `Project` option.
    ![](https://files.catbox.moe/3n76fh.png)
 8. Search for the forked Git Repository and import it by clicking the `Import` button.
-9. Create a Personal Access Token (PAT) as described in the [previous section](#first-step-get-your-personal-access-token-pat).
-10. Add the PAT as an environment variable named `PAT_1` (as shown).
-    ![](https://files.catbox.moe/0yclio.png)
-    Note: For enhanced security, you can add a variable as a sensitive variable. To do this:
-    1. Go to `Environment Variables` in `Project Settings`, then choose `Add Environment Variable`.
-       ![](https://files.catbox.moe/heprjw.jpg)
-    2. Uncheck `Deployment` from `Environments`
-       ![](https://files.catbox.moe/tiqgd0.jpg)
-    3. Now you can make the variable `Sensitive` by checking the checkbox.
-       ![](https://files.catbox.moe/mla5no.jpg)
-11. As `Root directory` select the `apps/backend` folder.
+9. As `Application Preset` select `Container`.
+10. Create a Personal Access Token (PAT) as described in the [previous section](#first-step-get-your-personal-access-token-pat).
+11. Add the PAT as an environment variable named `PAT_1` (as shown).
+    ![](https://files.catbox.moe/6l785c.png)
 12. Click deploy.
 13. Point your Vercel project at the `release` branch instead of `master`.  
     `master` contains unreleased, potentially unstable code, while `release` contains the latest stable release.
@@ -130,15 +140,15 @@ Click on the deploy button to get started!
     2. Go to `Deployments → ... → Create Deployment`, select `release` and click `Deploy to production`.
 14. See your domains to use the API!
 
-### Optional steps
+#### Optional steps
 
-#### Add an SQL database
+##### Add an SQL database
 
 Add an SQL database, either through an integration such as ["Nile"](https://vercel.com/marketplace/nile), or by manually setting the environment variable `POSTGRES_URL`.
 
 #### Encrypt the stored access tokens
 
-Set `TOKEN_ENCRYPTION_KEY` to encrypt the GitHub access tokens in `authenticated_users` at rest (AES-256-GCM). Generate it with:
+Set `TOKEN_ENCRYPTION_KEY` to encrypt the GitHub access tokens in the SQL database at rest (AES-256-GCM). Generate it with:
 
 ```sh
 openssl rand -base64 32
@@ -156,17 +166,23 @@ POSTGRES_URL=… TOKEN_ENCRYPTION_KEY=… pnpm --filter ./apps/backend run encry
 Set `TOKEN_ENCRYPTION_KEY=<new>,<old>` and redeploy: new logins are encrypted with the first key, stored tokens are decrypted with whichever key matches. Run the command above with the same value to re-encrypt everything, then drop the old key.
 :::
 
-#### Use your own OAuth App
+##### Increase Vercel's function timeout
+
+If you handle a large number of requests, the `/api/repeat-recent` endpoint may time out. By default, Vercel limits serverless functions to 5 minutes. You can [increase this limit](https://vercel.com/docs/functions/configuring-functions/duration#dashboard) in Vercel's dashboard. Note that this [requires](https://vercel.com/docs/functions/limitations#max-duration) a "Pro" or "Enterprise" plan.
+
+##### Use your own OAuth App
 
 [Create your own OAuth App](https://github.com/settings/developers) and set the environment variables `OAUTH_REDIRECT_URI`, `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` on Vercel accordingly.
 
-#### Silence the turbo build warning
+#### Keep your fork up to date
 
-Set the environment variable `TURBO_PLATFORM_ENV_DISABLED` to `true` to disable the build-time warning from [turbo](https://turborepo.dev/) about environment variables missing from `turbo.json`. This warning is not relevant in our project.
+You can keep your fork, and thus your private Vercel instance up to date with the upstream using GitHub's [Sync Fork button](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork). You can also use the [pull](https://github.com/wei/pull) package created by [@wei](https://github.com/wei) to automate this process.
+
+As a prerequisite, GitHub has to know that your personal GitHub-Stats-Extended repo is a fork of https://github.com/stats-organization/github-stats-extended. This only works if you follow the [step-by-step guide](#step-by-step-guide) above, instead of clicking the Vercel "Deploy" button.
 
 ### Available environment variables
 
-GitHub Stats Extended provides several environment variables that can be used to customize the behavior of your self-hosted instance. These include:
+GitHub Stats Extended provides several environment variables that can be used to customize the behavior of your self-hosted instance, whether running via Docker or on Vercel:
 
 <table>
   <thead>
@@ -177,6 +193,21 @@ GitHub Stats Extended provides several environment variables that can be used to
     </tr>
   </thead>
   <tbody>
+    <tr>
+      <td><code>PAT_1</code></td>
+      <td>Your GitHub Personal Access Token. You can add multiple tokens as <code>PAT_1</code>, <code>PAT_2</code>, <code>PAT_3</code>, etc. The server rotates through them to spread the API rate limit across all tokens.</td>
+      <td>A valid GitHub PAT (required)</td>
+    </tr>
+    <tr>
+      <td><code>PORT</code></td>
+      <td>Sets the port the Express server listens on. The Docker image defaults to <code>80</code>; when running outside Docker the default is <code>9000</code>.</td>
+      <td>Any valid port number</td>
+    </tr>
+    <tr>
+      <td><code>POSTGRES_URL</code></td>
+      <td>Connection string for an SQL database. When set, the server stores previously generated cards and <a href="/frontend/docs/fork/#improved-performance-and-latency">proactively regenerates</a> them for faster responses.</td>
+      <td>A PostgreSQL connection string (e.g. <code>postgres://user:pass@host/db</code>)</td>
+    </tr>
     <tr>
       <td><code>CACHE_SECONDS</code></td>
       <td>Sets the cache duration in seconds for the generated cards. This variable takes precedence over the default cache timings for the public instance. If this variable is not set, the default cache duration is 24 hours (86,400 seconds).</td>
@@ -217,17 +248,26 @@ GitHub Stats Extended provides several environment variables that can be used to
       <td>Enables fetching all starred repositories for accurate star counts, especially for users with more than 100 repositories. This may increase response times and API points usage, so it is limited to 10 fetches - i.e. 1000 repos - on the public instance.</td>
       <td><code>true</code> or <code>false</code> or a maximum number of fetches</td>
     </tr>
+    <tr>
+      <td><code>OAUTH_CLIENT_ID</code></td>
+      <td>Client ID of a <a href="https://github.com/settings/developers">GitHub OAuth App</a>. Enables users to log in at the card wizard.</td>
+      <td>A GitHub OAuth App client ID</td>
+    </tr>
+    <tr>
+      <td><code>OAUTH_CLIENT_SECRET</code></td>
+      <td>Client secret of the same GitHub OAuth App.</td>
+      <td>The matching OAuth App client secret</td>
+    </tr>
+    <tr>
+      <td><code>OAUTH_REDIRECT_URI</code></td>
+      <td>The redirect URI registered in the OAuth App. Must match the <em>Authorization callback URL</em> configured in the app settings.</td>
+      <td>A fully-qualified URL (e.g. <code>https://your-domain.com/frontend</code>)</td>
+    </tr>
   </tbody>
 </table>
 
 See [the Vercel documentation](https://vercel.com/docs/concepts/projects/environment-variables) on adding these environment variables to your Vercel instance.
 
 :::caution[Warning]
-Please remember to redeploy your instance after making any changes to the environment variables so that the updates take effect. The changes will not be applied to the previous deployments.
+On Vercel, remember to redeploy your instance after making any changes to the environment variables so that the updates take effect. The changes will not be applied to the previous deployments.
 :::
-
-### Keep your fork up to date
-
-You can keep your fork, and thus your private Vercel instance up to date with the upstream using GitHub's [Sync Fork button](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork). You can also use the [pull](https://github.com/wei/pull) package created by [@wei](https://github.com/wei) to automate this process.
-
-As a prerequisite, GitHub has to know that your personal GitHub-Stats-Extended repo is a fork of https://github.com/stats-organization/github-stats-extended. This only works if you follow the "Step-by-step guide on setting up your own Vercel instance" above, instead of clicking the Vercel "Deploy" button above.

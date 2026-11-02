@@ -5,13 +5,30 @@ import { CustomError } from "./error.js";
 import { logger } from "./log.js";
 
 /**
+ * Delays (in milliseconds) applied before a retry that was caused by a
+ * temporary problem such as a network failure.
+ */
+const TRANSIENT_RETRY_DELAYS_MS: Array<number> = [100, 1000, 3000];
+
+/**
  * Error-detection fields the retryer inspects to detect rate-limiting and credential failures.
- * Every fetcher's payload is intersected with
- * this, so the retryer can read `errors`/`message` regardless of the payload's own shape.
+ * Every fetcher's payload is intersected with this,
+ * so the retryer can read `errors`/`message` regardless of the payload's own shape.
  */
 interface ResponseErrors {
   errors?: Array<{ type?: string; message?: string }>;
   message?: string;
+}
+
+/**
+ * Waits for the given amount of time.
+ *
+ * @param ms Duration in milliseconds.
+ *
+ * @returns A promise that resolves once the duration elapsed.
+ */
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
@@ -43,7 +60,12 @@ type FetcherFunction<TData = unknown, TVariables = Record<string, unknown>> = (
 ) => Promise<FetcherResponse<TData>>;
 
 /**
- * Try to execute the fetcher function until it succeeds or the max number of retries is reached.
+ * Try to execute the fetcher function until it succeeds or retries are exhausted.
+ *
+ * Rate-limited or rejected credentials are retried immediately with the next
+ * available PAT, temporary problems (e.g. network failures) are retried with
+ * the same PAT after the delays defined in {@link TRANSIENT_RETRY_DELAYS_MS}.
+ * Both budgets are independent, so retries of one kind never consume the other's.
  *
  * @template TData Shape of `response.data` returned by the fetcher.
  * @template TVariables Variables the fetcher accepts.
@@ -65,9 +87,11 @@ const retryer = async <TData = unknown, TVariables = Record<string, unknown>>(
     throw new CustomError("No GitHub API tokens found", CustomError.NO_TOKENS);
   }
   const startPAT = getRandomInt(PATs.length);
+  let temporaryFailures = 0;
 
-  for (let retries = 0; retries < PATs.length; retries++) {
-    const currentPAT = PATs[(startPAT + retries) % PATs.length];
+  for (let attempt = 0; attempt - temporaryFailures < PATs.length; attempt++) {
+    const currentPAT =
+      PATs[(startPAT + attempt - temporaryFailures) % PATs.length];
     if (!currentPAT) {
       continue;
     }
@@ -77,7 +101,7 @@ const retryer = async <TData = unknown, TVariables = Record<string, unknown>>(
         variables,
         currentPAT.value,
         // used in tests for faking rate limit
-        retries,
+        attempt,
       );
 
       // react on both type and message-based rate-limit signals.
@@ -89,17 +113,23 @@ const retryer = async <TData = unknown, TVariables = Record<string, unknown>>(
         (!!errors && errorType === "RATE_LIMITED") ||
         /rate limit/i.test(errorMsg);
 
-      if (isRateLimited) {
-        logger.log(`${currentPAT.name} Failed due to rate limiting`);
-      } else {
+      if (!isRateLimited) {
         return response;
       }
+      logger.log(`${currentPAT.name} Failed due to rate limiting`);
     } catch (err) {
       const e = err as { response?: FetcherResponse<TData> };
 
-      // network/unexpected error → let caller treat as failure
+      // network/unexpected error → temporary problem, retry with a delay
       if (!e.response) {
-        throw err;
+        if (temporaryFailures < TRANSIENT_RETRY_DELAYS_MS.length) {
+          await sleep(TRANSIENT_RETRY_DELAYS_MS[temporaryFailures] ?? 0);
+          temporaryFailures++;
+          continue;
+        } else {
+          // transient retries exhausted → let caller treat as failure
+          throw err;
+        }
       }
 
       // also checking for bad credentials if any tokens gets invalidated
@@ -108,12 +138,11 @@ const retryer = async <TData = unknown, TVariables = Record<string, unknown>>(
       const isAccountSuspended =
         message === "Sorry. Your account was suspended.";
 
-      if (isBadCredential || isAccountSuspended) {
-        logger.log(`${currentPAT.name} Failed due to bad credentials`);
-      } else {
+      if (!isBadCredential && !isAccountSuspended) {
         // HTTP error with a response → return it for caller-side handling
         return e.response;
       }
+      logger.log(`${currentPAT.name} Failed due to bad credentials`);
     }
   }
 

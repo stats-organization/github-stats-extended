@@ -12,6 +12,8 @@ interface SelectProps {
   options: Array<SelectOption>;
   selectedOption: SelectOption;
 
+  "aria-labelledby"?: string;
+
   className?: string;
   disabled?: boolean;
 
@@ -24,9 +26,11 @@ export function Select({
   onOptionChange,
   disabled,
   className,
+  "aria-labelledby": ariaLabelledBy,
 }: SelectProps): JSX.Element {
   return (
     <select
+      aria-labelledby={ariaLabelledBy}
       className={clsx("text-base select select-sm w-40 mt-4", className)}
       value={selectedOption.value}
       onChange={(e) => {

@@ -1,9 +1,7 @@
 import { loadConfigFromEnv } from "@stats-organization/github-readme-stats-core";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
-import type { JSX } from "react";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { JSX, Ref, RefCallback } from "react";
 
 import { setShouldMock } from "../../../axios-override.js";
 import {
@@ -18,6 +16,8 @@ interface SvgInlineProps {
   compact?: boolean;
   className?: string;
   forceLoading?: boolean;
+  /** Receives the shadow-root host, so a caller can reach the rendered `<svg>`. */
+  ref?: Ref<HTMLDivElement> | undefined;
 }
 
 export function SvgInline(props: SvgInlineProps): JSX.Element {
@@ -27,11 +27,24 @@ export function SvgInline(props: SvgInlineProps): JSX.Element {
     className,
     compact = false,
     forceLoading = false,
+    ref,
   } = props;
 
   const [svg, setSvg] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const setContainer = useCallback<RefCallback<HTMLDivElement>>(
+    (node) => {
+      containerRef.current = node;
+      if (typeof ref === "function") {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    },
+    [ref],
+  );
   const userToken = useUserToken();
   const isAuthenticated = useIsAuthenticated();
 
@@ -46,7 +59,7 @@ export function SvgInline(props: SvgInlineProps): JSX.Element {
     const loadSvg = async () => {
       const config: Record<string, string | undefined> = {
         FETCH_MULTI_PAGE_STARS: "10",
-        PAT_1: userToken as string, // even if it's null, core's retryer.js sees there is 1 PAT and sets `RETRIES` accordingly
+        PAT_1: userToken as string, // even if it's null, core's retryer.js needs at least one PAT entry to run
       };
 
       loadConfigFromEnv(config);
@@ -103,13 +116,17 @@ export function SvgInline(props: SvgInlineProps): JSX.Element {
   if (forceLoading || !loaded) {
     if (compact) {
       return (
-        <Skeleton key="compactSkeleton" style={{ paddingBottom: "58%" }} />
+        <div
+          key="compact-skeleton"
+          className="skeleton w-full"
+          style={{ paddingBottom: "58%" }}
+        />
       );
     }
     // maximum dimensions of cards in SelectCard stage
     return (
-      <div className=" w-[450px]">
-        <Skeleton key="skeleton" className="h-[245px]" />
+      <div className="w-[450px]">
+        <div key="skeleton" className="skeleton h-[245px] w-full" />
       </div>
     );
   }
@@ -118,9 +135,9 @@ export function SvgInline(props: SvgInlineProps): JSX.Element {
   // Using a different key than the skeletons above to ensure react doesn't reuse the node, which would keep its old shadow DOM content visible.
   return (
     <div
-      key="svgWrapper"
-      ref={containerRef}
-      id="svgWrapper"
+      key="svg-wrapper"
+      ref={setContainer}
+      id="svg-wrapper"
       className={className}
     />
   );

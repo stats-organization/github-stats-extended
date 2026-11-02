@@ -19,6 +19,11 @@
   --sl-color-bg-sidebar: #0d1117;
 }
 
+/* Prose styles render images as blocks; shrink-wrap any link that wraps one. */
+.sl-markdown-content a:has(> img) {
+  display: inline-block;
+}
+
 /* Prose styles render images as blocks, so the row is explicit. */
 .card-row {
   display: flex;
@@ -37,7 +42,10 @@
   height: auto;
 }
 
-/* `prefers-color-scheme` cannot see the site theme, so pick the card by `data-theme`. */
+/*
+ * `prefers-color-scheme` cannot see the site theme, so pick the card by `data-theme`.
+ * `plugins/rehypeCardImages.ts` writes these classes; keep class names in sync with that file.
+ */
 :root[data-theme="dark"] .card-preview-light,
 :root[data-theme="light"] .card-preview-dark {
   display: none;

@@ -1,3 +1,5 @@
+import { getGitHubYearRange, toGitHubDateTime } from "../common/date.js";
+
 import type { YearContributionsFragment } from "./generated/stats.js";
 import { graphqlDocument } from "./graphqlDocument.js";
 
@@ -19,10 +21,8 @@ interface ContributionsQuery {
 const buildContributionsDocument = (years: Array<number>) => {
   const yearFields = years
     .map((year) => {
-      // without "to", 2024-01-01 would count toward year=2023
-      const from = `${year}-01-01T00:00:00Z`;
-      const to = `${year}-12-31T23:59:59Z`;
-      return `year_${year}: contributionsCollection(from: "${from}", to: "${to}") { ...YearContributions }`;
+      const { from, to } = getGitHubYearRange(year);
+      return `year_${year}: contributionsCollection(from: "${toGitHubDateTime(from)}", to: "${toGitHubDateTime(to)}") { ...YearContributions }`;
     })
     .join("\n");
 
@@ -41,3 +41,4 @@ fragment YearContributions on ContributionsCollection {
 };
 
 export { buildContributionsDocument };
+export type { ContributionsQuery };

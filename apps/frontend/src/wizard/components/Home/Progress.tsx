@@ -1,4 +1,5 @@
 import { clsx } from "clsx";
+import { useEffect, useRef } from "react";
 import type { JSX, MouseEventHandler } from "react";
 import {
   FaArrowLeft as LeftArrowIcon,
@@ -60,9 +61,38 @@ export function ProgressBar({
   const leftDisabled = currItemIndex === 0;
   const rightDisabled = currItemIndex === items.length - 1;
 
+  const barRef = useRef<HTMLDivElement | null>(null);
+
+  /*
+   * The bar resizes because the step labels wrap, so a panel stacking under it cannot use a fixed offset.
+   * Publish the measured height instead; `Customize` and `Display` pin their card against it.
+   */
+  useEffect(() => {
+    const bar = barRef.current;
+    if (bar === null) {
+      return undefined;
+    }
+
+    const observer = new ResizeObserver(() => {
+      document.documentElement.style.setProperty(
+        "--wizard-progress-height",
+        `${bar.getBoundingClientRect().height}px`,
+      );
+    });
+    observer.observe(bar);
+
+    return () => {
+      observer.disconnect();
+      document.documentElement.style.removeProperty("--wizard-progress-height");
+    };
+  }, []);
+
   return (
     // The site header is fixed, so the bar parks directly under it rather than at the viewport top.
-    <div className="w-full flex items-center sticky top-[var(--sl-nav-height)] bg-base-300 z-50 pt-3 pb-1 px-1 md:px-20 shadow-md">
+    <div
+      ref={barRef}
+      className="w-full flex items-center sticky top-[var(--sl-nav-height)] bg-base-300 z-50 pt-3 pb-1 px-1 md:px-20 shadow-md"
+    >
       <button
         type="button"
         aria-label="Previous step"

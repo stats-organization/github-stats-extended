@@ -1,5 +1,4 @@
-import { themes } from "../themes/index.js";
-import type { ThemeName } from "../themes/index.js";
+import { isThemeName, themes } from "../themes/index.js";
 
 /** Matches a 3-, 4-, 6-, or 8-digit hex color with no leading `#`. */
 const HEX_COLOR =
@@ -106,15 +105,22 @@ const fallbackColor = (
 };
 
 /**
- * Object containing card colors.
+ * Resolved card colors for a single color scheme, as written into the SVG.
  */
 interface CardColors {
+  /** Card title color. */
   titleColor: string;
+  /** Card icon color. */
   iconColor: string;
+  /** Card text color. */
   textColor: string;
+  /** Card background color, or a gradient as `[angle, ...stops]`. */
   bgColor: string | Array<string>;
+  /** Card border color. */
   borderColor: string;
+  /** Stats card rank ring color. */
   ringColor: string;
+  /** Progress bar background color. */
   progBarBgColor: string;
 }
 
@@ -172,11 +178,7 @@ const getCardColors = ({
   theme,
 }: ColorInput): CardColors => {
   const defaultTheme = themes.default;
-  const isThemeProvided = theme !== undefined && theme in themes;
-
-  const selectedTheme = isThemeProvided
-    ? themes[theme as ThemeName]
-    : defaultTheme;
+  const selectedTheme = isThemeName(theme) ? themes[theme] : defaultTheme;
 
   const defaultBorderColor =
     "border_color" in selectedTheme
@@ -275,7 +277,7 @@ const extractLightDarkColors = (
  * @returns `{ lightColors, darkColors }`, resolved colors for both light and dark mode
  */
 const getLightDarkColors = (
-  params: ColorInput & LightDarkColorParams,
+  params: ColorParams,
 ): { lightColors: CardColors; darkColors: CardColors | null } => {
   const lightOverrides = extractLightDarkColors(params, "_light");
   const darkOverrides = extractLightDarkColors(params, "_dark");
@@ -342,6 +344,9 @@ const findInvalidColorParam = (params: ColorParams): string | null =>
       ),
     ),
   );
+
+export type { CardColors };
+export type { ColorParams };
 
 export {
   getCardColors,

@@ -359,19 +359,6 @@ export function CustomizeStage({
             }}
           />
         )}
-        {(cardType === CardType.STATS ||
-          cardType === CardType.TOP_LANGS ||
-          cardType === CardType.WAKATIME) && (
-          <CheckboxSection
-            title="Enable Animations?"
-            // text="Enable Animations."
-            question="enable animations?"
-            checked={enableAnimations}
-            onCheckedChange={(checked) => {
-              onOptionChange("enableAnimations", checked);
-            }}
-          />
-        )}
         {CATEGORY_BY_CARD_TYPE[cardType] === CardCategory.REPO && (
           <CheckboxSection
             title="Show Owner?"
@@ -402,6 +389,15 @@ export function CustomizeStage({
             max={3}
           />
         )}
+        <CheckboxSection
+          title="Enable Animations?"
+          // text="Enable Animations."
+          question="enable animations?"
+          checked={enableAnimations}
+          onCheckedChange={(checked) => {
+            onOptionChange("enableAnimations", checked);
+          }}
+        />
         <div className="pl-10 pr-10">
           For more customization options check the{" "}
           <LinkExternal
@@ -414,7 +410,7 @@ export function CustomizeStage({
         </div>
       </div>
       <div className="w-full lg:w-3/5 md:w-1/2 object-center pt-5 md:pt-0 pl-0 md:pl-5 lg:pl-0">
-        <div className="w-full lg:w-3/5 mx-auto flex flex-col justify-center sticky top-32">
+        <div className="w-full lg:w-3/5 mx-auto flex flex-col justify-center sticky top-[calc(var(--sl-nav-height)+var(--wizard-progress-height,6rem)+2rem)]">
           <CardImage card={card} stage={2} />
         </div>
       </div>

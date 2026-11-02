@@ -16,7 +16,7 @@ import {
 } from "../common/render.js";
 import type { GistData } from "../fetchers/types.js";
 
-import type { CommonOptions } from "./common-options.js";
+import type { CardOptions, CommonCardOptions } from "./options.js";
 
 const ICON_SIZE = 16;
 const CARD_DEFAULT_WIDTH = 400;
@@ -27,9 +27,10 @@ const DESCRIPTION_FONT_SIZE = 13;
 const DESCRIPTION_LINE_HEIGHT_PX = 16;
 const DESCRIPTION_MAX_LINES = 10;
 
-interface GistCardOptions extends CommonOptions {
+interface GistCardOptions extends CommonCardOptions {
   show_owner: boolean;
   browser_rendering: boolean;
+  disable_animations: boolean;
 }
 
 /**
@@ -41,7 +42,7 @@ interface GistCardOptions extends CommonOptions {
  */
 const renderGistCard = (
   gistData: GistData,
-  options: Partial<GistCardOptions> = {},
+  options: CardOptions<GistCardOptions> = {},
 ): string => {
   const { name, nameWithOwner, description, language, starsCount, forksCount } =
     gistData;
@@ -51,10 +52,10 @@ const renderGistCard = (
     show_owner = false,
     browser_rendering = false,
     hide_border = false,
+    disable_animations = false,
   } = options;
 
   const { lightColors, darkColors } = getLightDarkColors({ ...options, theme });
-  const { textColor, iconColor } = lightColors;
 
   const desc = parseEmojis(description || "No description provided");
 
@@ -151,7 +152,7 @@ const renderGistCard = (
   });
 
   card.setCSS({
-    light: `
+    light: ({ textColor, iconColor }) => `
     .description {
       font: 400 ${DESCRIPTION_FONT_SIZE}px 'Segoe UI', Ubuntu, Sans-Serif;fill: ${textColor};
       ${browser_rendering ? wrappedTextStyles(textColor) : ""}
@@ -159,18 +160,19 @@ const renderGistCard = (
     .gray { font: 400 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${textColor} }
     .icon { fill: ${iconColor} }
   `,
-    dark: darkColors
-      ? `
+    dark: ({ textColor, iconColor }) => `
       .description {
-        fill: ${darkColors.textColor};
-        ${browser_rendering ? wrappedTextStyles(darkColors.textColor) : ""}
+        fill: ${textColor};
+        ${browser_rendering ? wrappedTextStyles(textColor) : ""}
       }
-      .gray { fill: ${darkColors.textColor} }
-      .icon { fill: ${darkColors.iconColor} }
-    `
-      : null,
+      .gray { fill: ${textColor} }
+      .icon { fill: ${iconColor} }
+    `,
   });
 
+  if (disable_animations) {
+    card.disableAnimations();
+  }
   card.setHideBorder(hide_border);
 
   return card.render(`

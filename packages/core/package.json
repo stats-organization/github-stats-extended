@@ -1,6 +1,6 @@
 {
   "name": "@stats-organization/github-readme-stats-core",
-  "version": "2.1.5",
+  "version": "2.2.1",
   "type": "module",
   "homepage": "https://github-stats-extended.vercel.app/frontend",
   "bugs": {
@@ -72,7 +72,6 @@
     "test": "vitest",
     "test:update:snapshot": "vitest -u",
     "test:e2e": "vitest --config vitest.config.e2e.ts",
-    "bench": "vitest bench --run --config vitest.config.bench.ts",
     "lint": "eslint",
     "typecheck": "tsc -p tsconfig.typecheck.json",
     "generate-graphql-types": "node scripts/generate-graphql-types",
@@ -80,17 +79,17 @@
     "generate-language-colors": "node scripts/generate-language-colors"
   },
   "devDependencies": {
-    "@graphql-codegen/core": "6.2.0",
-    "@graphql-codegen/typescript": "6.1.0",
-    "@graphql-codegen/typescript-operations": "6.1.2",
+    "@graphql-codegen/core": "6.2.1",
+    "@graphql-codegen/typescript": "6.1.1",
+    "@graphql-codegen/typescript-operations": "6.1.10",
     "@octokit/graphql-schema": "15.26.1",
-    "@testing-library/dom": "10.4.1",
-    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/jest-dom": "7.0.1",
     "@uppercod/css-to-object": "1.1.1",
-    "axios-mock-adapter": "2.1.0",
-    "graphql": "16.11.0",
-    "js-yaml": "5.2.1",
+    "graphql": "16.14.2",
+    "js-yaml": "5.4.3",
     "jsdom": "catalog:default",
+    "nock": "catalog:default",
     "vitest": "catalog:default"
   },
   "dependencies": {

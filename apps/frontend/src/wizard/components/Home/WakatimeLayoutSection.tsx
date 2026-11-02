@@ -1,3 +1,4 @@
+import { useId } from "react";
 import type { JSX } from "react";
 
 import { Select } from "../Generic/Select";
@@ -37,10 +38,13 @@ export function WakatimeLayoutSection({
   selectedOption,
   onOptionChange,
 }: WakatimeLayoutSectionProps): JSX.Element {
+  const titleId = useId();
+
   return (
-    <Section title="Card Layout">
+    <Section title="Card Layout" titleId={titleId}>
       <p>Select a card layout.</p>
       <Select
+        aria-labelledby={titleId}
         options={options}
         selectedOption={selectedOption}
         onOptionChange={onOptionChange}

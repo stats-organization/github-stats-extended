@@ -46,7 +46,7 @@ const calculatePrimaryLanguage = (
  * @returns Gist data.
  */
 const fetchGist = async (
-  id: string,
+  id: string | undefined,
   pat: string | null = null,
 ): Promise<GistData> => {
   if (!id) {

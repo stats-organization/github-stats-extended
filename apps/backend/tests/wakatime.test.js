@@ -1,9 +1,10 @@
 // @ts-check
 
 import { wakatime } from "@stats-organization/github-readme-stats-core";
+import supertest from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import router from "../router.js";
+import { app } from "../app.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
 import { getUserAccessByName, storeRequest } from "../src/common/database.js";
 
@@ -21,16 +22,6 @@ vi.mock(import("../src/common/database.js"), async (importOriginal) => ({
 const wakatimeMock = vi.mocked(wakatime);
 const storeRequestMock = vi.mocked(storeRequest);
 const getUserAccessByNameMock = vi.mocked(getUserAccessByName);
-
-const createRequest = (search = "") => ({
-  headers: {},
-  url: `/api/wakatime?${search}`,
-});
-
-const createResponse = () => ({
-  end: vi.fn(),
-  setHeader: vi.fn(),
-});
 
 const defaultCacheHeader =
   `max-age=${CACHE_TTL.WAKATIME_CARD.DEFAULT}, ` +
@@ -52,10 +43,11 @@ describe("Test /api/wakatime backend routing", () => {
       content: "mock-wakatime-svg",
     });
 
-    const req = createRequest("username=anuraghazra&theme=dark&layout=compact");
-    const res = createResponse();
-
-    await router(req, res);
+    const res = await supertest(app)
+      .get("/api/wakatime?username=anuraghazra&theme=dark&layout=compact")
+      .expect("Cache-Control", defaultCacheHeader)
+      .expect("Content-Type", "image/svg+xml")
+      .expect(200);
 
     expect(wakatimeMock).toHaveBeenCalledWith({
       username: "anuraghazra",
@@ -63,16 +55,7 @@ describe("Test /api/wakatime backend routing", () => {
       layout: "compact",
     });
     expect(getUserAccessByNameMock).not.toHaveBeenCalled();
-    expect(req.query).toEqual({
-      username: "anuraghazra",
-      theme: "dark",
-      layout: "compact",
-    });
-    expect(res.setHeader.mock.calls).toEqual([
-      ["Cache-Control", defaultCacheHeader],
-      ["Content-Type", "image/svg+xml"],
-    ]);
-    expect(res.end).toHaveBeenCalledExactlyOnceWith("mock-wakatime-svg");
-    expect(storeRequestMock).toHaveBeenCalledExactlyOnceWith(req);
+    expect(res.body.toString()).toBe("mock-wakatime-svg");
+    expect(storeRequestMock).toHaveBeenCalledOnce();
   });
 });

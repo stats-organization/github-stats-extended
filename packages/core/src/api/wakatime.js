@@ -2,6 +2,7 @@ import { renderWakatimeCard } from "../cards/wakatime.js";
 import { findInvalidColorParam, pickColorParams } from "../common/color.js";
 import {
   MissingParamError,
+  describeError,
   retrieveSecondaryMessage,
 } from "../common/error.js";
 import { parseArray, parseBoolean } from "../common/ops.js";
@@ -77,7 +78,7 @@ export default async ({
         card_width: parseInt(card_width, 10),
         hide: parseArray(hide),
         line_height,
-        hide_progress,
+        hide_progress: parseBoolean(hide_progress),
         border_radius,
         locale: locale ? locale.toLowerCase() : null,
         layout,
@@ -90,6 +91,7 @@ export default async ({
     if (err instanceof Error) {
       return {
         status: "error - temporary",
+        error: describeError(err),
         content: renderError({
           message: err.message,
           secondaryMessage: retrieveSecondaryMessage(err),

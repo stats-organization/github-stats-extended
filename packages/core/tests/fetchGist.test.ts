@@ -1,6 +1,5 @@
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
-import { afterEach, describe, expect, it } from "vitest";
+import nock from "nock";
+import { describe, expect, it } from "vitest";
 
 import { fetchGist } from "../src/fetchers/gist.js";
 
@@ -68,15 +67,9 @@ const gist_errors_data = {
   ],
 };
 
-const mock = new MockAdapter(axios);
-
-afterEach(() => {
-  mock.reset();
-});
-
 describe("Test fetchGist", () => {
   it("should fetch gist correctly", async () => {
-    mock.onPost("https://api.github.com/graphql").reply(200, gist_data);
+    nock("https://api.github.com").post("/graphql").reply(200, gist_data);
 
     const gist = await fetchGist("bbfce31e0217a3689c8d961a356cb10d");
 
@@ -92,8 +85,8 @@ describe("Test fetchGist", () => {
   });
 
   it("should throw correct error if gist not found", async () => {
-    mock
-      .onPost("https://api.github.com/graphql")
+    nock("https://api.github.com")
+      .post("/graphql")
       .reply(200, gist_not_found_data);
 
     await expect(fetchGist("bbfce31e0217a3689c8d961a356cb10d")).rejects.toThrow(
@@ -102,7 +95,9 @@ describe("Test fetchGist", () => {
   });
 
   it("should throw error if response contains them", async () => {
-    mock.onPost("https://api.github.com/graphql").reply(200, gist_errors_data);
+    nock("https://api.github.com")
+      .post("/graphql")
+      .reply(200, gist_errors_data);
 
     await expect(fetchGist("bbfce31e0217a3689c8d961a356cb10d")).rejects.toThrow(
       "Some test GraphQL error",

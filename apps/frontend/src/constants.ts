@@ -1,6 +1,7 @@
 export const USE_LOGGER = true as boolean;
 
-export const CLIENT_ID = "Ov23lilAc5biyyRY0K1u";
+// injected at container startup; see apps/backend/docker-entrypoint.sh
+export const CLIENT_ID = "__OAUTH_CLIENT_ID__";
 
 export const HOST = window.location.host;
 

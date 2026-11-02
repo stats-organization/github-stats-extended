@@ -6,7 +6,7 @@ import * as prettier from "prettier";
 
 const LANGS_FILEPATH = "./src/common/languageColors.json";
 
-// Retrieve languages from github linguist repository yaml file
+// Retrieve languages from GitHub linguist repository yaml file
 const response = await axios.get(
   "https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml",
 );
@@ -21,8 +21,18 @@ Object.keys(languages).forEach((lang) => {
   languageColors[lang] = languages[lang].color;
 });
 
-// Debug Print
-// console.dir(languageColors);
+// Check for case-insensitive duplicates
+const seen = new Map();
+for (const name of Object.keys(languageColors)) {
+  const lower = name.toLowerCase();
+  if (seen.has(lower)) {
+    throw new Error(
+      `Case-insensitive duplicate language: "${seen.get(lower)}" vs "${name}"`,
+    );
+  }
+  seen.set(lower, name);
+}
+
 const jsonString = JSON.stringify(languageColors);
 fs.writeFileSync(
   LANGS_FILEPATH,
