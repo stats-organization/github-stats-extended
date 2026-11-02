@@ -360,9 +360,6 @@ importers:
       emoji-name-map:
         specifier: ^2.0.3
         version: 2.0.3
-      github-username-regex:
-        specifier: ^1.0.0
-        version: 1.0.0
     devDependencies:
       '@graphql-codegen/core':
         specifier: 6.2.1
@@ -2869,9 +2866,6 @@ packages:
 
   github-slugger@2.0.0:
     resolution: {integrity: sha512-IaOQ9puYtjrkq7Y0Ygl9KDZnrf/aiUJYUpVf89y8kyaxbRG7Y1SrX/jaumrv81vc61+kiMempujsM3Yw7w5qcw==}
-
-  github-username-regex@1.0.0:
-    resolution: {integrity: sha512-EqDVkN0/5MQyDPOSDLInVRRXdeISRfcN1UW/1FUqD2knV1HHw8DndMB3UPNn5lO51DvRnjzbLXwWqNNV86PLOw==}
 
   glob-parent@6.0.2:
     resolution: {integrity: sha512-XxwI8EOhVQgWp6iDL+3b0r86f4d6AX6zSU55HfB4ydCEuXLXc5FcYeOu+nnGftS4TEju/11rt4KJPTMgbfmv4A==}
@@ -7134,8 +7128,6 @@ snapshots:
       resolve-pkg-maps: 1.0.0
 
   github-slugger@2.0.0: {}
-
-  github-username-regex@1.0.0: {}
 
   glob-parent@6.0.2:
     dependencies:

@@ -1,6 +1,5 @@
 import axios from "axios";
 import type { AxiosResponse } from "axios";
-import githubUsernameRegex from "github-username-regex";
 
 import { calculateRank } from "../calculateRank.js";
 import { getConfig } from "../common/config.js";
@@ -28,6 +27,8 @@ import {
 } from "../graphql/reposContributedToDocument.js";
 
 import type { RepoUserStats, StatsData } from "./types.js";
+
+const githubUsernameRegex = /^[a-z\d-]{1,39}$/i;
 
 /** The subset of the stats response `statsFetcher` returns and threads on. */
 type StatsFetcherResponse = Pick<

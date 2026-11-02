@@ -390,11 +390,31 @@ describe("Test fetchStats", () => {
     );
   });
 
-  it("should throw specific error when include_all_commits true and invalid username", async () => {
-    await expect(fetchStats("asdf///---", true)).rejects.toThrow(
-      "Invalid username provided.",
-    );
-  });
+  it.each(["Foo-", "-", "-foo", "x--", "A--A"])(
+    "should fetch total commits for unusual but valid username %s",
+    async (username) => {
+      nock("https://api.github.com")
+        .get(`/search/commits?per_page=1&q=author:${username}`)
+        .reply(200, { total_count: 1000 });
+
+      const stats = await fetchStats(username, true);
+      expect(stats).toStrictEqual(
+        expectedStats(
+          { totalCommits: 1000 },
+          { all_commits: true, commits: 1000 },
+        ),
+      );
+    },
+  );
+
+  it.each(["asdf///---", "foo_bar", "a".repeat(40)])(
+    "should throw specific error when include_all_commits true and invalid username %s",
+    async (username) => {
+      await expect(fetchStats(username, true)).rejects.toThrow(
+        "Invalid username provided.",
+      );
+    },
+  );
 
   it("should throw specific error when include_all_commits true and API returns error", async () => {
     nock("https://api.github.com")
