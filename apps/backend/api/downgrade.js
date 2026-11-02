@@ -42,7 +42,7 @@ export default async (req, res) => {
   try {
     if (userAccess.token === null) {
       logger.warn(
-        `User ${user_key} has private access but no valid token; skipping GitHub authorization deletion.`,
+        `User has private access but no valid token; skipping GitHub authorization deletion.`,
       );
     } else {
       await axios.delete(
