@@ -87,7 +87,7 @@
     "@testing-library/jest-dom": "7.0.1",
     "@uppercod/css-to-object": "1.1.1",
     "graphql": "16.14.2",
-    "js-yaml": "5.4.3",
+    "js-yaml": "5.5.0",
     "jsdom": "catalog:default",
     "nock": "catalog:default",
     "vitest": "catalog:default"
