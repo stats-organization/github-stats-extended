@@ -23,7 +23,7 @@
     "@types/react-dom": "19.3.0",
     "astro": "^7.3.5",
     "axios": "catalog:default",
-    "axios-cache-interceptor": "^1.12.3",
+    "axios-cache-interceptor": "^1.13.0",
     "clsx": "2.1.1",
     "daisyui": "^5.7.47",
     "jsdom": "catalog:default",

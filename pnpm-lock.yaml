@@ -168,8 +168,8 @@ catalogs:
       specifier: 5.0.0
       version: 5.0.0
     axios:
-      specifier: ^1.20.0
-      version: 1.20.0
+      specifier: ^1.21.0
+      version: 1.21.0
     jsdom:
       specifier: 30.1.2
       version: 30.1.2
@@ -253,7 +253,7 @@ importers:
         version: link:../../packages/core
       axios:
         specifier: catalog:default
-        version: 1.20.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
+        version: 1.21.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
       express:
         specifier: 5.2.1
         version: 5.2.1(supports-color@10.2.2)
@@ -305,10 +305,10 @@ importers:
         version: 7.3.8(@astrojs/markdown-remark@7.3.2(supports-color@10.2.2))(@types/node@24.19.1)(jiti@2.7.0)(yaml@2.9.1)
       axios:
         specifier: catalog:default
-        version: 1.20.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
+        version: 1.21.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
       axios-cache-interceptor:
-        specifier: ^1.12.3
-        version: 1.12.3(axios@1.20.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2))
+        specifier: ^1.13.0
+        version: 1.13.0(axios@1.21.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2))
       clsx:
         specifier: 2.1.1
         version: 2.1.1
@@ -356,7 +356,7 @@ importers:
     dependencies:
       axios:
         specifier: catalog:default
-        version: 1.20.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
+        version: 1.21.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
       emoji-name-map:
         specifier: ^2.0.3
         version: 2.0.3
@@ -2189,14 +2189,14 @@ packages:
     resolution: {integrity: sha512-ooviqdwwgfIfNmDwo94wlshcdzfO64XV0Cg6oDsDYBJfITDz1EngD2z7DkbvCWn+XIMsIqW27sEVF6qcpJrRcg==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
-  axios-cache-interceptor@1.12.3:
-    resolution: {integrity: sha512-IK8+YGxH03wOImvVg1PlujxZ9CoBsUpqv2TdGlgENeo9wcL63N6usYW0glmK3mNrfu+CPA/lWeSuo0+9OmNJrw==}
+  axios-cache-interceptor@1.13.0:
+    resolution: {integrity: sha512-qscHNPAgpBtnI8lJ9r4lwHu+W4gacx9qm3rgwFnbkKvhT4QHhdVDl8MFtyg/OEQpKB61PXdqMj1aY6t9/hOGEA==}
     engines: {node: '>=12'}
     peerDependencies:
       axios: ^1.19.0
 
-  axios@1.20.0:
-    resolution: {integrity: sha512-r8aOh8j9cGKpgQAqpzrUHnSIc6a59Y3Xf/cv8sy1DrHCkZHzQGEuoq1tARk6qSyDdtQGSDgpb9kFlruzPvrgwg==}
+  axios@1.21.0:
+    resolution: {integrity: sha512-YCzXMB53Q9PZBsh7yN7wtapit4WepwcHS2fP8QhGsBxSz5YtgYobV7GGlWlAJi+RxfU77GQTQi2DSLUma42EYA==}
 
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
@@ -6361,16 +6361,16 @@ snapshots:
 
   auto-bind@5.0.1: {}
 
-  axios-cache-interceptor@1.12.3(axios@1.20.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)):
+  axios-cache-interceptor@1.13.0(axios@1.21.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)):
     dependencies:
-      axios: 1.20.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
+      axios: 1.21.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
       cache-parser: 1.2.6
       fast-defer: 1.1.9
       http-vary: 1.0.3
       object-code: 2.0.0
       try: 1.0.3
 
-  axios@1.20.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2):
+  axios@1.21.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2):
     dependencies:
       follow-redirects: 1.16.1(debug@4.4.3(supports-color@10.2.2))
       form-data: 4.0.6
