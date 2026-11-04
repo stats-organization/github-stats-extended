@@ -47,6 +47,7 @@ You can customize the appearance and behavior of the top languages card using th
 | `size_weight`                   | Configures language stats algorithm (see [Language stats algorithm](#language-stats-algorithm)).                                                                                                | number                          | `1`                                                 |
 | `count_weight`                  | Configures language stats algorithm (see [Language stats algorithm](#language-stats-algorithm)).                                                                                                | number                          | `0`                                                 |
 | `stats_format`                  | Switches between two available formats for language's stats `percentages` and `bytes`.                                                                                                          | enum                            | `percentages`                                       |
+| `count_jupyter`                 | Counts code-cell bytes in `.ipynb` files as the kernel language and ignores outputs. Set to `code`.                                                                                             | enum                            | `null`                                              |
 
 <sup>1</sup>: Supports light and dark mode via `prog_bar_bg_color_light` and `prog_bar_bg_color_dark`.
 
@@ -94,6 +95,18 @@ You can use `&hide=language1,language2` parameter to hide individual languages.
 ```
 
 Language names with spaces or symbols need to be [percent-encoded](#options), so Jupyter Notebook becomes `&hide=jupyter%20notebook` and C++ becomes `&hide=c%2B%2B`.
+
+## Count code inside Jupyter notebooks
+
+GitHub counts a whole `.ipynb` file, including saved outputs, as Jupyter Notebook. That file size can dwarf the language the notebook is written in. Hiding Jupyter Notebook drops those bytes. It does not add the code back to Python or any other language.
+
+`count_jupyter=code` recounts repositories that report Jupyter Notebook. Code-cell source is added to the kernel language, such as Python, R, or Julia. Markdown cells and outputs are ignored. A cell whose first line is a `%%` magic is counted as that language. A kernel this card does not recognize stays Jupyter Notebook, without its output bytes. Repositories that do not contain notebooks are unchanged.
+
+The option is off by default because it downloads notebook files and uses extra GitHub API requests. One card reads at most 25 notebooks, and a notebook larger than 2 MB is left on GitHub's original count. The same parameter applies to notebooks added later.
+
+```md
+![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&count_jupyter=code)
+```
 
 ## Show more languages
 
