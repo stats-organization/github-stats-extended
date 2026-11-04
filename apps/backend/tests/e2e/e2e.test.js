@@ -3,8 +3,10 @@
  */
 
 import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
+import nock from "nock";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
+
+import { createRequestResponse } from "../utils.js";
 
 const REPO = "curly-fiesta";
 const USER = "catelinemnemosyne";
@@ -153,13 +155,6 @@ const GIST_MOCK_RESPONSE = {
 
 const CACHE_BURST_STRING = `v=${new Date().getTime()}`;
 
-const mock = new MockAdapter(axios, { onNoMatch: "passthrough" });
-
-const createResponse = () => ({
-  end: vi.fn(),
-  setHeader: vi.fn(),
-});
-
 let router;
 
 /**
@@ -168,11 +163,7 @@ let router;
  * @returns {Promise<string>} Rendered SVG markup.
  */
 async function getLocalSvg(url) {
-  const req = {
-    headers: {},
-    url,
-  };
-  const res = createResponse();
+  const { req, res } = createRequestResponse(url);
 
   await router(req, res);
 
@@ -191,46 +182,48 @@ beforeAll(async () => {
 
   ({ default: router } = await import("../../router.js"));
 
-  mock.onPost("https://api.github.com/graphql").reply((config) => {
-    const { query, variables } = JSON.parse(config.data);
+  nock("https://api.github.com", { allowUnmocked: true })
+    .persist()
+    .post("/graphql")
+    .reply(async (request) => {
+      const { query, variables } = await request.json();
 
-    if (
-      query.includes("query userInfo") &&
-      variables?.login === STATS_CARD_USER
-    ) {
-      return [200, STATS_MOCK_RESPONSE];
-    }
+      if (
+        query.includes("query userInfo") &&
+        variables?.login === STATS_CARD_USER
+      ) {
+        return [200, STATS_MOCK_RESPONSE];
+      }
 
-    if (query.includes("query topLanguages") && variables?.login === USER) {
-      return [200, TOP_LANGS_MOCK_RESPONSE];
-    }
+      if (query.includes("query topLanguages") && variables?.login === USER) {
+        return [200, TOP_LANGS_MOCK_RESPONSE];
+      }
 
-    if (query.includes("query getRepo")) {
-      return [200, REPO_MOCK_RESPONSE];
-    }
+      if (query.includes("query getRepo")) {
+        return [200, REPO_MOCK_RESPONSE];
+      }
 
-    if (query.includes("query gistInfo")) {
-      return [200, GIST_MOCK_RESPONSE];
-    }
+      if (query.includes("query gistInfo")) {
+        return [200, GIST_MOCK_RESPONSE];
+      }
 
-    return [500, { error: "Unhandled GraphQL request in e2e test" }];
-  });
+      return [500, { error: "Unhandled GraphQL request in e2e test" }];
+    });
 
-  mock
-    .onGet(
-      `https://api.github.com/search/commits?per_page=1&q=author:${STATS_CARD_USER}`,
-    )
+  nock("https://api.github.com", { allowUnmocked: true })
+    .persist()
+    .get(`/search/commits?per_page=1&q=author:${STATS_CARD_USER}`)
     .reply(200, COMMITS_SEARCH_MOCK_RESPONSE);
 
-  mock
-    .onGet(
-      `https://wakatime.com/api/v1/users/${USER}/stats?is_including_today=true`,
-    )
+  nock("https://wakatime.com", { allowUnmocked: true })
+    .persist()
+    .get(`/api/v1/users/${USER}/stats?is_including_today=true`)
     .reply(200, WAKATIME_MOCK_RESPONSE);
 });
 
 afterAll(() => {
-  mock.restore();
+  nock.cleanAll();
+  nock.restore();
   vi.unstubAllEnvs();
 });
 

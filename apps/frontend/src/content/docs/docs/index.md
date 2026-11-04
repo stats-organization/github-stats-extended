@@ -60,7 +60,7 @@ GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For 
 - [Cards](/frontend/docs/cards/stats/) — the options each card accepts.
 - [Customization](/frontend/docs/customization/common-options/) — options every card shares, plus theming and locales.
 - [Available Themes](/frontend/docs/customization/themes/) — the built-in themes, rendered as live examples.
-- [Run It Yourself](/frontend/docs/deploy/) — GitHub Actions or a self-hosted Vercel deployment.
+- [Run It Yourself](/frontend/docs/deploy/) — GitHub Actions or a self-hosted deployment.
 - [Fork Information](/frontend/docs/fork/) — what this project adds on top of github-readme-stats.
 
 ## Acknowledgements

@@ -29,6 +29,7 @@ const DESCRIPTION_MAX_LINES = 3;
 
 interface RepoCardOptions extends CommonCardOptions {
   locale: string;
+  disable_animations: boolean;
   show_owner: boolean;
   browser_rendering: boolean;
   description_lines_count: number;
@@ -118,6 +119,7 @@ const renderRepoCard = (
     border_radius,
     locale,
     description_lines_count,
+    disable_animations = true,
   } = options;
 
   const card_width =
@@ -324,7 +326,9 @@ const renderRepoCard = (
     colors: { light: lightColors, dark: darkColors },
   });
 
-  card.disableAnimations();
+  if (disable_animations) {
+    card.disableAnimations();
+  }
   card.setHideBorder(hide_border);
   card.setHideTitle(false);
   card.setCSS({

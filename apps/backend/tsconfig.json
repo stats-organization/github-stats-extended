@@ -1,13 +1,16 @@
 {
   "extends": ["../../tsconfig.base.json"],
   "include": [
-    "src",
+    "src/**/*.ts",
     "vitest.config.ts",
     "vitest.config.bench.ts",
     "vitest.config.e2e.ts"
   ],
   "compilerOptions": {
     "module": "nodenext",
-    "moduleResolution": "nodenext"
+    "moduleResolution": "nodenext",
+    // Allow TS files to import the remaining JS files
+    "allowJs": true,
+    "erasableSyntaxOnly": true
   }
 }

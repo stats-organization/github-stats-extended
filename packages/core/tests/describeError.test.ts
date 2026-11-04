@@ -1,6 +1,5 @@
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import nock from "nock";
+import { describe, expect, it, vi } from "vitest";
 
 import statsApi from "../src/api/index.js";
 import {
@@ -56,16 +55,13 @@ describe("Test describeError", () => {
 });
 
 describe("Test API result error contract", () => {
-  const mock = new MockAdapter(axios);
-
-  afterEach(() => {
-    mock.restore();
-  });
-
   it("stats handler should attach typed details on rate limit exhaustion", async () => {
-    mock.onPost("https://api.github.com/graphql").reply(200, {
-      errors: [{ type: "RATE_LIMITED" }],
-    });
+    nock("https://api.github.com")
+      .persist()
+      .post("/graphql")
+      .reply(200, {
+        errors: [{ type: "RATE_LIMITED" }],
+      });
 
     const result = await statsApi({ username: "octocat" } as Parameters<
       typeof statsApi

@@ -190,7 +190,7 @@ exports[`Test /api/gist contract > should match the public many-params response 
         }
       }
     
-          
+          * { animation-duration: 0s !important; animation-delay: 0s !important; }
         </style>
 
         

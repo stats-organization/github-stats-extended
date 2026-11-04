@@ -49,7 +49,7 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
 
   // for stages two and three
   const [cardOptions, setCardOptions] = useState(() =>
-    getDefaultCardOptions(userId),
+    getDefaultCardOptions(userId, selectedCard),
   );
 
   const setCardOption = useCallback<
@@ -91,6 +91,11 @@ export function HomeScreen({ stage, setStage }: HomeScreenProps): JSX.Element {
     if (theme === getCardThemeDefault(isDark, cardCategory)) {
       setTheme(getCardThemeDefault(isDark, CATEGORY_BY_CARD_TYPE[cardType]));
     }
+
+    setCardOptions((prev) => ({
+      ...prev,
+      enableAnimations: cardType !== CardType.PIN,
+    }));
 
     setSelectedCard(cardType);
     // Go to the next stage

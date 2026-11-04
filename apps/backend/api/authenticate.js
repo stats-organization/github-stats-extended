@@ -1,6 +1,6 @@
 import { logger } from "@stats-organization/github-readme-stats-core";
 
-import { authenticate } from "../src/users.js";
+import { authenticate } from "../src/users.ts";
 
 /**
  * @param {any} req The request.

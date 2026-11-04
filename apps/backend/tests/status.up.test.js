@@ -3,21 +3,10 @@
  */
 
 import { logger } from "@stats-organization/github-readme-stats-core";
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
-import {
-  afterAll,
-  afterEach,
-  beforeAll,
-  describe,
-  expect,
-  it,
-  vi,
-} from "vitest";
+import nock from "nock";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
-import up, { RATE_LIMIT_SECONDS } from "../api-renamed/status/up.js";
-
-const mock = new MockAdapter(axios);
+import up, { RATE_LIMIT_SECONDS } from "../api/status/up.js";
 
 const successData = {
   rateLimit: {
@@ -64,13 +53,32 @@ const shields_down = {
   color: "red",
 };
 
+const realSetImmediate = setImmediate;
+
+/**
+ * Runs fake timers until the given promise settles.
+ * nock answers on real macrotasks, so a single `vi.runAllTimersAsync()` can return
+ * before the retryer has scheduled its next delay.
+ *
+ * @param {Promise<unknown>} promise Promise to settle.
+ * @returns {Promise<unknown>} The given promise.
+ */
+const runTimersUntilSettled = async (promise) => {
+  let settled = false;
+  promise.then(
+    () => (settled = true),
+    () => (settled = true),
+  );
+  while (!settled) {
+    await vi.runAllTimersAsync();
+    await new Promise((resolve) => realSetImmediate(resolve));
+  }
+  return promise;
+};
+
 beforeAll(() => {
   vi.spyOn(logger, "log").mockImplementation(() => {});
   vi.spyOn(logger, "error").mockImplementation(() => {});
-});
-
-afterEach(() => {
-  mock.reset();
 });
 
 afterAll(() => {
@@ -79,7 +87,7 @@ afterAll(() => {
 
 describe("Test /api/status/up", () => {
   it("should return `true` if request was successful", async () => {
-    mock.onPost("https://api.github.com/graphql").replyOnce(200, successData);
+    nock("https://api.github.com").post("/graphql").reply(200, successData);
 
     const { req, res } = faker({}, {});
     await up(req, res);
@@ -92,7 +100,10 @@ describe("Test /api/status/up", () => {
   });
 
   it("should return `false` if all PATs are rate limited", async () => {
-    mock.onPost("https://api.github.com/graphql").reply(200, rate_limit_error);
+    nock("https://api.github.com")
+      .persist()
+      .post("/graphql")
+      .reply(200, rate_limit_error);
 
     const { req, res } = faker({}, {});
     await up(req, res);
@@ -105,7 +116,7 @@ describe("Test /api/status/up", () => {
   });
 
   it("should return JSON `true` if request was successful and type='json'", async () => {
-    mock.onPost("https://api.github.com/graphql").replyOnce(200, successData);
+    nock("https://api.github.com").post("/graphql").reply(200, successData);
 
     const { req, res } = faker({ type: "json" }, {});
     await up(req, res);
@@ -118,7 +129,10 @@ describe("Test /api/status/up", () => {
   });
 
   it("should return JSON `false` if all PATs are rate limited and type='json'", async () => {
-    mock.onPost("https://api.github.com/graphql").reply(200, rate_limit_error);
+    nock("https://api.github.com")
+      .persist()
+      .post("/graphql")
+      .reply(200, rate_limit_error);
 
     const { req, res } = faker({ type: "json" }, {});
     await up(req, res);
@@ -131,7 +145,7 @@ describe("Test /api/status/up", () => {
   });
 
   it("should return UP shields.io config if request was successful and type='shields'", async () => {
-    mock.onPost("https://api.github.com/graphql").replyOnce(200, successData);
+    nock("https://api.github.com").post("/graphql").reply(200, successData);
 
     const { req, res } = faker({ type: "shields" }, {});
     await up(req, res);
@@ -144,7 +158,10 @@ describe("Test /api/status/up", () => {
   });
 
   it("should return DOWN shields.io config if all PATs are rate limited and type='shields'", async () => {
-    mock.onPost("https://api.github.com/graphql").reply(200, rate_limit_error);
+    nock("https://api.github.com")
+      .persist()
+      .post("/graphql")
+      .reply(200, rate_limit_error);
 
     const { req, res } = faker({ type: "shields" }, {});
     await up(req, res);
@@ -157,11 +174,11 @@ describe("Test /api/status/up", () => {
   });
 
   it("should return `true` if the first PAT is rate limited but the second PATs works", async () => {
-    mock
-      .onPost("https://api.github.com/graphql")
-      .replyOnce(200, rate_limit_error)
-      .onPost("https://api.github.com/graphql")
-      .replyOnce(200, successData);
+    nock("https://api.github.com")
+      .post("/graphql")
+      .reply(200, rate_limit_error)
+      .post("/graphql")
+      .reply(200, successData);
 
     const { req, res } = faker({}, {});
     await up(req, res);
@@ -174,11 +191,11 @@ describe("Test /api/status/up", () => {
   });
 
   it("should return `true` if the first PAT has 'Bad credentials' but the second PAT works", async () => {
-    mock
-      .onPost("https://api.github.com/graphql")
-      .replyOnce(404, bad_credentials_error)
-      .onPost("https://api.github.com/graphql")
-      .replyOnce(200, successData);
+    nock("https://api.github.com")
+      .post("/graphql")
+      .reply(404, bad_credentials_error)
+      .post("/graphql")
+      .reply(200, successData);
 
     const { req, res } = faker({}, {});
     await up(req, res);
@@ -191,8 +208,9 @@ describe("Test /api/status/up", () => {
   });
 
   it("should return `false` if all pats have 'Bad credentials'", async () => {
-    mock
-      .onPost("https://api.github.com/graphql")
+    nock("https://api.github.com")
+      .persist()
+      .post("/graphql")
       .reply(404, bad_credentials_error);
 
     const { req, res } = faker({}, {});
@@ -208,13 +226,13 @@ describe("Test /api/status/up", () => {
   it("should throw an error if the request fails", async () => {
     vi.useFakeTimers();
     try {
-      mock.onPost("https://api.github.com/graphql").networkError();
+      nock("https://api.github.com")
+        .persist()
+        .post("/graphql")
+        .replyWithError("Network Error");
 
       const { req, res } = faker({}, {});
-      const result = up(req, res);
-
-      await vi.runAllTimersAsync();
-      await result;
+      await runTimersUntilSettled(up(req, res));
 
       expect(res.setHeader).toHaveBeenCalledWith(
         "Content-Type",
@@ -227,7 +245,7 @@ describe("Test /api/status/up", () => {
   });
 
   it("should have proper cache when no error is thrown", async () => {
-    mock.onPost("https://api.github.com/graphql").replyOnce(200, successData);
+    nock("https://api.github.com").post("/graphql").reply(200, successData);
 
     const { req, res } = faker({}, {});
     await up(req, res);
@@ -241,13 +259,13 @@ describe("Test /api/status/up", () => {
   it("should have proper cache when error is thrown", async () => {
     vi.useFakeTimers();
     try {
-      mock.onPost("https://api.github.com/graphql").networkError();
+      nock("https://api.github.com")
+        .persist()
+        .post("/graphql")
+        .replyWithError("Network Error");
 
       const { req, res } = faker({}, {});
-      const result = up(req, res);
-
-      await vi.runAllTimersAsync();
-      await result;
+      await runTimersUntilSettled(up(req, res));
 
       expect(res.setHeader.mock.calls).toEqual([
         ["Content-Type", "application/json"],

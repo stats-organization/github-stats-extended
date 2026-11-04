@@ -1,22 +1,12 @@
-# `packageManager` in package.json is deliberately held at pnpm 10.
-# Vercel does not support pnpm 11 yet, and deploying with it makes every request fail at runtime.
-# See https://github.com/stats-organization/github-stats-extended/pull/459
-#
-# Re-check Vercel's supported package managers before updating again:
-# https://vercel.com/docs/package-managers#supported-package-managers
 packages:
   - apps/*
   - packages/*
 
-onlyBuiltDependencies:
-  - "@swc/core"
-  - esbuild
-  - unrs-resolver
-
 catalog:
   "@vitest/coverage-v8": 5.0.0
-  axios: ^1.18.1
-  jsdom: 30.0.1
+  axios: ^1.21.0
+  jsdom: 30.1.3
+  nock: 15.0.5
   vitest: 5.0.0
 
 overrides:
@@ -24,19 +14,12 @@ overrides:
   # Updates against the existing lockfile keep 1.32.0 either way, so this only guards re-resolution.
   # Enforced by scripts/assert-deduped.ts; drop it there too once @tailwindcss/node pins a version vite also resolves to.
   "vite>lightningcss": 1.32.0
-  # @astrojs/react still asks for @vitejs/plugin-react ^5, which compiles through Babel and so
-  # pulls in semver@6.3.1 — rejected by `trustPolicy: no-downgrade`. Version 6 dropped Babel for
-  # oxc and is what the rest of the repo already resolves to. Drop this once @astrojs/react moves to ^6.
-  "@astrojs/react>@vitejs/plugin-react": 6.0.3
-  # zod 4.6.2 leads to type errors being detected in starlight
-  zod: 4.6.1
-  # see https://github.com/stats-organization/github-stats-extended/pull/555
-  axios: 1.18.1
-  axios-cache-interceptor: 1.12.1
-  astro: 7.2.8
-  "@astrojs/markdown-satteri": 0.3.6
+  # jsdoc-type-pratt-parser 9.2.1+ adds a hard dependency on @types/node@^26, which
+  # pulls a second @types/node into the tree and breaks vitest (duplicate instances).
+  "jsdoc-type-pratt-parser": 9.2.0
+  # https://github.com/stats-organization/github-stats-extended/pull/555 explains why we didn't upgrade to graphql 17 yet.
 
-# Deliberately stricter than pnpm 11's 1440 default (7 days vs 1)
+# Deliberately stricter than pnpm's 1440 default (7 days vs 1)
 minimumReleaseAge: 10080
 
 # Reject a version with weaker publish trust evidence than an earlier one.
@@ -45,3 +28,5 @@ trustPolicy: no-downgrade
 # Fail on unmet peers and on a Node version outside `engines`, instead of warning
 strictPeerDependencies: true
 engineStrict: true
+allowBuilds:
+  unrs-resolver: true

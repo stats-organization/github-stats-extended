@@ -1,6 +1,24 @@
 // @ts-check
 
+import nock from "nock";
 import { vi } from "vitest";
+
+/**
+ * Intercepts all GitHub GraphQL requests with a fixed response.
+ *
+ * @param {nock.ReplyBody} data Response body.
+ * @returns {Array<string>} Raw bodies of the intercepted requests, filled as they arrive.
+ */
+export function mockGraphQL(data) {
+  /** @type {Array<string>} */
+  const requests = [];
+  nock("https://api.github.com")
+    .persist()
+    .on("request", (_req, _interceptor, body) => requests.push(body))
+    .post("/graphql")
+    .reply(200, data);
+  return requests;
+}
 
 export const data_stats = {
   data: {
@@ -259,6 +277,18 @@ export const wakaTimeData = {
     writes_only: false,
   },
 };
+
+export const createRequestResponse = (url) => ({
+  req: {
+    headers: {},
+    url,
+    query: Object.fromEntries(new URL(url, "http://localhost").searchParams),
+  },
+  res: {
+    end: vi.fn(),
+    setHeader: vi.fn(),
+  },
+});
 
 /** @typedef {import('@stats-organization/github-readme-stats-core')} CoreModule */
 

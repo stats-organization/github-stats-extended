@@ -47,6 +47,9 @@ jobs:
       - name: Run tests
         run: pnpm run test
 
+      - name: Run benchmarks
+        run: pnpm --filter ./apps/backend/ run bench
+
   frontend-test-e2e:
     name: Frontend E2E test
 

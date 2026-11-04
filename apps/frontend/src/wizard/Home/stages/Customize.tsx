@@ -359,19 +359,6 @@ export function CustomizeStage({
             }}
           />
         )}
-        {(cardType === CardType.STATS ||
-          cardType === CardType.TOP_LANGS ||
-          cardType === CardType.WAKATIME) && (
-          <CheckboxSection
-            title="Enable Animations?"
-            // text="Enable Animations."
-            question="enable animations?"
-            checked={enableAnimations}
-            onCheckedChange={(checked) => {
-              onOptionChange("enableAnimations", checked);
-            }}
-          />
-        )}
         {CATEGORY_BY_CARD_TYPE[cardType] === CardCategory.REPO && (
           <CheckboxSection
             title="Show Owner?"
@@ -402,6 +389,15 @@ export function CustomizeStage({
             max={3}
           />
         )}
+        <CheckboxSection
+          title="Enable Animations?"
+          // text="Enable Animations."
+          question="enable animations?"
+          checked={enableAnimations}
+          onCheckedChange={(checked) => {
+            onOptionChange("enableAnimations", checked);
+          }}
+        />
         <div className="pl-10 pr-10">
           For more customization options check the{" "}
           <LinkExternal

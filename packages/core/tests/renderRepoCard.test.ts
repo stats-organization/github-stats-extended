@@ -406,6 +406,22 @@ describe("Test renderRepoCard", () => {
     );
     expect(document.querySelector("svg")).toHaveAttribute("height", "120");
   });
+
+  it("should disable animations by default", () => {
+    document.body.innerHTML = renderRepoCard(data_repo.repository);
+
+    const styles = document.querySelector("style")?.textContent ?? "";
+    expect(styles).toContain("animation-duration: 0s !important");
+  });
+
+  it("should not disable animations when disable_animations is false", () => {
+    document.body.innerHTML = renderRepoCard(data_repo.repository, {
+      disable_animations: false,
+    });
+
+    const styles = document.querySelector("style")?.textContent ?? "";
+    expect(styles).not.toContain("animation-duration: 0s !important");
+  });
 });
 
 describe("test pin API", () => {

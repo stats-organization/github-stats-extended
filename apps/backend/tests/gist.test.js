@@ -1,9 +1,10 @@
 // @ts-check
 
 import { getConfig, gist } from "@stats-organization/github-readme-stats-core";
+import supertest from "supertest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import router from "../router.js";
+import { app } from "../app.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
 import { getUserAccessByName, storeRequest } from "../src/common/database.js";
 
@@ -22,16 +23,6 @@ const gistMock = vi.mocked(gist);
 const getConfigMock = vi.mocked(getConfig);
 const storeRequestMock = vi.mocked(storeRequest);
 const getUserAccessByNameMock = vi.mocked(getUserAccessByName);
-
-const createRequest = (search) => ({
-  headers: {},
-  url: `/api/gist?${search}`,
-});
-
-const createResponse = () => ({
-  end: vi.fn(),
-  setHeader: vi.fn(),
-});
 
 const defaultCacheHeader =
   `max-age=${CACHE_TTL.GIST_CARD.DEFAULT}, ` +
@@ -59,26 +50,19 @@ describe("Test /api/gist backend routing", () => {
       content: "mock-gist-svg",
     });
 
-    const req = createRequest("id=bbfce31e0217a3689c8d961a356cb10d&theme=dark");
-    const res = createResponse();
-
-    await router(req, res);
+    const res = await supertest(app)
+      .get("/api/gist?id=bbfce31e0217a3689c8d961a356cb10d&theme=dark")
+      .expect("Cache-Control", defaultCacheHeader)
+      .expect("Content-Type", "image/svg+xml")
+      .expect(200);
 
     expect(gistMock).toHaveBeenCalledWith({
       id: "bbfce31e0217a3689c8d961a356cb10d",
       theme: "dark",
     });
     expect(getUserAccessByNameMock).not.toHaveBeenCalled();
-    expect(req.query).toEqual({
-      id: "bbfce31e0217a3689c8d961a356cb10d",
-      theme: "dark",
-    });
-    expect(res.setHeader.mock.calls).toEqual([
-      ["Cache-Control", defaultCacheHeader],
-      ["Content-Type", "image/svg+xml"],
-    ]);
-    expect(res.end).toHaveBeenCalledExactlyOnceWith("mock-gist-svg");
-    expect(storeRequestMock).toHaveBeenCalledExactlyOnceWith(req);
+    expect(res.body.toString()).toBe("mock-gist-svg");
+    expect(storeRequestMock).toHaveBeenCalledOnce();
   });
 
   it("should use the shorter error cache for temporary gist errors", async () => {
@@ -87,21 +71,18 @@ describe("Test /api/gist backend routing", () => {
       content: "temporary-error-svg",
     });
 
-    const req = createRequest("id=bbfce31e0217a3689c8d961a356cb10d");
-    const res = createResponse();
-
-    await router(req, res);
+    const res = await supertest(app)
+      .get("/api/gist?id=bbfce31e0217a3689c8d961a356cb10d")
+      .expect("Cache-Control", errorCacheHeader)
+      .expect("Content-Type", "image/svg+xml")
+      .expect(200);
 
     expect(gistMock).toHaveBeenCalledWith({
       id: "bbfce31e0217a3689c8d961a356cb10d",
     });
     expect(getUserAccessByNameMock).not.toHaveBeenCalled();
-    expect(res.setHeader.mock.calls).toEqual([
-      ["Cache-Control", errorCacheHeader],
-      ["Content-Type", "image/svg+xml"],
-    ]);
-    expect(res.end).toHaveBeenCalledExactlyOnceWith("temporary-error-svg");
-    expect(storeRequestMock).toHaveBeenCalledExactlyOnceWith(req);
+    expect(res.body.toString()).toBe("temporary-error-svg");
+    expect(storeRequestMock).toHaveBeenCalledOnce();
   });
 
   it("should not persist permanent gist errors returned by core", async () => {
@@ -110,38 +91,32 @@ describe("Test /api/gist backend routing", () => {
       content: "permanent-error-svg",
     });
 
-    const req = createRequest("id=bbfce31e0217a3689c8d961a356cb10d");
-    const res = createResponse();
-
-    await router(req, res);
+    const res = await supertest(app)
+      .get("/api/gist?id=bbfce31e0217a3689c8d961a356cb10d")
+      .expect("Cache-Control", defaultCacheHeader)
+      .expect("Content-Type", "image/svg+xml")
+      .expect(200);
 
     expect(gistMock).toHaveBeenCalledWith({
       id: "bbfce31e0217a3689c8d961a356cb10d",
     });
     expect(getUserAccessByNameMock).not.toHaveBeenCalled();
-    expect(res.setHeader.mock.calls).toEqual([
-      ["Cache-Control", defaultCacheHeader],
-      ["Content-Type", "image/svg+xml"],
-    ]);
-    expect(res.end).toHaveBeenCalledExactlyOnceWith("permanent-error-svg");
+    expect(res.body.toString()).toBe("permanent-error-svg");
     expect(storeRequestMock).not.toHaveBeenCalled();
   });
 
   it("should reject non-whitelisted gist ids before calling core logic", async () => {
     getConfigMock.mockReturnValue({ gistWhitelist: ["allowed-gist-id"] });
 
-    const req = createRequest("id=blocked-gist-id");
-    const res = createResponse();
-
-    await router(req, res);
+    const res = await supertest(app)
+      .get("/api/gist?id=blocked-gist-id")
+      .expect("Cache-Control", defaultCacheHeader)
+      .expect("Content-Type", "image/svg+xml")
+      .expect(200);
 
     expect(gistMock).not.toHaveBeenCalled();
     expect(getUserAccessByNameMock).not.toHaveBeenCalled();
-    expect(res.setHeader.mock.calls).toEqual([
-      ["Cache-Control", defaultCacheHeader],
-      ["Content-Type", "image/svg+xml"],
-    ]);
-    expect(res.end).toHaveBeenCalledExactlyOnceWith(
+    expect(res.body.toString()).toBe(
       "render-error:This gist ID is not whitelisted",
     );
     expect(storeRequestMock).not.toHaveBeenCalled();

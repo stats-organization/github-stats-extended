@@ -74,12 +74,24 @@ describe("buildCardUrl", () => {
   it("builds pin suffix using userId not selectedUserId", () => {
     const result = buildCardUrl(USER_ID, CardType.PIN, {
       ...baseOptions,
+      enableAnimations: false,
       showOwner: true,
       descriptionLines: 3,
     });
 
     expect(result.toString()).toBe(
       "/pin?username=john-github&repo=repo1&show_owner=true&description_lines_count=3",
+    );
+  });
+
+  it("adds disable_animations to the pin card", () => {
+    const result = buildCardUrl(USER_ID, CardType.PIN, {
+      ...baseOptions,
+      enableAnimations: true,
+    });
+
+    expect(result.toString()).toBe(
+      "/pin?username=john-github&repo=repo1&disable_animations=false",
     );
   });
 
@@ -90,6 +102,15 @@ describe("buildCardUrl", () => {
     });
 
     expect(result.toString()).toBe("/gist?id=gist1&show_owner=true");
+  });
+
+  it("adds disable_animations to the gist card", () => {
+    const result = buildCardUrl(USER_ID, CardType.GIST, {
+      ...baseOptions,
+      enableAnimations: false,
+    });
+
+    expect(result.toString()).toBe("/gist?id=gist1&disable_animations=true");
   });
 
   it("builds wakatime suffix with percent and custom title", () => {

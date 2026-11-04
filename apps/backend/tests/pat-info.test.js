@@ -2,8 +2,7 @@
  * @file Tests for the status/pat-info cloud function.
  */
 
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
+import nock from "nock";
 import {
   afterAll,
   afterEach,
@@ -13,8 +12,6 @@ import {
   it,
   vi,
 } from "vitest";
-
-const mock = new MockAdapter(axios);
 
 const successData = {
   data: {
@@ -77,11 +74,10 @@ beforeAll(async () => {
   vi.spyOn(logger, "error").mockImplementation(() => {});
 
   ({ RATE_LIMIT_SECONDS, default: patInfo } =
-    await import("../api-renamed/status/pat-info.js"));
+    await import("../api/status/pat-info.js"));
 });
 
 afterEach(() => {
-  mock.reset();
   vi.unstubAllEnvs();
   // modules may cache environment variables, so we need to reset them
   vi.resetModules();
@@ -93,10 +89,12 @@ afterAll(() => {
 
 describe("Test /api/status/pat-info", () => {
   it("should return only 'validPATs' if all PATs are valid", async () => {
-    mock
-      .onPost("https://api.github.com/graphql")
-      .replyOnce(200, rate_limit_error)
-      .onPost("https://api.github.com/graphql")
+    nock("https://api.github.com")
+      .post("/graphql")
+      .reply(200, rate_limit_error);
+    nock("https://api.github.com")
+      .persist()
+      .post("/graphql")
       .reply(200, successData);
 
     const { req, res } = faker({}, {});
@@ -141,10 +139,10 @@ describe("Test /api/status/pat-info", () => {
   });
 
   it("should return `errorPATs` if a PAT causes an error to be thrown", async () => {
-    mock
-      .onPost("https://api.github.com/graphql")
-      .replyOnce(200, other_error)
-      .onPost("https://api.github.com/graphql")
+    nock("https://api.github.com").post("/graphql").reply(200, other_error);
+    nock("https://api.github.com")
+      .persist()
+      .post("/graphql")
       .reply(200, successData);
 
     const { req, res } = faker({}, {});
@@ -191,10 +189,12 @@ describe("Test /api/status/pat-info", () => {
   });
 
   it("should return `expiredPaths` if a PAT returns a 'Bad credentials' error", async () => {
-    mock
-      .onPost("https://api.github.com/graphql")
-      .replyOnce(404, bad_credentials_error)
-      .onPost("https://api.github.com/graphql")
+    nock("https://api.github.com")
+      .post("/graphql")
+      .reply(404, bad_credentials_error);
+    nock("https://api.github.com")
+      .persist()
+      .post("/graphql")
       .reply(200, successData);
 
     const { req, res } = faker({}, {});
@@ -237,7 +237,10 @@ describe("Test /api/status/pat-info", () => {
   });
 
   it("should throw an error if something goes wrong", async () => {
-    mock.onPost("https://api.github.com/graphql").networkError();
+    nock("https://api.github.com")
+      .persist()
+      .post("/graphql")
+      .replyWithError("Network Error");
 
     const { req, res } = faker({}, {});
     await patInfo(req, res);
@@ -252,7 +255,10 @@ describe("Test /api/status/pat-info", () => {
   });
 
   it("should have proper cache when no error is thrown", async () => {
-    mock.onPost("https://api.github.com/graphql").reply(200, successData);
+    nock("https://api.github.com")
+      .persist()
+      .post("/graphql")
+      .reply(200, successData);
 
     const { req, res } = faker({}, {});
     await patInfo(req, res);
@@ -264,7 +270,10 @@ describe("Test /api/status/pat-info", () => {
   });
 
   it("should have proper cache when error is thrown", async () => {
-    mock.onPost("https://api.github.com/graphql").networkError();
+    nock("https://api.github.com")
+      .persist()
+      .post("/graphql")
+      .replyWithError("Network Error");
 
     const { req, res } = faker({}, {});
     await patInfo(req, res);
