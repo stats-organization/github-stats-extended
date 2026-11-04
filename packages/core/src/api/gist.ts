@@ -19,6 +19,7 @@ interface GistApiQuery extends ColorParams {
   show_owner?: string;
   browser_rendering?: string;
   hide_border?: string;
+  disable_animations?: string;
 }
 
 /** Characters a gist ID may contain. */
@@ -33,6 +34,7 @@ const SAFE_PATTERN = /^[-\w/.,]+$/;
  * @param query.show_owner Whether to show the gist owner.
  * @param query.browser_rendering Whether the browser wraps the description text.
  * @param query.hide_border Whether to hide the card border.
+ * @param query.disable_animations Whether to disable all animations.
  * @param pat Optional PAT override.
  * @returns The rendered card, or a rendered error.
  */
@@ -43,6 +45,7 @@ export default async (
     show_owner,
     browser_rendering,
     hide_border,
+    disable_animations,
     ...remainingParams
   }: GistApiQuery,
   pat: string | null = null,
@@ -98,6 +101,7 @@ export default async (
         show_owner: parseBoolean(show_owner),
         browser_rendering: parseBoolean(browser_rendering),
         hide_border: parseBoolean(hide_border),
+        disable_animations: parseBoolean(disable_animations),
       }),
     };
   } catch (err) {

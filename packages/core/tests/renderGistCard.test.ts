@@ -265,6 +265,22 @@ describe("test renderGistCard", () => {
       "No description provided",
     );
   });
+
+  it("should not disable animations by default", () => {
+    document.body.innerHTML = renderGistCard(data);
+
+    const styles = document.querySelector("style")?.textContent ?? "";
+    expect(styles).not.toContain("animation-duration: 0s !important");
+  });
+
+  it("should disable animations when disable_animations is true", () => {
+    document.body.innerHTML = renderGistCard(data, {
+      disable_animations: true,
+    });
+
+    const styles = document.querySelector("style")?.textContent ?? "";
+    expect(styles).toContain("animation-duration: 0s !important");
+  });
 });
 
 describe("test gist API", () => {

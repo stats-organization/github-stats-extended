@@ -30,6 +30,7 @@ const DESCRIPTION_MAX_LINES = 10;
 interface GistCardOptions extends CommonCardOptions {
   show_owner: boolean;
   browser_rendering: boolean;
+  disable_animations: boolean;
 }
 
 /**
@@ -51,6 +52,7 @@ const renderGistCard = (
     show_owner = false,
     browser_rendering = false,
     hide_border = false,
+    disable_animations = false,
   } = options;
 
   const { lightColors, darkColors } = getLightDarkColors({ ...options, theme });
@@ -168,6 +170,9 @@ const renderGistCard = (
     `,
   });
 
+  if (disable_animations) {
+    card.disableAnimations();
+  }
   card.setHideBorder(hide_border);
 
   return card.render(`

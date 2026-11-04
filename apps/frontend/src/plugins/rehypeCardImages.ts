@@ -1,3 +1,5 @@
+// Registers the `raw` node type (for `child.type === "raw"` below) with hast.
+/// <reference types="mdast-util-to-hast" />
 import type { RehypePlugin } from "@astrojs/markdown-remark";
 
 import { CATEGORY_BY_CARD_TYPE, CardType } from "../wizard/models/CardType";

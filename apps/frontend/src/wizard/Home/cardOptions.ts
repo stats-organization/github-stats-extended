@@ -3,6 +3,7 @@ import type { SelectOption } from "../components/Generic/Select";
 import { DEFAULT_OPTION as LANGUAGES_DEFAULT_LAYOUT } from "../components/Home/LanguagesLayoutSection";
 import { DEFAULT_OPTION as STATS_DEFAULT_RANK } from "../components/Home/StatsRankSection";
 import { DEFAULT_OPTION as WAKATIME_DEFAULT_LAYOUT } from "../components/Home/WakatimeLayoutSection";
+import { CardType } from "../models/CardType";
 
 /**
  * All user-tunable card parameters collected during the customize stage.
@@ -29,7 +30,10 @@ export interface CardOptions {
   usePercent: boolean;
 }
 
-export function getDefaultCardOptions(userId: string): CardOptions {
+export function getDefaultCardOptions(
+  userId: string,
+  card: CardType,
+): CardOptions {
   return {
     selectedUserId: userId,
     repo: DEMO_REPO,
@@ -47,7 +51,7 @@ export function getDefaultCardOptions(userId: string): CardOptions {
     showAllStats: false,
     showIcons: false,
     includeAllCommits: true,
-    enableAnimations: true,
+    enableAnimations: card !== CardType.PIN,
     usePercent: false,
   };
 }

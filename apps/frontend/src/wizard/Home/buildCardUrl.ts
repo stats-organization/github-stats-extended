@@ -124,6 +124,9 @@ export function buildCardUrl(
       if (descriptionLines) {
         url = url.descriptionLines(descriptionLines);
       }
+      if (enableAnimations) {
+        url = url.disableAnimations(false);
+      }
       return url;
     }
 
@@ -134,6 +137,9 @@ export function buildCardUrl(
       }
       if (showOwner) {
         url = url.showOwner();
+      }
+      if (!enableAnimations) {
+        url = url.disableAnimations();
       }
       return url;
     }

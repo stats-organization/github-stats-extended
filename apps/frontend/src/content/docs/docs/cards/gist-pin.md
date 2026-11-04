@@ -18,10 +18,11 @@ Endpoint: `api/gist?id=bbfce31e0217a3689c8d961a356cb10d`
 
 You can customize the appearance and behavior of the gist card using the [common options](/frontend/docs/customization/common-options/) and exclusive options listed in the table below.
 
-| Name                | Description                                                                                             | Type    | Default value |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | ------- | ------------- |
-| `show_owner`        | Shows the gist's owner name.                                                                            | boolean | `false`       |
-| `browser_rendering` | Compute text wrapping of gist description natively in the browser, instead of computing it server-side. | boolean | `false`       |
+| Name                 | Description                                                                                             | Type    | Default value |
+| -------------------- | ------------------------------------------------------------------------------------------------------- | ------- | ------------- |
+| `show_owner`         | Shows the gist's owner name.                                                                            | boolean | `false`       |
+| `browser_rendering`  | Compute text wrapping of gist description natively in the browser, instead of computing it server-side. | boolean | `false`       |
+| `disable_animations` | Disables all animations in the card.                                                                    | boolean | `false`       |
 
 ## Demo
 

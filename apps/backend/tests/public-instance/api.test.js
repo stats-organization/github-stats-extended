@@ -1,8 +1,6 @@
 // @ts-check
 
 import { logger } from "@stats-organization/github-readme-stats-core";
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
 import {
   afterAll,
   afterEach,
@@ -14,14 +12,15 @@ import {
   vi,
 } from "vitest";
 
-import { data_stats, normalizeSvg } from "../utils.js";
+import {
+  createRequestResponse,
+  data_stats,
+  mockGraphQL,
+  normalizeSvg,
+} from "../utils.js";
 
-const mock = new MockAdapter(axios);
-
-const createResponse = () => ({
-  end: vi.fn(),
-  setHeader: vi.fn(),
-});
+/** @type {Array<string>} */
+let graphqlRequests;
 
 beforeEach(() => {
   vi.stubEnv("CACHE_SECONDS", "");
@@ -29,7 +28,7 @@ beforeEach(() => {
   vi.stubEnv("POSTGRES_URL", "");
   vi.stubEnv("WHITELIST", "");
 
-  mock.onPost("https://api.github.com/graphql").reply(200, data_stats);
+  graphqlRequests = mockGraphQL(data_stats);
 });
 
 beforeAll(() => {
@@ -38,7 +37,6 @@ beforeAll(() => {
 });
 
 afterEach(() => {
-  mock.reset();
   vi.unstubAllEnvs();
   // modules may cache environment variables, so we need to reset them
   vi.resetModules();
@@ -52,11 +50,7 @@ describe("Test /api contract", () => {
   it("should match the public happy-path response snapshot", async () => {
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api?username=anuraghazra",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse("/api?username=anuraghazra");
 
     await router(req, res);
 
@@ -69,8 +63,6 @@ describe("Test /api contract", () => {
   });
 
   it("should match the public many-params response snapshot", async () => {
-    mock.onPost("https://api.github.com/graphql").reply(200, data_stats);
-
     const { default: router } = await import("../../router.js");
 
     const params = new URLSearchParams({
@@ -99,18 +91,14 @@ describe("Test /api contract", () => {
       show: "reviews,prs_merged,prs_merged_percentage,discussions_started,discussions_answered",
     });
 
-    const req = {
-      headers: {},
-      url: `/api?${params.toString()}`,
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse(`/api?${params.toString()}`);
 
     await router(req, res);
 
     expect(res.end).toHaveBeenCalledOnce();
 
     expect({
-      graphqlRequest: mock.history.post[0].data,
+      graphqlRequest: graphqlRequests[0],
       headers: res.setHeader.mock.calls,
       content: normalizeSvg(res.end.mock.calls[0][0]),
     }).toMatchSnapshot();
@@ -125,11 +113,7 @@ describe("Test /api contract", () => {
       bg_color_dark: "45,60A5FA,4ADE80",
     });
 
-    const req = {
-      headers: {},
-      url: `/api?${params.toString()}`,
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse(`/api?${params.toString()}`);
 
     await router(req, res);
 
@@ -144,11 +128,7 @@ describe("Test /api contract", () => {
   it("should match the public missing-username response snapshot", async () => {
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse("/api");
 
     await router(req, res);
 
@@ -163,11 +143,7 @@ describe("Test /api contract", () => {
   it("should render error card in same theme as requested card", async () => {
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api?theme=merko",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse("/api?theme=merko");
 
     await router(req, res);
 
@@ -182,11 +158,7 @@ describe("Test /api contract", () => {
   it("should match the public blacklisted-username response snapshot", async () => {
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api?username=renovate-bot",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse("/api?username=renovate-bot");
 
     await router(req, res);
 
@@ -203,11 +175,7 @@ describe("Test /api contract", () => {
 
     const { default: router } = await import("../../router.js");
 
-    const req = {
-      headers: {},
-      url: "/api",
-    };
-    const res = createResponse();
+    const { req, res } = createRequestResponse("/api");
 
     await router(req, res);
 

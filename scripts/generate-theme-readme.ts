@@ -3,6 +3,7 @@ import path from "path";
 
 import { format, resolveConfig } from "prettier";
 
+// @ts-expect-error -- We don't compile this file, we execute it directly. So we import a ts file instead of a js file.
 import { themes } from "../packages/core/src/themes/index.ts";
 
 // The docs live with the site that publishes them.
@@ -51,20 +52,28 @@ ${STAT_CARD_LINKS_FLAG}
 ${REPO_CARD_LINKS_FLAG}
 `;
 
-const createRepoMdLink = (theme) => {
+const createRepoMdLink = (theme: string): string => {
   return `\n[${theme}_repo]: /api/pin?username=anuraghazra&repo=github-readme-stats&cache_seconds=86400&theme=${theme}`;
 };
-const createStatMdLink = (theme) => {
+const createStatMdLink = (theme: string): string => {
   return `\n[${theme}]: /api?username=anuraghazra&show_icons=true&hide=contribs,prs&cache_seconds=86400&theme=${theme}`;
 };
 
-const generateLinks = (fn) => {
+const generateLinks = (fn: (theme: string) => string): string => {
   return Object.keys(themes)
     .map((name) => fn(name))
     .join("");
 };
 
-const createTableItem = ({ link, label, isRepoCard }) => {
+const createTableItem = ({
+  link,
+  label,
+  isRepoCard,
+}: {
+  link: string | undefined;
+  label: string | undefined;
+  isRepoCard: boolean;
+}): string => {
   if (!link || !label) {
     return "";
   }
@@ -77,7 +86,7 @@ const allThemeNames = Object.keys(themes);
 // the stats, top languages and WakaTime cards. Each table lists only its own
 // variant.
 //
-// Keep in sync with the theme lists in `apps/frontend/src/pages/Home/stages/Theme.tsx`,
+// Keep in sync with the theme lists in `apps/frontend/src/wizard/Home/stages/Theme.tsx`,
 // which splits the picker by the same rule.
 const repoCardThemes = allThemeNames.filter(
   (name) => !allThemeNames.includes(`${name}_repocard`),
@@ -87,8 +96,8 @@ const nonRepoCardThemes = allThemeNames.filter(
   (name) => !name.endsWith("_repocard"),
 );
 
-const generateTable = ({ isRepoCard }) => {
-  const rows = [];
+const generateTable = ({ isRepoCard }: { isRepoCard: boolean }): string => {
+  const rows: Array<string> = [];
   const themesFiltered = isRepoCard ? repoCardThemes : nonRepoCardThemes;
 
   for (let i = 0; i < themesFiltered.length; i += 3) {
@@ -96,9 +105,13 @@ const generateTable = ({ isRepoCard }) => {
     const two = themesFiltered[i + 1];
     const three = themesFiltered[i + 2];
 
-    let tableItem1 = createTableItem({ link: one, label: one, isRepoCard });
-    let tableItem2 = createTableItem({ link: two, label: two, isRepoCard });
-    let tableItem3 = createTableItem({ link: three, label: three, isRepoCard });
+    const tableItem1 = createTableItem({ link: one, label: one, isRepoCard });
+    const tableItem2 = createTableItem({ link: two, label: two, isRepoCard });
+    const tableItem3 = createTableItem({
+      link: three,
+      label: three,
+      isRepoCard,
+    });
 
     rows.push(`| ${tableItem1} | ${tableItem2} | ${tableItem3} |`);
   }
@@ -106,7 +119,7 @@ const generateTable = ({ isRepoCard }) => {
   return rows.join("\n");
 };
 
-const buildReadme = () => {
+const buildReadme = (): string => {
   return THEME_TEMPLATE.split("\n")
     .map((line) => {
       if (line.includes(REPO_CARD_LINKS_FLAG)) {
