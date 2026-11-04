@@ -37,7 +37,7 @@ describe("buildCardUrl", () => {
   it("builds stats suffix with defaults", () => {
     const result = buildCardUrl(USER_ID, CardType.STATS, baseOptions);
 
-    expect(result.toString()).toBe("?username=john");
+    expect(result.toString()).toBe("/stats?username=john");
   });
 
   it("adds stats options", () => {
@@ -50,7 +50,7 @@ describe("buildCardUrl", () => {
     });
 
     expect(result.toString()).toBe(
-      "?username=john" +
+      "/stats?username=john" +
         "&hide_title=true" +
         // commas are percent-encoded (%2C) now that params go through URLSearchParams
         "&show=reviews%2Cdiscussions_started%2Cdiscussions_answered%2Cprs_merged%2Cprs_merged_percentage%2Cprs_commented%2Cprs_reviewed%2Cissues_commented%2Ccontributions%2Call_time_contribs" +
