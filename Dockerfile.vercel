@@ -1,6 +1,6 @@
 # --- Build stage ---
 
-FROM node:24-slim AS build
+FROM node:25-slim AS build
 RUN corepack enable
 WORKDIR /app
 
@@ -17,7 +17,7 @@ RUN pnpm run build:frontend
 
 # --- Production stage ---
 
-FROM node:24-slim
+FROM node:25-slim
 RUN corepack enable
 WORKDIR /app
 
