@@ -146,7 +146,7 @@ Click the button to deploy in one click, or follow the step-by-step guide below.
 
 Add an SQL database, either through an integration such as ["Nile"](https://vercel.com/marketplace/nile), or by manually setting the environment variable `POSTGRES_URL`.
 
-#### Encrypt the stored access tokens
+##### Encrypt the stored access tokens
 
 Set `TOKEN_ENCRYPTION_KEY` to encrypt the GitHub access tokens in the SQL database at rest (AES-256-GCM). Generate it with:
 
