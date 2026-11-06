@@ -1,0 +1,10 @@
+version: "1"
+rules:
+  - base: master
+    upstream: stats-organization:master
+    mergeMethod: hardreset
+    mergeUnstable: true
+  - base: release
+    upstream: stats-organization:release
+    mergeMethod: hardreset
+    mergeUnstable: true
