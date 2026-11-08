@@ -437,11 +437,7 @@ const fetchAllTimeReposContributedTo = async (
         { retryTransientErrors: !splitOnNetworkError || chunk.length === 1 },
       );
     } catch (err) {
-      if (
-        !splitOnNetworkError ||
-        !axios.isAxiosError(err) ||
-        err.response
-      ) {
+      if (!splitOnNetworkError || !axios.isAxiosError(err) || err.response) {
         throw err;
       }
       if (chunk.length > 1) {
