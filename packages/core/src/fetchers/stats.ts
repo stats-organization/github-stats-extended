@@ -4,6 +4,7 @@ import type { AxiosResponse } from "axios";
 import { calculateRank } from "../calculateRank.js";
 import { getConfig } from "../common/config.js";
 import { getGitHubYearRange, toGitHubDateTime } from "../common/date.js";
+import { isBrowser } from "../common/env.js";
 import { CustomError, MissingParamError } from "../common/error.js";
 import { wrapTextMultiline } from "../common/fmt.js";
 import { createGraphQLFetcher } from "../common/http.js";
@@ -392,7 +393,8 @@ const isResourceLimitsExceeded = (
  * A range returning `MAX_REPOSITORIES_LIMIT` results may have more,
  * so it is halved and both halves are queued again.
  * When GitHub rejects a request with `RESOURCE_LIMITS_EXCEEDED` or a timeout,
- * it is retried with half as many ranges.
+ * or (in browsers only, where GitHub's timeout responses lack CORS headers)
+ * the request fails without a response, it is retried with half as many ranges.
  * When GitHub rejects a request with an empty response, it is retried up to 3 times.
  *
  * Whether private contributions are included depends on the used PAT.
@@ -416,6 +418,9 @@ const fetchAllTimeReposContributedTo = async (
   let rangesPerRequest = MAX_RANGES_PER_REQUEST;
   let emptyResponseRetries = 0;
   const MAX_EMPTY_RESPONSE_RETRIES = 3;
+  // in browsers, GitHub's timeout responses lack CORS headers,
+  // so they surface as network errors without a response
+  const splitOnNetworkError = isBrowser();
 
   while (pending.length > 0) {
     const chunk = pending.slice(0, rangesPerRequest);
@@ -423,11 +428,35 @@ const fetchAllTimeReposContributedTo = async (
       buildReposContributedToDocument(chunk, includeOwnRepos),
       "bearer",
     );
-    const res = await retryer(
-      fetcher,
-      { login: canonicalUsername, maxRepositories: MAX_REPOSITORIES_LIMIT },
-      pat,
-    );
+    let res;
+    try {
+      res = await retryer(
+        fetcher,
+        { login: canonicalUsername, maxRepositories: MAX_REPOSITORIES_LIMIT },
+        pat,
+        { retryTransientErrors: !splitOnNetworkError || chunk.length === 1 },
+      );
+    } catch (err) {
+      if (
+        !splitOnNetworkError ||
+        !axios.isAxiosError(err) ||
+        err.response
+      ) {
+        throw err;
+      }
+      if (chunk.length > 1) {
+        rangesPerRequest = Math.floor(chunk.length / 2);
+        logger.log(
+          `Request failed without response (${err.code ?? err.message}), retrying with ${rangesPerRequest} range(s) per request...`,
+        );
+        continue;
+      }
+      logger.error(err);
+      throw new CustomError(
+        REPOS_CONTRIBUTED_TO_ERROR,
+        CustomError.GRAPHQL_ERROR,
+      );
+    }
     if (res.status === 502 || res.status === 504) {
       if (chunk.length > 1) {
         rangesPerRequest = Math.floor(chunk.length / 2);
