@@ -31,15 +31,5 @@ const getGitHubYearRange = (year: number): GitHubDateRange => ({
   to: new Date(Date.UTC(year, 11, 31, 23, 59, 59)),
 });
 
-/**
- * Get diff in minutes between two dates.
- *
- * @param d1 First date.
- * @param d2 Second date.
- * @returns Number of minutes between the two dates.
- */
-const dateDiff = (d1: Date, d2: Date): number =>
-  Math.round((d1.getTime() - d2.getTime()) / (1000 * 60));
-
-export { dateDiff, getGitHubYearRange, toGitHubDateTime };
+export { getGitHubYearRange, toGitHubDateTime };
 export type { GitHubDateRange };
