@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  getGitHubYearRange,
-  toGitHubDateTime,
-} from "../src/common/date.js";
+import { getGitHubYearRange, toGitHubDateTime } from "../src/common/date.js";
 
 describe("Test date.js", () => {
   it("should test toGitHubDateTime", () => {
