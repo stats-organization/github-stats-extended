@@ -1,0 +1,10 @@
+{
+  "extends": ["../../tsconfig.base.json"],
+  "include": [".vercel/**/*.mjs", "**/*.js", "vitest.config.ts"],
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    // Base config sets `types: []`; the function runs on node
+    "types": ["node"]
+  }
+}

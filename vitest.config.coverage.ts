@@ -8,6 +8,7 @@ export default defineConfig({
     projects: [
       "packages/core/vitest.config.ts",
       "apps/backend/vitest.config.ts",
+      "apps/isr-proxy/vitest.config.ts",
     ],
   },
 });

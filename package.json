@@ -39,7 +39,7 @@
     "lint:eslint:fix": "eslint --fix",
     "lint:knip": "knip",
     "lint:deps": "node scripts/assert-deduped.ts",
-    "typecheck": "turbo run typecheck && tsc -p tsconfig.scripts.json",
+    "typecheck": "turbo run typecheck && tsc -p tsconfig.scripts.json && tsc -p apps/isr-proxy/tsconfig.json",
     "generate-theme-readme": "node scripts/generate-theme-readme.ts"
   },
   "lint-staged": {

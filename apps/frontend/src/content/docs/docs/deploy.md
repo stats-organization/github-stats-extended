@@ -170,6 +170,15 @@ Set `TOKEN_ENCRYPTION_KEY=<new>,<old>` and redeploy: new logins are encrypted wi
 
 If you handle a large number of requests, the `/api/repeat-recent` endpoint may time out. By default, Vercel limits serverless functions to 5 minutes. You can [increase this limit](https://vercel.com/docs/functions/configuring-functions/duration#dashboard) in Vercel's dashboard. Note that this [requires](https://vercel.com/docs/functions/limitations#max-duration) a "Pro" or "Enterprise" plan.
 
+##### Cache cards with an ISR proxy
+
+If you handle a large number of requests, a persistent server-side cache for generated cards might significantly reduce your hosting cost. This persistent cache is also necessary if you want to benefit from [proactive card regeneration](/frontend/docs/fork/#improved-performance-and-latency). Our ISR Proxy provides this functionality by caching generated cards in Vercel's durable [ISR cache](https://vercel.com/docs/incremental-static-regeneration) for the duration specified in the proxy.
+
+1. In [`apps/isr-proxy/`](https://github.com/stats-organization/github-stats-extended/tree/master/apps/isr-proxy), replace the hard-coded domain `github-stats-extended-internal.vercel.app` with the domain of your GitHub-Stats-Extended instance. If you also use a preview deployment, replace `github-stats-extended-internal-preview.vercel.app` and `github-stats-extended-preview.vercel.app` as well.
+2. Create a second Vercel project from the same repository. Set `Root Directory` to `apps/isr-proxy` and `Application Preset` to `Other`.
+3. In your GitHub-Stats-Extended instance, set `REPEAT_BASE_URL` (see [Available environment variables](#available-environment-variables)) to your ISR Proxy's domain, so that proactive regeneration refreshes the proxy's cache. If present, point `OAUTH_REDIRECT_URI` at this domain as well.
+4. Request all cards from your proxy's domain, not directly from your GitHub-Stats-Extended instance.
+
 ##### Use your own OAuth App
 
 [Create your own OAuth App](https://github.com/settings/developers) and set the environment variables `OAUTH_REDIRECT_URI`, `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` on Vercel accordingly.
@@ -262,6 +271,11 @@ GitHub Stats Extended provides several environment variables that can be used to
       <td><code>OAUTH_REDIRECT_URI</code></td>
       <td>The redirect URI registered in the OAuth App. Must match the <em>Authorization callback URL</em> configured in the app settings.</td>
       <td>A fully-qualified URL (e.g. <code>https://your-domain.com/frontend</code>)</td>
+    </tr>
+    <tr>
+      <td><code>REPEAT_BASE_URL</code></td>
+      <td>Domain from which your cards are requested. Only relevant if you use <a href="/frontend/docs/fork/#improved-performance-and-latency">proactive regeneration</a>. Defaults to Vercel's <code>VERCEL_BRANCH_URL</code>. Set to a different value when a proxy such as the <a href="#cache-cards-with-an-isr-proxy">ISR proxy</a> sits in front of your instance.</td>
+      <td>A domain (e.g. <code>your-project.vercel.app</code>)</td>
     </tr>
   </tbody>
 </table>

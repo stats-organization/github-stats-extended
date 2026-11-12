@@ -1,0 +1,38 @@
+{
+  "version": 3,
+  "routes": [
+    {
+      "src": "^/api(?:/(pin|top-langs|gist|wakatime))?/?$",
+      "caseSensitive": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "github-stats-extended-preview.vercel.app"
+        }
+      ],
+      "dest": "/isr?__card=$1&__env=preview",
+      "check": true
+    },
+    {
+      "src": "^/api(?:/(pin|top-langs|gist|wakatime))?/?$",
+      "caseSensitive": true,
+      "dest": "/isr?__card=$1&__env=production",
+      "check": true
+    },
+    { "handle": "filesystem" },
+    {
+      "src": "^/(.*)$",
+      "has": [
+        {
+          "type": "host",
+          "value": "github-stats-extended-preview.vercel.app"
+        }
+      ],
+      "dest": "https://github-stats-extended-internal-preview.vercel.app/$1"
+    },
+    {
+      "src": "^/(.*)$",
+      "dest": "https://github-stats-extended-internal.vercel.app/$1"
+    }
+  ]
+}
