@@ -7,11 +7,13 @@
  * @description This function is currently rate limited to 1 request per 3 minutes.
  */
 import {
-  dateDiff,
   getConfig,
   logger,
   request,
 } from "@stats-organization/github-readme-stats-core";
+
+const dateDiff = (d1, d2) =>
+  Math.round((d1.getTime() - d2.getTime()) / (1000 * 60));
 
 export const RATE_LIMIT_SECONDS = 60 * 3; // 1 request per 3 minutes
 

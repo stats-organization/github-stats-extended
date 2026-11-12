@@ -10,7 +10,6 @@ export { retryer } from "./common/retryer.js";
 export { renderError } from "./common/render.js";
 
 export { clampValue } from "./common/ops.js";
-export { dateDiff } from "./common/date.js";
 
 export { logger } from "./common/log.js";
 export { request } from "./common/http.js";
