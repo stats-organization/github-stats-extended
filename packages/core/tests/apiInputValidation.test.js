@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import gistApi from "../src/api/gist.js";
-import statsApi from "../src/api/index.js";
 import pinApi from "../src/api/pin.js";
+import statsApi from "../src/api/stats.js";
 import topLangsApi from "../src/api/top-langs.js";
 import wakatimeApi from "../src/api/wakatime.js";
 

@@ -7,7 +7,7 @@ With inbuilt themes, you can customize the look of the card without doing any [m
 Pass `&theme=THEME_NAME`:
 
 ```md
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=radical)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api/stats?username=anuraghazra&show_icons=true&theme=radical)
 ```
 
 ## All inbuilt themes
@@ -24,7 +24,7 @@ Preview [all available themes](/frontend/docs/customization/themes/) or read the
 
 ## Light and Dark Mode
 
-![Anurag's GitHub stats](/api?username=anuraghazra&show_icons=true)
+![Anurag's GitHub stats](/api/stats?username=anuraghazra&show_icons=true)
 
 There are several ways to switch a card between modes on the client side.
 
@@ -36,11 +36,11 @@ There are several ways to switch a card between modes on the client side.
 ```html
 <picture>
   <source
-    srcset="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark_github"
+    srcset="https://github-stats-extended.vercel.app/api/stats?username=anuraghazra&show_icons=true&theme=dark_github"
     media="(prefers-color-scheme: dark)"
   />
   <!-- light mode -->
-  <img src="https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=light_github" />
+  <img src="https://github-stats-extended.vercel.app/api/stats?username=anuraghazra&show_icons=true&theme=light_github" />
 </picture>
 ```
 
@@ -55,13 +55,13 @@ GitHub serves the card from its [CDN](https://docs.github.com/en/authentication/
 :::
 
 ```md
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api/stats?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github)
 ```
 
 <details>
 <summary>👀 Show example</summary>
 
-![Anurag's GitHub stats](/api?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github)
+![Anurag's GitHub stats](/api/stats?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github)
 
 </details>
 
@@ -80,13 +80,13 @@ These parameters style each mode separately.
 For example:
 
 ```md
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api/stats?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github)
 ```
 
 Parameter types can be mixed — for example a light and a dark theme, plus one fixed title color:
 
 ```md
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github&title_color=aabbcc)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api/stats?username=anuraghazra&show_icons=true&theme_light=light_github&theme_dark=dark_github&title_color=aabbcc)
 ```
 
 ### Use GitHub's theme context tag
@@ -94,8 +94,8 @@ Parameter types can be mixed — for example a light and a dark theme, plus one 
 Appending [`#gh-dark-mode-only` or `#gh-light-mode-only`](https://github.blog/changelog/2021-11-24-specify-theme-context-for-images-in-markdown/) to an image URL shows it only to viewers on that GitHub mode:
 
 ```md
-[![Anurag's GitHub stats-Dark](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=dark_github#gh-dark-mode-only)](https://github.com/stats-organization/github-stats-extended#gh-dark-mode-only)
-[![Anurag's GitHub stats-Light](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=light_github#gh-light-mode-only)](https://github.com/stats-organization/github-stats-extended#gh-light-mode-only)
+[![Anurag's GitHub stats-Dark](https://github-stats-extended.vercel.app/api/stats?username=anuraghazra&show_icons=true&theme=dark_github#gh-dark-mode-only)](https://github.com/stats-organization/github-stats-extended#gh-dark-mode-only)
+[![Anurag's GitHub stats-Light](https://github-stats-extended.vercel.app/api/stats?username=anuraghazra&show_icons=true&theme=light_github#gh-light-mode-only)](https://github.com/stats-organization/github-stats-extended#gh-light-mode-only)
 ```
 
 ### Use the transparent theme
@@ -103,13 +103,13 @@ Appending [`#gh-dark-mode-only` or `#gh-light-mode-only`](https://github.blog/ch
 The `transparent` theme has no background, so it sits well on GitHub's light and dark modes:
 
 ```md
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&theme=transparent)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api/stats?username=anuraghazra&show_icons=true&theme=transparent)
 ```
 
 <details>
 <summary>👀 Show example</summary>
 
-![Anurag's GitHub stats](/api?username=anuraghazra&show_icons=true&theme=transparent)
+![Anurag's GitHub stats](/api/stats?username=anuraghazra&show_icons=true&theme=transparent)
 
 </details>
 
@@ -118,7 +118,7 @@ The `transparent` theme has no background, so it sits well on GitHub's light and
 Any of [the available themes](/frontend/docs/customization/themes/) turns transparent when `bg_color` carries an alpha channel (i.e. `bg_color=00000000`):
 
 ```md
-![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra&show_icons=true&bg_color=00000000)
+![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api/stats?username=anuraghazra&show_icons=true&bg_color=00000000)
 ```
 
 <details>
@@ -126,6 +126,6 @@ Any of [the available themes](/frontend/docs/customization/themes/) turns transp
 
 <!-- set theme=default explicitly so rehypeCardImages.ts doesn't create a light and a dark version -->
 
-![Anurag's GitHub stats](/api?username=anuraghazra&show_icons=true&bg_color=00000000&theme=default)
+![Anurag's GitHub stats](/api/stats?username=anuraghazra&show_icons=true&bg_color=00000000&theme=default)
 
 </details>
