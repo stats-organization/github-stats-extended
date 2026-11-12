@@ -10,7 +10,7 @@ on:
     #        │ │  │  │ │
     #        │ │  │  │ │
     #        * *  *  * *
-    - cron: "10,40 * * * *"
+    - cron: "15,45 * * * *"
   workflow_dispatch:
 
 permissions: {}
