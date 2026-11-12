@@ -2,6 +2,7 @@ import { getConfig } from "../common/config.js";
 import { CustomError, MissingParamError } from "../common/error.js";
 import { wrapTextMultiline } from "../common/fmt.js";
 import { createGraphQLFetcher } from "../common/http.js";
+import { getLanguageColor } from "../common/languageColors.js";
 import { logger } from "../common/log.js";
 import { parseOwnerAffiliations } from "../common/ops.js";
 import { retryer } from "../common/retryer.js";
@@ -11,9 +12,53 @@ import type {
   TopLanguagesRepositoryFragment,
 } from "../graphql/generated/top-languages.js";
 
+import {
+  JUPYTER_NOTEBOOK,
+  MAX_NOTEBOOKS_PER_CARD,
+  recountJupyterRepository,
+} from "./jupyter-languages.js";
 import type { Lang, TopLangData } from "./types.js";
 
 const fetcher = createGraphQLFetcher(TopLanguagesDocument, "token");
+
+/**
+ * Swap a repository's Jupyter Notebook edge for the languages its code cells use.
+ * Bytes of an unknown kernel stay Jupyter Notebook. Outputs are not included.
+ *
+ * @param edges Language edges GitHub reported for one repository.
+ * @param bytesByLanguage Code-cell bytes keyed by Linguist language name.
+ * @param jupyterColor Color GitHub assigned to Jupyter Notebook.
+ * @returns Edges with notebook output bytes removed.
+ */
+const mergeCodeCellBytes = (
+  edges: Array<TopLanguageFragment | null>,
+  bytesByLanguage: Record<string, number>,
+  jupyterColor: string | null,
+): Array<TopLanguageFragment> => {
+  const next = edges.filter(
+    (edge): edge is TopLanguageFragment =>
+      edge !== null && edge.node.name !== JUPYTER_NOTEBOOK,
+  );
+  for (const [name, size] of Object.entries(bytesByLanguage)) {
+    if (size <= 0) {
+      continue;
+    }
+    const existing = next.find((edge) => edge.node.name === name);
+    if (existing) {
+      existing.size += size;
+      continue;
+    }
+    next.push({
+      size,
+      node: {
+        name,
+        color:
+          name === JUPYTER_NOTEBOOK ? jupyterColor : getLanguageColor(name),
+      },
+    });
+  }
+  return next;
+};
 
 /**
  * Fetch top languages for a given username.
@@ -24,6 +69,7 @@ const fetcher = createGraphQLFetcher(TopLanguagesDocument, "token");
  * @param count_weight Weightage to be given to count.
  * @param ownerAffiliations The owner affiliations to filter by. Default: OWNER.
  * @param pat Optional PAT override.
+ * @param countJupyter When true, replace Jupyter Notebook bytes with code-cell bytes.
  * @returns Top languages data.
  */
 const fetchTopLanguages = async (
@@ -33,14 +79,19 @@ const fetchTopLanguages = async (
   count_weight = 0,
   ownerAffiliations: Array<string> = [],
   pat: string | null = null,
+  countJupyter = false,
 ): Promise<TopLangData> => {
   if (!username) {
     throw new MissingParamError(["username"]);
   }
   const affiliations = parseOwnerAffiliations(ownerAffiliations);
 
+  let githubToken = "";
   const res = await retryer(
-    fetcher,
+    (variables, token) => {
+      githubToken = token;
+      return fetcher(variables, token);
+    },
     {
       login: username,
       ownerAffiliations: affiliations,
@@ -85,6 +136,44 @@ const fetchTopLanguages = async (
     (node): node is TopLanguagesRepositoryFragment =>
       !!node && !repoToHide[node.name],
   );
+
+  if (countJupyter && githubToken !== "") {
+    let budget = MAX_NOTEBOOKS_PER_CARD;
+    for (const repo of repoNodes) {
+      if (budget <= 0) {
+        break;
+      }
+      const languages = repo.languages;
+      if (languages === null) {
+        continue;
+      }
+      const edges = languages.edges;
+      if (edges === null) {
+        continue;
+      }
+      const jupyterEdge = edges.find(
+        (edge) => edge?.node.name === JUPYTER_NOTEBOOK,
+      );
+      if (jupyterEdge === null || jupyterEdge === undefined) {
+        continue;
+      }
+      const recounted = await recountJupyterRepository(
+        repo.owner.login,
+        repo.name,
+        githubToken,
+        budget,
+      );
+      if (recounted === null) {
+        continue;
+      }
+      budget -= recounted.notebooks;
+      languages.edges = mergeCodeCellBytes(
+        edges,
+        recounted.bytesByLanguage,
+        jupyterEdge.node.color,
+      );
+    }
+  }
 
   // flatten edges across repos. Order matters: `concat(acc)` prepends, and the
   // shared repoCount below depends on visitation order.

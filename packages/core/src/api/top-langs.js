@@ -23,6 +23,7 @@ export default async (
     exclude_repo,
     size_weight,
     count_weight,
+    count_jupyter,
     custom_title,
     locale,
     border_radius,
@@ -100,6 +101,23 @@ export default async (
     };
   }
 
+  if (
+    count_jupyter !== undefined &&
+    count_jupyter !== "" &&
+    count_jupyter !== "false" &&
+    count_jupyter !== "0" &&
+    count_jupyter !== "code"
+  ) {
+    return {
+      status: "error - permanent",
+      content: renderError({
+        message: "Something went wrong",
+        secondaryMessage: "Incorrect count_jupyter input",
+        renderOptions: colorParams,
+      }),
+    };
+  }
+
   try {
     const topLangs = await fetchTopLanguages(
       username,
@@ -108,6 +126,7 @@ export default async (
       count_weight,
       parseArray(role),
       pat,
+      count_jupyter === "code",
     );
 
     return {

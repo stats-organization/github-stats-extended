@@ -223,6 +223,7 @@ describe("XSS prevention - top-langs API", () => {
     "exclude_repo",
     "size_weight",
     "count_weight",
+    "count_jupyter",
     "custom_title",
     "locale",
     "border_radius",
