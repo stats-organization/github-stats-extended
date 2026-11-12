@@ -72,12 +72,15 @@ type FetcherFunction<TData = unknown, TVariables = Record<string, unknown>> = (
  * @param fetcher The fetcher function.
  * @param variables Object with arguments to pass to the fetcher function.
  * @param pat Optional PAT override.
+ * @param options Retry options.
+ * @param options.retryTransientErrors Whether to retry temporary problems.
  * @returns The response from the fetcher function.
  */
 const retryer = async <TData = unknown, TVariables = Record<string, unknown>>(
   fetcher: FetcherFunction<TData, TVariables>,
   variables: TVariables,
   pat: string | null = null,
+  { retryTransientErrors = true }: { retryTransientErrors?: boolean } = {},
 ): Promise<FetcherResponse<TData>> => {
   const PATs = pat
     ? [{ name: "user PAT from database", value: pat }]
@@ -122,7 +125,10 @@ const retryer = async <TData = unknown, TVariables = Record<string, unknown>>(
 
       // network/unexpected error → temporary problem, retry with a delay
       if (!e.response) {
-        if (temporaryFailures < TRANSIENT_RETRY_DELAYS_MS.length) {
+        if (
+          retryTransientErrors &&
+          temporaryFailures < TRANSIENT_RETRY_DELAYS_MS.length
+        ) {
           await sleep(TRANSIENT_RETRY_DELAYS_MS[temporaryFailures] ?? 0);
           temporaryFailures++;
           continue;

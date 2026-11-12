@@ -169,6 +169,24 @@ describe("Test Retryer", () => {
     }
   });
 
+  it("retryer should rethrow temporary errors immediately when retryTransientErrors is false", async () => {
+    vi.useFakeTimers();
+    try {
+      const networkError = new Error("Network Error");
+      const fetcherNetworkError = vi
+        .fn()
+        .mockRejectedValue(networkError) as unknown as Fetcher;
+
+      // timers are never advanced, so this only settles if no delay is awaited
+      await expect(
+        retryer(fetcherNetworkError, {}, null, { retryTransientErrors: false }),
+      ).rejects.toThrow(networkError);
+      expect(fetcherNetworkError).toHaveBeenCalledTimes(1);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("retryer should handle a rate limit error followed by a network error", async () => {
     vi.useFakeTimers();
     try {

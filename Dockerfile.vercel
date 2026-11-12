@@ -26,7 +26,8 @@ COPY packages/core/package.json packages/core/
 COPY apps/backend/package.json apps/backend/
 COPY apps/frontend/package.json apps/frontend/
 
-RUN pnpm install --frozen-lockfile --prod --ignore-scripts
+RUN pnpm install --frozen-lockfile --prod --ignore-scripts \
+ && rm -rf /root/.cache
 
 COPY --from=build /app/packages/core/build/ packages/core/build/
 COPY --chown=node:node --from=build /app/apps/frontend/build/ apps/frontend/build/

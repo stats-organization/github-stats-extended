@@ -5,7 +5,7 @@ updates:
     directory: "/"
     schedule:
       interval: cron
-      cronjob: "40 0 * * 3,6"
+      cronjob: "45 0 * * 3,6"
     open-pull-requests-limit: 20
     commit-message:
       prefix: "build(deps)"
