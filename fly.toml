@@ -17,5 +17,14 @@ cpu_kind = 'shared'
 cpus = 2
 memory_mb = 512
 
+[[services.http_checks]]
+interval = 10000
+grace_period = "10s"
+method = "get"
+path = "/api/status/up"
+protocol = "https"
+timeout = 10000
+tls_skip_verify = false
+
 [deploy]
 strategy = "bluegreen"
