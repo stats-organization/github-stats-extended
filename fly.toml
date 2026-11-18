@@ -24,7 +24,7 @@ method = "get"
 path = "/api/status/up"
 protocol = "https"
 timeout = 10000
-tls_skip_verify = false
+tls_skip_verify = true
 
 #[deploy]
 #strategy = "bluegreen"
