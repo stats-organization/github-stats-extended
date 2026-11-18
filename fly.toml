@@ -20,10 +20,10 @@ memory_mb = 512
 [[http_service.checks]]
 grace_period = "10s"
 interval = "30s"
+timeout = "10s"
 method = "GET"
 path = "/api/status/up"
 protocol = "http"
-timeout = "10s"
 
-#[deploy]
-#strategy = "bluegreen"
+[deploy]
+strategy = "bluegreen"
