@@ -26,5 +26,5 @@ protocol = "https"
 timeout = 10000
 tls_skip_verify = false
 
-[deploy]
-strategy = "bluegreen"
+#[deploy]
+#strategy = "bluegreen"
