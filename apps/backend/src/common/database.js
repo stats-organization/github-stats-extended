@@ -5,6 +5,9 @@ import { AccessTokenCipher, TokenDecryptionError } from "./tokenEncryption.js";
 /** SQLSTATE `undefined_table`, see https://www.postgresql.org/docs/current/errcodes-appendix.html */
 const UNDEFINED_TABLE = "42P01";
 
+/** FLY-TEST: hard-coded read-only mode, all write functions below are no-ops. */
+const READ_ONLY = true;
+
 export let pool = null;
 if (process.env.POSTGRES_URL) {
   const { Pool } = await import("pg");
@@ -36,7 +39,8 @@ function getCipher() {
  * Creates all required tables if they do not exist.
  */
 async function createAllTables() {
-  if (!pool) {
+  // FLY-TEST: read-only DB access
+  if (!pool || READ_ONLY) {
     return;
   }
 
@@ -59,7 +63,8 @@ async function createAllTables() {
  * Stores or updates a request in the database.
  */
 export async function storeRequest(req) {
-  if (!pool) {
+  // FLY-TEST: read-only DB access
+  if (!pool || READ_ONLY) {
     return;
   }
 
@@ -95,7 +100,8 @@ export async function storeRequest(req) {
  * Deletes all requests older than the specified time from the database.
  */
 export async function deleteOldRequests(interval) {
-  if (!pool) {
+  // FLY-TEST: read-only DB access
+  if (!pool || READ_ONLY) {
     return;
   }
 
@@ -154,7 +160,8 @@ export async function getRecentRequests(minInterval, maxInterval) {
  * @param {boolean} privateAccess Whether private access was requested
  */
 export async function storeUser(userId, accessToken, userKey, privateAccess) {
-  if (!pool) {
+  // FLY-TEST: read-only DB access
+  if (!pool || READ_ONLY) {
     return;
   }
 
@@ -217,7 +224,8 @@ function toUserAccess(row) {
  * @param userKey user key of the user which is to be deleted.
  */
 export async function deleteUser(userKey) {
-  if (!pool) {
+  // FLY-TEST: read-only DB access
+  if (!pool || READ_ONLY) {
     return;
   }
 
@@ -309,6 +317,10 @@ export async function getUserAccessByName(userName) {
 export async function encryptStoredAccessTokens() {
   if (!pool) {
     throw new Error("POSTGRES_URL is not set");
+  }
+  // FLY-TEST: read-only DB access
+  if (READ_ONLY) {
+    throw new Error("DB access is read-only on this test branch");
   }
   const cipher = getCipher();
   if (!cipher.isEnabled) {
