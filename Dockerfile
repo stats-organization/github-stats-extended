@@ -35,8 +35,8 @@ COPY apps/backend/ apps/backend/
 
 USER node
 ENV NODE_ENV=production
-ENV PORT=80
-EXPOSE 80
+ENV PORT=8080
+EXPOSE 8080
 HEALTHCHECK CMD node -e "fetch('http://localhost:80/api/status/up').then(r => { if (!r.ok) process.exit(1) }).catch(() => process.exit(1))"
 
 ENTRYPOINT ["apps/backend/docker-entrypoint.sh"]
