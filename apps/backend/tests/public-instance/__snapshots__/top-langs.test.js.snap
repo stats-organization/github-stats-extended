@@ -398,7 +398,7 @@ exports[`Test /api/top-langs contract > should match the public many-params resp
         Java 4.5 B
       </text>
     </g>
-  </g></g><g transform="translate(150, 0)"><g transform="translate(0, 0)">
+  </g></g><g transform="translate(185, 0)"><g transform="translate(0, 0)">
     <g class="stagger" style="animation-delay: 450ms">
       <circle cx="5" cy="6" r="5" fill="#00f"/>
       <text data-testid="lang-name" x="15" y="10" class="lang-name">

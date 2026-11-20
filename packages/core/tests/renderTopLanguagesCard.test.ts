@@ -806,6 +806,40 @@ describe("Test renderTopLanguages", () => {
     expect(langNames[0]).toHaveTextContent("HTML 200.0 B");
     expect(langNames[1]).toHaveTextContent("javascript 200.0 B");
     expect(langNames[2]).toHaveTextContent("css 100.0 B");
+
+    document.body.innerHTML = renderTopLanguages(langs, {
+      layout: "compact",
+      stats_format: "both",
+    });
+
+    langNames = screen.queryAllByTestId("lang-name");
+    expect(langNames[0]).toHaveTextContent("HTML 40.00% (200.0 B)");
+    expect(langNames[1]).toHaveTextContent("javascript 40.00% (200.0 B)");
+    expect(langNames[2]).toHaveTextContent("css 20.00% (100.0 B)");
+  });
+
+  it("should start the second compact column at the bar midpoint with byte stats", () => {
+    const columnOffset = (html: string) =>
+      Number(
+        /<\/g><\/g><g transform="translate\((\d+(?:\.\d+)?), 0\)">/.exec(
+          html,
+        )?.[1],
+      );
+
+    // 600px card: 550px bar, so the second column starts at 275
+    const both = renderTopLanguages(langs, {
+      layout: "compact",
+      stats_format: "both",
+      card_width: 600,
+    });
+    expect(columnOffset(both)).toBe(275);
+
+    // percentages keep the existing 150px minimum gap
+    const percentages = renderTopLanguages(langs, {
+      layout: "compact",
+      card_width: 600,
+    });
+    expect(columnOffset(percentages)).toBe(150);
   });
 
   it("should hide stats values when hide_values is true (compact layout)", () => {

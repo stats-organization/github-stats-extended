@@ -90,7 +90,7 @@ export default async (
 
   if (
     stats_format !== undefined &&
-    !["bytes", "percentages"].includes(stats_format)
+    !["bytes", "percentages", "both"].includes(stats_format)
   ) {
     return {
       status: "error - permanent",
