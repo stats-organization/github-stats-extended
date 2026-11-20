@@ -1,7 +1,7 @@
 import nock from "nock";
 import { describe, expect, it, vi } from "vitest";
 
-import statsApi from "../src/api/index.js";
+import statsApi from "../src/api/stats.js";
 import {
   CustomError,
   MissingParamError,
@@ -63,9 +63,7 @@ describe("Test API result error contract", () => {
         errors: [{ type: "RATE_LIMITED" }],
       });
 
-    const result = await statsApi({ username: "octocat" } as Parameters<
-      typeof statsApi
-    >[0]);
+    const result = await statsApi({ username: "octocat" });
 
     expect(result).toMatchObject({
       status: "error - temporary",

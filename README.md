@@ -2,13 +2,13 @@
   <img src="docs/appIcon.svg" width="100px" alt="GitHub Stats Extended Logo" />
   <h1>GitHub Stats Extended</h1>
   <p>Dynamically generate GitHub stats for your READMEs.</p>
-<a href="https://github-stats-extended.vercel.app/api?username=anuraghazra">
+<a href="https://github-stats-extended.vercel.app/api/stats?username=anuraghazra">
   <picture>
     <source
-      srcset="https://github-stats-extended.vercel.app/api?username=anuraghazra&theme=dark_github"
+      srcset="https://github-stats-extended.vercel.app/api/stats?username=anuraghazra&theme=dark_github"
       media="(prefers-color-scheme: dark)"
     />
-    <img src="https://github-stats-extended.vercel.app/api?username=anuraghazra&theme=light_github" />
+    <img src="https://github-stats-extended.vercel.app/api/stats?username=anuraghazra&theme=light_github" />
   </picture>
 </a>
 </div>
@@ -29,7 +29,7 @@ GitHub-Stats-Extended is the [extended, actively maintained successor](https://g
 Copy and paste this into your markdown, then change the `?username=` value to your GitHub username:
 
 ```md
-[![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api?username=anuraghazra)](https://github.com/stats-organization/github-stats-extended)
+[![Anurag's GitHub stats](https://github-stats-extended.vercel.app/api/stats?username=anuraghazra)](https://github.com/stats-organization/github-stats-extended)
 ```
 
 As a more comfortable alternative, use the [card wizard](https://github-stats-extended.vercel.app/frontend) to configure your card visually. Then copy the generated markdown into your [GitHub profile README](https://docs.github.com/en/account-and-profile/how-tos/profile-customization/managing-your-profile-readme#adding-a-profile-readme).
@@ -51,10 +51,10 @@ GitHub-Stats-Extended aims to be fully compatible with github-readme-stats. For 
 
   <picture>
     <source
-      srcset="https://github-stats-extended.vercel.app/api?username=anuraghazra&theme=dark_github"
+      srcset="https://github-stats-extended.vercel.app/api/stats?username=anuraghazra&theme=dark_github"
       media="(prefers-color-scheme: dark)"
     />
-    <img src="https://github-stats-extended.vercel.app/api?username=anuraghazra&theme=light_github" alt="Anurag's GitHub stats" />
+    <img src="https://github-stats-extended.vercel.app/api/stats?username=anuraghazra&theme=light_github" alt="Anurag's GitHub stats" />
   </picture>
 
 - ...your top languages...:

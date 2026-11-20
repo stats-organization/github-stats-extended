@@ -42,7 +42,7 @@ abstract class CardUrlBase<S extends CardUrlBase<S>> {
   /** Build a new instance of the concrete card builder. */
   protected abstract create(params: ReadonlyMap<string, string>): S;
 
-  /** Path segment appended after `/api` (empty for the stats card). */
+  /** Path segment appended after `/api`. */
   protected abstract readonly path: string;
 
   /**
@@ -91,7 +91,7 @@ abstract class CardUrlBase<S extends CardUrlBase<S>> {
 }
 
 class StatsCardUrl extends CardUrlBase<StatsCardUrl> {
-  protected readonly path = "";
+  protected readonly path = "/stats";
   protected create(p: ReadonlyMap<string, string>) {
     return new StatsCardUrl(p);
   }

@@ -304,7 +304,7 @@ export function mockCore() {
     fetchWakatimeStats: vi.fn(),
     retryer: vi.fn(),
     dateDiff: vi.fn(),
-    api: vi.fn(),
+    stats: vi.fn(),
     gist: vi.fn(),
     pin: vi.fn(),
     topLangs: vi.fn(),

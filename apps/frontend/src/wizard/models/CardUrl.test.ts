@@ -5,7 +5,7 @@ import { cardUrl } from "./CardUrl";
 
 describe("cardUrl", () => {
   it("maps each card type to its path", () => {
-    expect(cardUrl(CardType.STATS).toString()).toBe("");
+    expect(cardUrl(CardType.STATS).toString()).toBe("/stats");
     expect(cardUrl(CardType.TOP_LANGS).toString()).toBe("/top-langs");
     expect(cardUrl(CardType.PIN).toString()).toBe("/pin");
     expect(cardUrl(CardType.GIST).toString()).toBe("/gist");
@@ -38,13 +38,15 @@ describe("cardUrl", () => {
     const base = cardUrl(CardType.STATS).username("john");
     const withIcons = base.showIcons();
 
-    expect(base.toString()).toBe("?username=john");
-    expect(withIcons.toString()).toBe("?username=john&show_icons=true");
+    expect(base.toString()).toBe("/stats?username=john");
+    expect(withIcons.toString()).toBe("/stats?username=john&show_icons=true");
   });
 
   it("sets values verbatim (callers decide whether to include a param)", () => {
     // no dropping of empty/false — the value is set as given
-    expect(cardUrl(CardType.STATS).username("").toString()).toBe("?username=");
+    expect(cardUrl(CardType.STATS).username("").toString()).toBe(
+      "/stats?username=",
+    );
   });
 
   it("encodes special characters", () => {
@@ -54,10 +56,10 @@ describe("cardUrl", () => {
         .username("john")
         .customTitle("My Stats")
         .toString(),
-    ).toBe("?username=john&custom_title=My%20Stats");
+    ).toBe("/stats?username=john&custom_title=My%20Stats");
     expect(
       cardUrl(CardType.STATS).username("john").show("a,b,c").toString(),
-    ).toBe("?username=john&show=a%2Cb%2Cc");
+    ).toBe("/stats?username=john&show=a%2Cb%2Cc");
   });
 
   it("builds an absolute api url with the given host", () => {
@@ -66,12 +68,12 @@ describe("cardUrl", () => {
         .username("john")
         .client("wizard")
         .toApiUrl("example.com"),
-    ).toBe("https://example.com/api?username=john&client=wizard");
+    ).toBe("https://example.com/api/stats?username=john&client=wizard");
   });
 
   it("applies a theme via the universal setter", () => {
     expect(
       cardUrl(CardType.STATS).username("john").theme("github_dark").toString(),
-    ).toBe("?username=john&theme=github_dark");
+    ).toBe("/stats?username=john&theme=github_dark");
   });
 });

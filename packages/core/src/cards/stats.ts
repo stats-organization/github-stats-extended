@@ -9,7 +9,7 @@ import { createTextNode, flexLayout, measureText } from "../common/render.js";
 import type { StatsData } from "../fetchers/types.js";
 import { statCardLocales, wakatimeCardLocales } from "../translations.js";
 
-import type { CommonCardOptions } from "./options.js";
+import type { CardOptions, CommonCardOptions } from "./options.js";
 
 const CARD_MIN_WIDTH = 287;
 const CARD_DEFAULT_WIDTH = 287;
@@ -227,7 +227,7 @@ const getTotalCommitsYearLabel = (
  */
 const renderStatsCard = (
   stats: StatsData,
-  options: Partial<StatCardOptions> = {},
+  options: CardOptions<StatCardOptions> = {},
   username?: string,
   repo: Array<string> = [],
   owner: Array<string> = [],
