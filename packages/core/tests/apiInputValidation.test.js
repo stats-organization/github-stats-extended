@@ -46,4 +46,23 @@ describe("API input validation", () => {
       },
     );
   });
+
+  describe.each(["pushed_after", "pushed_before"])("top-langs: %s", (param) => {
+    it.each([
+      "",
+      "abc",
+      "24",
+      "2024-13",
+      "2024-01-32",
+      "2024-02-30",
+      "2024/01/01",
+      "1e3",
+    ])("rejects %j", async (value) => {
+      const result = await topLangsApi({ username: "user", [param]: value });
+      expect(result.status).toBe("error - permanent");
+      expect(result.content).toContain(
+        `Invalid date input for parameter &#34;${param}&#34;`,
+      );
+    });
+  });
 });

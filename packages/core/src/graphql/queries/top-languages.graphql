@@ -8,6 +8,7 @@ fragment TopLanguage on LanguageEdge {
 
 fragment TopLanguagesRepository on Repository {
   name
+  pushedAt
   languages(first: 10, orderBy: { field: SIZE, direction: DESC }) {
     edges {
       ...TopLanguage
@@ -18,6 +19,7 @@ fragment TopLanguagesRepository on Repository {
 query topLanguages(
   $login: String!
   $ownerAffiliations: [RepositoryAffiliation]
+  $after: String
 ) {
   user(login: $login) {
     # do not fetch forks
@@ -25,9 +27,15 @@ query topLanguages(
       ownerAffiliations: $ownerAffiliations
       isFork: false
       first: 100
+      after: $after
+      orderBy: { field: PUSHED_AT, direction: DESC }
     ) {
       nodes {
         ...TopLanguagesRepository
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
       }
     }
   }
