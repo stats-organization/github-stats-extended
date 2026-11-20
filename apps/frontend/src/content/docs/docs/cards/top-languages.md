@@ -48,7 +48,7 @@ You can customize the appearance and behavior of the top languages card using th
 | `hide_values`                   | Hides language percentages or bytes while keeping the progress bars or chart.                                                                                                                   | boolean                         | `false`                                             |
 | `size_weight`                   | Configures language stats algorithm (see [Language stats algorithm](#language-stats-algorithm)).                                                                                                | number                          | `1`                                                 |
 | `count_weight`                  | Configures language stats algorithm (see [Language stats algorithm](#language-stats-algorithm)).                                                                                                | number                          | `0`                                                 |
-| `stats_format`                  | Switches between two available formats for language's stats `percentages` and `bytes`.                                                                                                          | enum                            | `percentages`                                       |
+| `stats_format`                  | Switches the format of language's stats: `percentages`, `bytes` or `both`.                                                                                                                      | enum                            | `percentages`                                       |
 
 <sup>1</sup>: Supports light and dark mode via `prog_bar_bg_color_light` and `prog_bar_bg_color_dark`.
 
@@ -159,7 +159,7 @@ You can use the `&hide_progress=true` option to hide the percentages and the pro
 
 ## Change format of language's stats
 
-You can use the `&stats_format=bytes` option to display the stats in bytes instead of percentage.
+You can use the `&stats_format=bytes` option to display the stats in bytes instead of percentage. Use `&stats_format=both` to show the percentage followed by the size in bytes, e.g. `TypeScript 25.71% (22.5 MB)`. Byte sizes make labels longer, so you may want a wider `card_width` with the compact layout.
 
 ```md
 ![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&stats_format=bytes)
