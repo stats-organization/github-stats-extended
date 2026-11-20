@@ -87,6 +87,10 @@ const fetchRepositoriesPage = async (
  * @param count_weight Weightage to be given to count.
  * @param ownerAffiliations The owner affiliations to filter by. Default: OWNER.
  * @param pat Optional PAT override.
+ * @param pushedRange Only count repositories whose last push falls in this range.
+ * @param pushedRange.after Inclusive lower bound on the last push date.
+ *        Paging stops once repositories pushed before it are reached.
+ * @param pushedRange.before Exclusive upper bound on the last push date.
  * @returns Top languages data.
  */
 const fetchTopLanguages = async (
@@ -96,11 +100,30 @@ const fetchTopLanguages = async (
   count_weight = 0,
   ownerAffiliations: Array<string> = [],
   pat: string | null = null,
+  pushedRange: { after?: Date | null; before?: Date | null } = {},
 ): Promise<TopLangData> => {
   if (!username) {
     throw new MissingParamError(["username"]);
   }
   const affiliations = parseOwnerAffiliations(ownerAffiliations);
+
+  const { after: pushedAfter, before: pushedBefore } = pushedRange;
+  const pushedAt = (node: TopLanguagesRepositoryFragment): Date | null =>
+    node.pushedAt ? new Date(node.pushedAt) : null;
+  const isNotTooOld = (node: TopLanguagesRepositoryFragment): boolean => {
+    if (!pushedAfter) {
+      return true;
+    }
+    const date = pushedAt(node);
+    return !!date && date >= pushedAfter;
+  };
+  const isNotTooNew = (node: TopLanguagesRepositoryFragment): boolean => {
+    if (!pushedBefore) {
+      return true;
+    }
+    const date = pushedAt(node);
+    return !!date && date < pushedBefore;
+  };
 
   const fetchedNodes: Array<TopLanguagesRepositoryFragment> = [];
   let after: string | null = null;
@@ -113,7 +136,10 @@ const fetchTopLanguages = async (
     );
     fetchedNodes.push(...pageNodes.nodes);
 
-    if (!pageNodes.hasNextPage) {
+    // repositories come most recently pushed first, so once one is older
+    // than the range, every later page is too
+    const last = pageNodes.nodes.at(-1);
+    if (!pageNodes.hasNextPage || (last && !isNotTooOld(last))) {
       break;
     }
     after = pageNodes.endCursor;
@@ -130,8 +156,10 @@ const fetchTopLanguages = async (
     repoToHide[repoName] = true;
   });
 
-  // filter out repositories to be hidden
-  const repoNodes = fetchedNodes.filter((node) => !repoToHide[node.name]);
+  // filter out repositories to be hidden or last pushed outside the range
+  const repoNodes = fetchedNodes.filter(
+    (node) => !repoToHide[node.name] && isNotTooOld(node) && isNotTooNew(node),
+  );
 
   // flatten edges across repos. Order matters: `concat(acc)` prepends, and the
   // shared repoCount below depends on visitation order.

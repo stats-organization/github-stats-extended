@@ -8,6 +8,7 @@ fragment TopLanguage on LanguageEdge {
 
 fragment TopLanguagesRepository on Repository {
   name
+  pushedAt
   languages(first: 10, orderBy: { field: SIZE, direction: DESC }) {
     edges {
       ...TopLanguage

@@ -202,6 +202,55 @@ describe("FetchTopLanguages", () => {
     expect(nock.isDone()).toBe(true);
   });
 
+  describe("with a pushed date range", () => {
+    // two pages, most recently pushed first; the second reaches back to 2015
+    const mockPushedAtPages = () =>
+      nock("https://api.github.com")
+        .post("/graphql", withCursor(null))
+        .reply(
+          200,
+          repoPage(
+            [langRepo("recent-1", "Rust", "2025-06-01T00:00:00Z")],
+            "c1",
+          ),
+        )
+        .post("/graphql", withCursor("c1"))
+        .reply(
+          200,
+          repoPage(
+            [
+              langRepo("recent-2", "Go", "2024-01-01T00:00:00Z"),
+              langRepo("old", "PHP", "2015-01-01T00:00:00Z"),
+            ],
+            "c2",
+          ),
+        );
+
+    it("should drop repositories pushed before `after` and stop paging", async () => {
+      // no interceptor for cursor "c2": a third request would throw
+      mockPushedAtPages();
+
+      const repo = await fetchTopLanguages("anuraghazra", [], 1, 0, [], null, {
+        after: new Date("2020-01-01T00:00:00Z"),
+      });
+
+      expect(Object.keys(repo).sort()).toStrictEqual(["Go", "Rust"]);
+      expect(nock.isDone()).toBe(true);
+    });
+
+    it("should only count repositories last pushed between `after` and `before`", async () => {
+      mockPushedAtPages();
+
+      const repo = await fetchTopLanguages("anuraghazra", [], 1, 0, [], null, {
+        after: new Date("2020-01-01T00:00:00Z"),
+        before: new Date("2025-01-01T00:00:00Z"),
+      });
+
+      expect(Object.keys(repo)).toStrictEqual(["Go"]);
+      expect(nock.isDone()).toBe(true);
+    });
+  });
+
   it("should throw specific error when user not found", async () => {
     nock("https://api.github.com").post("/graphql").reply(200, error);
 
