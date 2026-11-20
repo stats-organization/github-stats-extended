@@ -25,6 +25,7 @@ query topLanguages(
       ownerAffiliations: $ownerAffiliations
       isFork: false
       first: 100
+      orderBy: { field: PUSHED_AT, direction: DESC }
     ) {
       nodes {
         ...TopLanguagesRepository
