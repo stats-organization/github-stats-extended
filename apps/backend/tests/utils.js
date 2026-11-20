@@ -303,7 +303,6 @@ export function mockCore() {
     request: vi.fn(),
     fetchWakatimeStats: vi.fn(),
     retryer: vi.fn(),
-    dateDiff: vi.fn(),
     api: vi.fn(),
     gist: vi.fn(),
     pin: vi.fn(),
