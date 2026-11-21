@@ -14,7 +14,7 @@ processes = ['app']
 [[vm]]
 memory = '256mb'
 cpu_kind = 'shared'
-cpus = 2
+cpus = 1
 memory_mb = 256
 
 [[http_service.checks]]
