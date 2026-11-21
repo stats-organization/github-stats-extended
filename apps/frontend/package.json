@@ -16,7 +16,7 @@
     "@astrojs/markdown-remark": "7.3.4",
     "@astrojs/react": "^7.0.0",
     "@astrojs/starlight": "^0.42.5",
-    "@reduxjs/toolkit": "^2.13.0",
+    "@reduxjs/toolkit": "^2.14.0",
     "@stats-organization/github-readme-stats-core": "workspace:^",
     "@tailwindcss/vite": "^4.3.3",
     "@types/react": "19.3.0",
