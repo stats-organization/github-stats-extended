@@ -12,10 +12,10 @@ min_machines_running = 1
 processes = ['app']
 
 [[vm]]
-memory = '512mb'
+memory = '256mb'
 cpu_kind = 'shared'
 cpus = 2
-memory_mb = 512
+memory_mb = 256
 
 [[http_service.checks]]
 grace_period = "10s"
