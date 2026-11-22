@@ -1,6 +1,10 @@
 import axios from "axios";
 
-import { getRecentRequests, pool } from "./common/database.js";
+import {
+  deleteOldRequests,
+  getRecentRequests,
+  pool,
+} from "./common/database.js";
 
 /**
  * Processes URLs with a thread pool of given size using axios.get.
@@ -21,8 +25,10 @@ async function makeRequests(urls, poolSize) {
       if (idx >= urls.length) {
         break;
       }
-      // FLY-TEST: hard-coded fly.io host instead of REPEAT_BASE_URL / VERCEL_BRANCH_URL
-      const url = "https://gh-stats-extended.fly.dev" + urls[idx];
+      const url =
+        "https://" +
+        (process.env.REPEAT_BASE_URL || process.env.VERCEL_BRANCH_URL) +
+        urls[idx];
       try {
         if (idx % 10 === 0) {
           console.log(`Processing request ${idx + 1} out of ${urls.length}`);
@@ -58,7 +64,7 @@ export async function repeatRecentRequests() {
   let minInterval = process.env.UPDATE_AFTER_HOURS
     ? `${process.env.UPDATE_AFTER_HOURS} hours`
     : "11 hours";
-  // FLY-TEST: read-only DB, so no deleteOldRequests(maxInterval) here
+  await deleteOldRequests(maxInterval);
   const urls = await getRecentRequests(minInterval, maxInterval);
   if (urls.length === 0) {
     console.log("No recent requests found.");
