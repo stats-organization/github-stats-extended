@@ -105,6 +105,14 @@ jobs:
       - name: Run backend end-to-end tests
         run: pnpm --filter ./apps/backend/ run test:e2e
 
+  docker:
+    permissions:
+      contents: read
+
+    uses: ./.github/workflows/docker.yml
+    with:
+      push: false
+
   code-checks:
     name: Code checks
 
