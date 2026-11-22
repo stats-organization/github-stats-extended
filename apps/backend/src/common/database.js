@@ -101,10 +101,10 @@ export async function deleteOldRequests(interval) {
 
   const deleteQuery = `
       DELETE FROM requests
-      WHERE user_requested_at < NOW() - INTERVAL '${interval}'
+      WHERE user_requested_at < NOW() - ($1)::interval
     `;
   try {
-    let result = await pool.query(deleteQuery);
+    let result = await pool.query(deleteQuery, [interval]);
     console.log(`Deleted ${result.rowCount} old requests.`);
   } catch (err) {
     if (err.code === UNDEFINED_TABLE) {
@@ -128,13 +128,13 @@ export async function getRecentRequests(minInterval, maxInterval) {
   const query = `
       SELECT request
       FROM requests
-      WHERE requested_at >= NOW() - INTERVAL '${maxInterval}'
-        AND requested_at < NOW() - INTERVAL '${minInterval}'
+      WHERE requested_at >= NOW() - ($1)::interval
+        AND requested_at < NOW() - ($2)::interval
       ORDER BY requested_at ASC
       `;
   let rows;
   try {
-    ({ rows } = await pool.query(query));
+    ({ rows } = await pool.query(query, [maxInterval, minInterval]));
   } catch (err) {
     if (err.code === UNDEFINED_TABLE) {
       console.log("Error fetching requests, table doesn't exist");

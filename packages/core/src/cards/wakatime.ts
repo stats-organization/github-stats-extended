@@ -219,6 +219,12 @@ const recalculatePercentages = (languages: Array<WakaTimeLang>): void => {
     (totalSum, language) => totalSum + language.percent,
     0,
   );
+  if (totalSum <= 0) {
+    languages.forEach((language) => {
+      language.percent = 0;
+    });
+    return;
+  }
   const weight = +(100 / totalSum).toFixed(2);
   languages.forEach((language) => {
     language.percent = +(language.percent * weight).toFixed(2);
@@ -328,7 +334,8 @@ const renderWakatimeCard = (
 
   const lheight = parseInt(String(line_height), 10);
 
-  const langsCount = clampValue(langs_count, 1, langs_count);
+  const maxLangs = languages.length > 0 ? languages.length : 1;
+  const langsCount = clampValue(langs_count, 1, maxLangs);
 
   const { lightColors, darkColors } = getLightDarkColors(options);
 

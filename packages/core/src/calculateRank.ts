@@ -75,7 +75,7 @@ function calculateRank({
   const THRESHOLDS = [1, 12.5, 25, 37.5, 50, 62.5, 75, 87.5, 100];
   const LEVELS = ["S", "A+", "A", "A-", "B+", "B", "B-", "C+", "C"];
 
-  const rank =
+  const rawRank =
     1 -
     (COMMITS_WEIGHT * exponential_cdf(commits / COMMITS_MEDIAN) +
       PRS_WEIGHT * exponential_cdf(prs / PRS_MEDIAN) +
@@ -85,10 +85,14 @@ function calculateRank({
       FOLLOWERS_WEIGHT * log_normal_cdf(followers / FOLLOWERS_MEDIAN)) /
       TOTAL_WEIGHT;
 
-  const level = LEVELS[THRESHOLDS.findIndex((t) => rank * 100 <= t)];
-  if (level === undefined) {
-    throw new Error("Unable to determine rank level");
-  }
+  const rank = Number.isFinite(rawRank) ? Math.max(0, Math.min(1, rawRank)) : 1;
+
+  const thresholdIndex = THRESHOLDS.findIndex((t) => rank * 100 <= t);
+  const fallbackLevel = LEVELS[LEVELS.length - 1] ?? "C";
+  const level =
+    thresholdIndex === -1
+      ? fallbackLevel
+      : (LEVELS[thresholdIndex] ?? fallbackLevel);
 
   return { level, percentile: rank * 100 };
 }

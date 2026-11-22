@@ -232,57 +232,82 @@ const fetchRepoUserStats = async (
   include_issues_commented: boolean,
   pat: string | null,
 ): Promise<RepoUserStats> => {
+  const [
+    totalPRsAuthored,
+    totalPRsCommented,
+    totalPRsReviewed,
+    totalIssuesAuthored,
+    totalIssuesCommented,
+  ] = await Promise.all([
+    include_prs_authored
+      ? totalItemsFetcher(
+          username,
+          repo,
+          owner,
+          "issues",
+          `author:${username}+type:pr`,
+          pat,
+        )
+      : undefined,
+    include_prs_commented
+      ? totalItemsFetcher(
+          username,
+          repo,
+          owner,
+          "issues",
+          `commenter:${username}+-author:${username}+type:pr`,
+          pat,
+        )
+      : undefined,
+    include_prs_reviewed
+      ? totalItemsFetcher(
+          username,
+          repo,
+          owner,
+          "issues",
+          `reviewed-by:${username}+-author:${username}+type:pr`,
+          pat,
+        )
+      : undefined,
+    include_issues_authored
+      ? totalItemsFetcher(
+          username,
+          repo,
+          owner,
+          "issues",
+          `author:${username}+type:issue`,
+          pat,
+        )
+      : undefined,
+    include_issues_commented
+      ? totalItemsFetcher(
+          username,
+          repo,
+          owner,
+          "issues",
+          `commenter:${username}+-author:${username}+type:issue`,
+          pat,
+        )
+      : undefined,
+  ]);
+
   const stats: RepoUserStats = {};
-  if (include_prs_authored) {
-    stats.totalPRsAuthored = await totalItemsFetcher(
-      username,
-      repo,
-      owner,
-      "issues",
-      `author:${username}+type:pr`,
-      pat,
-    );
+  if (totalPRsAuthored !== undefined) {
+    stats.totalPRsAuthored = totalPRsAuthored;
   }
-  if (include_prs_commented) {
-    stats.totalPRsCommented = await totalItemsFetcher(
-      username,
-      repo,
-      owner,
-      "issues",
-      `commenter:${username}+-author:${username}+type:pr`,
-      pat,
-    );
+  if (totalPRsCommented !== undefined) {
+    stats.totalPRsCommented = totalPRsCommented;
   }
-  if (include_prs_reviewed) {
-    stats.totalPRsReviewed = await totalItemsFetcher(
-      username,
-      repo,
-      owner,
-      "issues",
-      `reviewed-by:${username}+-author:${username}+type:pr`,
-      pat,
-    );
+  if (totalPRsReviewed !== undefined) {
+    stats.totalPRsReviewed = totalPRsReviewed;
   }
-  if (include_issues_authored) {
-    stats.totalIssuesAuthored = await totalItemsFetcher(
-      username,
-      repo,
-      owner,
-      "issues",
-      `author:${username}+type:issue`,
-      pat,
-    );
+  if (totalIssuesAuthored !== undefined) {
+    stats.totalIssuesAuthored = totalIssuesAuthored;
   }
-  if (include_issues_commented) {
-    stats.totalIssuesCommented = await totalItemsFetcher(
-      username,
-      repo,
-      owner,
-      "issues",
-      `commenter:${username}+-author:${username}+type:issue`,
-      pat,
-    );
+  if (totalIssuesCommented !== undefined) {
+    stats.totalIssuesCommented = totalIssuesCommented;
   }
+
   return stats;
 };
 

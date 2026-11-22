@@ -41,7 +41,7 @@ const bad_credentials_error = {
 const shields_up = {
   schemaVersion: 1,
   label: "Public Instance",
-  isError: true,
+  isError: false,
   message: "up",
   color: "brightgreen",
 };

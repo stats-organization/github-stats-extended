@@ -276,4 +276,63 @@ describe("Test Retryer", () => {
     );
     expect(res).toStrictEqual({ data: { token: "user-pat-token" } });
   });
+
+  it("retryer should throw BAD_CREDENTIALS error when token is rejected as Bad credentials", async () => {
+    const badCredFetcher = vi.fn().mockRejectedValue({
+      response: {
+        data: { message: "Bad credentials" },
+      },
+    }) as unknown as Fetcher;
+
+    await expect(retryer(badCredFetcher, {}, "invalid-token")).rejects.toThrow(
+      "GitHub API token is invalid or expired",
+    );
+  });
+
+  it("retryer should throw BAD_CREDENTIALS error when account is suspended", async () => {
+    const suspendedFetcher = vi.fn().mockRejectedValue({
+      response: {
+        data: { message: "Sorry. Your account was suspended." },
+      },
+    }) as unknown as Fetcher;
+
+    await expect(
+      retryer(suspendedFetcher, {}, "suspended-token"),
+    ).rejects.toThrow("GitHub API token is invalid or expired");
+  });
+
+  it("retryer should rotate PAT when receiving REST 403 rate limit and succeed on second try", async () => {
+    const restRateLimitFetcher = vi.fn((_vars, _token, retries) => {
+      if (retries < 1) {
+        return Promise.reject(
+          Object.assign(new Error("Rate limited"), {
+            response: {
+              status: 403,
+              data: { message: "API rate limit exceeded for user ID 12345" },
+            },
+          }),
+        );
+      }
+      return Promise.resolve({ data: "ok from second pat" });
+    }) as unknown as Fetcher;
+
+    const res = await retryer(restRateLimitFetcher, {});
+    expect(restRateLimitFetcher).toHaveBeenCalledTimes(2);
+    expect(res).toStrictEqual({ data: "ok from second pat" });
+  });
+
+  it("retryer should throw MAX_RETRY when all PATs return REST 429 rate limit", async () => {
+    const all429Fetcher = vi.fn().mockRejectedValue(
+      Object.assign(new Error("Too Many Requests"), {
+        response: {
+          status: 429,
+          data: { message: "Too Many Requests" },
+        },
+      }),
+    ) as unknown as Fetcher;
+
+    await expect(retryer(all429Fetcher, {})).rejects.toThrow(
+      "Downtime due to GitHub API rate limiting",
+    );
+  });
 });

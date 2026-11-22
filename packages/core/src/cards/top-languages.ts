@@ -240,7 +240,8 @@ const getDisplayValue = (
   percentages: number,
   format: string,
 ): string => {
-  return format === "bytes" ? formatBytes(size) : `${percentages.toFixed(2)}%`;
+  const safePercent = Number.isFinite(percentages) ? percentages : 0;
+  return format === "bytes" ? formatBytes(size) : `${safePercent.toFixed(2)}%`;
 };
 
 /**
@@ -296,7 +297,7 @@ const createProgressTextNode = ({
   const progressTextX = width - paddingRight + 10;
   const progressWidth = width - paddingRight;
 
-  const progress = (size / totalSize) * 100;
+  const progress = totalSize > 0 ? (size / totalSize) * 100 : 0;
   const displayValue = getDisplayValue(size, progress, statsFormat);
 
   return `
@@ -342,7 +343,7 @@ const createCompactLangNode = ({
   statsFormat?: string | undefined;
   index: number;
 }): string => {
-  const percentages = (lang.size / totalSize) * 100;
+  const percentages = totalSize > 0 ? (lang.size / totalSize) * 100 : 0;
   const displayValue = getDisplayValue(lang.size, percentages, statsFormat);
 
   const staggerDelay = (index + 3) * 150;
@@ -953,7 +954,7 @@ const renderTopLanguages = (
   const { lightColors, darkColors } = getLightDarkColors(options);
 
   let finalLayout: string;
-  if (langs.length === 0) {
+  if (langs.length === 0 || totalLanguageSize <= 0) {
     height = COMPACT_LAYOUT_BASE_HEIGHT;
     finalLayout = noLanguagesDataNode({
       text: i18n.t("langcard.nodata"),

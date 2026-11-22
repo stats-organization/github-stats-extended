@@ -34,7 +34,9 @@ const cipher = new AccessTokenCipher([KEY]);
 let storeUser,
   getUserAccessByName,
   getUserAccessByKey,
-  encryptStoredAccessTokens;
+  encryptStoredAccessTokens,
+  deleteOldRequests,
+  getRecentRequests;
 
 beforeAll(async () => {
   vi.stubEnv("POSTGRES_URL", "postgres://user:password@localhost:5432/test");
@@ -45,6 +47,8 @@ beforeAll(async () => {
     getUserAccessByName,
     getUserAccessByKey,
     encryptStoredAccessTokens,
+    deleteOldRequests,
+    getRecentRequests,
   } = await import("../src/common/database.js"));
 });
 
@@ -166,5 +170,26 @@ describe("Test database access token storage", () => {
       encrypted: 0,
       failed: [],
     });
+  });
+
+  it("should use parameterized query for deleteOldRequests", async () => {
+    await deleteOldRequests("8 days");
+    expect(queryMock).toHaveBeenCalledTimes(1);
+    const [sql, values] = queryMock.mock.calls[0];
+    expect(sql).toContain("NOW() - ($1)::interval");
+    expect(values).toEqual(["8 days"]);
+  });
+
+  it("should use parameterized query for getRecentRequests", async () => {
+    queryMock.mockResolvedValueOnce({
+      rows: [{ request: "/api?username=test" }],
+    });
+    const results = await getRecentRequests("11 hours", "8 days");
+    expect(results).toEqual(["/api?username=test"]);
+    expect(queryMock).toHaveBeenCalledTimes(1);
+    const [sql, values] = queryMock.mock.calls[0];
+    expect(sql).toContain("NOW() - ($1)::interval");
+    expect(sql).toContain("NOW() - ($2)::interval");
+    expect(values).toEqual(["8 days", "11 hours"]);
   });
 });

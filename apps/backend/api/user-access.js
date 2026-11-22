@@ -30,6 +30,7 @@ export default async (req, res) => {
     });
   } catch (err) {
     logger.error(err);
+    res.statusCode = 500;
     res.send("Something went wrong: " + err.message);
   }
 };

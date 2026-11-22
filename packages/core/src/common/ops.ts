@@ -29,16 +29,19 @@ const parseBoolean = (
 };
 
 /**
- * Parse string to array of strings.
+ * Parse string to array of strings, trimming whitespace and filtering out empty elements.
  *
  * @param str The string to parse.
  * @returns The array of strings.
  */
-const parseArray = (str: string): Array<string> => {
+const parseArray = (str: string | undefined): Array<string> => {
   if (!str) {
     return [];
   }
-  return str.split(",");
+  return str
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
 };
 
 /**
@@ -50,14 +53,18 @@ const parseArray = (str: string): Array<string> => {
  * @returns The clamped number.
  */
 const clampValue = (
-  number: string | number,
+  number: string | number | undefined,
   min: number,
   max: number,
 ): number => {
-  if (Number.isNaN(parseInt(String(number), 10))) {
+  if (number === undefined || String(number).trim() === "") {
     return min;
   }
-  return Math.max(min, Math.min(Number(number), max));
+  const num = Number(number);
+  if (!Number.isFinite(num)) {
+    return min;
+  }
+  return Math.max(min, Math.min(num, max));
 };
 
 /**

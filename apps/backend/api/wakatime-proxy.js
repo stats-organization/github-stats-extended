@@ -15,6 +15,7 @@ export default async (req, res) => {
     res.send(stats);
   } catch (err) {
     logger.error(err);
-    res.send("Something went wrong: " + err.message);
+    res.statusCode = 500;
+    res.send({ error: "Something went wrong", message: err.message });
   }
 };

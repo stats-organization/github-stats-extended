@@ -29,9 +29,10 @@ describe("Test ops.js", () => {
 
   it("should test parseArray", () => {
     expect(parseArray("a,b,c")).toEqual(["a", "b", "c"]);
-    expect(parseArray("a, b, c")).toEqual(["a", " b", " c"]); // preserves spaces
+    expect(parseArray("a, b, c")).toEqual(["a", "b", "c"]); // trims spaces
+    expect(parseArray("a, , b")).toEqual(["a", "b"]); // filters empty elements
     expect(parseArray("")).toEqual([]);
-    // @ts-expect-error testing invalid input
+    expect(parseArray("   ")).toEqual([]);
     expect(parseArray(undefined)).toEqual([]);
   });
 
@@ -40,12 +41,16 @@ describe("Test ops.js", () => {
     expect(clampValue(0, 1, 10)).toBe(1);
     expect(clampValue(15, 1, 10)).toBe(10);
 
-    // string inputs are coerced numerically by Math.min/Math.max
+    // string inputs are coerced numerically
     expect(clampValue("7", 1, 10)).toBe(7);
 
-    // non-numeric and NaN fall back to min
+    // non-numeric, units and NaN fall back to min
+    expect(clampValue("100px", 1, 10)).toBe(1);
     expect(clampValue("abc", 1, 10)).toBe(1);
     expect(clampValue(NaN, 2, 5)).toBe(2);
+    expect(clampValue("", 1, 10)).toBe(1);
+    expect(clampValue("   ", 1, 10)).toBe(1);
+    expect(clampValue(undefined, 1, 10)).toBe(1);
   });
 
   it("should test lowercaseTrim", () => {
