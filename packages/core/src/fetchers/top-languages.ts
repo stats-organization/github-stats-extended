@@ -6,10 +6,7 @@ import { logger } from "../common/log.js";
 import { parseOwnerAffiliations } from "../common/ops.js";
 import { retryer } from "../common/retryer.js";
 import { TopLanguagesDocument } from "../graphql/generated/top-languages.js";
-import type {
-  TopLanguageFragment,
-  TopLanguagesRepositoryFragment,
-} from "../graphql/generated/top-languages.js";
+import type { TopLanguagesRepositoryFragment } from "../graphql/generated/top-languages.js";
 
 import type { Lang, TopLangData } from "./types.js";
 
@@ -43,6 +40,7 @@ const fetchTopLanguages = async (
     fetcher,
     {
       login: username,
+      after: null,
       ownerAffiliations: affiliations,
     },
     pat,
@@ -69,6 +67,64 @@ const fetchTopLanguages = async (
     );
   }
 
+  const allRepoNodes: Array<TopLanguagesRepositoryFragment> = [];
+  const initialNodes = res.data.data.user?.repositories.nodes ?? [];
+  for (const node of initialNodes) {
+    if (node) {
+      allRepoNodes.push(node);
+    }
+  }
+
+  const maxPages = getConfig().fetchMultiPageLangs;
+  let pageRepositories = res.data.data.user?.repositories;
+  let previousCursor: string | null = null;
+  let fetchedPages = 1;
+
+  interface PageInfoType {
+    hasNextPage?: boolean;
+    endCursor?: string | null;
+  }
+
+  while (
+    fetchedPages < maxPages &&
+    Boolean(
+      (pageRepositories as { pageInfo?: PageInfoType } | undefined)?.pageInfo
+        ?.hasNextPage,
+    )
+  ) {
+    const after =
+      (pageRepositories as { pageInfo?: PageInfoType } | undefined)?.pageInfo
+        ?.endCursor ?? null;
+    if (after === null || after === previousCursor) {
+      break;
+    }
+    previousCursor = after;
+
+    const pageRes = await retryer(
+      fetcher,
+      {
+        login: username,
+        after,
+        ownerAffiliations: affiliations,
+      },
+      pat,
+    );
+
+    if (pageRes.data.errors) {
+      logger.error(pageRes.data.errors);
+      break;
+    }
+
+    pageRepositories = pageRes.data.data.user?.repositories;
+    const pageNodes = pageRepositories?.nodes ?? [];
+    for (const node of pageNodes) {
+      if (node) {
+        allRepoNodes.push(node);
+      }
+    }
+    fetchedPages++;
+  }
+
   const repoToHide: Record<string, boolean> = {};
   const allExcludedRepos = [
     ...exclude_repo,
@@ -77,47 +133,35 @@ const fetchTopLanguages = async (
 
   // populate repoToHide map for quick lookup while filtering out
   allExcludedRepos.forEach((repoName) => {
-    repoToHide[repoName] = true;
+    repoToHide[repoName.trim()] = true;
   });
 
-  // filter out repositories to be hidden
-  const repoNodes = (res.data.data.user?.repositories.nodes ?? []).filter(
-    (node): node is TopLanguagesRepositoryFragment =>
-      !!node && !repoToHide[node.name],
+  // filter out repositories to be hidden (matching name or nameWithOwner)
+  const repoNodes = allRepoNodes.filter(
+    (node) => !repoToHide[node.name] && !repoToHide[node.nameWithOwner],
   );
 
-  // flatten edges across repos. Order matters: `concat(acc)` prepends, and the
-  // shared repoCount below depends on visitation order.
-  const languageEdges = repoNodes.reduce<Array<TopLanguageFragment>>(
-    (acc, repo) => {
-      const edges = (repo.languages?.edges ?? []).filter(
-        (edge): edge is TopLanguageFragment => !!edge,
-      );
-      return edges.length > 0 ? edges.concat(acc) : acc;
-    },
-    [],
-  );
-
-  // accumulate size and repo count per language
+  // accumulate size and repo count per language in a single linear pass
   const languageMap: Record<string, Lang> = {};
-  let repoCount: number;
-  for (const edge of languageEdges) {
-    const existing = languageMap[edge.node.name];
-
-    // same language seen again: add to its size and bump count; else reset to 1
-    let langSize = edge.size;
-    if (existing && edge.node.name === existing.name) {
-      langSize = edge.size + existing.size;
-      repoCount = existing.count + 1;
-    } else {
-      repoCount = 1;
+  for (const repo of repoNodes) {
+    const edges = repo.languages?.edges ?? [];
+    for (const edge of edges) {
+      if (!edge) {
+        continue;
+      }
+      const existing = languageMap[edge.node.name];
+      if (existing) {
+        existing.size += edge.size;
+        existing.count += 1;
+      } else {
+        languageMap[edge.node.name] = {
+          name: edge.node.name,
+          color: edge.node.color,
+          size: edge.size,
+          count: 1,
+        };
+      }
     }
-    languageMap[edge.node.name] = {
-      name: edge.node.name,
-      color: edge.node.color,
-      size: langSize,
-      count: repoCount,
-    };
   }
 
   // comparison index calculation

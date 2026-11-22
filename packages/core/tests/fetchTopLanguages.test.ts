@@ -186,4 +186,134 @@ describe("FetchTopLanguages", () => {
 
     expect(loggerErrorSpy).toHaveBeenCalledOnce();
   });
+
+  it("should paginate through multiple pages and accumulate languages without loss", async () => {
+    const page1 = {
+      data: {
+        user: {
+          repositories: {
+            nodes: [
+              {
+                name: "repo-page-1",
+                nameWithOwner: "anuraghazra/repo-page-1",
+                languages: {
+                  edges: [
+                    {
+                      size: 300,
+                      node: { color: "#3178c6", name: "TypeScript" },
+                    },
+                    {
+                      size: 100,
+                      node: { color: "#f1e05a", name: "JavaScript" },
+                    },
+                  ],
+                },
+              },
+            ],
+            pageInfo: {
+              hasNextPage: true,
+              endCursor: "cursor_page_1",
+            },
+          },
+        },
+      },
+    };
+
+    const page2 = {
+      data: {
+        user: {
+          repositories: {
+            nodes: [
+              {
+                name: "repo-page-2",
+                nameWithOwner: "anuraghazra/repo-page-2",
+                languages: {
+                  edges: [
+                    { size: 250, node: { color: "#A97BFF", name: "Kotlin" } },
+                    {
+                      size: 100,
+                      node: { color: "#3178c6", name: "TypeScript" },
+                    },
+                  ],
+                },
+              },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: "cursor_page_2",
+            },
+          },
+        },
+      },
+    };
+
+    nock("https://api.github.com").post("/graphql").reply(200, page1);
+    nock("https://api.github.com").post("/graphql").reply(200, page2);
+
+    const result = await fetchTopLanguages("anuraghazra");
+
+    expect(result).toStrictEqual({
+      TypeScript: {
+        color: "#3178c6",
+        count: 2,
+        name: "TypeScript",
+        size: 400,
+      },
+      Kotlin: {
+        color: "#A97BFF",
+        count: 1,
+        name: "Kotlin",
+        size: 250,
+      },
+      JavaScript: {
+        color: "#f1e05a",
+        count: 1,
+        name: "JavaScript",
+        size: 100,
+      },
+    });
+  });
+
+  it("should exclude repository by namespaced nameWithOwner", async () => {
+    const multiRepoData = {
+      data: {
+        user: {
+          repositories: {
+            nodes: [
+              {
+                name: "shared-repo",
+                nameWithOwner: "orgA/shared-repo",
+                languages: {
+                  edges: [{ size: 300, node: { color: "#00f", name: "C++" } }],
+                },
+              },
+              {
+                name: "shared-repo",
+                nameWithOwner: "orgB/shared-repo",
+                languages: {
+                  edges: [{ size: 200, node: { color: "#f00", name: "Rust" } }],
+                },
+              },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: null,
+            },
+          },
+        },
+      },
+    };
+
+    nock("https://api.github.com").post("/graphql").reply(200, multiRepoData);
+
+    const result = await fetchTopLanguages("anuraghazra", ["orgA/shared-repo"]);
+    expect(result).toStrictEqual({
+      Rust: {
+        color: "#f00",
+        count: 1,
+        name: "Rust",
+        size: 200,
+      },
+    });
+  });
 });

@@ -13,7 +13,7 @@ This card shows language usage only inside your own non-forked repositories, not
 :::
 
 :::caution[Warning]
-Currently this card shows data only about first 1000 repositories. This is because GitHub API limitations which cause downtimes of public instances (see [#1471](https://github.com/anuraghazra/github-readme-stats/issues/1471)). In future this behavior will be improved by releasing GitHub action or providing environment variables for user's own instances.
+By default, this card queries repositories ordered by most recent activity (`PUSHED_AT, DESC`) across up to 300 repositories (3 pages of 100). On self-hosted instances, this can be customized via the `FETCH_MULTI_PAGE_LANGS` environment variable (e.g. `FETCH_MULTI_PAGE_LANGS=5` for 500 repositories or `FETCH_MULTI_PAGE_LANGS=true` to paginate across all repositories).
 :::
 
 ## Usage
@@ -79,10 +79,10 @@ If the percentages still look wrong to you, these two comments cover most of the
 
 ## Exclude individual repositories
 
-You can use the `&exclude_repo=repo1,repo2` parameter to exclude individual repositories.
+You can use the `&exclude_repo=repo1,repo2` parameter to exclude individual repositories. Both repository names (e.g. `github-readme-stats`) and namespaced names (e.g. `owner/repo`) are supported.
 
 ```md
-![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&exclude_repo=github-readme-stats,anuraghazra.github.io)
+![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&exclude_repo=github-readme-stats,anuraghazra.github.io,some-org/collab-repo)
 ```
 
 ## Hide individual languages
