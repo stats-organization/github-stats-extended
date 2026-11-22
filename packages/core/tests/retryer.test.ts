@@ -276,4 +276,28 @@ describe("Test Retryer", () => {
     );
     expect(res).toStrictEqual({ data: { token: "user-pat-token" } });
   });
+
+  it("retryer should throw BAD_CREDENTIALS error when token is rejected as Bad credentials", async () => {
+    const badCredFetcher = vi.fn().mockRejectedValue({
+      response: {
+        data: { message: "Bad credentials" },
+      },
+    }) as unknown as Fetcher;
+
+    await expect(retryer(badCredFetcher, {}, "invalid-token")).rejects.toThrow(
+      "GitHub API token is invalid or expired",
+    );
+  });
+
+  it("retryer should throw BAD_CREDENTIALS error when account is suspended", async () => {
+    const suspendedFetcher = vi.fn().mockRejectedValue({
+      response: {
+        data: { message: "Sorry. Your account was suspended." },
+      },
+    }) as unknown as Fetcher;
+
+    await expect(
+      retryer(suspendedFetcher, {}, "suspended-token"),
+    ).rejects.toThrow("GitHub API token is invalid or expired");
+  });
 });

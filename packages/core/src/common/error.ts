@@ -20,6 +20,10 @@ const SECONDARY_ERROR_MESSAGES = {
   INVALID_AFFILIATION: `Invalid owner affiliations. Valid values are: ${OWNER_AFFILIATIONS.join(
     ", ",
   )}`,
+  INVALID_API_DOMAIN:
+    "Make sure the provided api_domain is a valid public domain name",
+  BAD_CREDENTIALS:
+    "Please check that your GitHub API token is valid and not expired",
 };
 
 /**
@@ -50,6 +54,8 @@ class CustomError extends Error {
   static GITHUB_REST_API_ERROR = "GITHUB_REST_API_ERROR";
   static WAKATIME_ERROR = "WAKATIME_ERROR";
   static INVALID_AFFILIATION = "INVALID_AFFILIATION";
+  static INVALID_API_DOMAIN = "INVALID_API_DOMAIN";
+  static BAD_CREDENTIALS = "BAD_CREDENTIALS";
 }
 
 /**

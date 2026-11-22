@@ -13,6 +13,7 @@ export default async (req, res) => {
   } catch (err) {
     logger.error(err);
     res.send("Something went wrong: " + err.message);
+    return;
   }
   res.send("ok");
 };
