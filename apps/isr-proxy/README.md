@@ -13,4 +13,4 @@ A separate Vercel project that sits in front of the container deployment and cac
 
 ## fly.io traffic share
 
-The ISR function sends a random `FLY_SHARE` (currently 30%) of production card requests to the fly.io deployment in `FLY_HOSTS` (`gh-stats-extended.fly.dev`) instead of the Vercel container. Preview requests always go to the preview container. If fly.io is unreachable, the request falls back to the Vercel container. Non-card requests (the external rewrites above) always go to the Vercel container, since Vercel routes cannot split traffic randomly.
+The ISR function sends a random `FLY_SHARE` (currently 30%) of production card requests to the fly.io deployment in `FLY_HOSTS` (`gh-stats-extended.fly.dev`) instead of the Vercel container. Preview requests always go to the preview container. If fly.io is unreachable or returns HTTP 5xx, the request falls back to the Vercel container. Other HTTP statuses are passed through unchanged. Non-card requests (the external rewrites above) always go to the Vercel container, since Vercel routes cannot split traffic randomly.

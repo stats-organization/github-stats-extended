@@ -101,7 +101,7 @@ const fetchUpstream = async (url, headers) => {
  * Prerender function handler: fetches the card from the container and returns it.
  *
  * For environments listed in `FLY_HOSTS`, `FLY_SHARE` of the requests are sent to
- * fly.io; if that fails, the Vercel container is used instead.
+ * fly.io; if that fails or returns HTTP 5xx, the Vercel container is used instead.
  *
  * @param {import("node:http").IncomingMessage} req The request.
  * @param {import("node:http").ServerResponse} res The response.
@@ -130,7 +130,11 @@ export default async (req, res) => {
     Math.random() < FLY_SHARE ? getUpstreamUrl(req.url ?? "", true) : null;
   if (flyUrl !== null) {
     try {
-      result = await fetchUpstream(flyUrl, headers);
+      const flyResult = await fetchUpstream(flyUrl, headers);
+      if (flyResult.upstream.status >= 500) {
+        throw new Error(`fly.io returned HTTP ${flyResult.upstream.status}`);
+      }
+      result = flyResult;
     } catch (err) {
       console.error(
         `Error fetching ${flyUrl}, falling back to ${vercelUrl}:`,
