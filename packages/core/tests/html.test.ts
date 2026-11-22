@@ -12,4 +12,23 @@ describe("Test html.js", () => {
   it("should handle empty strings", () => {
     expect(encodeHTML("")).toBe("");
   });
+
+  it("should securely encode tags and quotes followed by hash to prevent XSS bypass", () => {
+    expect(encodeHTML("<#script>alert(1)</#script>")).toBe(
+      "&#60;#script&#62;alert(1)&#60;/#script&#62;",
+    );
+    expect(encodeHTML('"# onfocus="alert(1)')).toBe(
+      "&#34;# onfocus=&#34;alert(1)",
+    );
+    expect(encodeHTML("'# onfocus='alert(1)")).toBe(
+      "&#39;# onfocus=&#39;alert(1)",
+    );
+  });
+
+  it("should preserve valid numeric character references without double escaping", () => {
+    expect(encodeHTML("&#60;hello&#62; &#x3c;world&#x3e;")).toBe(
+      "&#60;hello&#62; &#x3c;world&#x3e;",
+    );
+    expect(encodeHTML("&#notanumber;")).toBe("&#38;#notanumber;");
+  });
 });
