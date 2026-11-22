@@ -10,3 +10,7 @@ A separate Vercel project that sits in front of the container deployment and cac
 - Everything else is rewritten to the container unchanged (method, body, headers, query string).
 - Requests to `github-stats-extended-preview.vercel.app` go to the preview container at `github-stats-extended-internal-preview.vercel.app`, all other hosts to the production container at `github-stats-extended-internal.vercel.app`.
   _These domains are hard-coded in this project. If you want to use the ISR proxy for different domains, replace all their occurrences in the code._
+
+## fly.io traffic share
+
+The ISR function sends a random `FLY_SHARE` (currently 30%) of production card requests to the fly.io deployment in `FLY_HOSTS` (`gh-stats-extended.fly.dev`) instead of the Vercel container. Preview requests always go to the preview container. If fly.io is unreachable or returns HTTP 5xx, the request falls back to the Vercel container. Other HTTP statuses are passed through unchanged. Non-card requests (the external rewrites above) always go to the Vercel container, since Vercel routes cannot split traffic randomly.
