@@ -32,7 +32,7 @@
     },
     {
       "src": "^/(.*)$",
-      "dest": "https://github-stats-extended-internal.vercel.app/$1"
+      "dest": "https://gh-stats-extended.fly.dev/$1"
     }
   ]
 }
