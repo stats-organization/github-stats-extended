@@ -51,7 +51,12 @@ export const TopLanguagesDocument = graphqlDocument<
 >(`
 query topLanguages($login: String!, $ownerAffiliations: [RepositoryAffiliation]) {
   user(login: $login) {
-    repositories(ownerAffiliations: $ownerAffiliations, isFork: false, first: 100) {
+    repositories(
+      ownerAffiliations: $ownerAffiliations
+      isFork: false
+      first: 100
+      orderBy: {field: PUSHED_AT, direction: DESC}
+    ) {
       nodes {
         ...TopLanguagesRepository
       }
