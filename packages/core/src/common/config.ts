@@ -11,6 +11,8 @@ interface Config {
   excludeRepositories: Array<string>;
   /** Max pages of starred repos to fetch; `Infinity` means every page, `1` only the first. */
   fetchMultiPageStars: number;
+  /** Max pages of repositories to fetch for top languages; default: 3 pages (300 repos). */
+  fetchMultiPageLangs: number;
   pats: Array<PersonalAccessToken>;
 }
 
@@ -26,6 +28,21 @@ const parseCsv = (value: string | undefined): Array<string> | undefined =>
  * @returns Page limit: `"true"` means every page, a positive number caps the pages, anything else means one.
  */
 const parseFetchMultiPageStars = (value: string | undefined): number => {
+  if (value === "true") {
+    return Infinity;
+  }
+  const limit = Number(value);
+  return limit > 0 ? limit : 1;
+};
+
+/**
+ * @param value Raw `FETCH_MULTI_PAGE_LANGS` value.
+ * @returns Page limit: `"true"` means every page, a positive number caps the pages, default is 3 if undefined/empty.
+ */
+const parseFetchMultiPageLangs = (value: string | undefined): number => {
+  if (value === undefined || value === "") {
+    return 3;
+  }
   if (value === "true") {
     return Infinity;
   }
@@ -66,6 +83,9 @@ export const loadConfigFromEnv = (env: Env = getDefaultEnv()): void => {
     excludeRepositories: parseCsv(env["EXCLUDE_REPO"]) ?? [],
     fetchMultiPageStars: parseFetchMultiPageStars(
       env["FETCH_MULTI_PAGE_STARS"],
+    ),
+    fetchMultiPageLangs: parseFetchMultiPageLangs(
+      env["FETCH_MULTI_PAGE_LANGS"],
     ),
     pats: parsePATsFromEnv(env),
   };

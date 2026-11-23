@@ -412,7 +412,7 @@ exports[`Test /api/top-langs contract > should match the public many-params resp
   
         </g>
       </svg>",
-  "graphqlRequest": "{"query":"\\nquery topLanguages($login: String!, $ownerAffiliations: [RepositoryAffiliation]) {\\n  user(login: $login) {\\n    repositories(ownerAffiliations: $ownerAffiliations, isFork: false, first: 100) {\\n      nodes {\\n        ...TopLanguagesRepository\\n      }\\n    }\\n  }\\n}\\nfragment TopLanguagesRepository on Repository {\\n  name\\n  languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {\\n    edges {\\n      ...TopLanguage\\n    }\\n  }\\n}\\nfragment TopLanguage on LanguageEdge {\\n  size\\n  node {\\n    color\\n    name\\n  }\\n}","variables":{"login":"anuraghazra","ownerAffiliations":["OWNER","COLLABORATOR"]}}",
+  "graphqlRequest": "{"query":"\\nquery topLanguages($login: String!, $after: String, $ownerAffiliations: [RepositoryAffiliation]) {\\n  user(login: $login) {\\n    repositories(\\n      ownerAffiliations: $ownerAffiliations\\n      isFork: false\\n      first: 100\\n      after: $after\\n      orderBy: {field: PUSHED_AT, direction: DESC}\\n    ) {\\n      nodes {\\n        ...TopLanguagesRepository\\n      }\\n      pageInfo {\\n        hasNextPage\\n        endCursor\\n      }\\n    }\\n  }\\n}\\nfragment TopLanguagesRepository on Repository {\\n  name\\n  nameWithOwner\\n  languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {\\n    edges {\\n      ...TopLanguage\\n    }\\n  }\\n}\\nfragment TopLanguage on LanguageEdge {\\n  size\\n  node {\\n    color\\n    name\\n  }\\n}","variables":{"login":"anuraghazra","after":null,"ownerAffiliations":["OWNER","COLLABORATOR"]}}",
   "headers": [
     [
       "Cache-Control",
