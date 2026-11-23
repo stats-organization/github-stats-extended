@@ -8,9 +8,5 @@ A separate Vercel project that sits in front of the container deployment and cac
 
 - Card routes (`/api`, `/api/pin`, `/api/top-langs`, `/api/gist`, `/api/wakatime`, each with or without trailing slash) are proxied to the prerender function `/isr`, with `__card` and `__env` appended to the query string. The function (`.vercel/output/functions/isr.func/index.mjs`) fetches the card from the container deployment. ISR settings are in `.vercel/output/functions/isr.prerender-config.json`.
 - Everything else is rewritten to the container unchanged (method, body, headers, query string).
-- Requests to `github-stats-extended-preview.vercel.app` go to the preview container at `github-stats-extended-internal-preview.vercel.app`, all other hosts to the production container at `github-stats-extended-internal.vercel.app`.
+- Requests to `github-stats-extended-preview.vercel.app` go to the preview container at `github-stats-extended-internal-preview.vercel.app`, all other hosts to production, at `gh-stats-extended.fly.dev`. Failing production card requests are retried against `github-stats-extended-internal.vercel.app`.
   _These domains are hard-coded in this project. If you want to use the ISR proxy for different domains, replace all their occurrences in the code._
-
-## fly.io traffic share
-
-The ISR function sends a random `FLY_SHARE` (currently 30%) of production card requests to the fly.io deployment in `FLY_HOSTS` (`gh-stats-extended.fly.dev`) instead of the Vercel container. Preview requests always go to the preview container. If fly.io is unreachable or returns HTTP 5xx, the request falls back to the Vercel container. Other HTTP statuses are passed through unchanged. Non-card requests (the external rewrites above) always go to the Vercel container, since Vercel routes cannot split traffic randomly.

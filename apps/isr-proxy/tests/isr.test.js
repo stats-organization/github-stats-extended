@@ -57,13 +57,20 @@ afterEach(() => {
 });
 
 describe("config.json", () => {
-  it("uses the same container hosts as the ISR function", () => {
+  it("uses the same hosts as the ISR function", () => {
     const externalHosts = config.routes
       .filter((/** @type {any} */ r) => r.dest?.startsWith("https://"))
       .map((/** @type {any} */ r) => new URL(r.dest.replace("$1", "")).host);
-    expect(externalHosts.toSorted()).toEqual(
-      Object.values(CONTAINER_HOSTS).toSorted(),
+    const envs = /** @type {(keyof typeof CONTAINER_HOSTS)[]} */ (
+      Object.keys(CONTAINER_HOSTS)
     );
+    // Environments fully served by fly.io are rewritten to fly.io as well.
+    const expectedHosts = envs.map((env) =>
+      FLY_SHARE >= 1
+        ? (FLY_HOSTS[env] ?? CONTAINER_HOSTS[env])
+        : CONTAINER_HOSTS[env],
+    );
+    expect(externalHosts.toSorted()).toEqual(expectedHosts.toSorted());
   });
 });
 
