@@ -3,8 +3,11 @@ import path from "path";
 import express from "express";
 
 import router from "./router.js";
+import { requestLogging } from "./src/common/logging.ts";
 
 export const app = express();
+
+app.use(requestLogging);
 
 app.get("/", (req, res) => {
   res.redirect("/frontend/docs/");
