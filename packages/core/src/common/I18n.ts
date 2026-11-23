@@ -39,7 +39,7 @@ class I18n<Translations extends TranslationsMap = TranslationsMap> {
       throw new Error(`${str} Translation string not found`);
     }
 
-    const localized = translation[this.locale];
+    const localized = translation[this.locale] || translation[FALLBACK_LOCALE];
     if (!localized) {
       throw new Error(
         `'${str}' translation not found for locale '${this.locale}'`,

@@ -17,6 +17,7 @@ export default async (req, res) => {
     res.send({ userId, needDowngrade });
   } catch (err) {
     logger.error(err);
+    res.statusCode = 500;
     res.send("Something went wrong: " + err.message);
   }
 };

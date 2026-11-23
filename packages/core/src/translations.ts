@@ -371,6 +371,8 @@ const statCardLocales = ({
     },
     "statcard.all-time-contribs": {
       en: "Contributed to (all time)",
+      cn: "贡献 (总计)",
+      "zh-tw": "貢獻 (總計)",
     },
     "statcard.reviews": {
       en: "Total PRs Reviewed",
@@ -524,26 +526,32 @@ const statCardLocales = ({
     },
     "statcard.prs-authored": {
       en: "PRs Created",
+      cn: "创建的 PR",
       "zh-tw": "建立的拉取請求",
     },
     "statcard.prs-commented": {
       en: "PRs Commented",
+      cn: "参与评论的 PR",
       "zh-tw": "參與討論的拉取請求",
     },
     "statcard.prs-reviewed": {
       en: "PRs Reviewed",
+      cn: "审核的 PR",
       "zh-tw": "審核的拉取請求",
     },
     "statcard.issues-authored": {
       en: "Issues Created",
+      cn: "创建的 Issue",
       "zh-tw": "建立的議題",
     },
     "statcard.issues-commented": {
       en: "Issues Commented",
+      cn: "参与评论的 Issue",
       "zh-tw": "參與討論的議題",
     },
     "statcard.contributions": {
       en: "Total Contributions",
+      cn: "总贡献",
       "zh-tw": "總貢獻數量",
     },
     "statcard.prs-merged": {
@@ -750,22 +758,27 @@ const repoCardLocales = {
   },
   "repocard.prs-authored": {
     en: "my created PRs",
+    cn: "我创建的 PR",
     "zh-tw": "我所創建的拉取請求",
   },
   "repocard.prs-commented": {
     en: "my commented PRs",
+    cn: "我评论的 PR",
     "zh-tw": "我所參與的拉取請求",
   },
   "repocard.prs-reviewed": {
     en: "my reviewed PRs",
+    cn: "我审核的 PR",
     "zh-tw": "我所審核的拉取請求",
   },
   "repocard.issues-authored": {
     en: "my created issues",
+    cn: "我创建的 Issue",
     "zh-tw": "我所創建的議題",
   },
   "repocard.issues-commented": {
     en: "my commented issues",
+    cn: "我评论的 Issue",
     "zh-tw": "我所參與的議題",
   },
 };

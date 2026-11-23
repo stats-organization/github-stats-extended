@@ -97,6 +97,22 @@ describe("Test Render WakaTime Card", () => {
     });
     expect(card).toMatchSnapshot();
   });
+  it("should handle zero total percent without producing NaN", () => {
+    const card = renderWakatimeCard({
+      languages: [
+        {
+          name: "TypeScript",
+          percent: 0,
+          hours: 0,
+          minutes: 0,
+          text: "0 secs",
+          digital: "0:00",
+          total_seconds: 0,
+        },
+      ],
+    });
+    expect(card).not.toContain("NaN");
+  });
 });
 
 describe("test wakatime API", () => {

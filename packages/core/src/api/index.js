@@ -66,10 +66,12 @@ export default async (
   }
 
   const safePattern = /^[-\w/.,]+$/;
+  const repos = parseArray(repo);
+  const owners = parseArray(owner);
   if (
     (username && !safePattern.test(username)) ||
-    (repo && !safePattern.test(repo)) ||
-    (owner && !safePattern.test(owner))
+    (repo && !repos.every((r) => safePattern.test(r))) ||
+    (owner && !owners.every((o) => safePattern.test(o)))
   ) {
     return {
       status: "error - permanent",

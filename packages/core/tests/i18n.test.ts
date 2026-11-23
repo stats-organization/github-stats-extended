@@ -31,10 +31,26 @@ describe("I18n", () => {
     ).toThrow("statcard.title1 Translation string not found");
   });
 
-  it("should throw error if translation not found for locale", () => {
+  it("should fall back to English if translation is missing for requested locale", () => {
+    const i18n = new I18n({
+      locale: "fr",
+      translations: {
+        "statcard.new-stat": {
+          en: "English Only Stat",
+        },
+      },
+    });
+    expect(i18n.t("statcard.new-stat")).toBe("English Only Stat");
+  });
+
+  it("should throw error if translation not found for locale and fallback", () => {
     const i18n = new I18n({
       locale: "asdf",
-      translations: statCardLocales({ name: "Anurag Hazra", apostrophe: "s" }),
+      translations: {
+        "statcard.title": {
+          fr: "Statistiques",
+        },
+      },
     });
     expect(() => i18n.t("statcard.title")).toThrow(
       "'statcard.title' translation not found for locale 'asdf'",

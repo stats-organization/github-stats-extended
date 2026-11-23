@@ -35,32 +35,43 @@ const guardAccess = ({ id, type, colors }) => {
       ? NOT_WHITELISTED_GIST_MESSAGE
       : NOT_WHITELISTED_USERNAME_MESSAGE;
 
-  if (Array.isArray(currentWhitelist) && !currentWhitelist.includes(id)) {
-    const result = renderError({
-      message: notWhitelistedMsg,
-      secondaryMessage: "Please deploy your own instance",
-      renderOptions: {
-        ...colors,
-        show_repo_link: false,
-      },
-    });
-    return { isPassed: false, result };
+  const normalizedId = typeof id === "string" ? id.trim().toLowerCase() : "";
+
+  if (Array.isArray(currentWhitelist)) {
+    const isWhitelisted = currentWhitelist.some(
+      (w) => typeof w === "string" && w.trim().toLowerCase() === normalizedId,
+    );
+    if (!isWhitelisted) {
+      const result = renderError({
+        message: notWhitelistedMsg,
+        secondaryMessage: "Please deploy your own instance",
+        renderOptions: {
+          ...colors,
+          show_repo_link: false,
+        },
+      });
+      return { isPassed: false, result };
+    }
   }
 
   if (
-    type === "username" &&
-    currentWhitelist === undefined &&
-    blacklist.includes(id)
+    (type === "username" || type === "wakatime") &&
+    currentWhitelist === undefined
   ) {
-    const result = renderError({
-      message: BLACKLISTED_MESSAGE,
-      secondaryMessage: "Please deploy your own instance",
-      renderOptions: {
-        ...colors,
-        show_repo_link: false,
-      },
-    });
-    return { isPassed: false, result };
+    const isBlacklisted = blacklist.some(
+      (b) => typeof b === "string" && b.trim().toLowerCase() === normalizedId,
+    );
+    if (isBlacklisted) {
+      const result = renderError({
+        message: BLACKLISTED_MESSAGE,
+        secondaryMessage: "Please deploy your own instance",
+        renderOptions: {
+          ...colors,
+          show_repo_link: false,
+        },
+      });
+      return { isPassed: false, result };
+    }
   }
 
   return { isPassed: true };

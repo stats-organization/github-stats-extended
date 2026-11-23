@@ -46,4 +46,15 @@ describe("API input validation", () => {
       },
     );
   });
+
+  describe("stats: comma-separated repo and owner with space", () => {
+    it("accepts valid comma-separated lists with whitespace", async () => {
+      const result = await statsApi({
+        username: "user",
+        repo: "repo1, repo2",
+        owner: "owner1, owner2",
+      });
+      expect(result.content).not.toContain("unsafe characters");
+    });
+  });
 });

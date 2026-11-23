@@ -910,3 +910,16 @@ describe("test renderTopLanguages with languages missing a color", () => {
     },
   );
 });
+
+describe("test renderTopLanguages with zero-byte languages", () => {
+  const zeroByteLangs = {
+    HTML: { color: "#0f0", name: "HTML", size: 0, count: 1 },
+    CSS: { color: "#00f", name: "CSS", size: 0, count: 1 },
+  } satisfies TopLangData;
+
+  it("should render no data node when all languages have zero bytes", () => {
+    const card = renderTopLanguages(zeroByteLangs, { layout: "compact" });
+    expect(card).not.toContain("NaN");
+    expect(card).toContain("No languages data");
+  });
+});

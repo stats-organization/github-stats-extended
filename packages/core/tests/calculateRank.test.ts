@@ -121,4 +121,19 @@ describe("Test calculateRank", () => {
       percentile: approxNumber(0.4578556547153667),
     });
   });
+
+  it("handles negative or invalid stats gracefully with C tier fallback", () => {
+    const result = calculateRank({
+      all_commits: false,
+      commits: -100,
+      prs: -50,
+      issues: -20,
+      reviews: -10,
+      repos: 0,
+      stars: -5,
+      followers: -1,
+    });
+    expect(result.level).toBe("C");
+    expect(result.percentile).toBe(100);
+  });
 });
