@@ -128,6 +128,8 @@ vi.mock("../src/fetchers/wakatime.js", () => ({
 const xssPayloads = [
   "<script>alert('xss')</script>",
   "\"><script>alert('xss')</script>",
+  "<#script>alert('xss')</#script>",
+  "\"# onfocus=\"alert('xss')",
 ];
 
 describe("XSS prevention - stats API", () => {
