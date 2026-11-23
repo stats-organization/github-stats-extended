@@ -1,7 +1,8 @@
 // @ts-check
 
 /**
- * The same hosts are hard-coded in the external rewrites in `../../config.json`.
+ * Vercel container of each environment. The external rewrites in `../../config.json`
+ * hard-code the same hosts, or their fly.io replacements.
  * Keep both places in sync.
  */
 export const CONTAINER_HOSTS = {
@@ -10,7 +11,7 @@ export const CONTAINER_HOSTS = {
 };
 
 /**
- * fly.io deployments that receive a share of the card requests. Environments
+ * fly.io deployments that receive `FLY_SHARE` of the card requests. Environments
  * without an entry are always served by their Vercel container.
  *
  * @type {Partial<Record<keyof typeof CONTAINER_HOSTS, string>>}
@@ -20,7 +21,7 @@ export const FLY_HOSTS = {
 };
 
 /** Share of card requests (0 to 1) that are randomly routed to `FLY_HOSTS`. */
-export const FLY_SHARE = 0.3;
+export const FLY_SHARE = 1;
 
 /** Allowed `__card` values. Set in `../../config.json`. */
 const CARDS = new Set(["", "pin", "top-langs", "gist", "wakatime"]);
