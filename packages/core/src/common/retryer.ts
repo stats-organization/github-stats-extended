@@ -91,6 +91,8 @@ const retryer = async <TData = unknown, TVariables = Record<string, unknown>>(
   }
   const startPAT = getRandomInt(PATs.length);
   let temporaryFailures = 0;
+  let hasBadCredentials = false;
+  let hasRateLimited = false;
 
   for (let attempt = 0; attempt - temporaryFailures < PATs.length; attempt++) {
     const currentPAT =
@@ -119,6 +121,7 @@ const retryer = async <TData = unknown, TVariables = Record<string, unknown>>(
       if (!isRateLimited) {
         return response;
       }
+      hasRateLimited = true;
       logger.log(`${currentPAT.name} Failed due to rate limiting`);
     } catch (err) {
       const e = err as { response?: FetcherResponse<TData> };
@@ -148,8 +151,16 @@ const retryer = async <TData = unknown, TVariables = Record<string, unknown>>(
         // HTTP error with a response → return it for caller-side handling
         return e.response;
       }
+      hasBadCredentials = true;
       logger.log(`${currentPAT.name} Failed due to bad credentials`);
     }
+  }
+
+  if (hasBadCredentials && !hasRateLimited) {
+    throw new CustomError(
+      "GitHub API token is invalid or expired",
+      CustomError.BAD_CREDENTIALS,
+    );
   }
 
   throw new CustomError(

@@ -7,6 +7,22 @@ import {
 } from "./common/database.js";
 
 /**
+ * Normalizes base host and path into a clean HTTPS URL.
+ *
+ * @param {string} [baseUrl] Base URL or hostname.
+ * @param {string} [path] Request path.
+ * @returns {string} Fully formed HTTPS URL.
+ */
+export function normalizeRequestUrl(baseUrl = "", path = "") {
+  const cleanBase = baseUrl
+    .trim()
+    .replace(/^https?:\/\//i, "")
+    .replace(/\/+$/, "");
+  const cleanPath = path.trim().replace(/^\/+/, "");
+  return `https://${cleanBase}/${cleanPath}`;
+}
+
+/**
  * Processes URLs with a thread pool of given size using axios.get.
  *
  * @param {string[]} urls An array of URLs to process.
@@ -25,10 +41,9 @@ async function makeRequests(urls, poolSize) {
       if (idx >= urls.length) {
         break;
       }
-      const url =
-        "https://" +
-        (process.env.REPEAT_BASE_URL || process.env.VERCEL_BRANCH_URL) +
-        urls[idx];
+      const rawBase =
+        process.env.REPEAT_BASE_URL || process.env.VERCEL_BRANCH_URL || "";
+      const url = normalizeRequestUrl(rawBase, urls[idx]);
       try {
         if (idx % 10 === 0) {
           console.log(`Processing request ${idx + 1} out of ${urls.length}`);
