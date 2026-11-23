@@ -15,35 +15,34 @@ import type { Lang, TopLangData } from "./types.js";
 
 const fetcher = createGraphQLFetcher(TopLanguagesDocument, "token");
 
+/** Upper bound on repository pages (100 repos each) fetched for one card. */
+const MAX_PAGES = 10;
+
 /**
- * Fetch top languages for a given username.
+ * Fetch one page of the user's non-fork repositories, most recently pushed first.
  *
  * @param username GitHub username.
- * @param exclude_repo List of repositories to exclude. Default: [].
- * @param size_weight Weightage to be given to size.
- * @param count_weight Weightage to be given to count.
- * @param ownerAffiliations The owner affiliations to filter by. Default: OWNER.
+ * @param affiliations Parsed owner affiliations.
+ * @param after Cursor of the previous page, or null for the first page.
  * @param pat Optional PAT override.
- * @returns Top languages data.
+ * @returns The page's repositories and pagination info.
  */
-const fetchTopLanguages = async (
+const fetchRepositoriesPage = async (
   username: string,
-  exclude_repo: Array<string> = [],
-  size_weight = 1,
-  count_weight = 0,
-  ownerAffiliations: Array<string> = [],
-  pat: string | null = null,
-): Promise<TopLangData> => {
-  if (!username) {
-    throw new MissingParamError(["username"]);
-  }
-  const affiliations = parseOwnerAffiliations(ownerAffiliations);
-
+  affiliations: ReturnType<typeof parseOwnerAffiliations>,
+  after: string | null,
+  pat: string | null,
+): Promise<{
+  nodes: Array<TopLanguagesRepositoryFragment>;
+  hasNextPage: boolean;
+  endCursor: string | null;
+}> => {
   const res = await retryer(
     fetcher,
     {
       login: username,
       ownerAffiliations: affiliations,
+      after,
     },
     pat,
   );
@@ -69,6 +68,57 @@ const fetchTopLanguages = async (
     );
   }
 
+  const repositories = res.data.data.user?.repositories;
+  return {
+    nodes: (repositories?.nodes ?? []).filter(
+      (node): node is TopLanguagesRepositoryFragment => !!node,
+    ),
+    hasNextPage: repositories?.pageInfo.hasNextPage ?? false,
+    endCursor: repositories?.pageInfo.endCursor ?? null,
+  };
+};
+
+/**
+ * Fetch top languages for a given username.
+ *
+ * @param username GitHub username.
+ * @param exclude_repo List of repositories to exclude. Default: [].
+ * @param size_weight Weightage to be given to size.
+ * @param count_weight Weightage to be given to count.
+ * @param ownerAffiliations The owner affiliations to filter by. Default: OWNER.
+ * @param pat Optional PAT override.
+ * @returns Top languages data.
+ */
+const fetchTopLanguages = async (
+  username: string,
+  exclude_repo: Array<string> = [],
+  size_weight = 1,
+  count_weight = 0,
+  ownerAffiliations: Array<string> = [],
+  pat: string | null = null,
+): Promise<TopLangData> => {
+  if (!username) {
+    throw new MissingParamError(["username"]);
+  }
+  const affiliations = parseOwnerAffiliations(ownerAffiliations);
+
+  const fetchedNodes: Array<TopLanguagesRepositoryFragment> = [];
+  let after: string | null = null;
+  for (let page = 0; page < MAX_PAGES; page++) {
+    const pageNodes = await fetchRepositoriesPage(
+      username,
+      affiliations,
+      after,
+      pat,
+    );
+    fetchedNodes.push(...pageNodes.nodes);
+
+    if (!pageNodes.hasNextPage) {
+      break;
+    }
+    after = pageNodes.endCursor;
+  }
+
   const repoToHide: Record<string, boolean> = {};
   const allExcludedRepos = [
     ...exclude_repo,
@@ -81,10 +131,7 @@ const fetchTopLanguages = async (
   });
 
   // filter out repositories to be hidden
-  const repoNodes = (res.data.data.user?.repositories.nodes ?? []).filter(
-    (node): node is TopLanguagesRepositoryFragment =>
-      !!node && !repoToHide[node.name],
-  );
+  const repoNodes = fetchedNodes.filter((node) => !repoToHide[node.name]);
 
   // flatten edges across repos. Order matters: `concat(acc)` prepends, and the
   // shared repoCount below depends on visitation order.

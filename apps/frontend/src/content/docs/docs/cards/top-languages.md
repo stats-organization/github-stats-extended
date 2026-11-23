@@ -13,7 +13,7 @@ This card shows language usage only inside your own non-forked repositories, not
 :::
 
 :::caution[Warning]
-Currently this card shows data only about first 1000 repositories. This is because GitHub API limitations which cause downtimes of public instances (see [#1471](https://github.com/anuraghazra/github-readme-stats/issues/1471)). In future this behavior will be improved by releasing GitHub action or providing environment variables for user's own instances.
+Currently this card shows data only about your 1000 most recently pushed repositories. This is because GitHub API limitations which cause downtimes of public instances (see [#1471](https://github.com/anuraghazra/github-readme-stats/issues/1471)). In future this behavior will be improved by releasing GitHub action or providing environment variables for user's own instances.
 :::
 
 ## Usage

@@ -52,6 +52,7 @@ const data_langs = {
             },
           },
         ],
+        pageInfo: { hasNextPage: false, endCursor: null },
       },
     },
   },
@@ -67,6 +68,32 @@ const error = {
     },
   ],
 };
+
+const langRepo = (name: string, lang: string, pushedAt?: string) => ({
+  name,
+  pushedAt,
+  languages: {
+    edges: [{ size: 100, node: { color: "#000", name: lang } }],
+  },
+});
+
+const repoPage = (
+  nodes: Array<ReturnType<typeof langRepo>>,
+  endCursor: string | null,
+) => ({
+  data: {
+    user: {
+      repositories: {
+        nodes,
+        pageInfo: { hasNextPage: endCursor !== null, endCursor },
+      },
+    },
+  },
+});
+
+const withCursor =
+  (cursor: string | null) => (body: { variables: { after: string | null } }) =>
+    body.variables.after === cursor;
 
 describe("FetchTopLanguages", () => {
   it("should fetch correct language data while using the new calculation", async () => {
@@ -147,6 +174,32 @@ describe("FetchTopLanguages", () => {
         size: 2,
       },
     });
+  });
+
+  it("should fetch every page of repositories", async () => {
+    nock("https://api.github.com")
+      .post("/graphql", withCursor(null))
+      .reply(200, repoPage([langRepo("repo-1", "Rust")], "c1"))
+      .post("/graphql", withCursor("c1"))
+      .reply(200, repoPage([langRepo("repo-2", "Go")], null));
+
+    const repo = await fetchTopLanguages("anuraghazra");
+
+    expect(Object.keys(repo).sort()).toStrictEqual(["Go", "Rust"]);
+    expect(nock.isDone()).toBe(true);
+  });
+
+  it("should stop after 10 pages of repositories", async () => {
+    // an 11th request would find no matching interceptor and throw
+    nock("https://api.github.com")
+      .post("/graphql")
+      .times(10)
+      .reply(200, repoPage([langRepo("repo", "Rust")], "next"));
+
+    const repo = await fetchTopLanguages("anuraghazra");
+
+    expect(repo["Rust"]?.count).toBe(10);
+    expect(nock.isDone()).toBe(true);
   });
 
   it("should throw specific error when user not found", async () => {
