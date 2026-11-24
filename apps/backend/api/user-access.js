@@ -12,11 +12,13 @@ export default async (req, res) => {
     const result = await getUserAccessByKey(user_key);
 
     if (!result) {
+      console.warn("User access rejected: user not found");
       res.statusCode = 404;
       res.send("user not found");
       return;
     }
     if (result.token === null) {
+      console.warn("User access rejected: invalid stored token");
       // the stored token cannot be decrypted: drop it so the user can log in again
       await deleteUser(user_key);
       res.statusCode = 404;

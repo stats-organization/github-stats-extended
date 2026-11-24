@@ -2,6 +2,9 @@ import { repeatRecentRequests } from "../src/repeatRequests.js";
 
 export default async (req, res) => {
   if (req.method !== "POST") {
+    console.warn(
+      `Repeat recent requests rejected: method ${req.method} not allowed`,
+    );
     res.statusCode = 405;
     res.send({ error: "Method Not Allowed" });
     return;

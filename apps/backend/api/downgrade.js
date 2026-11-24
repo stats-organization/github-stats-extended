@@ -8,6 +8,7 @@ export default async (req, res) => {
 
   const { user_key } = req.query;
   if (!user_key) {
+    console.warn("Downgrade rejected: missing user_key");
     res.statusCode = 400;
     res.send("missing user_key");
     return;
@@ -26,6 +27,7 @@ export default async (req, res) => {
   // get token and private access status
   const userAccess = await getUserAccessByKey(user_key);
   if (!userAccess) {
+    console.warn("Downgrade rejected: user not found");
     res.statusCode = 404;
     res.send("user not found");
     return;
@@ -33,6 +35,7 @@ export default async (req, res) => {
 
   // verify that user has private access
   if (!userAccess.privateAccess) {
+    console.warn("Downgrade rejected: user does not have private access");
     res.statusCode = 400;
     res.send("user does not have private access");
     return;

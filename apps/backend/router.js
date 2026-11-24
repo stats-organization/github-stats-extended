@@ -204,6 +204,7 @@ export default async (req, res) => {
       await downgrade(req, res);
       break;
     default:
+      console.warn("Route not found");
       res.statusCode = 404;
       res.end("Not Found");
       break;
