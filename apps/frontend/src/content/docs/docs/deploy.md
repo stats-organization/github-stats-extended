@@ -274,8 +274,13 @@ GitHub Stats Extended provides several environment variables that can be used to
     </tr>
     <tr>
       <td><code>REPEAT_BASE_URL</code></td>
-      <td>Domain from which your cards are requested. Only relevant if you use <a href="/frontend/docs/fork/#improved-performance-and-latency">proactive regeneration</a>. Defaults to Vercel's <code>VERCEL_BRANCH_URL</code>. Set to a different value when a proxy such as the <a href="#cache-cards-with-an-isr-proxy">ISR proxy</a> sits in front of your instance.</td>
+      <td>Domain from which your cards are requested. If you set this variable and host GitHub-Stats-Extended via Docker, <a href="/frontend/docs/fork/#improved-performance-and-latency">proactive regeneration</a> is enabled. Defaults to Vercel's <code>VERCEL_BRANCH_URL</code>. Set to a different value when a proxy such as the <a href="#cache-cards-with-an-isr-proxy">ISR proxy</a> sits in front of your instance.</td>
       <td>A domain (e.g. <code>your-project.vercel.app</code>)</td>
+    </tr>
+    <tr>
+      <td><code>REPEAT_INTERVAL_MINUTES</code></td>
+      <td>Sets how often the server runs <a href="/frontend/docs/fork/#improved-performance-and-latency">proactive regeneration</a> in minutes, if enabled. Defaults to <code>15</code>.</td>
+      <td>Any positive number, or <code>0</code> to disable</td>
     </tr>
   </tbody>
 </table>

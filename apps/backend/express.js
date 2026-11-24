@@ -1,12 +1,15 @@
 import { app } from "./app.js";
+import { startRepeatRequestsScheduler } from "./src/repeatRequests.js";
 
 const port = process.env.PORT || process.env.port || 9000;
 const server = app.listen(port, "0.0.0.0", () => {
   console.log(`Server running on port ${port}`);
 });
+const stopRepeatScheduler = startRepeatRequestsScheduler();
 
 const shutdown = (signal) => {
   console.log(`${signal} received. Shutting down gracefully.`);
+  stopRepeatScheduler();
   server.close(() => process.exit(0));
   setTimeout(() => process.exit(1), 20_000).unref();
 };

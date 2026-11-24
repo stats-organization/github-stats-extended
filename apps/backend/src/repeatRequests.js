@@ -50,6 +50,8 @@ async function makeRequests(urls, poolSize) {
   await Promise.all(workers);
 }
 
+const DEFAULT_REPEAT_INTERVAL_MINUTES = 15;
+
 /**
  * Repeats requests made in the last 8 days (or configured interval), excluding those made in the last 11 hours (or configured interval).
  */
@@ -69,6 +71,91 @@ export async function repeatRecentRequests() {
   if (urls.length === 0) {
     console.log("No recent requests found.");
   } else {
-    await makeRequests(urls, 4);
+    await makeRequests(urls, 1);
   }
+}
+
+/**
+ * Parses `REPEAT_INTERVAL_MINUTES` from the environment.
+ * Returns `null` when scheduling is explicitly disabled (`<= 0`).
+ *
+ * @returns {number | null} Interval in milliseconds, or `null` if disabled.
+ */
+function resolveRepeatIntervalMs() {
+  const raw = process.env.REPEAT_INTERVAL_MINUTES;
+  if (raw === undefined || raw === "") {
+    return DEFAULT_REPEAT_INTERVAL_MINUTES * 60_000;
+  }
+  const minutes = Number(raw);
+  if (!Number.isFinite(minutes)) {
+    console.warn(
+      `Invalid REPEAT_INTERVAL_MINUTES="${raw}", falling back to ${DEFAULT_REPEAT_INTERVAL_MINUTES} minutes.`,
+    );
+    return DEFAULT_REPEAT_INTERVAL_MINUTES * 60_000;
+  }
+  if (minutes <= 0) {
+    return null;
+  }
+  return minutes * 60_000;
+}
+
+/**
+ * Starts a periodic scheduler that invokes `repeatRecentRequests` in-process.
+ * Schedules the next run after the previous run settles so runs cannot overlap.
+ *
+ * @returns {() => void} Stop function to cancel pending scheduled runs.
+ */
+export function startRepeatRequestsScheduler() {
+  if (!pool) {
+    console.log(
+      "Not scheduling repeatRecentRequests: POSTGRES_URL is not set.",
+    );
+    return () => {};
+  }
+  if (!process.env.REPEAT_BASE_URL && !process.env.VERCEL_BRANCH_URL) {
+    console.log(
+      "Not scheduling repeatRecentRequests: neither REPEAT_BASE_URL nor VERCEL_BRANCH_URL is set.",
+    );
+    return () => {};
+  }
+  const intervalMs = resolveRepeatIntervalMs();
+  if (intervalMs === null) {
+    console.log(
+      "Not scheduling repeatRecentRequests: disabled via REPEAT_INTERVAL_MINUTES.",
+    );
+    return () => {};
+  }
+
+  let stopped = false;
+  let timer = null;
+
+  const scheduleNext = () => {
+    if (stopped) {
+      return;
+    }
+    timer = setTimeout(async () => {
+      timer = null;
+      try {
+        await repeatRecentRequests();
+      } catch (err) {
+        console.error("Scheduled repeatRecentRequests failed:", err);
+      } finally {
+        scheduleNext();
+      }
+    }, intervalMs);
+    timer.unref();
+  };
+
+  console.log(
+    `Scheduled repeatRecentRequests every ${intervalMs / 60_000} minutes.`,
+  );
+  scheduleNext();
+
+  return () => {
+    stopped = true;
+    if (timer !== null) {
+      clearTimeout(timer);
+      timer = null;
+    }
+  };
 }

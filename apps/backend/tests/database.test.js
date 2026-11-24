@@ -24,7 +24,7 @@ vi.mock(import("pg"), () => {
     query = queryMock;
   }
 
-  return { default: { Pool }, Pool };
+  return { Pool };
 });
 
 const KEY = randomBytes(32);
