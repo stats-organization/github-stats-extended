@@ -41,7 +41,7 @@ interface TopLangOptions extends CommonCardOptions {
   hide_progress: boolean;
   hide_values: boolean;
   prog_bar_bg_color: string;
-  stats_format: "percentages" | "bytes";
+  stats_format: "percentages" | "bytes" | "both";
 }
 
 /**
@@ -240,7 +240,13 @@ const getDisplayValue = (
   percentages: number,
   format: string,
 ): string => {
-  return format === "bytes" ? formatBytes(size) : `${percentages.toFixed(2)}%`;
+  if (format === "bytes") {
+    return formatBytes(size);
+  }
+  if (format === "both") {
+    return `${percentages.toFixed(2)}% (${formatBytes(size)})`;
+  }
+  return `${percentages.toFixed(2)}%`;
 };
 
 /**
@@ -367,6 +373,8 @@ const createCompactLangNode = ({
  * @param props.hideProgress Whether to hide percentage.
  * @param props.hideValues Whether to hide stats values.
  * @param props.statsFormat Stats format
+ * @param props.columnsWidth Width available to both columns. With byte stats,
+ *        the second column starts no earlier than half of it.
  * @returns Programming languages SVG node.
  */
 const createLanguageTextNode = ({
@@ -375,12 +383,14 @@ const createLanguageTextNode = ({
   hideProgress,
   hideValues,
   statsFormat,
+  columnsWidth,
 }: {
   langs: Array<Lang>;
   totalSize: number;
   hideProgress?: boolean | undefined;
   hideValues?: boolean | undefined;
   statsFormat?: string | undefined;
+  columnsWidth?: number | undefined;
 }): string => {
   const longestLang = getLongestLang(langs);
   const chunked = chunkArray(langs, langs.length / 2);
@@ -402,9 +412,26 @@ const createLanguageTextNode = ({
     }).join("");
   });
 
-  const percent = ((longestLang.size / totalSize) * 100).toFixed(2);
-  const minGap = 150;
-  const maxGap = 20 + measureText(`${longestLang.name} ${percent}%`, 11);
+  const isPercentages =
+    statsFormat === "percentages" || statsFormat === undefined;
+  const minGap = isPercentages ? 150 : Math.max(150, (columnsWidth ?? 0) / 2);
+  const maxGap =
+    20 +
+    (isPercentages
+      ? measureText(
+          `${longestLang.name} ${((longestLang.size / totalSize) * 100).toFixed(2)}%`,
+          11,
+        )
+      : // byte values vary in length, so measure every label and leave a gap
+        15 +
+        Math.max(
+          ...langs.map((lang) =>
+            measureText(
+              `${lang.name} ${getDisplayValue(lang.size, (lang.size / totalSize) * 100, statsFormat)}`,
+              11,
+            ),
+          ),
+        ));
   return flexLayout({
     items: layouts,
     gap: maxGap < minGap ? minGap : maxGap,
@@ -551,6 +578,7 @@ const renderCompactLayout = (
         hideProgress,
         statsFormat,
         hideValues,
+        columnsWidth: offsetWidth,
       })}
     </g>
   `;

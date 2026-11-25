@@ -163,6 +163,7 @@ export const data_langs = {
             },
           },
         ],
+        pageInfo: { hasNextPage: false, endCursor: null },
       },
     },
   },

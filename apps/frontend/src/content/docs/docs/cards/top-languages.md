@@ -13,7 +13,7 @@ This card shows language usage only inside your own non-forked repositories, not
 :::
 
 :::caution[Warning]
-Currently this card shows data only about first 1000 repositories. This is because GitHub API limitations which cause downtimes of public instances (see [#1471](https://github.com/anuraghazra/github-readme-stats/issues/1471)). In future this behavior will be improved by releasing GitHub action or providing environment variables for user's own instances.
+Currently this card shows data only about your 1000 most recently pushed repositories. This is because GitHub API limitations which cause downtimes of public instances (see [#1471](https://github.com/anuraghazra/github-readme-stats/issues/1471)). In future this behavior will be improved by releasing GitHub action or providing environment variables for user's own instances.
 :::
 
 ## Usage
@@ -39,6 +39,8 @@ You can customize the appearance and behavior of the top languages card using th
 | `langs_count`                   | Shows more languages on the card, between 1-20.                                                                                                                                                 | integer                         | `5` for `normal` and `donut`, `6` for other layouts |
 | `exclude_repo`                  | Excludes specified repositories.                                                                                                                                                                | string (comma-separated values) | `null`                                              |
 | `role`                          | Include repositories where the user has one of the specified [roles](https://docs.github.com/en/graphql/reference/repos#enum-repositoryaffiliation) (OWNER, ORGANIZATION_MEMBER, COLLABORATOR). | string (comma-separated values) | `OWNER`                                             |
+| `pushed_after`                  | Only counts repositories last pushed on or after this date (see [Filter by date](#filter-by-date)).                                                                                             | string (`YYYY-MM-DD`)           | `null`                                              |
+| `pushed_before`                 | Only counts repositories last pushed before this date (see [Filter by date](#filter-by-date)).                                                                                                  | string (`YYYY-MM-DD`)           | `null`                                              |
 | `custom_title`                  | Sets a custom title for the card.                                                                                                                                                               | string                          | `Most Used Languages`                               |
 | `disable_animations`            | Disables all animations in the card.                                                                                                                                                            | boolean                         | `false`                                             |
 | `prog_bar_bg_color`<sup>1</sup> | Background color of the bars. (Applies only to `normal` layout.)                                                                                                                                | string (hex color)              | `#ddd`                                              |
@@ -46,7 +48,7 @@ You can customize the appearance and behavior of the top languages card using th
 | `hide_values`                   | Hides language percentages or bytes while keeping the progress bars or chart.                                                                                                                   | boolean                         | `false`                                             |
 | `size_weight`                   | Configures language stats algorithm (see [Language stats algorithm](#language-stats-algorithm)).                                                                                                | number                          | `1`                                                 |
 | `count_weight`                  | Configures language stats algorithm (see [Language stats algorithm](#language-stats-algorithm)).                                                                                                | number                          | `0`                                                 |
-| `stats_format`                  | Switches between two available formats for language's stats `percentages` and `bytes`.                                                                                                          | enum                            | `percentages`                                       |
+| `stats_format`                  | Switches the format of language's stats: `percentages`, `bytes` or `both`.                                                                                                                      | enum                            | `percentages`                                       |
 
 <sup>1</sup>: Supports light and dark mode via `prog_bar_bg_color_light` and `prog_bar_bg_color_dark`.
 
@@ -84,6 +86,18 @@ You can use the `&exclude_repo=repo1,repo2` parameter to exclude individual repo
 ```md
 ![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&exclude_repo=github-readme-stats,anuraghazra.github.io)
 ```
+
+## Filter by date
+
+You can use the `&pushed_after=` and `&pushed_before=` parameters to only count repositories whose last push falls within a date range, for example to compare the languages you used in different periods. `pushed_after` is inclusive and `pushed_before` is exclusive. Dates are in UTC and can also be given as `YYYY` or `YYYY-MM`.
+
+```md
+![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&pushed_after=2021-01-01&pushed_before=2026-01-01)
+```
+
+:::note
+GitHub only exposes when a repository was last pushed to, so a repository you worked on across several years counts only in the range containing its latest push, with its current language sizes.
+:::
 
 ## Hide individual languages
 
@@ -145,7 +159,7 @@ You can use the `&hide_progress=true` option to hide the percentages and the pro
 
 ## Change format of language's stats
 
-You can use the `&stats_format=bytes` option to display the stats in bytes instead of percentage.
+You can use the `&stats_format=bytes` option to display the stats in bytes instead of percentage. Use `&stats_format=both` to show the percentage followed by the size in bytes, e.g. `TypeScript 25.71% (22.5 MB)`. Byte sizes make labels longer, so you may want a wider `card_width` with the compact layout.
 
 ```md
 ![Top Langs](https://github-stats-extended.vercel.app/api/top-langs/?username=anuraghazra&stats_format=bytes)

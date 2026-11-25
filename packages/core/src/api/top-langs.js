@@ -27,6 +27,8 @@ export default async (
     locale,
     border_radius,
     role,
+    pushed_after,
+    pushed_before,
     disable_animations,
     hide_progress,
     hide_values,
@@ -88,7 +90,7 @@ export default async (
 
   if (
     stats_format !== undefined &&
-    !["bytes", "percentages"].includes(stats_format)
+    !["bytes", "percentages", "both"].includes(stats_format)
   ) {
     return {
       status: "error - permanent",
@@ -100,6 +102,39 @@ export default async (
     };
   }
 
+  // accepts YYYY, YYYY-MM or YYYY-MM-DD (UTC); null when absent, undefined when invalid
+  const parseDateParam = (value) => {
+    if (value === undefined) {
+      return null;
+    }
+    if (!/^\d{4}(-\d{2}(-\d{2})?)?$/.test(value)) {
+      return undefined;
+    }
+    const date = new Date(value);
+    // rejects impossible dates like 2024-02-30, which Date rolls over
+    const isExact =
+      !Number.isNaN(date.getTime()) &&
+      date.toISOString().slice(0, value.length) === value;
+    return isExact ? date : undefined;
+  };
+  const pushedAfter = parseDateParam(pushed_after);
+  const pushedBefore = parseDateParam(pushed_before);
+  for (const [name, parsed] of [
+    ["pushed_after", pushedAfter],
+    ["pushed_before", pushedBefore],
+  ]) {
+    if (parsed === undefined) {
+      return {
+        status: "error - permanent",
+        content: renderError({
+          message: "Something went wrong",
+          secondaryMessage: `Invalid date input for parameter "${name}"`,
+          renderOptions: colorParams,
+        }),
+      };
+    }
+  }
+
   try {
     const topLangs = await fetchTopLanguages(
       username,
@@ -108,6 +143,7 @@ export default async (
       count_weight,
       parseArray(role),
       pat,
+      { after: pushedAfter, before: pushedBefore },
     );
 
     return {
